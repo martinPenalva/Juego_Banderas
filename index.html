@@ -856,7 +856,7 @@
         <!-- Ranking principal -->
         <div class="main-ranking-container" id="mainRankingContainer" style="display: none;">
             <div class="ranking-header">
-                <h2>🏆 Top 10 Ranking</h2>
+                <h2 id="rankingTitle">🏆 Top 10 Ranking</h2>
                 <button class="close-ranking-btn" id="closeRankingBtn">✕</button>
             </div>
             <div class="main-ranking-list" id="mainRankingList">
@@ -1362,7 +1362,7 @@
             saveBtn.textContent = '💾 Guardando...';
             
             try {
-                const success = await window.guardarPuntuacion(playerName, score);
+                const success = await window.guardarPuntuacion(playerName, score, difficulty);
                 if (success) {
                     saveBtn.textContent = '✅ Guardado';
                     document.getElementById('showRankingBtn').style.display = 'block';
@@ -1552,10 +1552,12 @@
             rankingList.innerHTML = '<div style="text-align: center; padding: 20px;">Cargando ranking...</div>';
             
             try {
-                const ranking = await window.obtenerRanking();
+                // Obtener ranking del nivel actual
+                const ranking = await window.obtenerRanking(difficulty);
                 
                 if (ranking.length === 0) {
-                    rankingList.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún</div>';
+                    const nivelTexto = difficulty === 'easy' ? 'Fácil' : (difficulty === 'hard' ? 'Difícil' : (difficulty === 'impossible' ? 'Imposible' : ''));
+                    rankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}</div>`;
                     return;
                 }
                 
@@ -1590,6 +1592,19 @@
         // Mostrar ranking principal
         async function showMainRanking() {
             const mainRankingContainer = document.getElementById('mainRankingContainer');
+            const rankingTitle = document.getElementById('rankingTitle');
+            
+            // Actualizar título según el nivel
+            if (difficulty === 'easy') {
+                rankingTitle.textContent = '🏆 Top 10 Ranking - Fácil';
+            } else if (difficulty === 'hard') {
+                rankingTitle.textContent = '🏆 Top 10 Ranking - Difícil';
+            } else if (difficulty === 'impossible') {
+                rankingTitle.textContent = '🏆 Top 10 Ranking - Imposible';
+            } else {
+                rankingTitle.textContent = '🏆 Top 10 Ranking';
+            }
+            
             mainRankingContainer.style.display = 'block';
             await loadMainRanking();
         }
@@ -1612,10 +1627,12 @@
             mainRankingList.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">Cargando ranking...</div>';
             
             try {
-                const ranking = await window.obtenerRanking();
+                // Obtener ranking del nivel actual
+                const ranking = await window.obtenerRanking(difficulty);
                 
                 if (ranking.length === 0) {
-                    mainRankingList.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún. ¡Sé el primero en jugar!</div>';
+                    const nivelTexto = difficulty === 'easy' ? 'Fácil' : (difficulty === 'hard' ? 'Difícil' : (difficulty === 'impossible' ? 'Imposible' : ''));
+                    mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
                 
@@ -2006,11 +2023,12 @@
         });
 
         // ----------- GUARDAR PUNTUACIÓN -------------
-        window.guardarPuntuacion = async function(nombre, puntos) {
+        window.guardarPuntuacion = async function(nombre, puntos, nivel) {
             try {
                 await addDoc(collection(db, "puntuaciones"), {
                     nombre: nombre,
                     puntos: puntos,
+                    nivel: nivel || 'unknown',
                     fecha: Date.now(),
                     userId: window.currentUser ? window.currentUser.uid : null
                 });
@@ -2023,20 +2041,46 @@
         };
 
         // ----------- OBTENER RANKING ----------------
-        window.obtenerRanking = async function() {
+        window.obtenerRanking = async function(nivel) {
             try {
-                const q = query(
-                    collection(db, "puntuaciones"),
-                    orderBy("puntos", "desc"),
-                    limit(10)
-                );
+                let q;
+                
+                if (nivel) {
+                    // Filtrar por nivel específico
+                    q = query(
+                        collection(db, "puntuaciones"),
+                        orderBy("puntos", "desc"),
+                        limit(10)
+                    );
+                } else {
+                    // Sin filtro (todos los niveles)
+                    q = query(
+                        collection(db, "puntuaciones"),
+                        orderBy("puntos", "desc"),
+                        limit(10)
+                    );
+                }
 
                 const snapshot = await getDocs(q);
                 const resultados = [];
 
-                snapshot.forEach(doc => resultados.push(doc.data()));
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    // Si se especificó un nivel, filtrar por ese nivel
+                    if (nivel) {
+                        if (data.nivel === nivel) {
+                            resultados.push(data);
+                        }
+                    } else {
+                        resultados.push(data);
+                    }
+                });
 
-                return resultados;
+                // Ordenar por puntos (por si acaso)
+                resultados.sort((a, b) => (b.puntos || 0) - (a.puntos || 0));
+                
+                // Limitar a 10
+                return resultados.slice(0, 10);
             } catch (e) {
                 console.error("Error al obtener ranking: ", e);
                 return [];
