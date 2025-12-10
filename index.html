@@ -37,7 +37,8 @@
 
         body.hell-mode {
             background: linear-gradient(180deg, #1a0000 0%, #4a0000 30%, #8b0000 60%, #ff4500 100%);
-            animation: hellFlicker 0.5s ease-in-out infinite alternate; /* Animación más lenta */
+            /* Desactivar animación de parpadeo para mejor rendimiento */
+            /* animation: hellFlicker 0.5s ease-in-out infinite alternate; */
         }
 
         body.war-mode {
@@ -299,7 +300,8 @@
                 rgba(255, 200, 0, 0.4) 60%,
                 transparent 100%
             );
-            animation: flameFlicker 0.5s ease-in-out infinite alternate;
+            /* Animación más lenta para mejor rendimiento */
+            animation: flameFlicker 1.5s ease-in-out infinite alternate;
             clip-path: polygon(
                 0% 100%,
                 5% 80%,
@@ -458,7 +460,8 @@
                         0 0 50px rgba(255, 140, 0, 0.3),
                         inset 0 0 30px rgba(255, 69, 0, 0.2);
             border: 2px solid rgba(255, 69, 0, 0.5);
-            animation: containerFlicker 0.4s ease-in-out infinite alternate;
+            /* Desactivar animación de parpadeo para mejor rendimiento */
+            /* animation: containerFlicker 0.4s ease-in-out infinite alternate; */
             color: #f0f0f0;
         }
 
@@ -2067,7 +2070,7 @@
         }
 
         // Seleccionar nivel de dificultad
-        // Crear partículas de fuego (optimizado para mejor rendimiento)
+        // Crear partículas de fuego (muy optimizado para mejor rendimiento)
         function createHellParticles() {
             const particlesContainer = document.getElementById('hellParticles');
             if (!particlesContainer) return;
@@ -2075,8 +2078,8 @@
             // Limpiar partículas anteriores
             particlesContainer.innerHTML = '';
             
-            // Reducir a 15 partículas para mejor rendimiento
-            for (let i = 0; i < 15; i++) {
+            // Reducir a solo 5 partículas para mejor rendimiento
+            for (let i = 0; i < 5; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'hell-particle';
                 particle.style.left = Math.random() * 100 + '%';
@@ -2087,13 +2090,13 @@
             }
         }
 
-        // Crear mini llamas que salpican (optimizado)
+        // Crear mini llamas que salpican (muy optimizado)
         function createSparks() {
             const overlay = document.getElementById('hellOverlay');
             if (!overlay) return;
             
-            // Reducir a 5-8 mini llamas para mejor rendimiento
-            const sparkCount = 5 + Math.floor(Math.random() * 4);
+            // Reducir a solo 2-3 mini llamas para mejor rendimiento
+            const sparkCount = 2 + Math.floor(Math.random() * 2);
             
             for (let i = 0; i < sparkCount; i++) {
                 const spark = document.createElement('div');
@@ -2244,14 +2247,14 @@
                 document.body.classList.add('hell-mode');
                 createHellParticles();
                 createSparks();
-                // Recrear partículas cada 5 segundos (menos frecuente para mejor rendimiento)
+                // Recrear partículas cada 10 segundos (mucho menos frecuente)
                 setInterval(() => {
                     createHellParticles();
-                }, 5000);
-                // Crear mini llamas cada 1.5 segundos (menos frecuente para mejor rendimiento)
+                }, 10000);
+                // Crear mini llamas cada 3 segundos (mucho menos frecuente)
                 setInterval(() => {
                     createSparks();
-                }, 1500);
+                }, 3000);
             } else if (level === 'hard') {
                 document.body.classList.add('war-mode');
                 createWarEffects();
