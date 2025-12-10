@@ -50,30 +50,38 @@
         }
 
         .score {
-            font-size: 1.2em;
-            color: #667eea;
-            font-weight: bold;
+            font-size: 1.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 700;
             margin-bottom: 15px;
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
         }
 
         .streak-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .streak-fire {
-            font-size: 2em;
+            font-size: 2.5em;
             animation: fireFlicker 0.5s ease-in-out infinite alternate;
             filter: drop-shadow(0 0 10px rgba(255, 69, 0, 0.8));
             transition: all 0.3s ease;
         }
 
         .streak-fire.hot {
-            font-size: 2.5em;
-            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 1));
+            font-size: 3em;
+            filter: drop-shadow(0 0 20px rgba(255, 140, 0, 1));
             animation: fireFlicker 0.3s ease-in-out infinite alternate;
         }
 
@@ -89,42 +97,285 @@
         }
 
         .streak-text {
-            font-size: 1.1em;
-            color: #ff4500;
-            font-weight: bold;
-        }
-
-        .joker-btn {
+            font-size: 1.3em;
             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
             color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            cursor: pointer;
-            margin: 20px auto;
-            display: block;
-            font-weight: 600;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 50px;
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .lives-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientFlow 3s ease infinite;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4), 0 0 30px rgba(118, 75, 162, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lives-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            animation: rotate 4s linear infinite;
+        }
+
+        .lives-text {
+            font-size: 1.2em;
+            color: white;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hearts {
+            font-size: 2.2em;
+            letter-spacing: 10px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hearts .heart-full {
+            animation: heartFloat 2s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(255, 20, 147, 0.8));
+            transform-origin: center;
+        }
+
+        .hearts .heart-full:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .hearts .heart-full:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .hearts .heart-full:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .hearts .heart-empty {
+            opacity: 0.4;
+            filter: grayscale(100%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            transform: scale(0.9);
             transition: all 0.3s ease;
-            animation: pulse 2s ease-in-out infinite;
         }
 
-        .joker-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-        }
-
-        .joker-btn:active {
-            transform: translateY(0);
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
             }
             50% {
-                box-shadow: 0 4px 20px rgba(255, 107, 107, 0.8);
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes heartFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1) rotate(0deg);
+                filter: drop-shadow(0 0 10px rgba(255, 20, 147, 0.8));
+            }
+            25% {
+                transform: translateY(-8px) scale(1.1) rotate(-5deg);
+                filter: drop-shadow(0 0 15px rgba(255, 20, 147, 1));
+            }
+            50% {
+                transform: translateY(-12px) scale(1.15) rotate(0deg);
+                filter: drop-shadow(0 0 20px rgba(255, 20, 147, 1));
+            }
+            75% {
+                transform: translateY(-8px) scale(1.1) rotate(5deg);
+                filter: drop-shadow(0 0 15px rgba(255, 20, 147, 1));
+            }
+        }
+
+        .joker-message {
+            font-size: 1em;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(245, 87, 108, 0.4);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            animation: jokerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes jokerPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 10px rgba(245, 87, 108, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 15px rgba(245, 87, 108, 0.6);
+            }
+        }
+
+        /* Alertas estilizadas */
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .alert-box.success {
+            border-top: 5px solid #48bb78;
+        }
+
+        .alert-box.error {
+            border-top: 5px solid #f56565;
+        }
+
+        .alert-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 0.5s ease;
+        }
+
+        .alert-message {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .alert-box.success .alert-message {
+            color: #22543d;
+        }
+
+        .alert-box.error .alert-message {
+            color: #742a2a;
+        }
+
+        .alert-details {
+            font-size: 1em;
+            color: #718096;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .joker-btn-inline {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            transition: all 0.3s ease;
+            animation: jokerPulse 2s ease-in-out infinite;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .joker-btn-inline:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+        }
+
+        .joker-btn-inline:active {
+            transform: translateY(0) scale(1);
+        }
+
+        @keyframes jokerPulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 6px 20px rgba(245, 87, 108, 0.8);
+                transform: scale(1.05);
             }
         }
 
@@ -502,11 +753,64 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
+        .ranking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
         .main-ranking-container h2 {
             color: #667eea;
-            margin-bottom: 15px;
+            margin: 0;
             font-size: 1.8em;
-            text-align: center;
+        }
+
+        .close-ranking-btn {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(245, 101, 101, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .close-ranking-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .close-ranking-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .close-ranking-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.6);
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+        }
+
+        .close-ranking-btn:active {
+            transform: scale(0.95) rotate(90deg);
         }
 
         .main-ranking-list {
@@ -844,6 +1148,7 @@
         <div class="streak-container">
             <div class="streak-fire" id="streakFire">🔥</div>
             <div class="streak-text">Racha: <span id="streak">0</span></div>
+            <button class="joker-btn-inline" id="jokerBtn" style="display: none;">🎯 Comodín</button>
         </div>
         
         <div class="flag-container">
@@ -882,7 +1187,6 @@
             <button class="option" id="option4"></button>
         </div>
 
-        <button class="joker-btn" id="jokerBtn" style="display: none;">🎯 Comodín</button>
 
         <div class="message" id="message"></div>
         <button class="next-btn" id="nextBtn">Siguiente Bandera</button>
@@ -1326,14 +1630,19 @@
         // Actualizar corazones/vidas
         function updateHearts() {
             const heartsEl = document.getElementById('hearts');
-            const heartsArray = [];
-            for (let i = 0; i < lives; i++) {
-                heartsArray.push('❤️');
+            heartsEl.innerHTML = '';
+            
+            for (let i = 0; i < 3; i++) {
+                const heart = document.createElement('span');
+                if (i < lives) {
+                    heart.textContent = '❤️';
+                    heart.className = 'heart-full';
+                } else {
+                    heart.textContent = '🤍';
+                    heart.className = 'heart-empty';
+                }
+                heartsEl.appendChild(heart);
             }
-            for (let i = lives; i < 3; i++) {
-                heartsArray.push('🤍');
-            }
-            heartsEl.textContent = heartsArray.join(' ');
         }
 
         // Mostrar pantalla de game over
@@ -1731,15 +2040,58 @@
             updateJokerButton();
         }
 
+        // Mostrar alerta estilizada
+        function showAlert(type, message, details) {
+            const overlay = document.createElement('div');
+            overlay.className = 'alert-overlay';
+            
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert-box ${type}`;
+            
+            const icon = document.createElement('div');
+            icon.className = 'alert-icon';
+            icon.textContent = type === 'success' ? '✅' : '❌';
+            
+            const messageEl = document.createElement('div');
+            messageEl.className = 'alert-message';
+            messageEl.textContent = message;
+            
+            const detailsEl = document.createElement('div');
+            detailsEl.className = 'alert-details';
+            detailsEl.textContent = details;
+            
+            alertBox.appendChild(icon);
+            alertBox.appendChild(messageEl);
+            alertBox.appendChild(detailsEl);
+            overlay.appendChild(alertBox);
+            
+            document.body.appendChild(overlay);
+            
+            // Remover después de 1.5 segundos
+            setTimeout(() => {
+                overlay.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    if (document.body.contains(overlay)) {
+                        document.body.removeChild(overlay);
+                    }
+                }, 300);
+            }, 1500);
+        }
+
         // Actualizar botón comodín
         function updateJokerButton() {
             const jokerBtn = document.getElementById('jokerBtn');
+            
             if (streak >= 5 && !jokerUsed) {
                 jokerAvailable = true;
-                jokerBtn.style.display = 'block';
+                if (jokerBtn) {
+                    jokerBtn.style.display = 'block';
+                }
             } else {
                 jokerAvailable = false;
-                jokerBtn.style.display = 'none';
+                if (jokerBtn) {
+                    jokerBtn.style.display = 'none';
+                }
             }
         }
 
@@ -1823,6 +2175,9 @@
                 // Actualizar puntuación
                 document.getElementById('score').textContent = score;
                 
+                // Mostrar alerta de acierto
+                showAlert('success', '¡Correcto! 🎉', '¡Bien hecho!');
+                
                 // Pasar automáticamente a la siguiente bandera después de 2 segundos
                 setTimeout(() => {
                     loadNewQuestion();
@@ -1838,14 +2193,19 @@
                 // Actualizar puntuación
                 document.getElementById('score').textContent = score;
                 
+                // Mostrar alerta de fallo
+                showAlert('error', '❌ Incorrecto', `La respuesta correcta era: ${currentCountry.name.common}`);
+                
                 // Si se acabaron las vidas, mostrar game over
                 if (lives <= 0) {
                     setTimeout(() => {
                         showGameOver();
                     }, 2000);
                 } else {
-                    // Mostrar botón siguiente (solo para respuestas incorrectas)
-                    document.getElementById('nextBtn').classList.add('show');
+                    // Pasar automáticamente a la siguiente bandera después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
                 }
             }
         }
