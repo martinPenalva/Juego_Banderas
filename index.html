@@ -37,7 +37,7 @@
 
         body.hell-mode {
             background: linear-gradient(180deg, #1a0000 0%, #4a0000 30%, #8b0000 60%, #ff4500 100%);
-            animation: hellFlicker 0.3s ease-in-out infinite alternate;
+            animation: hellFlicker 0.5s ease-in-out infinite alternate; /* Animación más lenta */
         }
 
         body.war-mode {
@@ -323,6 +323,8 @@
                 95% 75%,
                 100% 100%
             );
+            will-change: transform, filter;
+            transform: translateZ(0); /* Aceleración por hardware */
         }
 
         .flame:nth-child(1) {
@@ -372,6 +374,8 @@
             border-radius: 50%;
             box-shadow: 0 0 10px #ff4500, 0 0 20px #ff4500;
             animation: particleFloat 3s ease-in-out infinite;
+            will-change: transform, opacity;
+            transform: translateZ(0); /* Aceleración por hardware */
         }
 
         /* Mini llamas que salpican */
@@ -385,6 +389,8 @@
             box-shadow: 0 0 15px #ff4500, 0 0 25px #ff6b00;
             animation: sparkFly 1.5s ease-out forwards;
             pointer-events: none;
+            will-change: transform, opacity;
+            transform: translateZ(0); /* Aceleración por hardware */
         }
 
         @keyframes sparkFly {
@@ -1313,6 +1319,19 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
+        /* Estilos para modo imposible */
+        body.hell-mode .main-ranking-container {
+            background: linear-gradient(135deg, #2a1a1a 0%, #3d2525 50%, #2a1a1a 100%);
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3), 
+                        0 0 30px rgba(255, 140, 0, 0.2);
+            border: 2px solid rgba(255, 69, 0, 0.5);
+        }
+
+        body.hell-mode .main-ranking-container h2 {
+            color: #ffcc99;
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+        }
+
         .ranking-header {
             display: flex;
             justify-content: space-between;
@@ -1392,6 +1411,22 @@
             transition: transform 0.2s;
         }
 
+        /* Estilos para items en modo imposible */
+        body.hell-mode .main-ranking-item {
+            background: rgba(61, 37, 37, 0.7) !important;
+            border-left-color: rgba(255, 69, 0, 0.6) !important;
+        }
+
+        body.hell-mode .main-ranking-item:hover {
+            background: rgba(61, 37, 37, 0.9) !important;
+            border-left-color: rgba(255, 140, 0, 0.8) !important;
+        }
+
+        body.hell-mode .main-ranking-item.top {
+            background: rgba(139, 69, 19, 0.8) !important;
+            border-left-color: rgba(255, 140, 0, 0.9) !important;
+        }
+
         .main-ranking-item:hover {
             transform: translateX(5px);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -1409,18 +1444,43 @@
             font-size: 1.1em;
         }
 
+        /* Estilos para posición en modo imposible */
+        body.hell-mode .main-ranking-position {
+            color: #ff9999 !important;
+            text-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+        }
+
         .main-ranking-name {
             flex: 1;
             text-align: left;
             margin-left: 15px;
             font-weight: 600;
             font-size: 1.05em;
+            color: #333;
+        }
+
+        /* Estilos para nombres en modo imposible */
+        body.hell-mode .main-ranking-name {
+            color: #ffcc99 !important;
+            text-shadow: 0 0 5px rgba(255, 140, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         .main-ranking-score {
             font-weight: bold;
             color: #764ba2;
             font-size: 1.2em;
+        }
+
+        /* Estilos para puntuación en modo imposible */
+        body.hell-mode .main-ranking-score {
+            color: #ffcc99 !important;
+            text-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+        }
+
+        /* Estilos para puntuación en modo imposible */
+        body.hell-mode .main-ranking-score {
+            color: #ffcc99;
+            text-shadow: 0 0 5px rgba(255, 140, 0, 0.3);
         }
 
         .ranking-list {
@@ -2007,7 +2067,7 @@
         }
 
         // Seleccionar nivel de dificultad
-        // Crear partículas de fuego
+        // Crear partículas de fuego (optimizado para mejor rendimiento)
         function createHellParticles() {
             const particlesContainer = document.getElementById('hellParticles');
             if (!particlesContainer) return;
@@ -2015,24 +2075,25 @@
             // Limpiar partículas anteriores
             particlesContainer.innerHTML = '';
             
-            // Crear 30 partículas
-            for (let i = 0; i < 30; i++) {
+            // Reducir a 15 partículas para mejor rendimiento
+            for (let i = 0; i < 15; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'hell-particle';
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 3 + 's';
                 particle.style.animationDuration = (2 + Math.random() * 2) + 's';
+                particle.style.willChange = 'transform, opacity';
                 particlesContainer.appendChild(particle);
             }
         }
 
-        // Crear mini llamas que salpican
+        // Crear mini llamas que salpican (optimizado)
         function createSparks() {
             const overlay = document.getElementById('hellOverlay');
             if (!overlay) return;
             
-            // Crear 10-15 mini llamas
-            const sparkCount = 10 + Math.floor(Math.random() * 6);
+            // Reducir a 5-8 mini llamas para mejor rendimiento
+            const sparkCount = 5 + Math.floor(Math.random() * 4);
             
             for (let i = 0; i < sparkCount; i++) {
                 const spark = document.createElement('div');
@@ -2042,7 +2103,7 @@
                 spark.style.setProperty('--spark-x', (Math.random() * 200 - 100) + 'px');
                 spark.style.animationDelay = Math.random() * 0.5 + 's';
                 spark.style.animationDuration = (1 + Math.random() * 0.5) + 's';
-                
+                spark.style.willChange = 'transform, opacity';
                 overlay.appendChild(spark);
                 
                 // Remover después de la animación
@@ -2183,14 +2244,14 @@
                 document.body.classList.add('hell-mode');
                 createHellParticles();
                 createSparks();
-                // Recrear partículas cada 3 segundos
+                // Recrear partículas cada 5 segundos (menos frecuente para mejor rendimiento)
                 setInterval(() => {
                     createHellParticles();
-                }, 3000);
-                // Crear mini llamas cada 0.8 segundos
+                }, 5000);
+                // Crear mini llamas cada 1.5 segundos (menos frecuente para mejor rendimiento)
                 setInterval(() => {
                     createSparks();
-                }, 800);
+                }, 1500);
             } else if (level === 'hard') {
                 document.body.classList.add('war-mode');
                 createWarEffects();
