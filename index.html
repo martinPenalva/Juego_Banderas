@@ -343,6 +343,31 @@
             }
         }
 
+        /* Estilos para cohetes */
+        .rocket {
+            position: fixed;
+            font-size: 2.5em;
+            pointer-events: none;
+            z-index: 3000;
+            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8));
+            animation: rocketTrail 2s ease-out forwards;
+        }
+
+        @keyframes rocketTrail {
+            0% {
+                opacity: 1;
+                filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8));
+            }
+            50% {
+                opacity: 0.8;
+                filter: drop-shadow(0 0 20px rgba(255, 200, 0, 1));
+            }
+            100% {
+                opacity: 0;
+                filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.5));
+            }
+        }
+
         .joker-btn-inline {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
@@ -2040,8 +2065,98 @@
             updateJokerButton();
         }
 
+        // Frases motivadoras para aciertos
+        const successMessages = [
+            'Good boooy! 😊🎉',
+            '¡Excelente! 😄🌟',
+            '¡Perfecto! 😃⭐',
+            '¡Increíble! 🤩🚀',
+            '¡Genial! 😎💪',
+            '¡Fantástico! 😁🎊',
+            '¡Bien hecho! 😊👏',
+            '¡Así se hace! 😄🔥',
+            '¡Eres un crack! 🤩💎',
+            '¡Sigue así! 😃🎯',
+            '¡Increíble trabajo! 😊✨',
+            '¡Lo hiciste genial! 😄🎉',
+            '¡Perfecto! 😃👌',
+            '¡Eres increíble! 🤩🌟',
+            '¡Bien jugado! 😊💪'
+        ];
+
+        // Frases motivadoras para fallos
+        const errorMessages = [
+            '¡Casi! Sigue intentando 😊💪',
+            'No te rindas, sigue adelante 😌🌟',
+            'La próxima será mejor 😊🎯',
+            '¡Sigue practicando! 😄💪',
+            'Cada error es aprendizaje 😊📚',
+            '¡Tú puedes! Sigue adelante 😃🚀',
+            'No pasa nada, sigue jugando 😊',
+            'La práctica hace al maestro 😌🎓',
+            '¡Sigue intentando! 😊💪',
+            'Cada intento te acerca más 😄🎯',
+            '¡Ánimo! Lo conseguirás 😊✨',
+            'Sigue adelante, tú puedes 😃💪',
+            'No te desanimes 😌🌟',
+            '¡La próxima vez será mejor! 😊🎯',
+            'Sigue intentando, lo lograrás 😄💪'
+        ];
+
+        // Crear cohetes animados
+        function createRockets() {
+            const container = document.body;
+            const rocketCount = 15;
+            
+            for (let i = 0; i < rocketCount; i++) {
+                const rocket = document.createElement('div');
+                rocket.className = 'rocket';
+                rocket.textContent = '🚀';
+                rocket.style.position = 'fixed';
+                rocket.style.fontSize = '2em';
+                rocket.style.pointerEvents = 'none';
+                rocket.style.zIndex = '3000';
+                
+                // Posición inicial aleatoria
+                const startX = Math.random() * window.innerWidth;
+                const startY = window.innerHeight + 50;
+                const endX = startX + (Math.random() - 0.5) * 200;
+                const endY = -100;
+                
+                rocket.style.left = startX + 'px';
+                rocket.style.top = startY + 'px';
+                
+                // Animación
+                const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                rocket.style.transform = `rotate(${angle + 90}deg)`;
+                
+                container.appendChild(rocket);
+                
+                // Animar cohete
+                setTimeout(() => {
+                    rocket.style.transition = 'all 2s ease-out';
+                    rocket.style.left = endX + 'px';
+                    rocket.style.top = endY + 'px';
+                    rocket.style.opacity = '0';
+                    rocket.style.transform = `rotate(${angle + 90}deg) scale(0.5)`;
+                }, 10);
+                
+                // Remover cohete después de la animación
+                setTimeout(() => {
+                    if (container.contains(rocket)) {
+                        container.removeChild(rocket);
+                    }
+                }, 2000);
+            }
+        }
+
         // Mostrar alerta estilizada
         function showAlert(type, message, details) {
+            // Si es acierto, crear cohetes
+            if (type === 'success') {
+                createRockets();
+            }
+            
             const overlay = document.createElement('div');
             overlay.className = 'alert-overlay';
             
@@ -2054,7 +2169,12 @@
             
             const messageEl = document.createElement('div');
             messageEl.className = 'alert-message';
-            messageEl.textContent = message;
+            // Usar frase aleatoria
+            if (type === 'success') {
+                messageEl.textContent = successMessages[Math.floor(Math.random() * successMessages.length)];
+            } else {
+                messageEl.textContent = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+            }
             
             const detailsEl = document.createElement('div');
             detailsEl.className = 'alert-details';
@@ -2175,8 +2295,8 @@
                 // Actualizar puntuación
                 document.getElementById('score').textContent = score;
                 
-                // Mostrar alerta de acierto
-                showAlert('success', '¡Correcto! 🎉', '¡Bien hecho!');
+                // Mostrar alerta de acierto (con cohetes y frase motivadora)
+                showAlert('success', '', '');
                 
                 // Pasar automáticamente a la siguiente bandera después de 2 segundos
                 setTimeout(() => {
@@ -2193,8 +2313,8 @@
                 // Actualizar puntuación
                 document.getElementById('score').textContent = score;
                 
-                // Mostrar alerta de fallo
-                showAlert('error', '❌ Incorrecto', `La respuesta correcta era: ${currentCountry.name.common}`);
+                // Mostrar alerta de fallo (con frase motivadora)
+                showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
                 
                 // Si se acabaron las vidas, mostrar game over
                 if (lives <= 0) {
