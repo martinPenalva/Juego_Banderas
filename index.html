@@ -2017,6 +2017,16 @@
                         return true;
                     }
                     
+                    // INCLUIR TODOS LOS PAÍSES DE OCEANÍA
+                    if (region === 'Oceania') {
+                        return true;
+                    }
+                    
+                    // INCLUIR PAÍSES PEQUEÑOS DE ÁFRICA (población menor a 10 millones)
+                    if (region === 'Africa' && population > 0 && population < 10000000) {
+                        return true;
+                    }
+                    
                     // Filtrar islas con población pequeña (menos de 1 millón)
                     if (population > 0 && population < 1000000) {
                         // Verificar si es una isla (no tiene fronteras terrestres o es pequeña)
@@ -2032,12 +2042,28 @@
                         return true;
                     }
                     
+                    // INCLUIR PAÍSES PEQUEÑOS DE ASIA (población menor a 5 millones)
+                    if (region === 'Asia' && population > 0 && population < 5000000) {
+                        return true;
+                    }
+                    
+                    // INCLUIR PAÍSES PEQUEÑOS DE AMÉRICA (población menor a 2 millones, excluyendo grandes países)
+                    if ((region === 'Americas' || region === 'North America' || region === 'South America') && 
+                        population > 0 && population < 2000000) {
+                        // Excluir países grandes conocidos
+                        const excludedCodes = ['US', 'CA', 'MX', 'BR', 'AR', 'CL', 'CO', 'PE', 'VE'];
+                        if (!excludedCodes.includes(code)) {
+                            return true;
+                        }
+                    }
+                    
                     return false;
                 });
                 
-                // Si no hay suficientes, agregar algunos de la lista de respaldo que sean islas
+                // Si no hay suficientes, agregar algunos de la lista de respaldo
                 if (countries.length < 10) {
-                    const islandFallback = [
+                    const impossibleFallback = [
+                        // Islas y Oceanía
                         { name: { common: "Maldivas" }, cca2: "MV" },
                         { name: { common: "Mauricio" }, cca2: "MU" },
                         { name: { common: "Seychelles" }, cca2: "SC" },
@@ -2060,9 +2086,42 @@
                         { name: { common: "San Vicente y las Granadinas" }, cca2: "VC" },
                         { name: { common: "Santa Lucía" }, cca2: "LC" },
                         { name: { common: "San Cristóbal y Nieves" }, cca2: "KN" },
-                        { name: { common: "Dominica" }, cca2: "DM" }
+                        { name: { common: "Dominica" }, cca2: "DM" },
+                        // Países pequeños de África
+                        { name: { common: "Guinea-Bisáu" }, cca2: "GW" },
+                        { name: { common: "Guinea Ecuatorial" }, cca2: "GQ" },
+                        { name: { common: "Gambia" }, cca2: "GM" },
+                        { name: { common: "Lesoto" }, cca2: "LS" },
+                        { name: { common: "Suazilandia" }, cca2: "SZ" },
+                        { name: { common: "Yibuti" }, cca2: "DJ" },
+                        { name: { common: "Gabón" }, cca2: "GA" },
+                        { name: { common: "Guinea" }, cca2: "GN" },
+                        { name: { common: "Sierra Leona" }, cca2: "SL" },
+                        { name: { common: "Togo" }, cca2: "TG" },
+                        { name: { common: "Benín" }, cca2: "BJ" },
+                        { name: { common: "Burkina Faso" }, cca2: "BF" },
+                        { name: { common: "Malí" }, cca2: "ML" },
+                        { name: { common: "Níger" }, cca2: "NE" },
+                        { name: { common: "Chad" }, cca2: "TD" },
+                        { name: { common: "República Centroafricana" }, cca2: "CF" },
+                        { name: { common: "Burundi" }, cca2: "BI" },
+                        { name: { common: "Ruanda" }, cca2: "RW" },
+                        { name: { common: "Eritrea" }, cca2: "ER" },
+                        // Países de Oceanía
+                        { name: { common: "Nueva Caledonia" }, cca2: "NC" },
+                        { name: { common: "Polinesia Francesa" }, cca2: "PF" },
+                        { name: { common: "Guam" }, cca2: "GU" },
+                        { name: { common: "Islas Marianas del Norte" }, cca2: "MP" },
+                        { name: { common: "Palau" }, cca2: "PW" },
+                        { name: { common: "Micronesia" }, cca2: "FM" },
+                        { name: { common: "Islas Marshall" }, cca2: "MH" },
+                        { name: { common: "Kiribati" }, cca2: "KI" },
+                        { name: { common: "Nauru" }, cca2: "NR" },
+                        { name: { common: "Tuvalu" }, cca2: "TV" },
+                        { name: { common: "Islas Salomón" }, cca2: "SB" },
+                        { name: { common: "Nueva Zelanda" }, cca2: "NZ" }
                     ];
-                    countries = islandFallback.length > 0 ? islandFallback : countries;
+                    countries = impossibleFallback.length > 0 ? impossibleFallback : countries;
                 }
             }
             
@@ -2862,7 +2921,9 @@
                     maxStreak = streak;
                 }
                 // Hacer el fuego más intenso cuando la racha es alta
-                if (streak >= 5) {
+                // En modo imposible, se activa con 2 de racha
+                const requiredStreak = difficulty === 'impossible' ? 2 : 5;
+                if (streak >= requiredStreak) {
                     fireEl.classList.add('hot');
                 }
             } else {
@@ -3013,7 +3074,11 @@
         function updateJokerButton() {
             const jokerBtn = document.getElementById('jokerBtn');
             
-            if (streak >= 5 && !jokerUsed) {
+            // En modo imposible, el comodín se activa con 2 de racha
+            // En otros modos, se activa con 5 de racha
+            const requiredStreak = difficulty === 'impossible' ? 2 : 5;
+            
+            if (streak >= requiredStreak && !jokerUsed) {
                 jokerAvailable = true;
                 if (jokerBtn) {
                     jokerBtn.style.display = 'block';
@@ -3056,13 +3121,16 @@
                 btn.disabled = true;
             });
 
-            // Reducir la racha en 5 (se usó el comodín)
-            streak = Math.max(0, streak - 5);
+            // Reducir la racha (se usó el comodín)
+            // En modo imposible, se reduce en 2. En otros modos, en 5
+            const streakReduction = difficulty === 'impossible' ? 2 : 5;
+            streak = Math.max(0, streak - streakReduction);
             document.getElementById('streak').textContent = streak;
             
             // Actualizar el fuego
             const fireEl = document.getElementById('streakFire');
-            if (streak < 5) {
+            const requiredStreak = difficulty === 'impossible' ? 2 : 5;
+            if (streak < requiredStreak) {
                 fireEl.classList.remove('hot');
             }
             
