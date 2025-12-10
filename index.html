@@ -688,6 +688,11 @@
         document.getElementById('jokerBtn').addEventListener('click', useJoker);
         document.getElementById('nextBtn').addEventListener('click', loadNewQuestion);
 
+        // Verificar y redirigir si es necesario (para PWA)
+        if (window.location.pathname === '/' && !window.location.href.includes('Juego_Banderas')) {
+            window.location.href = 'https://martinpenalva.github.io/Juego_Banderas/index.html';
+        }
+
         // Iniciar juego
         loadCountries();
     </script>

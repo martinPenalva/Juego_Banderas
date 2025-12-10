@@ -2,7 +2,7 @@
   "name": "Juego de Adivinar Banderas",
   "short_name": "Banderas",
   "description": "Juego interactivo de adivinar banderas de países",
-  "start_url": "https://martinpenalva.github.io/Juego_Banderas/",
+  "start_url": "https://martinpenalva.github.io/Juego_Banderas/index.html",
   "scope": "https://martinpenalva.github.io/Juego_Banderas/",
   "display": "standalone",
   "background_color": "#667eea",
