@@ -36,11 +36,28 @@ Un juego interactivo de adivinar banderas de países con sistema de racha y como
 - JavaScript (Vanilla)
 - Emojis Unicode para banderas
 
+## 📱 Instalación en Móvil
+
+Para agregar el juego a la pantalla de inicio de tu móvil:
+
+1. **Habilita GitHub Pages** (si quieres que funcione desde el repositorio):
+   - Ve a Settings → Pages en tu repositorio
+   - Selecciona la rama `main` como fuente
+   - El juego estará disponible en `https://tuusuario.github.io/Juego_Banderas/`
+
+2. **O abre directamente el archivo**:
+   - Descarga el repositorio
+   - Abre `index.html` en tu navegador móvil
+   - Agrega a pantalla de inicio desde el menú del navegador
+
+3. **El icono aparecerá automáticamente** cuando agregues la app a tu pantalla de inicio
+
 ## 📝 Notas
 
 - El juego funciona completamente offline una vez cargado
 - Las banderas se muestran como emojis Unicode para máxima compatibilidad
 - El juego intenta cargar más países desde la API de REST Countries, pero tiene una lista de respaldo
+- Los iconos PWA están incluidos en el repositorio (`icon-192.png`, `icon-512.png`)
 
 ## 📄 Licencia
 
