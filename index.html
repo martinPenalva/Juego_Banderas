@@ -3399,17 +3399,66 @@
                 const snapshot = await getDocs(q);
                 const resultados = [];
 
-                snapshot.forEach(doc => {
-                    const data = doc.data();
+                // Verificar cada puntuación para ver si el usuario aún existe
+                for (const docSnapshot of snapshot.docs) {
+                    const data = docSnapshot.data();
+                    
                     // Si se especificó un nivel, filtrar por ese nivel
-                    if (nivel) {
-                        if (data.nivel === nivel) {
+                    if (nivel && data.nivel !== nivel) {
+                        continue;
+                    }
+                    
+                    // Si tiene userId, verificar si el usuario aún existe
+                    if (data.userId) {
+                        try {
+                            // Verificar si el usuario existe en la colección de usuarios
+                            const userDoc = await getDoc(doc(db, "usuarios", data.userId));
+                            if (!userDoc.exists()) {
+                                // El usuario no existe en la colección, omitir esta puntuación
+                                console.log(`Usuario ${data.userId} no existe en usuarios, omitiendo puntuación`);
+                                continue;
+                            }
+                            
+                            // Verificar también que el documento tenga un nombre válido
+                            const userData = userDoc.data();
+                            if (!userData || !userData.nombre) {
+                                // El documento existe pero no tiene datos válidos, omitir
+                                console.log(`Usuario ${data.userId} no tiene datos válidos, omitiendo puntuación`);
+                                continue;
+                            }
+                            
+                            // Verificar que el nombre en la puntuación coincida EXACTAMENTE con el nombre del usuario
+                            // Si no coincide, puede ser que el usuario fue eliminado y recreado, o que hay una inconsistencia
+                            if (data.nombre && userData.nombre) {
+                                if (data.nombre.trim() !== userData.nombre.trim()) {
+                                    // Los nombres no coinciden exactamente, omitir esta puntuación
+                                    console.log(`Nombre no coincide para usuario ${data.userId}: "${data.nombre}" vs "${userData.nombre}", omitiendo puntuación`);
+                                    continue;
+                                }
+                            } else if (data.nombre && !userData.nombre) {
+                                // La puntuación tiene nombre pero el usuario no, omitir
+                                console.log(`Usuario ${data.userId} no tiene nombre en su documento, omitiendo puntuación`);
+                                continue;
+                            }
+                            
+                            // Verificar que el documento no esté marcado como eliminado (si agregamos ese campo en el futuro)
+                            if (userData.eliminado === true) {
+                                console.log(`Usuario ${data.userId} está marcado como eliminado, omitiendo puntuación`);
+                                continue;
+                            }
+                            
+                            // Si el usuario existe y tiene datos válidos, agregar al ranking
                             resultados.push(data);
+                        } catch (error) {
+                            // Si hay error al verificar, omitir esta puntuación por seguridad
+                            console.log(`Error al verificar usuario ${data.userId}:`, error);
+                            continue;
                         }
                     } else {
+                        // Si no tiene userId (puntuación anónima), incluirla
                         resultados.push(data);
                     }
-                });
+                }
                 
                 // Ordenar por puntos (por si acaso) y limitar a 10
                 resultados.sort((a, b) => (b.puntos || 0) - (a.puntos || 0));
