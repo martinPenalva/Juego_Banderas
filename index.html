@@ -668,16 +668,24 @@
                 score++;
                 messageEl.textContent = '¡Correcto! 🎉';
                 messageEl.className = 'message correct';
+                
+                // Actualizar puntuación
+                document.getElementById('score').textContent = score;
+                
+                // Pasar automáticamente a la siguiente bandera después de 2 segundos
+                setTimeout(() => {
+                    loadNewQuestion();
+                }, 2000);
             } else {
                 messageEl.textContent = `Incorrecto. La respuesta correcta es: ${currentCountry.name.common}`;
                 messageEl.className = 'message incorrect';
+                
+                // Actualizar puntuación
+                document.getElementById('score').textContent = score;
+                
+                // Mostrar botón siguiente (solo para respuestas incorrectas)
+                document.getElementById('nextBtn').classList.add('show');
             }
-
-            // Actualizar puntuación
-            document.getElementById('score').textContent = score;
-
-            // Mostrar botón siguiente
-            document.getElementById('nextBtn').classList.add('show');
         }
 
         // Event listeners
