@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generar Iconos</title>
+</head>
+<body>
+    <h1>Generador de Iconos PWA</h1>
+    <p>Este script generará los iconos necesarios para la PWA.</p>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <div id="downloads"></div>
+    
+    <script>
+        const sizes = [192, 512];
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const downloads = document.getElementById('downloads');
+        
+        // Crear gradiente de fondo
+        function createIcon(size) {
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Fondo con gradiente
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Bordes redondeados (simulado)
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            const radius = size * 0.2;
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(size - radius, 0);
+            ctx.quadraticCurveTo(size, 0, size, radius);
+            ctx.lineTo(size, size - radius);
+            ctx.quadraticCurveTo(size, size, size - radius, size);
+            ctx.lineTo(radius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.globalCompositeOperation = 'source-over';
+            
+            // Dibujar bandera usando formas geométricas
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const flagWidth = size * 0.6;
+            const flagHeight = size * 0.4;
+            
+            // Asta de la bandera
+            ctx.fillStyle = '#8B7355';
+            ctx.fillRect(centerX - flagWidth/2 - size * 0.08, centerY - flagHeight/2, size * 0.08, flagHeight);
+            
+            // Bandera (rectángulo con franjas)
+            const stripeHeight = flagHeight / 3;
+            // Franja superior (roja)
+            ctx.fillStyle = '#DC143C';
+            ctx.fillRect(centerX - flagWidth/2, centerY - flagHeight/2, flagWidth, stripeHeight);
+            // Franja media (blanca)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(centerX - flagWidth/2, centerY - flagHeight/2 + stripeHeight, flagWidth, stripeHeight);
+            // Franja inferior (azul)
+            ctx.fillStyle = '#1E90FF';
+            ctx.fillRect(centerX - flagWidth/2, centerY - flagHeight/2 + stripeHeight * 2, flagWidth, stripeHeight);
+            
+            // Borde de la bandera
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(centerX - flagWidth/2, centerY - flagHeight/2, flagWidth, flagHeight);
+            
+            // Convertir a blob y descargar automáticamente
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}.png`;
+                a.click(); // Descargar automáticamente
+                URL.revokeObjectURL(url);
+                
+                // Mostrar confirmación
+                const p = document.createElement('p');
+                p.textContent = `✓ icon-${size}.png descargado`;
+                p.style.color = '#48bb78';
+                p.style.margin = '5px';
+                downloads.appendChild(p);
+            }, 'image/png');
+        }
+        
+        sizes.forEach(size => createIcon(size));
+    </script>
+</body>
+</html>
+
