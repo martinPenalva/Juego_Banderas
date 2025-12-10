@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Adivinar Banderas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .score {
+            font-size: 1.2em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .streak-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .streak-fire {
+            font-size: 2em;
+            animation: fireFlicker 0.5s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 10px rgba(255, 69, 0, 0.8));
+            transition: all 0.3s ease;
+        }
+
+        .streak-fire.hot {
+            font-size: 2.5em;
+            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 1));
+            animation: fireFlicker 0.3s ease-in-out infinite alternate;
+        }
+
+        @keyframes fireFlicker {
+            0% {
+                transform: scale(1) rotate(-2deg);
+                filter: drop-shadow(0 0 10px rgba(255, 69, 0, 0.8));
+            }
+            100% {
+                transform: scale(1.1) rotate(2deg);
+                filter: drop-shadow(0 0 15px rgba(255, 140, 0, 1));
+            }
+        }
+
+        .streak-text {
+            font-size: 1.1em;
+            color: #ff4500;
+            font-weight: bold;
+        }
+
+        .joker-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .joker-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .joker-btn:active {
+            transform: translateY(0);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(255, 107, 107, 0.8);
+            }
+        }
+
+        .flag-container {
+            margin: 30px 0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .flag {
+            font-size: 8em;
+            line-height: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .flag div {
+            font-size: 10em;
+            line-height: 1;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .flag img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 180px;
+            min-height: 100px;
+            object-fit: contain;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background: white;
+            padding: 5px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .option {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .option:active {
+            transform: translateY(0);
+        }
+
+        .option.correct {
+            background: #48bb78;
+        }
+
+        .option.incorrect {
+            background: #f56565;
+        }
+
+        .option:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .next-btn {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background: #653a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        .message.correct {
+            color: #48bb78;
+        }
+
+        .message.incorrect {
+            color: #f56565;
+        }
+
+        .loading {
+            font-size: 1.2em;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .flag {
+                font-size: 6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏳️ Adivina la Bandera</h1>
+        <div class="score">Puntuación: <span id="score">0</span></div>
+        <div class="streak-container">
+            <div class="streak-fire" id="streakFire">🔥</div>
+            <div class="streak-text">Racha: <span id="streak">0</span></div>
+        </div>
+        
+        <div class="flag-container">
+            <div class="flag" id="flag">🏳️</div>
+        </div>
+
+        <div class="loading" id="loading">Cargando...</div>
+
+        <div class="options" id="options" style="display: none;">
+            <button class="option" id="option1"></button>
+            <button class="option" id="option2"></button>
+            <button class="option" id="option3"></button>
+            <button class="option" id="option4"></button>
+        </div>
+
+        <button class="joker-btn" id="jokerBtn" style="display: none;">🎯 Comodín</button>
+
+        <div class="message" id="message"></div>
+        <button class="next-btn" id="nextBtn">Siguiente Bandera</button>
+    </div>
+
+    <script>
+        let countries = [];
+        let currentCountry = null;
+        let score = 0;
+        let streak = 0;
+        let answered = false;
+        let jokerAvailable = false;
+        let jokerUsed = false;
+
+        // Lista de países como respaldo (si la API falla)
+        const fallbackCountries = [
+            { name: { common: "España" }, cca2: "ES" },
+            { name: { common: "Francia" }, cca2: "FR" },
+            { name: { common: "Alemania" }, cca2: "DE" },
+            { name: { common: "Italia" }, cca2: "IT" },
+            { name: { common: "Reino Unido" }, cca2: "GB" },
+            { name: { common: "Estados Unidos" }, cca2: "US" },
+            { name: { common: "México" }, cca2: "MX" },
+            { name: { common: "Argentina" }, cca2: "AR" },
+            { name: { common: "Brasil" }, cca2: "BR" },
+            { name: { common: "Chile" }, cca2: "CL" },
+            { name: { common: "Colombia" }, cca2: "CO" },
+            { name: { common: "Perú" }, cca2: "PE" },
+            { name: { common: "Venezuela" }, cca2: "VE" },
+            { name: { common: "Ecuador" }, cca2: "EC" },
+            { name: { common: "Uruguay" }, cca2: "UY" },
+            { name: { common: "Paraguay" }, cca2: "PY" },
+            { name: { common: "Bolivia" }, cca2: "BO" },
+            { name: { common: "Cuba" }, cca2: "CU" },
+            { name: { common: "República Dominicana" }, cca2: "DO" },
+            { name: { common: "Panamá" }, cca2: "PA" },
+            { name: { common: "Costa Rica" }, cca2: "CR" },
+            { name: { common: "Guatemala" }, cca2: "GT" },
+            { name: { common: "Honduras" }, cca2: "HN" },
+            { name: { common: "El Salvador" }, cca2: "SV" },
+            { name: { common: "Nicaragua" }, cca2: "NI" },
+            { name: { common: "Japón" }, cca2: "JP" },
+            { name: { common: "China" }, cca2: "CN" },
+            { name: { common: "India" }, cca2: "IN" },
+            { name: { common: "Rusia" }, cca2: "RU" },
+            { name: { common: "Canadá" }, cca2: "CA" },
+            { name: { common: "Australia" }, cca2: "AU" },
+            { name: { common: "Nueva Zelanda" }, cca2: "NZ" },
+            { name: { common: "Sudáfrica" }, cca2: "ZA" },
+            { name: { common: "Egipto" }, cca2: "EG" },
+            { name: { common: "Marruecos" }, cca2: "MA" },
+            { name: { common: "Turquía" }, cca2: "TR" },
+            { name: { common: "Grecia" }, cca2: "GR" },
+            { name: { common: "Portugal" }, cca2: "PT" },
+            { name: { common: "Países Bajos" }, cca2: "NL" },
+            { name: { common: "Bélgica" }, cca2: "BE" },
+            { name: { common: "Suiza" }, cca2: "CH" },
+            { name: { common: "Austria" }, cca2: "AT" },
+            { name: { common: "Suecia" }, cca2: "SE" },
+            { name: { common: "Noruega" }, cca2: "NO" },
+            { name: { common: "Dinamarca" }, cca2: "DK" },
+            { name: { common: "Finlandia" }, cca2: "FI" },
+            { name: { common: "Polonia" }, cca2: "PL" },
+            { name: { common: "República Checa" }, cca2: "CZ" },
+            { name: { common: "Hungría" }, cca2: "HU" },
+            { name: { common: "Rumania" }, cca2: "RO" },
+            { name: { common: "Bulgaria" }, cca2: "BG" },
+            { name: { common: "Croacia" }, cca2: "HR" },
+            { name: { common: "Serbia" }, cca2: "RS" },
+            { name: { common: "Ucrania" }, cca2: "UA" },
+            { name: { common: "Israel" }, cca2: "IL" },
+            { name: { common: "Arabia Saudí" }, cca2: "SA" },
+            { name: { common: "Irán" }, cca2: "IR" },
+            { name: { common: "Irak" }, cca2: "IQ" },
+            { name: { common: "Pakistán" }, cca2: "PK" },
+            { name: { common: "Bangladesh" }, cca2: "BD" },
+            { name: { common: "Tailandia" }, cca2: "TH" },
+            { name: { common: "Vietnam" }, cca2: "VN" },
+            { name: { common: "Corea del Sur" }, cca2: "KR" },
+            { name: { common: "Corea del Norte" }, cca2: "KP" },
+            { name: { common: "Filipinas" }, cca2: "PH" },
+            { name: { common: "Indonesia" }, cca2: "ID" },
+            { name: { common: "Malasia" }, cca2: "MY" },
+            { name: { common: "Singapur" }, cca2: "SG" }
+        ];
+
+        // Cargar países desde la API
+        async function loadCountries() {
+            const loadingEl = document.getElementById('loading');
+            
+            try {
+                loadingEl.textContent = 'Cargando países...';
+                
+                // Intentar cargar desde la API (solo una vez, sin timeout para evitar errores)
+                let data = null;
+                
+                try {
+                    const response = await fetch('https://restcountries.com/v3.1/all', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const jsonData = await response.json();
+                        if (Array.isArray(jsonData) && jsonData.length > 0) {
+                            data = jsonData;
+                        }
+                    }
+                } catch (err) {
+                    console.log('API no disponible, usando lista de respaldo');
+                }
+                
+                // Si la API falla o no devuelve datos, usar lista de respaldo
+                if (!data || data.length === 0) {
+                    console.log('Usando lista de países de respaldo');
+                    countries = fallbackCountries;
+                } else {
+                    // Filtrar países que tengan nombre y código ISO (para FlagsAPI)
+                    countries = data.filter(country =>
+                        country &&
+                        country.name &&
+                        country.name.common &&
+                        country.cca2 // Código ISO de 2 letras para FlagsAPI
+                    );
+                    
+                    // Si después del filtro no hay países, usar respaldo
+                    if (countries.length === 0) {
+                        console.log('No se encontraron países válidos, usando lista de respaldo');
+                        countries = fallbackCountries;
+                    }
+                }
+                
+                if (countries.length === 0) {
+                    throw new Error('No se pudo cargar ningún país');
+                }
+                
+                loadingEl.style.display = 'none';
+                document.getElementById('options').style.display = 'flex';
+                loadNewQuestion();
+            } catch (error) {
+                // Si todo falla, usar la lista de respaldo
+                console.log('Error al cargar desde API, usando lista de respaldo:', error);
+                countries = fallbackCountries;
+                
+                if (countries.length > 0) {
+                    loadingEl.style.display = 'none';
+                    document.getElementById('options').style.display = 'flex';
+                    loadNewQuestion();
+                } else {
+                    loadingEl.textContent = `Error: ${error.message}. Recarga la página.`;
+                    loadingEl.style.color = '#f56565';
+                }
+            }
+        }
+
+        // Cargar nueva pregunta
+        function loadNewQuestion() {
+            if (countries.length === 0) return;
+
+            // Seleccionar país aleatorio
+            const randomIndex = Math.floor(Math.random() * countries.length);
+            currentCountry = countries[randomIndex];
+
+            // Mostrar bandera usando emojis Unicode (siempre funcionan)
+            const countryCode = currentCountry.cca2; // Código ISO de 2 letras
+            
+            // Función para convertir código ISO a emoji de bandera
+            function getFlagEmoji(countryCode) {
+                if (!countryCode || countryCode.length !== 2) return '🏳️';
+                
+                const codePoints = countryCode
+                    .toUpperCase()
+                    .split('')
+                    .map(char => 127397 + char.charCodeAt());
+                return String.fromCodePoint(...codePoints);
+            }
+            
+            const flagEmoji = getFlagEmoji(countryCode);
+            const flagEl = document.getElementById('flag');
+            
+            // Mostrar emoji de bandera (grande y centrado)
+            flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none;">${flagEmoji}</div>`;
+            
+            // También intentar cargar imagen como respaldo (opcional, en segundo plano)
+            const flagUrls = [
+                `https://flagcdn.com/${countryCode.toLowerCase()}.svg`,
+                `https://flagcdn.com/w256/${countryCode.toLowerCase()}.png`,
+                `https://flagsapi.com/${countryCode}/flat/64.png`
+            ];
+            
+            // Intentar cargar imagen en segundo plano (sin bloquear)
+            let imgIndex = 0;
+            function tryLoadImage() {
+                if (imgIndex >= flagUrls.length) return;
+                
+                const img = new Image();
+                img.src = flagUrls[imgIndex];
+                
+                img.onload = function() {
+                    // Si la imagen carga, reemplazar el emoji
+                    flagEl.innerHTML = '';
+                    img.alt = `Bandera de ${currentCountry.name.common}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '180px';
+                    img.style.minHeight = '100px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+                    img.style.borderRadius = '8px';
+                    img.style.background = 'white';
+                    img.style.padding = '5px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    flagEl.appendChild(img);
+                };
+                
+                img.onerror = function() {
+                    imgIndex++;
+                    tryLoadImage();
+                };
+            }
+            
+            // Intentar cargar imagen (opcional, el emoji ya está mostrado)
+            tryLoadImage();
+
+            // Generar opciones (1 correcta + 3 incorrectas)
+            const wrongCountries = countries
+                .filter(c => c.name.common !== currentCountry.name.common)
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 3);
+
+            const options = [
+                currentCountry.name.common,
+                wrongCountries[0].name.common,
+                wrongCountries[1].name.common,
+                wrongCountries[2].name.common
+            ].sort(() => Math.random() - 0.5);
+
+            // Asignar opciones a los botones
+            document.getElementById('option1').textContent = options[0];
+            document.getElementById('option2').textContent = options[1];
+            document.getElementById('option3').textContent = options[2];
+            document.getElementById('option4').textContent = options[3];
+
+            // Resetear estado
+            answered = false;
+            jokerUsed = false;
+            document.getElementById('message').textContent = '';
+            document.getElementById('message').className = 'message';
+            document.getElementById('nextBtn').classList.remove('show');
+
+            // Habilitar botones
+            [1, 2, 3, 4].forEach(i => {
+                const btn = document.getElementById(`option${i}`);
+                btn.disabled = false;
+                btn.className = 'option';
+                btn.style.display = 'block';
+            });
+
+            // Actualizar visibilidad del comodín
+            updateJokerButton();
+        }
+
+        // Actualizar racha
+        function updateStreak(isCorrect) {
+            const fireEl = document.getElementById('streakFire');
+            
+            if (isCorrect) {
+                streak++;
+                // Hacer el fuego más intenso cuando la racha es alta
+                if (streak >= 5) {
+                    fireEl.classList.add('hot');
+                }
+            } else {
+                streak = 0;
+                jokerAvailable = false;
+                jokerUsed = false;
+                fireEl.classList.remove('hot');
+            }
+            
+            document.getElementById('streak').textContent = streak;
+            updateJokerButton();
+        }
+
+        // Actualizar botón comodín
+        function updateJokerButton() {
+            const jokerBtn = document.getElementById('jokerBtn');
+            if (streak >= 5 && !jokerUsed) {
+                jokerAvailable = true;
+                jokerBtn.style.display = 'block';
+            } else {
+                jokerAvailable = false;
+                jokerBtn.style.display = 'none';
+            }
+        }
+
+        // Usar comodín
+        function useJoker() {
+            if (!jokerAvailable || jokerUsed || answered) return;
+
+            jokerUsed = true;
+            jokerAvailable = false;
+            document.getElementById('jokerBtn').style.display = 'none';
+
+            // Encontrar la respuesta correcta
+            const correctAnswer = currentCountry.name.common;
+            
+            // Obtener todos los botones incorrectos
+            const incorrectButtons = [];
+            [1, 2, 3, 4].forEach(i => {
+                const btn = document.getElementById(`option${i}`);
+                if (btn.textContent !== correctAnswer) {
+                    incorrectButtons.push(btn);
+                }
+            });
+
+            // Eliminar 2 opciones incorrectas aleatoriamente
+            const toRemove = incorrectButtons
+                .sort(() => Math.random() - 0.5)
+                .slice(0, 2);
+
+            toRemove.forEach(btn => {
+                btn.style.display = 'none';
+                btn.disabled = true;
+            });
+
+            // Reducir la racha en 5 (se usó el comodín)
+            streak = Math.max(0, streak - 5);
+            document.getElementById('streak').textContent = streak;
+            
+            // Actualizar el fuego
+            const fireEl = document.getElementById('streakFire');
+            if (streak < 5) {
+                fireEl.classList.remove('hot');
+            }
+            
+            updateJokerButton();
+        }
+
+        // Manejar selección de opción
+        function selectOption(optionNumber) {
+            if (answered) return;
+
+            const selectedBtn = document.getElementById(`option${optionNumber}`);
+            const selectedText = selectedBtn.textContent;
+            const isCorrect = selectedText === currentCountry.name.common;
+
+            answered = true;
+
+            // Deshabilitar todos los botones
+            [1, 2, 3, 4].forEach(i => {
+                const btn = document.getElementById(`option${i}`);
+                if (btn.style.display !== 'none') {
+                    btn.disabled = true;
+                    
+                    if (btn.textContent === currentCountry.name.common) {
+                        btn.classList.add('correct');
+                    } else if (btn === selectedBtn && !isCorrect) {
+                        btn.classList.add('incorrect');
+                    }
+                }
+            });
+
+            // Actualizar racha
+            updateStreak(isCorrect);
+
+            // Mostrar mensaje
+            const messageEl = document.getElementById('message');
+            if (isCorrect) {
+                score++;
+                messageEl.textContent = '¡Correcto! 🎉';
+                messageEl.className = 'message correct';
+            } else {
+                messageEl.textContent = `Incorrecto. La respuesta correcta es: ${currentCountry.name.common}`;
+                messageEl.className = 'message incorrect';
+            }
+
+            // Actualizar puntuación
+            document.getElementById('score').textContent = score;
+
+            // Mostrar botón siguiente
+            document.getElementById('nextBtn').classList.add('show');
+        }
+
+        // Event listeners
+        document.getElementById('option1').addEventListener('click', () => selectOption(1));
+        document.getElementById('option2').addEventListener('click', () => selectOption(2));
+        document.getElementById('option3').addEventListener('click', () => selectOption(3));
+        document.getElementById('option4').addEventListener('click', () => selectOption(4));
+        document.getElementById('jokerBtn').addEventListener('click', useJoker);
+        document.getElementById('nextBtn').addEventListener('click', loadNewQuestion);
+
+        // Iniciar juego
+        loadCountries();
+    </script>
+</body>
+</html>
+
