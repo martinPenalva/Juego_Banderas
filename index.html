@@ -2023,6 +2023,279 @@
             font-weight: 500;
         }
 
+        .profile-description-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .profile-description-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .profile-description-input:focus {
+            border-color: #667eea;
+        }
+
+        .profile-save-description-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .profile-save-description-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(72, 187, 120, 0.4);
+        }
+
+        .friend-profile-description {
+            color: #4a5568;
+            font-style: italic;
+            padding: 10px;
+            background: #f7fafc;
+            border-radius: 8px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .friend-description-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .friend-profile-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .remove-friend-btn {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
+        }
+
+        .remove-friend-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.6);
+        }
+
+        /* Estilos para biblioteca */
+        .profile-library-section {
+            width: 100%;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+        }
+
+        .profile-library-section h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .library-upload-container {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .library-upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .library-upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .library-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .library-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .library-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .library-item-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(245, 101, 101, 0.9);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .library-item:hover .library-item-remove {
+            opacity: 1;
+        }
+
+        .library-item-remove:hover {
+            background: rgba(229, 62, 62, 1);
+            transform: scale(1.1);
+        }
+
+        .friend-library-section {
+            width: 100%;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+        }
+
+        .friend-library-section h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .friend-library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .friend-library-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .friend-library-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .friend-library-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Modal para ver imagen en grande */
+        .library-image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 4000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .library-image-modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .library-image-modal-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .library-image-modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .library-image-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
         .profile-actions {
             display: flex;
             flex-direction: column;
@@ -2435,16 +2708,19 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .friends-search-input {
             flex: 1;
+            min-width: 0;
             padding: 12px 15px;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-size: 1em;
             outline: none;
             transition: border-color 0.3s ease;
+            box-sizing: border-box;
         }
 
         .friends-search-input:focus {
@@ -2462,6 +2738,8 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .friends-search-btn:hover {
@@ -2483,6 +2761,7 @@
             background: #f7fafc;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
         }
 
         .friend-result-picture {
@@ -2761,6 +3040,132 @@
             .auth-box {
                 padding: 30px 20px;
             }
+
+            /* Estilos responsive para modal de búsqueda de amigos */
+            .friends-modal-content {
+                padding: 20px 15px;
+                width: 95%;
+                max-height: 95vh;
+            }
+
+            .friends-modal-header {
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+
+            .friends-modal-header h2 {
+                font-size: 1.4em;
+            }
+
+            .friends-search-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .friends-search-input {
+                width: 100%;
+                padding: 10px 12px;
+                font-size: 0.95em;
+            }
+
+            .friends-search-btn {
+                width: 100%;
+                padding: 10px 20px;
+            }
+
+            .friend-result-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .friend-result-picture {
+                width: 45px;
+                height: 45px;
+            }
+
+            .friend-result-info {
+                width: 100%;
+            }
+
+            .friend-result-name {
+                font-size: 1em;
+            }
+
+            .friend-result-email {
+                font-size: 0.85em;
+            }
+
+            .friend-result-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .send-request-btn {
+                padding: 8px 16px;
+                font-size: 0.85em;
+            }
+
+            /* Estilos responsive para modal de bandeja */
+            .inbox-modal-content {
+                padding: 20px 15px;
+                width: 95%;
+                max-height: 95vh;
+            }
+
+            .inbox-modal-header {
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+
+            .inbox-modal-header h2 {
+                font-size: 1.4em;
+            }
+
+            .inbox-request-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .inbox-request-actions {
+                width: 100%;
+                justify-content: flex-end;
+                margin-left: 0;
+            }
+
+            .accept-request-btn,
+            .reject-request-btn {
+                padding: 8px 16px;
+                font-size: 0.85em;
+            }
+
+            /* Estilos responsive para modal de perfil de amigo */
+            .friend-profile-modal-content {
+                padding: 20px 15px;
+                width: 95%;
+                max-height: 95vh;
+            }
+
+            .friend-profile-modal-header {
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+
+            .friend-profile-modal-header h2 {
+                font-size: 1.4em;
+            }
+
+            .friend-profile-picture-large {
+                width: 120px;
+                height: 120px;
+            }
+
+            .friend-profile-picture-large-placeholder {
+                font-size: 4em;
+            }
         }
     </style>
 </head>
@@ -2836,6 +3241,11 @@
                         <span class="profile-info-label">Email:</span>
                         <span class="profile-info-value" id="profileEmail">-</span>
                     </div>
+                    <div class="profile-info-item profile-description-item">
+                        <span class="profile-info-label">Descripción:</span>
+                        <textarea id="profileDescription" class="profile-description-input" placeholder="Escribe una descripción sobre ti..." maxlength="500"></textarea>
+                        <button class="profile-save-description-btn" id="profileSaveDescriptionBtn">💾 Guardar Descripción</button>
+                    </div>
                 </div>
                 <div class="profile-actions">
                     <button class="profile-save-btn" id="profileSaveBtn" style="display: none;">💾 Guardar Cambios</button>
@@ -2850,9 +3260,25 @@
                         <h3>Mis Amigos</h3>
                         <div class="friends-list" id="friendsList"></div>
                     </div>
+                    <div class="profile-library-section" id="profileLibrarySection">
+                        <h3>📚 BIBLIOTECA</h3>
+                        <div class="library-upload-container">
+                            <label for="libraryImageInput" class="library-upload-btn">📷 Añadir Foto</label>
+                            <input type="file" id="libraryImageInput" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <div class="library-grid" id="libraryGrid"></div>
+                    </div>
                     <button class="profile-logout-btn" id="profileLogoutBtn">🚪 Cerrar Sesión</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver imagen de biblioteca en grande -->
+    <div class="library-image-modal" id="libraryImageModal">
+        <div class="library-image-modal-content">
+            <button class="library-image-modal-close" id="libraryImageModalClose">✕</button>
+            <img id="libraryImageModalImg" src="" alt="Imagen">
         </div>
     </div>
 
@@ -2909,6 +3335,17 @@
                         <span class="friend-profile-info-label">Email:</span>
                         <span class="friend-profile-info-value" id="friendProfileEmail">-</span>
                     </div>
+                    <div class="friend-profile-info-item friend-description-item" id="friendDescriptionItem" style="display: none;">
+                        <span class="friend-profile-info-label">Descripción:</span>
+                        <div class="friend-profile-description" id="friendProfileDescription">-</div>
+                    </div>
+                </div>
+                <div class="friend-profile-actions" id="friendProfileActions">
+                    <button class="remove-friend-btn" id="removeFriendBtn">🗑️ Eliminar Amigo</button>
+                </div>
+                <div class="friend-library-section" id="friendLibrarySection" style="display: none;">
+                    <h3>📚 BIBLIOTECA</h3>
+                    <div class="friend-library-grid" id="friendLibraryGrid"></div>
                 </div>
                 <div class="friend-profile-scores-section" id="friendProfileScoresSection" style="display: none;">
                     <h3>Puntuaciones Máximas</h3>
@@ -4668,6 +5105,50 @@
             });
         }
 
+        // Event listener para guardar descripción
+        const profileSaveDescriptionBtn = document.getElementById('profileSaveDescriptionBtn');
+        if (profileSaveDescriptionBtn) {
+            profileSaveDescriptionBtn.addEventListener('click', async () => {
+                if (window.saveProfileDescription) {
+                    await window.saveProfileDescription();
+                }
+            });
+        }
+
+        // Event listeners para biblioteca
+        const libraryImageInput = document.getElementById('libraryImageInput');
+        if (libraryImageInput) {
+            libraryImageInput.addEventListener('change', async (e) => {
+                const files = Array.from(e.target.files);
+                if (files.length > 0) {
+                    for (const file of files) {
+                        await window.uploadLibraryImage(file);
+                    }
+                    e.target.value = ''; // Limpiar input
+                }
+            });
+        }
+
+        const libraryImageModalClose = document.getElementById('libraryImageModalClose');
+        if (libraryImageModalClose) {
+            libraryImageModalClose.addEventListener('click', () => {
+                if (window.hideLibraryImage) {
+                    window.hideLibraryImage();
+                }
+            });
+        }
+
+        const libraryImageModal = document.getElementById('libraryImageModal');
+        if (libraryImageModal) {
+            libraryImageModal.addEventListener('click', (e) => {
+                if (e.target === libraryImageModal) {
+                    if (window.hideLibraryImage) {
+                        window.hideLibraryImage();
+                    }
+                }
+            });
+        }
+
         const friendsModalClose = document.getElementById('friendsModalClose');
         if (friendsModalClose) {
             friendsModalClose.addEventListener('click', () => {
@@ -5266,6 +5747,11 @@
                         window.loadUserScores();
                     }
                 }
+                
+                // Cargar descripción
+                if (window.loadProfileDescription) {
+                    window.loadProfileDescription();
+                }
             }
         };
 
@@ -5466,6 +5952,36 @@
                     }
                 }
                 
+                // Mostrar descripción si existe (solo visible para amigos)
+                const descriptionItem = document.getElementById('friendDescriptionItem');
+                const descriptionEl = document.getElementById('friendProfileDescription');
+                if (friendData.descripcion && friendData.descripcion.trim()) {
+                    if (descriptionEl) {
+                        descriptionEl.textContent = friendData.descripcion;
+                    }
+                    if (descriptionItem) {
+                        descriptionItem.style.display = 'flex';
+                    }
+                } else {
+                    if (descriptionItem) {
+                        descriptionItem.style.display = 'none';
+                    }
+                }
+                
+                // Configurar botón de eliminar amigo
+                const removeFriendBtn = document.getElementById('removeFriendBtn');
+                if (removeFriendBtn) {
+                    removeFriendBtn.onclick = async () => {
+                        if (confirm(`¿Estás seguro de que quieres eliminar a ${friendData.nombre || 'este amigo'}?`)) {
+                            const success = await window.removeFriend(friendId);
+                            if (success) {
+                                window.hideFriendProfileModal();
+                                await window.loadFriendsList();
+                            }
+                        }
+                    };
+                }
+                
                 // Verificar si el amigo tiene la opción de mostrar puntuaciones activada
                 const mostrarPuntuaciones = friendData.mostrarPuntuaciones !== false; // Por defecto true
                 
@@ -5479,6 +5995,11 @@
                     if (scoresSection) {
                         scoresSection.style.display = 'none';
                     }
+                }
+                
+                // Cargar biblioteca del amigo (solo visible para amigos)
+                if (window.loadFriendLibrary) {
+                    await window.loadFriendLibrary(friendId);
                 }
                 
                 modal.style.display = 'flex';
@@ -5547,6 +6068,296 @@
             const modal = document.getElementById('friendProfileModal');
             if (modal) {
                 modal.style.display = 'none';
+            }
+        };
+
+        // Guardar descripción del perfil
+        window.saveProfileDescription = async function() {
+            if (!window.currentUser) return false;
+            
+            try {
+                const descriptionInput = document.getElementById('profileDescription');
+                if (!descriptionInput) return false;
+                
+                const descripcion = descriptionInput.value.trim();
+                
+                await updateDoc(doc(db, "usuarios", window.currentUser.uid), {
+                    descripcion: descripcion
+                });
+                
+                const saveBtn = document.getElementById('profileSaveDescriptionBtn');
+                if (saveBtn) {
+                    const originalText = saveBtn.textContent;
+                    saveBtn.textContent = '✅ Guardado';
+                    saveBtn.disabled = true;
+                    setTimeout(() => {
+                        saveBtn.textContent = originalText;
+                        saveBtn.disabled = false;
+                    }, 2000);
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error al guardar descripción:', error);
+                alert('Error al guardar la descripción');
+                return false;
+            }
+        };
+
+        // Cargar descripción del perfil
+        window.loadProfileDescription = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                if (userDoc.exists()) {
+                    const descripcion = userDoc.data().descripcion || '';
+                    const descriptionInput = document.getElementById('profileDescription');
+                    if (descriptionInput) {
+                        descriptionInput.value = descripcion;
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar descripción:', error);
+            }
+        };
+
+        // Comprimir imagen para biblioteca (similar a foto de perfil)
+        async function compressLibraryImage(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const maxWidth = 800;
+                        const maxHeight = 800;
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height *= maxWidth / width;
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width *= maxHeight / height;
+                                height = maxHeight;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                        resolve(compressedBase64);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Subir foto a la biblioteca
+        window.uploadLibraryImage = async function(file) {
+            if (!window.currentUser) return false;
+            
+            try {
+                const compressedBase64 = await compressLibraryImage(file);
+                
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                const biblioteca = userDoc.exists() ? (userDoc.data().biblioteca || []) : [];
+                
+                biblioteca.push(compressedBase64);
+                
+                await updateDoc(doc(db, "usuarios", window.currentUser.uid), {
+                    biblioteca: biblioteca
+                });
+                
+                // Recargar biblioteca
+                await window.loadLibrary();
+                
+                return true;
+            } catch (error) {
+                console.error('Error al subir foto a biblioteca:', error);
+                alert('Error al subir la foto');
+                return false;
+            }
+        };
+
+        // Cargar biblioteca propia
+        window.loadLibrary = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                const biblioteca = userDoc.exists() ? (userDoc.data().biblioteca || []) : [];
+                
+                const libraryGrid = document.getElementById('libraryGrid');
+                if (!libraryGrid) return;
+                
+                libraryGrid.innerHTML = '';
+                
+                biblioteca.forEach((imageBase64, index) => {
+                    const libraryItem = document.createElement('div');
+                    libraryItem.className = 'library-item';
+                    
+                    const img = document.createElement('img');
+                    img.src = imageBase64;
+                    img.alt = `Foto ${index + 1}`;
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'library-item-remove';
+                    removeBtn.textContent = '✕';
+                    removeBtn.onclick = async (e) => {
+                        e.stopPropagation();
+                        if (confirm('¿Estás seguro de que quieres eliminar esta foto?')) {
+                            await window.removeLibraryImage(index);
+                        }
+                    };
+                    
+                    libraryItem.onclick = () => {
+                        window.showLibraryImage(imageBase64);
+                    };
+                    
+                    libraryItem.appendChild(img);
+                    libraryItem.appendChild(removeBtn);
+                    libraryGrid.appendChild(libraryItem);
+                });
+            } catch (error) {
+                console.error('Error al cargar biblioteca:', error);
+            }
+        };
+
+        // Cargar biblioteca del amigo
+        window.loadFriendLibrary = async function(friendId) {
+            if (!friendId) return;
+            
+            try {
+                const friendDoc = await getDoc(doc(db, "usuarios", friendId));
+                if (!friendDoc.exists()) return;
+                
+                const biblioteca = friendDoc.data().biblioteca || [];
+                const friendLibraryGrid = document.getElementById('friendLibraryGrid');
+                const friendLibrarySection = document.getElementById('friendLibrarySection');
+                
+                if (!friendLibraryGrid || !friendLibrarySection) return;
+                
+                if (biblioteca.length === 0) {
+                    friendLibrarySection.style.display = 'none';
+                    return;
+                }
+                
+                friendLibrarySection.style.display = 'block';
+                friendLibraryGrid.innerHTML = '';
+                
+                biblioteca.forEach((imageBase64) => {
+                    const libraryItem = document.createElement('div');
+                    libraryItem.className = 'friend-library-item';
+                    
+                    const img = document.createElement('img');
+                    img.src = imageBase64;
+                    img.alt = 'Foto de biblioteca';
+                    
+                    libraryItem.onclick = () => {
+                        window.showLibraryImage(imageBase64);
+                    };
+                    
+                    libraryItem.appendChild(img);
+                    friendLibraryGrid.appendChild(libraryItem);
+                });
+            } catch (error) {
+                console.error('Error al cargar biblioteca del amigo:', error);
+            }
+        };
+
+        // Eliminar foto de la biblioteca
+        window.removeLibraryImage = async function(index) {
+            if (!window.currentUser) return false;
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                const biblioteca = userDoc.exists() ? (userDoc.data().biblioteca || []) : [];
+                
+                biblioteca.splice(index, 1);
+                
+                await updateDoc(doc(db, "usuarios", window.currentUser.uid), {
+                    biblioteca: biblioteca
+                });
+                
+                // Recargar biblioteca
+                await window.loadLibrary();
+                
+                return true;
+            } catch (error) {
+                console.error('Error al eliminar foto:', error);
+                alert('Error al eliminar la foto');
+                return false;
+            }
+        };
+
+        // Mostrar imagen en grande
+        window.showLibraryImage = function(imageBase64) {
+            const modal = document.getElementById('libraryImageModal');
+            const modalImg = document.getElementById('libraryImageModalImg');
+            
+            if (modal && modalImg) {
+                modalImg.src = imageBase64;
+                modal.style.display = 'flex';
+            }
+        };
+
+        // Ocultar imagen en grande
+        window.hideLibraryImage = function() {
+            const modal = document.getElementById('libraryImageModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Eliminar amigo
+        window.removeFriend = async function(friendId) {
+            if (!window.currentUser || !friendId) return false;
+            
+            try {
+                const currentUserId = window.currentUser.uid;
+                
+                // Obtener datos de ambos usuarios
+                const currentUserRef = doc(db, "usuarios", currentUserId);
+                const friendUserRef = doc(db, "usuarios", friendId);
+                
+                const currentUserDoc = await getDoc(currentUserRef);
+                const friendUserDoc = await getDoc(friendUserRef);
+                
+                if (!currentUserDoc.exists() || !friendUserDoc.exists()) {
+                    alert('Error: Usuario no encontrado');
+                    return false;
+                }
+                
+                const currentUserAmigos = currentUserDoc.data().amigos || [];
+                const friendUserAmigos = friendUserDoc.data().amigos || [];
+                
+                // Eliminar de ambas listas
+                const updatedCurrentAmigos = currentUserAmigos.filter(id => id !== friendId);
+                const updatedFriendAmigos = friendUserAmigos.filter(id => id !== currentUserId);
+                
+                // Actualizar ambas listas
+                await updateDoc(currentUserRef, {
+                    amigos: updatedCurrentAmigos
+                });
+                
+                await updateDoc(friendUserRef, {
+                    amigos: updatedFriendAmigos
+                });
+                
+                return true;
+            } catch (error) {
+                console.error('Error al eliminar amigo:', error);
+                alert('Error al eliminar el amigo');
+                return false;
             }
         };
 
@@ -5771,6 +6582,21 @@
                             name.className = 'friend-item-name';
                             name.textContent = friendData.nombre || 'Sin nombre';
                             
+                            // Botón para eliminar amigo
+                            const removeBtn = document.createElement('button');
+                            removeBtn.className = 'friend-item-remove';
+                            removeBtn.textContent = '✕';
+                            removeBtn.title = 'Eliminar amigo';
+                            removeBtn.onclick = async (e) => {
+                                e.stopPropagation(); // Evitar que se abra el perfil
+                                if (confirm(`¿Estás seguro de que quieres eliminar a ${friendData.nombre || 'este amigo'}?`)) {
+                                    const success = await window.removeFriend(friendId);
+                                    if (success) {
+                                        await window.loadFriendsList();
+                                    }
+                                }
+                            };
+                            
                             // Hacer el item clicable para ver el perfil del amigo
                             friendItem.style.cursor = 'pointer';
                             friendItem.onclick = () => {
@@ -5779,6 +6605,7 @@
                             
                             friendItem.appendChild(picture);
                             friendItem.appendChild(name);
+                            friendItem.appendChild(removeBtn);
                             friendsListEl.appendChild(friendItem);
                         }
                     } catch (error) {
