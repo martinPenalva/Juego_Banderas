@@ -2097,13 +2097,19 @@
                 text-align: center;
             }
 
+            /* En móvil, el círculo de perfil va a la esquina superior izquierda */
             .profile-picture-container {
-                margin: 0 auto;
+                position: fixed !important;
+                top: 15px !important;
+                left: 15px !important;
+                z-index: 1000 !important;
+                margin: 0 !important;
             }
 
             .profile-picture-circle {
                 width: 50px;
                 height: 50px;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
             }
 
             .profile-picture-placeholder {
@@ -4120,95 +4126,74 @@
         });
 
         // ----------- FOTO DE PERFIL -------------
-        // Cargar foto de perfil desde Storage
+        // Cargar foto de perfil desde Firestore
         window.loadProfilePicture = async function() {
             if (!window.currentUser) return;
             
             try {
-                // Verificar si estamos en un entorno válido (no file://)
-                if (window.location.protocol === 'file:') {
-                    console.warn('⚠️ Firebase Storage no funciona con file://. Usa un servidor web (GitHub Pages, servidor local, etc.)');
+                // Obtener documento del usuario desde Firestore
+                const userDocRef = doc(db, "usuarios", window.currentUser.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (userDoc.exists() && userDoc.data().fotoPerfil) {
+                    const fotoBase64 = userDoc.data().fotoPerfil;
+                    
+                    // Actualizar círculo pequeño
+                    const smallImg = document.getElementById('profilePictureImg');
+                    const smallPlaceholder = document.getElementById('profilePicturePlaceholder');
+                    if (smallImg) {
+                        smallImg.src = fotoBase64;
+                        smallImg.style.display = 'block';
+                        if (smallPlaceholder) smallPlaceholder.style.display = 'none';
+                    }
+                    
+                    // Actualizar círculo grande en el modal
+                    const largeImg = document.getElementById('profilePictureLargeImg');
+                    const largePlaceholder = document.getElementById('profilePictureLargePlaceholder');
+                    if (largeImg) {
+                        largeImg.src = fotoBase64;
+                        largeImg.style.display = 'block';
+                        if (largePlaceholder) largePlaceholder.style.display = 'none';
+                    }
+                } else {
+                    // No hay foto, mostrar placeholder
                     clearProfilePicture();
-                    return;
-                }
-                
-                const profilePicRef = ref(storage, `profilePictures/${window.currentUser.uid}`);
-                const url = await getDownloadURL(profilePicRef);
-                
-                // Actualizar círculo pequeño
-                const smallImg = document.getElementById('profilePictureImg');
-                const smallPlaceholder = document.getElementById('profilePicturePlaceholder');
-                if (smallImg) {
-                    smallImg.src = url;
-                    smallImg.style.display = 'block';
-                    if (smallPlaceholder) smallPlaceholder.style.display = 'none';
-                }
-                
-                // Actualizar círculo grande en el modal
-                const largeImg = document.getElementById('profilePictureLargeImg');
-                const largePlaceholder = document.getElementById('profilePictureLargePlaceholder');
-                if (largeImg) {
-                    largeImg.src = url;
-                    largeImg.style.display = 'block';
-                    if (largePlaceholder) largePlaceholder.style.display = 'none';
                 }
             } catch (error) {
-                // Verificar si es un error de archivo no encontrado (404) o CORS
-                const errorCode = error.code || error.message || '';
-                
-                if (errorCode.includes('storage/object-not-found') || 
-                    errorCode.includes('404') || 
-                    error.message.includes('object-not-found')) {
-                    // Archivo no existe, mostrar placeholder (no es un error)
-                    clearProfilePicture();
-                } else if (errorCode.includes('CORS') || 
-                          error.message.includes('CORS') ||
-                          window.location.protocol === 'file:') {
-                    // Error de CORS - probablemente abriendo desde file://
-                    console.warn('⚠️ Error de CORS. Asegúrate de servir el archivo desde un servidor web (no file://)');
-                    clearProfilePicture();
-                } else {
-                    // Otro error
-                    console.log('No se pudo cargar la foto de perfil:', error.message);
-                    clearProfilePicture();
-                }
+                console.log('No se pudo cargar la foto de perfil:', error.message);
+                clearProfilePicture();
             }
         };
 
-        // Cargar foto de perfil de un usuario específico (para ranking)
+        // Cargar foto de perfil de un usuario específico (para ranking) desde Firestore
         window.loadUserProfilePicture = async function(userId, containerElement) {
             if (!userId || !containerElement) return;
             
             try {
-                // Verificar si estamos en un entorno válido (no file://)
-                if (window.location.protocol === 'file:') {
-                    // Mostrar placeholder si es file://
+                // Obtener documento del usuario desde Firestore
+                const userDocRef = doc(db, "usuarios", userId);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (userDoc.exists() && userDoc.data().fotoPerfil) {
+                    const fotoBase64 = userDoc.data().fotoPerfil;
+                    
+                    const img = document.createElement('img');
+                    img.src = fotoBase64;
+                    img.alt = 'Foto de perfil';
+                    containerElement.innerHTML = '';
+                    containerElement.appendChild(img);
+                } else {
+                    // No hay foto, mostrar placeholder
                     const placeholder = document.createElement('div');
                     placeholder.className = 'placeholder';
                     placeholder.textContent = '👤';
                     containerElement.innerHTML = '';
                     containerElement.appendChild(placeholder);
-                    return;
                 }
-                
-                const profilePicRef = ref(storage, `profilePictures/${userId}`);
-                const url = await getDownloadURL(profilePicRef);
-                
-                const img = document.createElement('img');
-                img.src = url;
-                img.alt = 'Foto de perfil';
-                containerElement.innerHTML = '';
-                containerElement.appendChild(img);
             } catch (error) {
-                // Si no hay foto o hay error, mostrar placeholder
-                const errorCode = error.code || error.message || '';
-                if (!errorCode.includes('object-not-found') && 
-                    !errorCode.includes('404') && 
-                    !error.message.includes('object-not-found')) {
-                    // Solo loguear si no es un error de "no encontrado"
-                    console.log(`No se pudo cargar foto de perfil para usuario ${userId}:`, error.message);
-                }
+                console.log(`No se pudo cargar foto de perfil para usuario ${userId}:`, error.message);
                 
+                // Mostrar placeholder en caso de error
                 const placeholder = document.createElement('div');
                 placeholder.className = 'placeholder';
                 placeholder.textContent = '👤';
@@ -4236,40 +4221,82 @@
             if (largePlaceholder) largePlaceholder.style.display = 'block';
         }
 
-        // Subir foto de perfil
+        // Función para comprimir imagen
+        function compressImage(file, maxWidth = 300, maxHeight = 300, quality = 0.8) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        // Calcular nuevas dimensiones manteniendo la proporción
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height = (height * maxWidth) / width;
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width = (width * maxHeight) / height;
+                                height = maxHeight;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Convertir a base64 con compresión
+                        const base64 = canvas.toDataURL('image/jpeg', quality);
+                        resolve(base64);
+                    };
+                    img.onerror = reject;
+                };
+                reader.onerror = reject;
+            });
+        }
+
+        // Subir foto de perfil (guardar como base64 en Firestore)
         window.uploadProfilePicture = async function(file) {
             if (!window.currentUser || !file) return false;
             
             try {
-                // Verificar si estamos en un entorno válido (no file://)
-                if (window.location.protocol === 'file:') {
-                    alert('⚠️ Firebase Storage no funciona con file://. Por favor, usa un servidor web (GitHub Pages, servidor local, etc.) para subir fotos.');
-                    return false;
-                }
-                
                 // Validar que sea una imagen
                 if (!file.type.startsWith('image/')) {
                     alert('Por favor, selecciona un archivo de imagen');
                     return false;
                 }
                 
-                // Validar tamaño (máximo 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('La imagen es demasiado grande. Máximo 5MB');
+                // Validar tamaño original (máximo 10MB antes de comprimir)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('La imagen es demasiado grande. Máximo 10MB');
                     return false;
                 }
                 
-                const profilePicRef = ref(storage, `profilePictures/${window.currentUser.uid}`);
-                await uploadBytes(profilePicRef, file);
+                // Comprimir imagen antes de guardar
+                const compressedBase64 = await compressImage(file, 300, 300, 0.8);
                 
-                // Obtener URL de descarga
-                const url = await getDownloadURL(profilePicRef);
+                // Guardar en Firestore en el documento del usuario
+                const userDocRef = doc(db, "usuarios", window.currentUser.uid);
+                await updateDoc(userDocRef, {
+                    fotoPerfil: compressedBase64,
+                    fotoPerfilFecha: Date.now()
+                });
+                
+                console.log('✅ Foto de perfil guardada en Firestore');
                 
                 // Actualizar círculo pequeño
                 const smallImg = document.getElementById('profilePictureImg');
                 const smallPlaceholder = document.getElementById('profilePicturePlaceholder');
                 if (smallImg) {
-                    smallImg.src = url;
+                    smallImg.src = compressedBase64;
                     smallImg.style.display = 'block';
                     if (smallPlaceholder) smallPlaceholder.style.display = 'none';
                 }
@@ -4278,7 +4305,7 @@
                 const largeImg = document.getElementById('profilePictureLargeImg');
                 const largePlaceholder = document.getElementById('profilePictureLargePlaceholder');
                 if (largeImg) {
-                    largeImg.src = url;
+                    largeImg.src = compressedBase64;
                     largeImg.style.display = 'block';
                     if (largePlaceholder) largePlaceholder.style.display = 'none';
                 }
@@ -4286,20 +4313,7 @@
                 return true;
             } catch (error) {
                 console.error('Error al subir foto de perfil:', error);
-                
-                // Verificar tipo de error
-                const errorCode = error.code || error.message || '';
-                let errorMessage = 'Error al subir la foto. Intenta de nuevo.';
-                
-                if (errorCode.includes('CORS') || error.message.includes('CORS')) {
-                    errorMessage = '⚠️ Error de CORS. Asegúrate de servir el archivo desde un servidor web (no file://).';
-                } else if (errorCode.includes('unauthorized') || errorCode.includes('permission')) {
-                    errorMessage = '⚠️ Error de permisos. Verifica las reglas de Firebase Storage.';
-                } else if (errorCode.includes('quota') || errorCode.includes('storage/quota-exceeded')) {
-                    errorMessage = '⚠️ Se ha excedido la cuota de almacenamiento.';
-                }
-                
-                alert(errorMessage);
+                alert('Error al subir la foto. Intenta de nuevo.');
                 return false;
             }
         };
