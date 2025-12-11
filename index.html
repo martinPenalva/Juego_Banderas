@@ -3216,35 +3216,164 @@
 
         .library-image-modal-content {
             max-width: 90%;
-            max-height: 90%;
+            max-height: 90vh;
+            width: 90%;
+            height: 90vh;
             position: relative;
             display: flex;
             flex-direction: column;
             background: white;
             border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .library-image-container {
-            flex: 1;
+            flex: 0 0 auto;
+            min-height: 300px;
+            max-height: 60vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            max-height: 60%;
             overflow: hidden;
+            background: #000;
+            padding: 20px;
+        }
+
+        .library-image-container {
+            cursor: pointer;
         }
 
         .library-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .library-image-container:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Modal de vista ampliada */
+        .library-image-zoom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .library-image-zoom-modal.active {
+            display: flex;
+        }
+
+        .library-image-zoom-container {
+            position: relative;
+            width: 95%;
+            height: 95%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .library-image-zoom-container img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
             object-fit: contain;
         }
 
+        .library-image-zoom-close-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 5001;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .library-image-zoom-close-back:hover {
+            background: rgba(102, 126, 234, 0.9);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        }
+
+        .library-image-zoom-close-all {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 5001;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .library-image-zoom-close-all:hover {
+            background: rgba(245, 101, 101, 0.9);
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(245, 101, 101, 0.5);
+        }
+
         .library-image-interactions {
+            flex: 1 1 auto;
+            min-height: 0;
             padding: 20px;
-            max-height: 40%;
             overflow-y: auto;
             border-top: 2px solid #e2e8f0;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .library-image-interactions::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .library-image-interactions::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .library-image-interactions::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+
+        .library-image-interactions::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
         }
 
         .library-image-likes {
@@ -3289,25 +3418,46 @@
         }
 
         .comments-list {
-            max-height: 200px;
+            flex: 1 1 auto;
+            min-height: 0;
             overflow-y: auto;
             margin-bottom: 15px;
+            padding-right: 5px;
+        }
+
+        .comments-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .comments-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .comments-list::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+
+        .comments-list::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
         }
 
         .comment-item {
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
             background: #f7fafc;
-            border-radius: 8px;
-            border-left: 3px solid #667eea;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: flex-start;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .comment-profile-picture {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             flex-shrink: 0;
             overflow: hidden;
@@ -3316,6 +3466,7 @@
             align-items: center;
             justify-content: center;
             border: 2px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .comment-profile-picture img {
@@ -3330,25 +3481,30 @@
 
         .comment-content {
             flex: 1;
+            min-width: 0;
         }
 
         .comment-author {
             font-weight: 600;
             color: #667eea;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 0.95em;
         }
 
         .comment-text {
-            color: #333;
+            color: #2d3748;
             word-wrap: break-word;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+            font-size: 0.9em;
         }
 
         .comment-actions {
             display: flex;
             gap: 15px;
             align-items: center;
-            margin-top: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .comment-like-btn {
@@ -3403,29 +3559,83 @@
         }
 
         .comment-replies {
-            margin-top: 10px;
-            margin-left: 50px;
-            padding-left: 15px;
-            border-left: 2px solid #e2e8f0;
+            margin-top: 15px;
+            margin-left: 55px;
+            padding-left: 20px;
+            padding-top: 5px;
+            border-left: 3px solid #cbd5e0;
+            position: relative;
+        }
+
+        .comment-replies::before {
+            content: '';
+            position: absolute;
+            left: -3px;
+            top: 0;
+            width: 3px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 0 0 0 3px;
         }
 
         .comment-reply-item {
-            margin-bottom: 8px;
-            padding: 8px;
-            background: #f0f4f8;
-            border-radius: 6px;
+            margin-bottom: 12px;
+            padding: 12px 15px;
+            background: #edf2f7;
+            border-radius: 8px;
+            border-left: 3px solid #a0aec0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            position: relative;
+            margin-left: 0;
+        }
+
+        .comment-reply-item .comment-profile-picture {
+            width: 35px;
+            height: 35px;
+            border: 2px solid #a0aec0;
+        }
+
+        .comment-reply-item .comment-author {
+            font-size: 0.9em;
+            color: #4a5568;
+        }
+
+        .comment-reply-item .comment-text {
+            font-size: 0.85em;
+        }
+
+        .comment-reply-indicator {
+            font-size: 0.75em;
+            color: #718096;
+            margin-bottom: 4px;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .comment-reply-indicator::before {
+            content: '↪';
+            color: #a0aec0;
+            font-size: 0.9em;
         }
 
         .comment-reply-input-container {
-            margin-top: 10px;
-            margin-left: 50px;
+            margin-top: 12px;
+            margin-left: 60px;
             display: none;
         }
 
         .comment-reply-input-container.active {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 12px;
+            padding: 10px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
         }
 
         .comment-reply-input {
@@ -3492,25 +3702,29 @@
 
         .library-image-modal-close {
             position: absolute;
-            top: -40px;
-            right: 0;
-            background: #f56565;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
             color: white;
             border: none;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.2em;
+            font-size: 1.5em;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
+            z-index: 4001;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .library-image-modal-close:hover {
-            background: #e53e3e;
-            transform: rotate(90deg);
+            background: rgba(245, 101, 101, 0.9);
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(245, 101, 101, 0.5);
         }
 
         .profile-actions {
@@ -4801,7 +5015,7 @@
     <div class="library-image-modal" id="libraryImageModal">
         <div class="library-image-modal-content">
             <button class="library-image-modal-close" id="libraryImageModalClose">✕</button>
-            <div class="library-image-container">
+            <div class="library-image-container" id="libraryImageContainer">
                 <img id="libraryImageModalImg" src="" alt="Imagen">
             </div>
             <div class="library-image-interactions">
@@ -4823,6 +5037,14 @@
         </div>
     </div>
 
+    <!-- Modal para vista ampliada de la imagen -->
+    <div class="library-image-zoom-modal" id="libraryImageZoomModal">
+        <button class="library-image-zoom-close-back" id="libraryImageZoomCloseBack" title="Volver a comentarios">←</button>
+        <button class="library-image-zoom-close-all" id="libraryImageZoomCloseAll" title="Cerrar">✕</button>
+        <div class="library-image-zoom-container">
+            <img id="libraryImageZoomImg" src="" alt="Imagen ampliada">
+        </div>
+    </div>
 
     <!-- Modal de búsqueda de amigos -->
     <div class="friends-modal" id="friendsModal" style="display: none;">
@@ -7230,6 +7452,37 @@
             });
         }
 
+        // Event listeners para el modal de zoom
+        const libraryImageZoomCloseBack = document.getElementById('libraryImageZoomCloseBack');
+        if (libraryImageZoomCloseBack) {
+            libraryImageZoomCloseBack.addEventListener('click', () => {
+                if (window.hideLibraryImageZoom) {
+                    window.hideLibraryImageZoom();
+                }
+            });
+        }
+
+        const libraryImageZoomCloseAll = document.getElementById('libraryImageZoomCloseAll');
+        if (libraryImageZoomCloseAll) {
+            libraryImageZoomCloseAll.addEventListener('click', () => {
+                if (window.hideLibraryImage) {
+                    window.hideLibraryImage();
+                }
+            });
+        }
+
+        // Cerrar zoom al hacer click fuera de la imagen
+        const libraryImageZoomModal = document.getElementById('libraryImageZoomModal');
+        if (libraryImageZoomModal) {
+            libraryImageZoomModal.addEventListener('click', (e) => {
+                if (e.target === libraryImageZoomModal) {
+                    if (window.hideLibraryImageZoom) {
+                        window.hideLibraryImageZoom();
+                    }
+                }
+            });
+        }
+
         // Event listeners para likes y comentarios
         // Variables globales para la foto actual en el modal (declaradas antes de los event listeners)
         window.currentFotoId = null;
@@ -8719,8 +8972,17 @@
                 modalImg.src = imageBase64;
                 window.currentFotoId = fotoId;
                 window.currentFotoOwnerId = ownerId;
+                window.currentImageBase64 = imageBase64; // Guardar para la vista ampliada
                 console.log('Mostrando imagen, fotoId:', fotoId, 'ownerId:', ownerId);
                 modal.style.display = 'flex';
+                
+                // Agregar evento click en la imagen para vista ampliada
+                const imageContainer = document.getElementById('libraryImageContainer');
+                if (imageContainer) {
+                    imageContainer.onclick = () => {
+                        window.showLibraryImageZoom(imageBase64);
+                    };
+                }
                 
                 // Cargar likes y comentarios si hay fotoId
                 if (fotoId) {
@@ -8745,13 +9007,38 @@
             }
         };
 
+        // Mostrar imagen en vista ampliada
+        window.showLibraryImageZoom = function(imageBase64) {
+            const zoomModal = document.getElementById('libraryImageZoomModal');
+            const zoomImg = document.getElementById('libraryImageZoomImg');
+            
+            if (zoomModal && zoomImg) {
+                zoomImg.src = imageBase64;
+                zoomModal.classList.add('active');
+            }
+        };
+
+        // Ocultar vista ampliada y volver a comentarios
+        window.hideLibraryImageZoom = function() {
+            const zoomModal = document.getElementById('libraryImageZoomModal');
+            if (zoomModal) {
+                zoomModal.classList.remove('active');
+            }
+        };
+
         // Ocultar imagen en grande
         window.hideLibraryImage = function() {
             const modal = document.getElementById('libraryImageModal');
+            const zoomModal = document.getElementById('libraryImageZoomModal');
             if (modal) {
                 modal.style.display = 'none';
                 window.currentFotoId = null;
                 window.currentFotoOwnerId = null;
+                window.currentImageBase64 = null;
+            }
+            // También cerrar el zoom si está abierto
+            if (zoomModal) {
+                zoomModal.classList.remove('active');
             }
         };
 
@@ -8958,7 +9245,7 @@
         }
 
         // Función auxiliar para crear un elemento de comentario
-        async function createCommentElement(data, isReply = false) {
+        async function createCommentElement(data, isReply = false, parentAuthor = null) {
             const commentItem = document.createElement('div');
             commentItem.className = isReply ? 'comment-reply-item' : 'comment-item';
             commentItem.dataset.commentId = data.id;
@@ -8980,6 +9267,14 @@
             // Contenedor para el contenido del comentario
             const commentContent = document.createElement('div');
             commentContent.className = 'comment-content';
+            
+            // Si es una respuesta y tenemos el autor del comentario padre, mostrar indicador
+            if (isReply && parentAuthor) {
+                const replyIndicator = document.createElement('div');
+                replyIndicator.className = 'comment-reply-indicator';
+                replyIndicator.textContent = `Respondiendo a ${parentAuthor}`;
+                commentContent.appendChild(replyIndicator);
+            }
             
             const author = document.createElement('div');
             author.className = 'comment-author';
@@ -9101,8 +9396,8 @@
                 const replies = allComments.filter(c => c.parentCommentId);
                 
                 // Función recursiva para construir el árbol de comentarios y respuestas
-                async function buildCommentTree(comment, allReplies, depth = 0) {
-                    const element = await createCommentElement(comment, depth > 0);
+                async function buildCommentTree(comment, allReplies, depth = 0, parentAuthor = null) {
+                    const element = await createCommentElement(comment, depth > 0, parentAuthor);
                     
                     // Buscar respuestas directas a este comentario (puede ser comentario principal o respuesta)
                     const directReplies = allReplies
@@ -9114,8 +9409,9 @@
                         repliesContainer.className = 'comment-replies';
                         
                         // Construir recursivamente las respuestas (que pueden tener sus propias respuestas)
+                        // Pasar el nombre del autor del comentario padre
                         const replyElements = await Promise.all(directReplies.map(reply => 
-                            buildCommentTree(reply, allReplies, depth + 1)
+                            buildCommentTree(reply, allReplies, depth + 1, comment.nombreUsuario || 'Anónimo')
                         ));
                         
                         replyElements.forEach(replyEl => repliesContainer.appendChild(replyEl));
