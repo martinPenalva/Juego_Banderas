@@ -3172,6 +3172,281 @@
                 font-size: 4em;
             }
         }
+
+        /* Estilos para chat integrado en el perfil */
+        .profile-active-chat {
+            width: 100%;
+            margin-top: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            max-height: 500px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .profile-active-chat.minimized {
+            max-height: 60px;
+            overflow: hidden;
+        }
+
+        .profile-active-chat.minimized .active-chat-messages,
+        .profile-active-chat.minimized .active-chat-input-container {
+            display: none;
+        }
+
+        .profile-active-chat.minimized .active-chat-header {
+            border-radius: 15px;
+        }
+
+        .active-chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px 15px 0 0;
+            cursor: pointer;
+            transition: border-radius 0.3s ease;
+        }
+
+        .active-chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .active-chat-header-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .active-chat-header-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .active-chat-header-name {
+            color: white;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .active-chat-minimize {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .active-chat-minimize:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .active-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 350px;
+            min-height: 200px;
+        }
+
+        .active-chat-message {
+            display: flex;
+            gap: 10px;
+            max-width: 85%;
+            animation: messageSlideIn 0.3s ease;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .active-chat-message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .active-chat-message.received {
+            align-self: flex-start;
+        }
+
+        .active-chat-message-picture {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.2em;
+        }
+
+        .active-chat-message.sent .active-chat-message-picture {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .active-chat-message-content {
+            background: #f7fafc;
+            padding: 10px 15px;
+            border-radius: 15px;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .active-chat-message.sent .active-chat-message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .active-chat-message.received .active-chat-message-content {
+            background: #e2e8f0;
+            color: #333;
+        }
+
+        .active-chat-message-time {
+            font-size: 0.75em;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .active-chat-message.sent .active-chat-message-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .active-chat-message.received .active-chat-message-time {
+            color: #718096;
+        }
+
+        .active-chat-input-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            border-top: 1px solid #e2e8f0;
+            background: #f7fafc;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .active-chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .active-chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .active-chat-send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .active-chat-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            /* Estilos responsive para chat */
+            .profile-active-chat {
+                max-height: 400px;
+            }
+
+            .active-chat-header {
+                padding: 12px;
+            }
+
+            .active-chat-header-name {
+                font-size: 1em;
+            }
+
+            .active-chat-header-picture {
+                width: 35px;
+                height: 35px;
+            }
+
+            .active-chat-messages {
+                padding: 12px;
+                max-height: 250px;
+                min-height: 150px;
+            }
+
+            .active-chat-message {
+                max-width: 85%;
+            }
+
+            .active-chat-input-container {
+                padding: 10px;
+            }
+
+            .active-chat-input {
+                font-size: 0.9em;
+                padding: 8px 12px;
+            }
+
+            .active-chat-send-btn {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+
+            .chat-item {
+                padding: 10px;
+            }
+
+            .chat-item-picture {
+                width: 40px;
+                height: 40px;
+            }
+
+            .friend-item-message {
+                width: 28px;
+                height: 28px;
+                font-size: 0.75em;
+                right: 40px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -3265,6 +3540,26 @@
                         <h3>Mis Amigos</h3>
                         <div class="friends-list" id="friendsList"></div>
                     </div>
+                    <div class="profile-active-chat" id="profileActiveChat" style="display: none;">
+                        <div class="active-chat-header">
+                            <div class="active-chat-header-info">
+                                <div class="active-chat-header-picture" id="activeChatHeaderPicture">
+                                    <div style="font-size: 1.2em;">👤</div>
+                                </div>
+                                <div class="active-chat-header-name" id="activeChatHeaderName">Amigo</div>
+                            </div>
+                            <button class="active-chat-minimize" id="activeChatMinimize">➖</button>
+                        </div>
+                        <div class="active-chat-messages" id="activeChatMessages"></div>
+                        <div class="active-chat-input-container">
+                            <input type="text" id="activeChatInput" class="active-chat-input" placeholder="Escribe un mensaje..." maxlength="500">
+                            <button class="active-chat-send-btn" id="activeChatSendBtn">Enviar</button>
+                        </div>
+                    </div>
+                    <div class="profile-chats-section" id="profileChatsSection" style="display: none;">
+                        <h3>💬 Chats</h3>
+                        <div class="chats-list" id="chatsList"></div>
+                    </div>
                     <div class="profile-library-section" id="profileLibrarySection">
                         <h3>📚 BIBLIOTECA</h3>
                         <div class="library-upload-container">
@@ -3286,6 +3581,7 @@
             <img id="libraryImageModalImg" src="" alt="Imagen">
         </div>
     </div>
+
 
     <!-- Modal de búsqueda de amigos -->
     <div class="friends-modal" id="friendsModal" style="display: none;">
@@ -3366,7 +3662,7 @@
             <button class="logout-btn" id="logoutBtn" style="display: none;">Cerrar Sesión</button>
         </div>
         <div class="title-container">
-            <h1>🏳️ Adivina la Bandera</h1>
+        <h1>🏳️ Adivina la Bandera</h1>
             <div class="profile-picture-container" id="profilePictureContainer" style="display: none;">
                 <div class="profile-picture-circle" id="profilePictureCircle">
                     <img id="profilePictureImg" src="" alt="Foto de perfil" style="display: none;">
@@ -4367,6 +4663,19 @@
             messageEl.textContent = '';
             messageEl.className = 'auth-message';
             
+            // Esperar a que window.iniciarSesion esté disponible
+            if (!window.iniciarSesion) {
+                // Esperar un poco y reintentar
+                await new Promise(resolve => setTimeout(resolve, 100));
+                if (!window.iniciarSesion) {
+                    messageEl.textContent = 'Error: El sistema de autenticación no está listo. Por favor, recarga la página.';
+                    messageEl.className = 'auth-message error';
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Iniciar Sesión';
+                    return;
+                }
+            }
+            
             const result = await window.iniciarSesion(email, password);
             
             if (result.success) {
@@ -5120,6 +5429,55 @@
             });
         }
 
+        // Event listeners para chat
+        const activeChatSendBtn = document.getElementById('activeChatSendBtn');
+        const activeChatInput = document.getElementById('activeChatInput');
+        const activeChatMinimize = document.getElementById('activeChatMinimize');
+        
+        if (activeChatSendBtn) {
+            activeChatSendBtn.addEventListener('click', () => {
+                if (window.sendChatMessage) {
+                    window.sendChatMessage();
+                }
+            });
+        }
+        
+        if (activeChatInput) {
+            activeChatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    if (window.sendChatMessage) {
+                        window.sendChatMessage();
+                    }
+                }
+            });
+        }
+        
+        if (activeChatMinimize) {
+            activeChatMinimize.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (window.toggleChatMinimize) {
+                    window.toggleChatMinimize();
+                }
+            });
+        }
+        
+        // Hacer que el header sea clicable para maximizar si está minimizado
+        const activeChatHeader = document.querySelector('.active-chat-header');
+        if (activeChatHeader) {
+            activeChatHeader.addEventListener('click', (e) => {
+                // No hacer nada si se hace clic en el botón de minimizar
+                if (e.target === activeChatMinimize || e.target.closest('.active-chat-minimize')) {
+                    return;
+                }
+                const activeChat = document.getElementById('profileActiveChat');
+                if (activeChat && activeChat.classList.contains('minimized')) {
+                    if (window.toggleChatMinimize) {
+                        window.toggleChatMinimize();
+                    }
+                }
+            });
+        }
+
         // Event listeners para biblioteca
         const libraryImageInput = document.getElementById('libraryImageInput');
         if (libraryImageInput) {
@@ -5406,7 +5764,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, doc, setDoc, getDoc, where, updateDoc } 
+        import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, doc, setDoc, getDoc, where, updateDoc, onSnapshot, writeBatch } 
             from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
             from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -5430,11 +5788,28 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
 
-        // Variable global para el usuario actual
-        window.currentUser = null;
-        window.currentUserName = null;
+        // Definir funciones de autenticación inmediatamente para que estén disponibles
+        window.iniciarSesion = async function(email, password) {
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Obtener nombre de usuario desde Firestore
+                const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+                if (userDoc.exists()) {
+                    window.currentUserName = userDoc.data().nombre;
+                } else {
+                    window.currentUserName = user.email.split('@')[0];
+                }
+                
+                window.currentUser = user;
+                return { success: true, user: user };
+            } catch (error) {
+                console.error("Error al iniciar sesión: ", error);
+                return { success: false, error: error.message };
+            }
+        };
 
-        // ----------- AUTENTICACIÓN -------------
         window.registrarUsuario = async function(email, password, nombre) {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -5456,26 +5831,34 @@
             }
         };
 
-        window.iniciarSesion = async function(email, password) {
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                
-                // Obtener nombre de usuario desde Firestore
-                const userDoc = await getDoc(doc(db, "usuarios", user.uid));
-                if (userDoc.exists()) {
-                    window.currentUserName = userDoc.data().nombre;
-                } else {
-                    window.currentUserName = user.email.split('@')[0];
-                }
-                
-                window.currentUser = user;
-                return { success: true, user: user };
-            } catch (error) {
-                console.error("Error al iniciar sesión: ", error);
-                return { success: false, error: error.message };
+        // Limpiar bibliotecas (función auxiliar)
+        function clearLibraries() {
+            // Limpiar biblioteca propia
+            const libraryGrid = document.getElementById('libraryGrid');
+            if (libraryGrid) {
+                libraryGrid.innerHTML = '';
             }
-        };
+            
+            // Limpiar biblioteca del amigo
+            const friendLibraryGrid = document.getElementById('friendLibraryGrid');
+            const friendLibrarySection = document.getElementById('friendLibrarySection');
+            if (friendLibraryGrid) {
+                friendLibraryGrid.innerHTML = '';
+            }
+            if (friendLibrarySection) {
+                friendLibrarySection.style.display = 'none';
+            }
+            
+            // Cerrar modal de imagen si está abierto
+            if (window.hideLibraryImage) {
+                window.hideLibraryImage();
+            }
+        }
+
+        // Variable global para el usuario actual
+        window.currentUser = null;
+        window.currentUserName = null;
+
 
         window.cerrarSesion = async function() {
             try {
@@ -5610,30 +5993,6 @@
                 containerElement.appendChild(placeholder);
             }
         };
-
-        // Limpiar bibliotecas
-        function clearLibraries() {
-            // Limpiar biblioteca propia
-            const libraryGrid = document.getElementById('libraryGrid');
-            if (libraryGrid) {
-                libraryGrid.innerHTML = '';
-            }
-            
-            // Limpiar biblioteca del amigo
-            const friendLibraryGrid = document.getElementById('friendLibraryGrid');
-            const friendLibrarySection = document.getElementById('friendLibrarySection');
-            if (friendLibraryGrid) {
-                friendLibraryGrid.innerHTML = '';
-            }
-            if (friendLibrarySection) {
-                friendLibrarySection.style.display = 'none';
-            }
-            
-            // Cerrar modal de imagen si está abierto
-            if (window.hideLibraryImage) {
-                window.hideLibraryImage();
-            }
-        }
 
         // Limpiar foto de perfil (mostrar placeholder)
         function clearProfilePicture() {
@@ -5793,6 +6152,17 @@
                 }
                 if (window.loadLibrary) {
                     window.loadLibrary();
+                }
+                
+                // NO cargar la lista de chats automáticamente
+                // Solo se abrirá cuando el usuario haga clic en el botón de mensaje de un amigo
+                const chatsSection = document.getElementById('profileChatsSection');
+                const activeChat = document.getElementById('profileActiveChat');
+                if (chatsSection) {
+                    chatsSection.style.display = 'none';
+                }
+                if (activeChat) {
+                    activeChat.style.display = 'none';
                 }
             }
         };
@@ -6413,6 +6783,516 @@
             }
         };
 
+        // ----------- SISTEMA DE CHAT -------------
+        let currentChatFriendId = null;
+        let chatUnsubscribe = null;
+
+        // Abrir chat con un amigo
+        window.openChat = async function(friendId, friendData = null) {
+            if (!window.currentUser || !friendId) return;
+            
+            try {
+                // Cerrar chat anterior si existe
+                if (chatUnsubscribe) {
+                    chatUnsubscribe();
+                    chatUnsubscribe = null;
+                }
+                
+                currentChatFriendId = friendId;
+                
+                // Cargar datos del amigo si no se proporcionaron
+                if (!friendData) {
+                    const friendDoc = await getDoc(doc(db, "usuarios", friendId));
+                    if (!friendDoc.exists()) {
+                        alert('Usuario no encontrado');
+                        return;
+                    }
+                    friendData = friendDoc.data();
+                }
+                
+                const activeChat = document.getElementById('profileActiveChat');
+                const headerName = document.getElementById('activeChatHeaderName');
+                const headerPicture = document.getElementById('activeChatHeaderPicture');
+                const messagesEl = document.getElementById('activeChatMessages');
+                const chatInput = document.getElementById('activeChatInput');
+                
+                if (!activeChat || !headerName || !messagesEl) return;
+                
+                // Configurar header
+                headerName.textContent = friendData.nombre || 'Amigo';
+                
+                if (friendData.fotoPerfil) {
+                    headerPicture.innerHTML = `<img src="${friendData.fotoPerfil}" alt="Foto">`;
+                } else {
+                    headerPicture.innerHTML = '<div style="font-size: 1.2em;">👤</div>';
+                }
+                
+                // Limpiar mensajes anteriores
+                messagesEl.innerHTML = '';
+                
+                // Cargar mensajes
+                await loadChatMessages(friendId);
+                
+                // Escuchar nuevos mensajes en tiempo real
+                const messagesRef = collection(db, "mensajes");
+                // Usar el chatId más pequeño alfabéticamente para mantener consistencia
+                const chatId1 = `${window.currentUser.uid}_${friendId}`;
+                const chatId2 = `${friendId}_${window.currentUser.uid}`;
+                const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
+                
+                // Usar query sin orderBy para evitar errores de índice
+                const q = query(
+                    messagesRef,
+                    where("chatId", "==", finalChatId)
+                );
+                
+                chatUnsubscribe = onSnapshot(q, (snapshot) => {
+                    const activeMessagesEl = document.getElementById('activeChatMessages');
+                    if (!activeMessagesEl) {
+                        console.error('No se encontró activeChatMessages en onSnapshot');
+                        return;
+                    }
+                    
+                    // Limpiar mensajes anteriores
+                    activeMessagesEl.innerHTML = '';
+                    
+                    // Obtener todos los mensajes y ordenarlos por timestamp
+                    const messages = [];
+                    snapshot.forEach((doc) => {
+                        const messageData = doc.data();
+                        messages.push({
+                            ...messageData,
+                            id: doc.id
+                        });
+                    });
+                    
+                    // Ordenar por timestamp si no se usó orderBy
+                    messages.sort((a, b) => {
+                        const timeA = a.timestamp || 0;
+                        const timeB = b.timestamp || 0;
+                        return timeA - timeB;
+                    });
+                    
+                    // Mostrar mensajes ordenados
+                    messages.forEach((messageData) => {
+                        displayMessage(messageData);
+                    });
+                    
+                    // Scroll al final
+                    setTimeout(() => {
+                        activeMessagesEl.scrollTop = activeMessagesEl.scrollHeight;
+                    }, 100);
+                }, (error) => {
+                    console.error('Error en onSnapshot:', error);
+                });
+                
+                // Ocultar sección de chats cuando se abre un chat activo
+                const chatsSection = document.getElementById('profileChatsSection');
+                if (chatsSection) {
+                    chatsSection.style.display = 'none';
+                }
+                
+                // Mostrar chat activo y asegurarse de que no esté minimizado
+                activeChat.style.display = 'flex';
+                activeChat.classList.remove('minimized');
+                
+                // Hacer scroll hacia el chat activo
+                setTimeout(() => {
+                    activeChat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+                
+                // Focus en el input
+                if (chatInput) {
+                    setTimeout(() => chatInput.focus(), 200);
+                }
+                
+                // Marcar mensajes como leídos
+                await markMessagesAsRead(friendId);
+                
+                // NO recargar lista de chats para evitar mostrar la foto y mensaje del amigo abajo
+            } catch (error) {
+                console.error('Error al abrir chat:', error);
+                alert('Error al abrir el chat');
+            }
+        };
+
+        // Cargar mensajes del chat
+        async function loadChatMessages(friendId) {
+            if (!window.currentUser) return;
+            
+            try {
+                const messagesRef = collection(db, "mensajes");
+                // Usar el chatId más pequeño alfabéticamente para mantener consistencia
+                const chatId1 = `${window.currentUser.uid}_${friendId}`;
+                const chatId2 = `${friendId}_${window.currentUser.uid}`;
+                const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
+                
+                const q = query(
+                    messagesRef,
+                    where("chatId", "==", finalChatId),
+                    limit(50)
+                );
+                
+                const snapshot = await getDocs(q);
+                const messagesEl = document.getElementById('activeChatMessages');
+                if (!messagesEl) {
+                    console.error('No se encontró el elemento activeChatMessages');
+                    return;
+                }
+                
+                messagesEl.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    console.log('No hay mensajes en este chat');
+                } else {
+                    // Obtener todos los mensajes y ordenarlos por timestamp
+                    const messages = [];
+                    snapshot.forEach((doc) => {
+                        const messageData = doc.data();
+                        messages.push({
+                            ...messageData,
+                            id: doc.id
+                        });
+                    });
+                    
+                    // Ordenar por timestamp
+                    messages.sort((a, b) => {
+                        const timeA = a.timestamp || 0;
+                        const timeB = b.timestamp || 0;
+                        return timeA - timeB;
+                    });
+                    
+                    // Mostrar mensajes ordenados
+                    messages.forEach((messageData) => {
+                        displayMessage(messageData);
+                    });
+                }
+                
+                // Scroll al final
+                setTimeout(() => {
+                    messagesEl.scrollTop = messagesEl.scrollHeight;
+                }, 100);
+            } catch (error) {
+                console.error('Error al cargar mensajes:', error);
+                // Si hay error de índice, intentar sin orderBy
+                try {
+                    const messagesRef = collection(db, "mensajes");
+                    const chatId1 = `${window.currentUser.uid}_${friendId}`;
+                    const chatId2 = `${friendId}_${window.currentUser.uid}`;
+                    const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
+                    
+                    const q = query(
+                        messagesRef,
+                        where("chatId", "==", finalChatId),
+                        limit(50)
+                    );
+                    
+                    const snapshot = await getDocs(q);
+                    const messagesEl = document.getElementById('activeChatMessages');
+                    if (messagesEl) {
+                        messagesEl.innerHTML = '';
+                        snapshot.forEach((doc) => {
+                            const messageData = doc.data();
+                            displayMessage(messageData);
+                        });
+                        setTimeout(() => {
+                            messagesEl.scrollTop = messagesEl.scrollHeight;
+                        }, 100);
+                    }
+                } catch (retryError) {
+                    console.error('Error al cargar mensajes (reintento):', retryError);
+                }
+            }
+        }
+
+        // Mostrar un mensaje en el chat
+        function displayMessage(messageData) {
+            const messagesEl = document.getElementById('activeChatMessages');
+            if (!messagesEl) return;
+            
+            const isSent = messageData.fromUserId === window.currentUser.uid;
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `active-chat-message ${isSent ? 'sent' : 'received'}`;
+            
+            const picture = document.createElement('div');
+            picture.className = 'active-chat-message-picture';
+            picture.textContent = '👤';
+            
+            const content = document.createElement('div');
+            content.className = 'active-chat-message-content';
+            
+            const text = document.createElement('div');
+            text.textContent = messageData.text || '';
+            content.appendChild(text);
+            
+            const time = document.createElement('div');
+            time.className = 'active-chat-message-time';
+            const date = messageData.timestamp ? new Date(messageData.timestamp) : new Date();
+            time.textContent = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            content.appendChild(time);
+            
+            messageDiv.appendChild(picture);
+            messageDiv.appendChild(content);
+            messagesEl.appendChild(messageDiv);
+        }
+
+        // Enviar mensaje
+        window.sendChatMessage = async function() {
+            if (!window.currentUser || !currentChatFriendId) return;
+            
+            const chatInput = document.getElementById('activeChatInput');
+            if (!chatInput) return;
+            
+            const text = chatInput.value.trim();
+            if (!text) return;
+            
+            try {
+                const chatId1 = `${window.currentUser.uid}_${currentChatFriendId}`;
+                const chatId2 = `${currentChatFriendId}_${window.currentUser.uid}`;
+                const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
+                
+                await addDoc(collection(db, "mensajes"), {
+                    chatId: finalChatId,
+                    fromUserId: window.currentUser.uid,
+                    toUserId: currentChatFriendId,
+                    text: text,
+                    timestamp: Date.now(),
+                    read: false
+                });
+                
+                // Limpiar input
+                chatInput.value = '';
+                
+                // El onSnapshot se encargará de actualizar automáticamente en tiempo real
+                // Scroll al final después de enviar (el onSnapshot también lo hará)
+                setTimeout(() => {
+                    const messagesEl = document.getElementById('activeChatMessages');
+                    if (messagesEl) {
+                        messagesEl.scrollTop = messagesEl.scrollHeight;
+                    }
+                }, 200);
+            } catch (error) {
+                console.error('Error al enviar mensaje:', error);
+                alert('Error al enviar el mensaje');
+            }
+        };
+
+        // Minimizar/maximizar chat
+        window.toggleChatMinimize = function() {
+            const activeChat = document.getElementById('profileActiveChat');
+            const minimizeBtn = document.getElementById('activeChatMinimize');
+            if (!activeChat) {
+                console.error('No se encontró profileActiveChat');
+                return;
+            }
+            
+            const isMinimized = activeChat.classList.contains('minimized');
+            if (isMinimized) {
+                // Maximizar
+                activeChat.classList.remove('minimized');
+                if (minimizeBtn) {
+                    minimizeBtn.textContent = '➖';
+                }
+                // Scroll al final cuando se maximiza
+                setTimeout(() => {
+                    const messagesEl = document.getElementById('activeChatMessages');
+                    if (messagesEl) {
+                        messagesEl.scrollTop = messagesEl.scrollHeight;
+                    }
+                }, 100);
+            } else {
+                // Minimizar - solo queda visible el header con la info del amigo
+                activeChat.classList.add('minimized');
+                if (minimizeBtn) {
+                    minimizeBtn.textContent = '➕';
+                }
+            }
+        };
+
+        // Marcar mensajes como leídos
+        async function markMessagesAsRead(friendId) {
+            if (!window.currentUser) return;
+            
+            try {
+                const messagesRef = collection(db, "mensajes");
+                const chatId1 = `${window.currentUser.uid}_${friendId}`;
+                const chatId2 = `${friendId}_${window.currentUser.uid}`;
+                const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
+                
+                const q = query(
+                    messagesRef,
+                    where("chatId", "==", finalChatId),
+                    where("toUserId", "==", window.currentUser.uid),
+                    where("read", "==", false)
+                );
+                
+                const snapshot = await getDocs(q);
+                const batch = writeBatch(db);
+                
+                snapshot.forEach((doc) => {
+                    batch.update(doc.ref, { read: true });
+                });
+                
+                await batch.commit();
+            } catch (error) {
+                console.error('Error al marcar mensajes como leídos:', error);
+            }
+        }
+
+        // Cerrar chat
+        window.closeChat = function() {
+            const activeChat = document.getElementById('profileActiveChat');
+            if (activeChat) {
+                activeChat.style.display = 'none';
+            }
+            
+            // Mostrar sección de chats cuando se cierra el chat activo
+            const chatsSection = document.getElementById('profileChatsSection');
+            if (chatsSection) {
+                chatsSection.style.display = 'block';
+            }
+            
+            if (chatUnsubscribe) {
+                chatUnsubscribe();
+                chatUnsubscribe = null;
+            }
+            
+            currentChatFriendId = null;
+        };
+
+        // Cargar lista de chats
+        window.loadChatsList = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                if (!userDoc.exists()) return;
+                
+                const amigos = userDoc.data().amigos || [];
+                const chatsListEl = document.getElementById('chatsList');
+                const chatsSection = document.getElementById('profileChatsSection');
+                
+                if (!chatsListEl || !chatsSection) return;
+                
+                if (amigos.length === 0) {
+                    chatsSection.style.display = 'none';
+                    return;
+                }
+                
+                chatsSection.style.display = 'block';
+                chatsListEl.innerHTML = '';
+                
+                // Obtener últimos mensajes de cada amigo
+                for (const friendId of amigos) {
+                    try {
+                        const friendDoc = await getDoc(doc(db, "usuarios", friendId));
+                        if (friendDoc.exists()) {
+                            const friendData = friendDoc.data();
+                            
+                            // Obtener último mensaje
+                            const messagesRef = collection(db, "mensajes");
+                            const chatId1 = `${window.currentUser.uid}_${friendId}`;
+                            const chatId2 = `${friendId}_${window.currentUser.uid}`;
+                            const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
+                            
+                            const q = query(
+                                messagesRef,
+                                where("chatId", "==", finalChatId),
+                                limit(50)
+                            );
+                            
+                            const snapshot = await getDocs(q);
+                            let lastMessage = null;
+                            let unreadCount = 0;
+                            
+                            if (!snapshot.empty) {
+                                // Obtener todos los mensajes y ordenarlos
+                                const messages = [];
+                                snapshot.forEach((doc) => {
+                                    const messageData = doc.data();
+                                    messages.push({
+                                        ...messageData,
+                                        id: doc.id
+                                    });
+                                });
+                                
+                                // Ordenar por timestamp descendente
+                                messages.sort((a, b) => {
+                                    const timeA = a.timestamp || 0;
+                                    const timeB = b.timestamp || 0;
+                                    return timeB - timeA;
+                                });
+                                
+                                if (messages.length > 0) {
+                                    lastMessage = messages[0];
+                                }
+                                
+                                // Contar mensajes no leídos
+                                const unreadQuery = query(
+                                    messagesRef,
+                                    where("chatId", "==", finalChatId),
+                                    where("toUserId", "==", window.currentUser.uid),
+                                    where("read", "==", false)
+                                );
+                                const unreadSnapshot = await getDocs(unreadQuery);
+                                unreadCount = unreadSnapshot.size;
+                            }
+                            
+                            const chatItem = document.createElement('div');
+                            chatItem.className = 'chat-item';
+                            chatItem.onclick = () => {
+                                window.openChat(friendId, friendData);
+                            };
+                            
+                            const picture = document.createElement('div');
+                            picture.className = 'chat-item-picture';
+                            if (friendData.fotoPerfil) {
+                                const img = document.createElement('img');
+                                img.src = friendData.fotoPerfil;
+                                picture.appendChild(img);
+                            } else {
+                                picture.textContent = '👤';
+                            }
+                            
+                            const info = document.createElement('div');
+                            info.className = 'chat-item-info';
+                            
+                            const name = document.createElement('div');
+                            name.className = 'chat-item-name';
+                            name.textContent = friendData.nombre || 'Sin nombre';
+                            
+                            const lastMsg = document.createElement('div');
+                            lastMsg.className = 'chat-item-last-message';
+                            if (lastMessage) {
+                                lastMsg.textContent = lastMessage.text || 'Sin mensajes';
+                            } else {
+                                lastMsg.textContent = 'Sin mensajes';
+                            }
+                            
+                            info.appendChild(name);
+                            info.appendChild(lastMsg);
+                            
+                            chatItem.appendChild(picture);
+                            chatItem.appendChild(info);
+                            
+                            if (unreadCount > 0) {
+                                const unread = document.createElement('div');
+                                unread.className = 'chat-item-unread';
+                                unread.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                                chatItem.appendChild(unread);
+                            }
+                            
+                            chatsListEl.appendChild(chatItem);
+                        }
+                    } catch (error) {
+                        console.error(`Error al cargar chat con ${friendId}:`, error);
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar lista de chats:', error);
+            }
+        };
+
         // ----------- SISTEMA DE AMIGOS -------------
         // Buscar usuarios por nombre
         window.searchUsers = async function(searchTerm) {
@@ -6634,6 +7514,16 @@
                             name.className = 'friend-item-name';
                             name.textContent = friendData.nombre || 'Sin nombre';
                             
+                            // Botón para enviar mensaje
+                            const messageBtn = document.createElement('button');
+                            messageBtn.className = 'friend-item-message';
+                            messageBtn.textContent = '💬';
+                            messageBtn.title = 'Enviar mensaje';
+                            messageBtn.onclick = async (e) => {
+                                e.stopPropagation(); // Evitar que se abra el perfil
+                                await window.openChat(friendId, friendData);
+                            };
+                            
                             // Botón para eliminar amigo
                             const removeBtn = document.createElement('button');
                             removeBtn.className = 'friend-item-remove';
@@ -6657,6 +7547,7 @@
                             
                             friendItem.appendChild(picture);
                             friendItem.appendChild(name);
+                            friendItem.appendChild(messageBtn);
                             friendItem.appendChild(removeBtn);
                             friendsListEl.appendChild(friendItem);
                         }
