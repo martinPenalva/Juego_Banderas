@@ -1253,6 +1253,65 @@
             opacity: 0.8;
         }
 
+        /* Botones de clasificación */
+        .ranking-buttons-container {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .ranking-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ranking-btn {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .ranking-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .ranking-btn-easy {
+            border-color: #48bb78;
+        }
+
+        .ranking-btn-easy:hover {
+            background: #48bb78;
+            color: white;
+        }
+
+        .ranking-btn-hard {
+            border-color: #f56565;
+        }
+
+        .ranking-btn-hard:hover {
+            background: #f56565;
+            color: white;
+        }
+
+        .ranking-btn-impossible {
+            border-color: #2d3748;
+        }
+
+        .ranking-btn-impossible:hover {
+            background: #2d3748;
+            color: white;
+        }
+
         .game-over {
             position: fixed;
             top: 0;
@@ -1518,6 +1577,7 @@
             align-items: center;
             border-left: 4px solid #667eea;
             transition: transform 0.2s;
+            overflow: visible;
         }
 
         /* Estilos para items en modo imposible */
@@ -1543,7 +1603,617 @@
 
         .main-ranking-item.top {
             border-left-color: #fbbf24;
-            background: #fffbeb;
+            background: linear-gradient(135deg, #fffbeb 0%, #fff4d6 50%, #fffbeb 100%);
+            background-size: 200% 200%;
+            animation: topGradient 3s ease infinite;
+            position: relative;
+            overflow: visible !important;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4), 0 0 30px rgba(251, 191, 36, 0.2);
+        }
+        
+        /* Estilos para foto de perfil Top 1 */
+        .main-ranking-item.top .ranking-profile-picture {
+            position: relative;
+            border: 4px solid #fbbf24;
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.8), 
+                        0 0 50px rgba(251, 191, 36, 0.6),
+                        0 0 75px rgba(251, 191, 36, 0.4),
+                        inset 0 0 15px rgba(251, 191, 36, 0.4);
+            animation: topPhotoGlow 2s ease-in-out infinite;
+            z-index: 5;
+        }
+        
+        .main-ranking-item.top .ranking-profile-picture::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(251, 191, 36, 0.4) 0%, 
+                rgba(251, 191, 36, 0.2) 40%,
+                transparent 70%);
+            animation: topAura 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes topAura {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.9;
+            }
+        }
+        
+        @keyframes topPhotoGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 
+                            0 0 40px rgba(251, 191, 36, 0.4),
+                            inset 0 0 10px rgba(251, 191, 36, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(251, 191, 36, 0.8), 
+                            0 0 50px rgba(251, 191, 36, 0.6),
+                            inset 0 0 15px rgba(251, 191, 36, 0.5);
+            }
+        }
+        
+        @keyframes topPhotoShine {
+            0%, 100% {
+                opacity: 0.4;
+                transform: rotate(0deg);
+            }
+            50% {
+                opacity: 0.7;
+                transform: rotate(180deg);
+            }
+        }
+        
+        @keyframes topGradient {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        
+        @keyframes crownFloat {
+            0%, 100% {
+                transform: translateY(-50%) rotate(-5deg);
+            }
+            50% {
+                transform: translateY(-60%) rotate(5deg);
+            }
+        }
+        
+        @keyframes topShine {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+        
+        .main-ranking-item.top .main-ranking-position {
+            color: #f59e0b;
+            font-size: 1.3em;
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(251, 191, 36, 0.5);
+        }
+        
+        .main-ranking-item.top .main-ranking-position::before {
+            content: '👑';
+            font-size: 1.5em;
+            animation: crownFloat 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(251, 191, 36, 0.6));
+        }
+        
+        .main-ranking-item.top .main-ranking-name {
+            font-weight: 700;
+            color: #92400e;
+        }
+        
+        .main-ranking-item.top .main-ranking-score {
+            color: #f59e0b;
+            font-size: 1.3em;
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(251, 191, 36, 0.5);
+        }
+
+        /* Estilos para Top 2 (Plata) */
+        .main-ranking-item.second {
+            border-left-color: #94a3b8;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+            background-size: 200% 200%;
+            animation: secondGradient 3s ease infinite;
+            position: relative;
+            overflow: visible !important;
+            box-shadow: 0 4px 15px rgba(148, 163, 184, 0.3), 0 0 20px rgba(148, 163, 184, 0.15);
+        }
+        
+        /* Estilos para foto de perfil Top 2 */
+        .main-ranking-item.second .ranking-profile-picture {
+            position: relative;
+            border: 4px solid #94a3b8;
+            box-shadow: 0 0 20px rgba(148, 163, 184, 0.7), 
+                        0 0 40px rgba(148, 163, 184, 0.5),
+                        0 0 60px rgba(148, 163, 184, 0.3),
+                        inset 0 0 12px rgba(148, 163, 184, 0.3);
+            animation: secondPhotoGlow 2.5s ease-in-out infinite;
+            z-index: 5;
+        }
+        
+        .main-ranking-item.second .ranking-profile-picture::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(148, 163, 184, 0.3) 0%, 
+                rgba(148, 163, 184, 0.15) 40%,
+                transparent 70%);
+            animation: secondAura 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes secondAura {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes secondPhotoGlow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(148, 163, 184, 0.5), 
+                            0 0 30px rgba(148, 163, 184, 0.3),
+                            inset 0 0 8px rgba(148, 163, 184, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(148, 163, 184, 0.7), 
+                            0 0 40px rgba(148, 163, 184, 0.5),
+                            inset 0 0 12px rgba(148, 163, 184, 0.4);
+            }
+        }
+        
+        @keyframes secondPhotoShine {
+            0%, 100% {
+                opacity: 0.3;
+                transform: rotate(0deg);
+            }
+            50% {
+                opacity: 0.6;
+                transform: rotate(180deg);
+            }
+        }
+        
+        @keyframes secondGradient {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        
+        @keyframes medalFloat {
+            0%, 100% {
+                transform: translateY(-50%) rotate(-3deg);
+            }
+            50% {
+                transform: translateY(-55%) rotate(3deg);
+            }
+        }
+        
+        @keyframes secondShine {
+            0%, 100% {
+                opacity: 0.25;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .main-ranking-item.second .main-ranking-position {
+            color: #64748b;
+            font-size: 1.2em;
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(148, 163, 184, 0.4);
+        }
+        
+        .main-ranking-item.second .main-ranking-position::before {
+            content: '🥈';
+            font-size: 1.3em;
+            animation: medalFloat 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(148, 163, 184, 0.5));
+        }
+        
+        .main-ranking-item.second .main-ranking-name {
+            font-weight: 700;
+            color: #475569;
+        }
+        
+        .main-ranking-item.second .main-ranking-score {
+            color: #64748b;
+            font-size: 1.2em;
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(148, 163, 184, 0.4);
+        }
+
+        /* Estilos para Top 3 (Bronce) */
+        .main-ranking-item.third {
+            border-left-color: #d97706;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fef3c7 100%);
+            background-size: 200% 200%;
+            animation: thirdGradient 3s ease infinite;
+            position: relative;
+            overflow: visible !important;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3), 0 0 20px rgba(217, 119, 6, 0.15);
+        }
+        
+        /* Estilos para foto de perfil Top 3 */
+        .main-ranking-item.third .ranking-profile-picture {
+            position: relative;
+            border: 4px solid #d97706;
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.7), 
+                        0 0 40px rgba(217, 119, 6, 0.5),
+                        0 0 60px rgba(217, 119, 6, 0.3),
+                        inset 0 0 12px rgba(217, 119, 6, 0.3);
+            animation: thirdPhotoGlow 2.5s ease-in-out infinite;
+            z-index: 5;
+        }
+        
+        .main-ranking-item.third .ranking-profile-picture::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(217, 119, 6, 0.3) 0%, 
+                rgba(217, 119, 6, 0.15) 40%,
+                transparent 70%);
+            animation: thirdAura 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes thirdAura {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes thirdPhotoGlow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(217, 119, 6, 0.5), 
+                            0 0 30px rgba(217, 119, 6, 0.3),
+                            inset 0 0 8px rgba(217, 119, 6, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(217, 119, 6, 0.7), 
+                            0 0 40px rgba(217, 119, 6, 0.5),
+                            inset 0 0 12px rgba(217, 119, 6, 0.4);
+            }
+        }
+        
+        @keyframes thirdPhotoShine {
+            0%, 100% {
+                opacity: 0.3;
+                transform: rotate(0deg);
+            }
+            50% {
+                opacity: 0.6;
+                transform: rotate(180deg);
+            }
+        }
+        
+        @keyframes thirdGradient {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        
+        @keyframes thirdShine {
+            0%, 100% {
+                opacity: 0.25;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .main-ranking-item.third .main-ranking-position {
+            color: #b45309;
+            font-size: 1.15em;
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(217, 119, 6, 0.4);
+        }
+        
+        .main-ranking-item.third .main-ranking-position::before {
+            content: '🥉';
+            font-size: 1.3em;
+            animation: medalFloat 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(217, 119, 6, 0.5));
+        }
+        
+        .main-ranking-item.third .main-ranking-name {
+            font-weight: 700;
+            color: #92400e;
+        }
+        
+        .main-ranking-item.third .main-ranking-score {
+            color: #b45309;
+            font-size: 1.15em;
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(217, 119, 6, 0.4);
+        }
+
+        /* Contenedor de ranking en la pantalla de selección de dificultad */
+        .difficulty-ranking-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .difficulty-ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 500px;
+            overflow-y: auto;
+            overflow-x: visible;
+        }
+
+        .difficulty-ranking-item {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s;
+            overflow: visible;
+        }
+
+        .difficulty-ranking-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .difficulty-ranking-item.top {
+            border-left-color: #fbbf24;
+            background: linear-gradient(135deg, #fffbeb 0%, #fff4d6 50%, #fffbeb 100%);
+            background-size: 200% 200%;
+            animation: topGradient 3s ease infinite;
+            position: relative;
+            overflow: visible !important;
+            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4), 0 0 30px rgba(251, 191, 36, 0.2);
+        }
+
+        /* Estilos para foto de perfil Top 1 en difficulty ranking */
+        .difficulty-ranking-item.top .ranking-profile-picture {
+            position: relative;
+            border: 4px solid #fbbf24;
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.8), 
+                        0 0 50px rgba(251, 191, 36, 0.6),
+                        0 0 75px rgba(251, 191, 36, 0.4),
+                        inset 0 0 15px rgba(251, 191, 36, 0.4);
+            animation: topPhotoGlow 2s ease-in-out infinite;
+            z-index: 5;
+        }
+        
+        .difficulty-ranking-item.top .ranking-profile-picture::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(251, 191, 36, 0.4) 0%, 
+                rgba(251, 191, 36, 0.2) 40%,
+                transparent 70%);
+            animation: topAura 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .difficulty-ranking-item.second {
+            border-left-color: #94a3b8;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+            background-size: 200% 200%;
+            animation: secondGradient 3s ease infinite;
+            position: relative;
+            overflow: visible !important;
+            box-shadow: 0 4px 15px rgba(148, 163, 184, 0.3), 0 0 20px rgba(148, 163, 184, 0.15);
+        }
+
+        /* Estilos para foto de perfil Top 2 en difficulty ranking */
+        .difficulty-ranking-item.second .ranking-profile-picture {
+            position: relative;
+            border: 4px solid #94a3b8;
+            box-shadow: 0 0 20px rgba(148, 163, 184, 0.7), 
+                        0 0 40px rgba(148, 163, 184, 0.5),
+                        0 0 60px rgba(148, 163, 184, 0.3),
+                        inset 0 0 12px rgba(148, 163, 184, 0.3);
+            animation: secondPhotoGlow 2.5s ease-in-out infinite;
+            z-index: 5;
+        }
+        
+        .difficulty-ranking-item.second .ranking-profile-picture::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(148, 163, 184, 0.3) 0%, 
+                rgba(148, 163, 184, 0.15) 40%,
+                transparent 70%);
+            animation: secondAura 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .difficulty-ranking-item.third {
+            border-left-color: #d97706;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fef3c7 100%);
+            background-size: 200% 200%;
+            animation: thirdGradient 3s ease infinite;
+            position: relative;
+            overflow: visible !important;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3), 0 0 20px rgba(217, 119, 6, 0.15);
+        }
+
+        /* Estilos para foto de perfil Top 3 en difficulty ranking */
+        .difficulty-ranking-item.third .ranking-profile-picture {
+            position: relative;
+            border: 3px solid #d97706;
+            box-shadow: 0 0 15px rgba(217, 119, 6, 0.5), 
+                        0 0 30px rgba(217, 119, 6, 0.3),
+                        inset 0 0 8px rgba(217, 119, 6, 0.2);
+            animation: thirdPhotoGlow 2.5s ease-in-out infinite;
+        }
+        
+        
+        .difficulty-ranking-item.third .ranking-profile-picture::after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            right: -6px;
+            bottom: -6px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, 
+                rgba(217, 119, 6, 0.3) 0%, 
+                transparent 30%, 
+                transparent 70%);
+            animation: thirdAura 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .difficulty-ranking-item.top .difficulty-ranking-position,
+        .difficulty-ranking-item.top .difficulty-ranking-score {
+            color: #f59e0b;
+            font-size: 1.3em;
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(251, 191, 36, 0.5);
+        }
+        
+        .difficulty-ranking-item.top .difficulty-ranking-position::before {
+            content: '👑';
+            font-size: 1.5em;
+            animation: crownFloat 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(251, 191, 36, 0.6));
+        }
+
+        .difficulty-ranking-item.top .difficulty-ranking-name {
+            font-weight: 700;
+            color: #92400e;
+        }
+
+        .difficulty-ranking-item.second .difficulty-ranking-position,
+        .difficulty-ranking-item.second .difficulty-ranking-score {
+            color: #64748b;
+            font-size: 1.2em;
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(148, 163, 184, 0.4);
+        }
+        
+        .difficulty-ranking-item.second .difficulty-ranking-position::before {
+            content: '🥈';
+            font-size: 1.3em;
+            animation: medalFloat 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(148, 163, 184, 0.5));
+        }
+
+        .difficulty-ranking-item.second .difficulty-ranking-name {
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .difficulty-ranking-item.third .difficulty-ranking-position,
+        .difficulty-ranking-item.third .difficulty-ranking-score {
+            color: #b45309;
+            font-size: 1.15em;
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(217, 119, 6, 0.4);
+        }
+        
+        .difficulty-ranking-item.third .difficulty-ranking-position::before {
+            content: '🥉';
+            font-size: 1.3em;
+            animation: medalFloat 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(217, 119, 6, 0.5));
+        }
+
+        .difficulty-ranking-item.third .difficulty-ranking-name {
+            font-weight: 700;
+            color: #92400e;
+        }
+
+        .difficulty-ranking-position {
+            font-weight: bold;
+            color: #667eea;
+            min-width: 40px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .difficulty-ranking-name {
+            flex: 1;
+            text-align: left;
+            margin-left: 15px;
+            font-weight: 600;
+            font-size: 1.05em;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: visible;
+            position: relative;
+        }
+
+        .difficulty-ranking-score {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
         }
 
         .main-ranking-position {
@@ -1551,6 +2221,9 @@
             color: #667eea;
             min-width: 40px;
             font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         /* Estilos para posición en modo imposible */
@@ -1569,6 +2242,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            overflow: visible;
+            position: relative;
         }
 
         .ranking-profile-picture {
@@ -1582,7 +2257,8 @@
             flex-shrink: 0;
             border: 2px solid white;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
+            overflow: visible;
+            position: relative;
         }
 
         .ranking-profile-picture img {
@@ -3725,6 +4401,18 @@
                 <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
                 <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
             </div>
+            <div class="ranking-buttons-container">
+                <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
+                <div class="ranking-buttons">
+                    <button class="ranking-btn ranking-btn-easy" id="viewRankingEasyBtn">🏆 Clasificación Fácil</button>
+                    <button class="ranking-btn ranking-btn-hard" id="viewRankingHardBtn">🏆 Clasificación Difícil</button>
+                    <button class="ranking-btn ranking-btn-impossible" id="viewRankingImpossibleBtn">🏆 Clasificación Imposible</button>
+                </div>
+                <div class="difficulty-ranking-container" id="difficultyRankingContainer" style="display: none;">
+                    <h3 id="difficultyRankingTitle" style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.5em; text-align: center;"></h3>
+                    <div class="difficulty-ranking-list" id="difficultyRankingList"></div>
+                </div>
+            </div>
         </div>
 
         <div class="loading" id="loading" style="display: none;">Cargando...</div>
@@ -4923,6 +5611,203 @@
             mainRankingContainer.style.display = 'none';
         }
 
+        // Mostrar ranking por nivel específico (desde la pantalla de selección)
+        async function showRankingByLevel(level) {
+            const difficultyRankingContainer = document.getElementById('difficultyRankingContainer');
+            const difficultyRankingTitle = document.getElementById('difficultyRankingTitle');
+            const difficultyRankingList = document.getElementById('difficultyRankingList');
+            
+            // Actualizar título según el nivel
+            if (level === 'easy') {
+                difficultyRankingTitle.textContent = '🏆 Top 10 Ranking - Fácil';
+            } else if (level === 'hard') {
+                difficultyRankingTitle.textContent = '🏆 Top 10 Ranking - Difícil';
+            } else if (level === 'impossible') {
+                difficultyRankingTitle.textContent = '🏆 Top 10 Ranking - Imposible';
+            } else {
+                difficultyRankingTitle.textContent = '🏆 Top 10 Ranking';
+            }
+            
+            // Mostrar contenedor y cargar ranking
+            difficultyRankingContainer.style.display = 'block';
+            await loadDifficultyRankingByLevel(level);
+            
+            // Scroll suave al ranking
+            setTimeout(() => {
+                difficultyRankingContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // Cargar ranking por nivel específico (para la pantalla de selección)
+        async function loadDifficultyRankingByLevel(level) {
+            const difficultyRankingList = document.getElementById('difficultyRankingList');
+            
+            if (!difficultyRankingList) {
+                console.error('difficultyRankingList no encontrado');
+                return;
+            }
+            
+            difficultyRankingList.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">Cargando ranking...</div>';
+            
+            try {
+                // Obtener ranking del nivel especificado
+                const ranking = await window.obtenerRanking(level);
+                
+                if (ranking.length === 0) {
+                    const nivelTexto = level === 'easy' ? 'Fácil' : (level === 'hard' ? 'Difícil' : (level === 'impossible' ? 'Imposible' : ''));
+                    difficultyRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
+                    return;
+                }
+                
+                difficultyRankingList.innerHTML = '';
+                ranking.forEach((item, index) => {
+                    const rankingItem = document.createElement('div');
+                    // Aplicar clases según la posición
+                    let itemClass = 'difficulty-ranking-item';
+                    if (index === 0) {
+                        itemClass += ' top';
+                    } else if (index === 1) {
+                        itemClass += ' second';
+                    } else if (index === 2) {
+                        itemClass += ' third';
+                    }
+                    rankingItem.className = itemClass;
+                    
+                    const position = document.createElement('div');
+                    position.className = 'difficulty-ranking-position';
+                    position.textContent = `#${index + 1}`;
+                    
+                    const name = document.createElement('div');
+                    name.className = 'difficulty-ranking-name';
+                    
+                    // Crear contenedor para foto de perfil
+                    const profilePicContainer = document.createElement('div');
+                    profilePicContainer.className = 'ranking-profile-picture';
+                    name.appendChild(profilePicContainer);
+                    
+                    // Crear span para el nombre
+                    const nameText = document.createElement('span');
+                    nameText.textContent = item.nombre || 'Anónimo';
+                    name.appendChild(nameText);
+                    
+                    // Cargar foto de perfil si hay userId
+                    if (item.userId) {
+                        if (window.loadUserProfilePicture) {
+                            window.loadUserProfilePicture(item.userId, profilePicContainer);
+                        } else {
+                            const placeholder = document.createElement('div');
+                            placeholder.className = 'placeholder';
+                            placeholder.textContent = '👤';
+                            profilePicContainer.appendChild(placeholder);
+                        }
+                    } else {
+                        // Mostrar placeholder si no hay userId
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'placeholder';
+                        placeholder.textContent = '👤';
+                        profilePicContainer.appendChild(placeholder);
+                    }
+                    
+                    const score = document.createElement('div');
+                    score.className = 'difficulty-ranking-score';
+                    score.textContent = item.puntos || 0;
+                    
+                    rankingItem.appendChild(position);
+                    rankingItem.appendChild(name);
+                    rankingItem.appendChild(score);
+                    difficultyRankingList.appendChild(rankingItem);
+                });
+            } catch (error) {
+                console.error('Error al cargar ranking:', error);
+                difficultyRankingList.innerHTML = '<div style="text-align: center; padding: 20px; color: #f56565;">Error al cargar el ranking</div>';
+            }
+        }
+
+        // Cargar ranking por nivel específico (para el modal durante el juego)
+        async function loadMainRankingByLevel(level) {
+            const mainRankingList = document.getElementById('mainRankingList');
+            
+            if (!mainRankingList) {
+                console.error('mainRankingList no encontrado');
+                return;
+            }
+            
+            mainRankingList.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">Cargando ranking...</div>';
+            
+            try {
+                // Obtener ranking del nivel especificado
+                const ranking = await window.obtenerRanking(level);
+                
+                if (ranking.length === 0) {
+                    const nivelTexto = level === 'easy' ? 'Fácil' : (level === 'hard' ? 'Difícil' : (level === 'impossible' ? 'Imposible' : ''));
+                    mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
+                    return;
+                }
+                
+                mainRankingList.innerHTML = '';
+                ranking.forEach((item, index) => {
+                    const rankingItem = document.createElement('div');
+                    // Aplicar clases según la posición
+                    let itemClass = 'main-ranking-item';
+                    if (index === 0) {
+                        itemClass += ' top';
+                    } else if (index === 1) {
+                        itemClass += ' second';
+                    } else if (index === 2) {
+                        itemClass += ' third';
+                    }
+                    rankingItem.className = itemClass;
+                    
+                    const position = document.createElement('div');
+                    position.className = 'main-ranking-position';
+                    position.textContent = `#${index + 1}`;
+                    
+                    const name = document.createElement('div');
+                    name.className = 'main-ranking-name';
+                    
+                    // Crear contenedor para foto de perfil
+                    const profilePicContainer = document.createElement('div');
+                    profilePicContainer.className = 'ranking-profile-picture';
+                    name.appendChild(profilePicContainer);
+                    
+                    // Crear span para el nombre
+                    const nameText = document.createElement('span');
+                    nameText.textContent = item.nombre || 'Anónimo';
+                    name.appendChild(nameText);
+                    
+                    // Cargar foto de perfil si hay userId
+                    if (item.userId) {
+                        if (window.loadUserProfilePicture) {
+                            window.loadUserProfilePicture(item.userId, profilePicContainer);
+                        } else {
+                            const placeholder = document.createElement('div');
+                            placeholder.className = 'placeholder';
+                            placeholder.textContent = '👤';
+                            profilePicContainer.appendChild(placeholder);
+                        }
+                    } else {
+                        // Mostrar placeholder si no hay userId
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'placeholder';
+                        placeholder.textContent = '👤';
+                        profilePicContainer.appendChild(placeholder);
+                    }
+                    
+                    const score = document.createElement('div');
+                    score.className = 'main-ranking-score';
+                    score.textContent = item.puntos || 0;
+                    
+                    rankingItem.appendChild(position);
+                    rankingItem.appendChild(name);
+                    rankingItem.appendChild(score);
+                    mainRankingList.appendChild(rankingItem);
+                });
+            } catch (error) {
+                console.error('Error al cargar ranking:', error);
+                mainRankingList.innerHTML = '<div style="text-align: center; padding: 20px; color: #f56565;">Error al cargar el ranking</div>';
+            }
+        }
+
         // Cargar y mostrar ranking principal (en la pantalla del juego)
         async function loadMainRanking() {
             const mainRankingList = document.getElementById('mainRankingList');
@@ -4947,7 +5832,16 @@
                 mainRankingList.innerHTML = '';
                 ranking.forEach((item, index) => {
                     const rankingItem = document.createElement('div');
-                    rankingItem.className = 'main-ranking-item' + (index === 0 ? ' top' : '');
+                    // Aplicar clases según la posición
+                    let itemClass = 'main-ranking-item';
+                    if (index === 0) {
+                        itemClass += ' top';
+                    } else if (index === 1) {
+                        itemClass += ' second';
+                    } else if (index === 2) {
+                        itemClass += ' third';
+                    }
+                    rankingItem.className = itemClass;
                     
                     const position = document.createElement('div');
                     position.className = 'main-ranking-position';
@@ -4994,11 +5888,6 @@
 
         // Terminar intento (eliminar vidas y volver a selección de modos)
         function endAttempt() {
-            // Confirmar acción
-            if (!confirm('¿Estás seguro de que quieres terminar este intento? Se perderá tu progreso actual.')) {
-                return;
-            }
-            
             // Detener temporizador
             stopTimer();
             document.getElementById('timerContainer').style.display = 'none';
@@ -5666,6 +6555,11 @@
         }
         document.getElementById('viewRankingBtn').addEventListener('click', showMainRanking);
         document.getElementById('closeRankingBtn').addEventListener('click', hideMainRanking);
+        
+        // Event listeners para botones de clasificación por nivel
+        document.getElementById('viewRankingEasyBtn').addEventListener('click', () => showRankingByLevel('easy'));
+        document.getElementById('viewRankingHardBtn').addEventListener('click', () => showRankingByLevel('hard'));
+        document.getElementById('viewRankingImpossibleBtn').addEventListener('click', () => showRankingByLevel('impossible'));
         
         // Event listeners para autenticación
         document.getElementById('loginTab').addEventListener('click', () => switchAuthTab('login'));
