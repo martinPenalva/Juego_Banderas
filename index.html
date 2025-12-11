@@ -587,10 +587,19 @@
             text-align: center;
         }
 
+        .title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 15px;
+        }
+
         h1 {
             color: #333;
-            margin-bottom: 10px;
+            margin: 0;
             font-size: 2.5em;
+            flex: 1;
         }
 
         .score {
@@ -986,6 +995,77 @@
             border-radius: 8px;
             background: white;
             padding: 5px;
+        }
+
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .timer-circle {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .timer-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-circle-bg {
+            fill: none;
+            stroke: #e0e0e0;
+            stroke-width: 8;
+        }
+
+        .timer-circle-progress {
+            fill: none;
+            stroke: #667eea;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 283;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+        }
+
+        .timer-circle-progress.warning {
+            stroke: #ff9800;
+        }
+
+        .timer-circle-progress.danger {
+            stroke: #f44336;
+        }
+
+        .timer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #333;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        body.hell-mode .timer-circle-progress {
+            stroke: #ff4500;
+        }
+
+        body.hell-mode .timer-circle-progress.warning {
+            stroke: #ff6b00;
+        }
+
+        body.hell-mode .timer-circle-progress.danger {
+            stroke: #ff0000;
+        }
+
+        body.hell-mode .timer-text {
+            color: #ffcccc;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
         }
 
         .options {
@@ -1460,6 +1540,35 @@
             font-weight: 600;
             font-size: 1.05em;
             color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ranking-profile-picture {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .ranking-profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .ranking-profile-picture .placeholder {
+            font-size: 1.2em;
+            color: white;
         }
 
         /* Estilos para nombres en modo imposible */
@@ -1518,6 +1627,9 @@
             text-align: left;
             margin-left: 10px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .ranking-score {
@@ -1678,6 +1790,264 @@
             color: #22543d;
         }
 
+        /* Estilos para círculo de foto de perfil */
+        .profile-picture-container {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .profile-picture-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            border: 3px solid white;
+            overflow: hidden;
+        }
+
+        .profile-picture-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .profile-picture-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .profile-picture-placeholder {
+            font-size: 2em;
+            color: white;
+        }
+
+        /* Estilos para modal de perfil */
+        .profile-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .profile-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .profile-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .profile-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .profile-modal-close {
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
+        .profile-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .profile-picture-large-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-picture-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            border: 5px solid white;
+            overflow: hidden;
+        }
+
+        .profile-picture-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .profile-picture-large-placeholder {
+            font-size: 5em;
+            color: white;
+        }
+
+        .profile-upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .profile-upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+        }
+
+        .profile-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .profile-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-info-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .profile-info-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-save-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .profile-save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.6);
+        }
+
+        .profile-save-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .profile-logout-btn {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .profile-logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.6);
+        }
+
         /* Estilos para información de usuario */
         .user-info {
             display: flex;
@@ -1716,8 +2086,28 @@
                 padding: 20px;
             }
 
+            .title-container {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
             h1 {
-                font-size: 2em;
+                font-size: 1.8em;
+                flex: 1 1 100%;
+                text-align: center;
+            }
+
+            .profile-picture-container {
+                margin: 0 auto;
+            }
+
+            .profile-picture-circle {
+                width: 50px;
+                height: 50px;
+            }
+
+            .profile-picture-placeholder {
+                font-size: 1.5em;
             }
 
             .flag {
@@ -1775,12 +2165,56 @@
         </div>
     </div>
 
-    <div class="container" id="gameContainer" style="display: none;">
-        <div class="user-info">
-            <div class="user-name" id="userNameDisplay">Usuario</div>
-            <button class="logout-btn" id="logoutBtn">Cerrar Sesión</button>
+    <!-- Modal de perfil -->
+    <div class="profile-modal" id="profileModal" style="display: none;">
+        <div class="profile-modal-content">
+            <div class="profile-modal-header">
+                <h2>👤 Mi Perfil</h2>
+                <button class="profile-modal-close" id="profileModalClose">✕</button>
+            </div>
+            <div class="profile-modal-body">
+                <div class="profile-picture-large-container">
+                    <div class="profile-picture-large" id="profilePictureLarge">
+                        <img id="profilePictureLargeImg" src="" alt="Foto de perfil" style="display: none;">
+                        <div class="profile-picture-large-placeholder" id="profilePictureLargePlaceholder">👤</div>
+                    </div>
+                    <label for="profilePictureInput" class="profile-upload-btn">
+                        📷 Cambiar Foto
+                    </label>
+                    <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+                </div>
+                <div class="profile-info">
+                    <div class="profile-info-item">
+                        <span class="profile-info-label">Nombre:</span>
+                        <span class="profile-info-value" id="profileName">-</span>
+                    </div>
+                    <div class="profile-info-item">
+                        <span class="profile-info-label">Email:</span>
+                        <span class="profile-info-value" id="profileEmail">-</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="profile-save-btn" id="profileSaveBtn" style="display: none;">💾 Guardar Cambios</button>
+                    <button class="profile-logout-btn" id="profileLogoutBtn">🚪 Cerrar Sesión</button>
+                </div>
+            </div>
         </div>
-        <h1>🏳️ Adivina la Bandera</h1>
+    </div>
+
+    <div class="container" id="gameContainer" style="display: none;">
+        <div class="user-info" style="display: none;">
+            <div class="user-name" id="userNameDisplay">Usuario</div>
+            <button class="logout-btn" id="logoutBtn" style="display: none;">Cerrar Sesión</button>
+        </div>
+        <div class="title-container">
+            <h1>🏳️ Adivina la Bandera</h1>
+            <div class="profile-picture-container" id="profilePictureContainer" style="display: none;">
+                <div class="profile-picture-circle" id="profilePictureCircle">
+                    <img id="profilePictureImg" src="" alt="Foto de perfil" style="display: none;">
+                    <div class="profile-picture-placeholder" id="profilePicturePlaceholder">👤</div>
+                </div>
+            </div>
+        </div>
         <div class="lives-container">
             <div class="lives-text">Vidas:</div>
             <div class="hearts" id="hearts">❤️ ❤️ ❤️</div>
@@ -1794,6 +2228,17 @@
         
         <div class="flag-container">
             <div class="flag" id="flag">🏳️</div>
+        </div>
+
+        <!-- Contador de tiempo -->
+        <div class="timer-container" id="timerContainer" style="display: none;">
+            <div class="timer-circle">
+                <svg class="timer-svg" viewBox="0 0 100 100">
+                    <circle class="timer-circle-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="timer-circle-progress" cx="50" cy="50" r="45" id="timerProgress"></circle>
+                </svg>
+                <div class="timer-text" id="timerText">20</div>
+            </div>
         </div>
 
         <!-- Botón para ver ranking -->
@@ -1871,6 +2316,8 @@
         let jokerAvailable = false;
         let jokerUsed = false;
         let difficulty = null; // 'easy', 'hard' o 'impossible'
+        let timerInterval = null;
+        let timeLeft = 20;
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -1997,13 +2444,13 @@
                     // Islas del Océano Índico
                     'MV', 'MU', 'SC', 'KM',
                     // Otras islas pequeñas
-                    'AD', 'AW', 'BH', 'BN', 'CV', 'CY', 'FO', 'GG', 'GI', 'GL', 'GP', 'GU', 'JE',
+                    'AD', 'AW', 'BH', 'BN', 'CV', 'CY', 'FO', 'GG', 'GI', 'GL', 'GP', 'GU', 'IM', 'JE',
                     'LI', 'MC', 'MQ', 'MT', 'MP', 'NC', 'PF', 'PM', 'PN', 'PR', 'RE', 'SH', 'SJ',
-                    'SM', 'ST', 'SX', 'TF', 'TK', 'VA', 'VI', 'WF', 'YT',
+                    'SM', 'ST', 'SX', 'TF', 'TK', 'TL', 'VA', 'VI', 'WF', 'YT',
                     // Paraísos fiscales y microestados
                     'AI', 'AS', 'AX', 'BL', 'BM', 'BQ', 'BV', 'CC', 'CD', 'CW', 'CX', 'EH', 'FK',
                     'GF', 'GS', 'HK', 'HM', 'IO', 'MF', 'MO', 'MS', 'NF', 'PS', 'PW', 'QA', 'SG',
-                    'SX', 'UM', 'VG', 'VI'
+                    'SX', 'UM', 'VG', 'VI', 'XK'
                 ];
                 
                 countries = allCountries.filter(country => {
@@ -2063,6 +2510,15 @@
                 // Si no hay suficientes, agregar algunos de la lista de respaldo
                 if (countries.length < 10) {
                     const impossibleFallback = [
+                        // Microestados y países ultra-pequeños
+                        { name: { common: "Nauru" }, cca2: "NR" },
+                        { name: { common: "Tuvalu" }, cca2: "TV" },
+                        { name: { common: "Kiribati" }, cca2: "KI" },
+                        { name: { common: "Santo Tomé y Príncipe" }, cca2: "ST" },
+                        { name: { common: "Comoras" }, cca2: "KM" },
+                        { name: { common: "Yibuti" }, cca2: "DJ" },
+                        { name: { common: "Timor Oriental" }, cca2: "TL" },
+                        { name: { common: "Eritrea" }, cca2: "ER" },
                         // Islas y Oceanía
                         { name: { common: "Maldivas" }, cca2: "MV" },
                         { name: { common: "Mauricio" }, cca2: "MU" },
@@ -2076,7 +2532,6 @@
                         { name: { common: "Samoa" }, cca2: "WS" },
                         { name: { common: "Tonga" }, cca2: "TO" },
                         { name: { common: "Vanuatu" }, cca2: "VU" },
-                        { name: { common: "Comoras" }, cca2: "KM" },
                         { name: { common: "Cabo Verde" }, cca2: "CV" },
                         { name: { common: "Malta" }, cca2: "MT" },
                         { name: { common: "Chipre" }, cca2: "CY" },
@@ -2087,13 +2542,39 @@
                         { name: { common: "Santa Lucía" }, cca2: "LC" },
                         { name: { common: "San Cristóbal y Nieves" }, cca2: "KN" },
                         { name: { common: "Dominica" }, cca2: "DM" },
+                        // Islas remotas y territorios dependientes
+                        { name: { common: "Tokelau" }, cca2: "TK" },
+                        { name: { common: "Niue" }, cca2: "NU" },
+                        { name: { common: "Islas Cocos" }, cca2: "CC" },
+                        { name: { common: "Isla Norfolk" }, cca2: "NF" },
+                        { name: { common: "Islas Pitcairn" }, cca2: "PN" },
+                        { name: { common: "Islas Åland" }, cca2: "AX" },
+                        { name: { common: "San Bartolomé" }, cca2: "BL" },
+                        { name: { common: "Wallis y Futuna" }, cca2: "WF" },
+                        { name: { common: "Mayotte" }, cca2: "YT" },
+                        { name: { common: "Nueva Caledonia" }, cca2: "NC" },
+                        // Territorios no reconocidos / parcialmente reconocidos
+                        { name: { common: "Kosovo" }, cca2: "XK" },
+                        // Regiones con bandera propia
+                        { name: { common: "Isla de Man" }, cca2: "IM" },
+                        { name: { common: "Guernsey" }, cca2: "GG" },
+                        { name: { common: "Jersey" }, cca2: "JE" },
+                        { name: { common: "Gibraltar" }, cca2: "GI" },
+                        // Islas y territorios británicos
+                        { name: { common: "Montserrat" }, cca2: "MS" },
+                        { name: { common: "Anguila" }, cca2: "AI" },
+                        { name: { common: "Islas Vírgenes Británicas" }, cca2: "VG" },
+                        { name: { common: "Santa Helena" }, cca2: "SH" },
+                        { name: { common: "Islas Turcas y Caicos" }, cca2: "TC" },
+                        // Paraísos fiscales
+                        { name: { common: "Islas Caimán" }, cca2: "KY" },
+                        { name: { common: "Islas Cook" }, cca2: "CK" },
                         // Países pequeños de África
                         { name: { common: "Guinea-Bisáu" }, cca2: "GW" },
                         { name: { common: "Guinea Ecuatorial" }, cca2: "GQ" },
                         { name: { common: "Gambia" }, cca2: "GM" },
                         { name: { common: "Lesoto" }, cca2: "LS" },
                         { name: { common: "Suazilandia" }, cca2: "SZ" },
-                        { name: { common: "Yibuti" }, cca2: "DJ" },
                         { name: { common: "Gabón" }, cca2: "GA" },
                         { name: { common: "Guinea" }, cca2: "GN" },
                         { name: { common: "Sierra Leona" }, cca2: "SL" },
@@ -2106,18 +2587,13 @@
                         { name: { common: "República Centroafricana" }, cca2: "CF" },
                         { name: { common: "Burundi" }, cca2: "BI" },
                         { name: { common: "Ruanda" }, cca2: "RW" },
-                        { name: { common: "Eritrea" }, cca2: "ER" },
-                        // Países de Oceanía
-                        { name: { common: "Nueva Caledonia" }, cca2: "NC" },
+                        // Países de Oceanía adicionales
                         { name: { common: "Polinesia Francesa" }, cca2: "PF" },
                         { name: { common: "Guam" }, cca2: "GU" },
                         { name: { common: "Islas Marianas del Norte" }, cca2: "MP" },
                         { name: { common: "Palau" }, cca2: "PW" },
                         { name: { common: "Micronesia" }, cca2: "FM" },
                         { name: { common: "Islas Marshall" }, cca2: "MH" },
-                        { name: { common: "Kiribati" }, cca2: "KI" },
-                        { name: { common: "Nauru" }, cca2: "NR" },
-                        { name: { common: "Tuvalu" }, cca2: "TV" },
                         { name: { common: "Islas Salomón" }, cca2: "SB" },
                         { name: { common: "Nueva Zelanda" }, cca2: "NZ" }
                     ];
@@ -2290,6 +2766,10 @@
         }
 
         function selectDifficulty(level) {
+            // Detener temporizador si existe
+            stopTimer();
+            document.getElementById('timerContainer').style.display = 'none';
+            
             difficulty = level;
             // Reiniciar vidas al seleccionar dificultad
             lives = 3;
@@ -2410,9 +2890,108 @@
             }
         }
 
+        // Funciones del temporizador
+        function startTimer() {
+            // Detener temporizador anterior si existe
+            stopTimer();
+            
+            timeLeft = 20;
+            updateTimerDisplay();
+            document.getElementById('timerContainer').style.display = 'flex';
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    stopTimer();
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay() {
+            const timerText = document.getElementById('timerText');
+            const timerProgress = document.getElementById('timerProgress');
+            
+            if (!timerText || !timerProgress) return;
+            
+            timerText.textContent = timeLeft;
+            
+            // Calcular el progreso del círculo (circunferencia = 2 * π * r = 2 * π * 45 ≈ 283)
+            const circumference = 2 * Math.PI * 45;
+            const progress = (timeLeft / 20) * circumference;
+            timerProgress.style.strokeDashoffset = circumference - progress;
+            
+            // Cambiar color según el tiempo restante
+            timerProgress.classList.remove('warning', 'danger');
+            if (timeLeft <= 5) {
+                timerProgress.classList.add('danger');
+            } else if (timeLeft <= 10) {
+                timerProgress.classList.add('warning');
+            }
+        }
+
+        function handleTimeUp() {
+            if (answered) return;
+            
+            answered = true;
+            
+            // Deshabilitar todos los botones
+            [1, 2, 3, 4].forEach(i => {
+                const btn = document.getElementById(`option${i}`);
+                if (btn.style.display !== 'none') {
+                    btn.disabled = true;
+                    
+                    if (btn.textContent === currentCountry.name.common) {
+                        btn.classList.add('correct');
+                    }
+                }
+            });
+
+            // Marcar como incorrecta (tiempo agotado)
+            lives--;
+            updateHearts();
+            
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCountry.name.common}`;
+            messageEl.className = 'message incorrect';
+            
+            // Actualizar puntuación
+            document.getElementById('score').textContent = score;
+            
+            // Mostrar alerta de fallo
+            showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
+            
+            // Actualizar racha (marcar como incorrecta)
+            updateStreak(false);
+            
+            // Si se acabaron las vidas, mostrar game over
+            if (lives <= 0) {
+                setTimeout(() => {
+                    showGameOver();
+                }, 2000);
+            } else {
+                // Pasar automáticamente a la siguiente bandera después de 2 segundos
+                setTimeout(() => {
+                    loadNewQuestion();
+                }, 2000);
+            }
+        }
+
         // Cargar nueva pregunta
         function loadNewQuestion() {
             if (countries.length === 0) return;
+
+            // Detener temporizador anterior
+            stopTimer();
 
             // Seleccionar país aleatorio
             const randomIndex = Math.floor(Math.random() * countries.length);
@@ -2517,6 +3096,9 @@
 
             // Actualizar visibilidad del comodín
             updateJokerButton();
+            
+            // Iniciar temporizador
+            startTimer();
         }
 
         // Actualizar corazones/vidas
@@ -2539,6 +3121,10 @@
 
         // Mostrar pantalla de game over
         function showGameOver() {
+            // Detener temporizador
+            stopTimer();
+            document.getElementById('timerContainer').style.display = 'none';
+            
             document.getElementById('finalScore').textContent = score;
             document.getElementById('maxStreak').textContent = maxStreak;
             document.getElementById('gameOver').style.display = 'flex';
@@ -2740,6 +3326,10 @@
 
         // Cerrar sesión
         async function handleLogout() {
+            // Cerrar modal de perfil si está abierto
+            if (window.hideProfileModal) {
+                window.hideProfileModal();
+            }
             await window.cerrarSesion();
             // El onAuthStateChanged se encargará de mostrar la pantalla de auth
         }
@@ -2773,7 +3363,27 @@
                     
                     const name = document.createElement('div');
                     name.className = 'ranking-name';
-                    name.textContent = item.nombre || 'Anónimo';
+                    
+                    // Crear contenedor para foto de perfil
+                    const profilePicContainer = document.createElement('div');
+                    profilePicContainer.className = 'ranking-profile-picture';
+                    name.appendChild(profilePicContainer);
+                    
+                    // Crear span para el nombre
+                    const nameText = document.createElement('span');
+                    nameText.textContent = item.nombre || 'Anónimo';
+                    name.appendChild(nameText);
+                    
+                    // Cargar foto de perfil si hay userId
+                    if (item.userId) {
+                        window.loadUserProfilePicture(item.userId, profilePicContainer);
+                    } else {
+                        // Mostrar placeholder si no hay userId
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'placeholder';
+                        placeholder.textContent = '👤';
+                        profilePicContainer.appendChild(placeholder);
+                    }
                     
                     const score = document.createElement('div');
                     score.className = 'ranking-score';
@@ -2848,7 +3458,27 @@
                     
                     const name = document.createElement('div');
                     name.className = 'main-ranking-name';
-                    name.textContent = item.nombre || 'Anónimo';
+                    
+                    // Crear contenedor para foto de perfil
+                    const profilePicContainer = document.createElement('div');
+                    profilePicContainer.className = 'ranking-profile-picture';
+                    name.appendChild(profilePicContainer);
+                    
+                    // Crear span para el nombre
+                    const nameText = document.createElement('span');
+                    nameText.textContent = item.nombre || 'Anónimo';
+                    name.appendChild(nameText);
+                    
+                    // Cargar foto de perfil si hay userId
+                    if (item.userId) {
+                        window.loadUserProfilePicture(item.userId, profilePicContainer);
+                    } else {
+                        // Mostrar placeholder si no hay userId
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'placeholder';
+                        placeholder.textContent = '👤';
+                        profilePicContainer.appendChild(placeholder);
+                    }
                     
                     const score = document.createElement('div');
                     score.className = 'main-ranking-score';
@@ -2867,6 +3497,10 @@
 
         // Reiniciar juego
         function restartGame() {
+            // Detener temporizador
+            stopTimer();
+            document.getElementById('timerContainer').style.display = 'none';
+            
             score = 0;
             streak = 0;
             maxStreak = 0;
@@ -2875,6 +3509,7 @@
             jokerAvailable = false;
             jokerUsed = false;
             difficulty = null;
+            timeLeft = 20;
             
             // Desactivar todos los modos
             document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode');
@@ -3141,6 +3776,9 @@
         function selectOption(optionNumber) {
             if (answered) return;
 
+            // Detener temporizador
+            stopTimer();
+
             const selectedBtn = document.getElementById(`option${optionNumber}`);
             const selectedText = selectedBtn.textContent;
             const isCorrect = selectedText === currentCountry.name.common;
@@ -3225,6 +3863,17 @@
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
         document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
         document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+        const profileLogoutBtn = document.getElementById('profileLogoutBtn');
+        if (profileLogoutBtn) {
+            profileLogoutBtn.addEventListener('click', async () => {
+                // Cerrar modal primero
+                if (window.hideProfileModal) {
+                    window.hideProfileModal();
+                }
+                // Luego cerrar sesión
+                await handleLogout();
+            });
+        }
         document.getElementById('viewRankingBtn').addEventListener('click', showMainRanking);
         document.getElementById('closeRankingBtn').addEventListener('click', hideMainRanking);
         
@@ -3251,6 +3900,85 @@
             if (e.key === 'Enter') handleRegister();
         });
         
+        // Event listeners para foto de perfil
+        const profilePictureCircle = document.getElementById('profilePictureCircle');
+        const profileModalClose = document.getElementById('profileModalClose');
+        const profilePictureInput = document.getElementById('profilePictureInput');
+        const profileModal = document.getElementById('profileModal');
+        
+        if (profilePictureCircle) {
+            profilePictureCircle.addEventListener('click', () => {
+                if (window.showProfileModal) {
+                    window.showProfileModal();
+                }
+            });
+        }
+        
+        if (profileModalClose) {
+            profileModalClose.addEventListener('click', () => {
+                if (window.hideProfileModal) {
+                    window.hideProfileModal();
+                }
+            });
+        }
+        
+        // Cerrar modal al hacer clic fuera
+        if (profileModal) {
+            profileModal.addEventListener('click', (e) => {
+                if (e.target === profileModal) {
+                    if (window.hideProfileModal) {
+                        window.hideProfileModal();
+                    }
+                }
+            });
+        }
+        
+        // Manejar subida de foto
+        if (profilePictureInput) {
+            profilePictureInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const saveBtn = document.getElementById('profileSaveBtn');
+                    if (saveBtn) {
+                        saveBtn.style.display = 'block';
+                        saveBtn.textContent = '💾 Guardando...';
+                        saveBtn.disabled = true;
+                    }
+                    
+                    // Mostrar preview antes de subir
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const largeImg = document.getElementById('profilePictureLargeImg');
+                        const largePlaceholder = document.getElementById('profilePictureLargePlaceholder');
+                        if (largeImg) {
+                            largeImg.src = event.target.result;
+                            largeImg.style.display = 'block';
+                            if (largePlaceholder) largePlaceholder.style.display = 'none';
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                    
+                    // Subir foto
+                    const success = await window.uploadProfilePicture(file);
+                    
+                    if (saveBtn) {
+                        if (success) {
+                            saveBtn.textContent = '✅ Guardado';
+                            setTimeout(() => {
+                                saveBtn.style.display = 'none';
+                            }, 2000);
+                        } else {
+                            saveBtn.textContent = '❌ Error';
+                            saveBtn.disabled = false;
+                        }
+                    }
+                    
+                    // Limpiar input
+                    e.target.value = '';
+                }
+            });
+        }
+        
         // Hacer funciones disponibles globalmente
         window.updateUserDisplay = updateUserDisplay;
         window.loadMainRanking = loadMainRanking;
@@ -3272,6 +4000,8 @@
             from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
             from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } 
+            from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         // Configuración de tu proyecto
         const firebaseConfig = {
@@ -3288,6 +4018,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const storage = getStorage(app);
 
         // Variable global para el usuario actual
         window.currentUser = null;
@@ -3367,9 +4098,13 @@
                 // Ocultar pantalla de autenticación y mostrar juego
                 document.getElementById('authContainer').style.display = 'none';
                 document.getElementById('gameContainer').style.display = 'block';
+                document.getElementById('profilePictureContainer').style.display = 'block';
                 if (window.updateUserDisplay) {
                     window.updateUserDisplay();
                 }
+                
+                // Cargar foto de perfil
+                loadProfilePicture();
                 
                 // No cargar ranking automáticamente - el usuario debe hacer clic en el botón "Ver Tabla"
             } else {
@@ -3378,8 +4113,223 @@
                 // Mostrar pantalla de autenticación y ocultar juego
                 document.getElementById('authContainer').style.display = 'flex';
                 document.getElementById('gameContainer').style.display = 'none';
+                document.getElementById('profilePictureContainer').style.display = 'none';
+                // Limpiar foto de perfil
+                clearProfilePicture();
             }
         });
+
+        // ----------- FOTO DE PERFIL -------------
+        // Cargar foto de perfil desde Storage
+        window.loadProfilePicture = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                // Verificar si estamos en un entorno válido (no file://)
+                if (window.location.protocol === 'file:') {
+                    console.warn('⚠️ Firebase Storage no funciona con file://. Usa un servidor web (GitHub Pages, servidor local, etc.)');
+                    clearProfilePicture();
+                    return;
+                }
+                
+                const profilePicRef = ref(storage, `profilePictures/${window.currentUser.uid}`);
+                const url = await getDownloadURL(profilePicRef);
+                
+                // Actualizar círculo pequeño
+                const smallImg = document.getElementById('profilePictureImg');
+                const smallPlaceholder = document.getElementById('profilePicturePlaceholder');
+                if (smallImg) {
+                    smallImg.src = url;
+                    smallImg.style.display = 'block';
+                    if (smallPlaceholder) smallPlaceholder.style.display = 'none';
+                }
+                
+                // Actualizar círculo grande en el modal
+                const largeImg = document.getElementById('profilePictureLargeImg');
+                const largePlaceholder = document.getElementById('profilePictureLargePlaceholder');
+                if (largeImg) {
+                    largeImg.src = url;
+                    largeImg.style.display = 'block';
+                    if (largePlaceholder) largePlaceholder.style.display = 'none';
+                }
+            } catch (error) {
+                // Verificar si es un error de archivo no encontrado (404) o CORS
+                const errorCode = error.code || error.message || '';
+                
+                if (errorCode.includes('storage/object-not-found') || 
+                    errorCode.includes('404') || 
+                    error.message.includes('object-not-found')) {
+                    // Archivo no existe, mostrar placeholder (no es un error)
+                    clearProfilePicture();
+                } else if (errorCode.includes('CORS') || 
+                          error.message.includes('CORS') ||
+                          window.location.protocol === 'file:') {
+                    // Error de CORS - probablemente abriendo desde file://
+                    console.warn('⚠️ Error de CORS. Asegúrate de servir el archivo desde un servidor web (no file://)');
+                    clearProfilePicture();
+                } else {
+                    // Otro error
+                    console.log('No se pudo cargar la foto de perfil:', error.message);
+                    clearProfilePicture();
+                }
+            }
+        };
+
+        // Cargar foto de perfil de un usuario específico (para ranking)
+        window.loadUserProfilePicture = async function(userId, containerElement) {
+            if (!userId || !containerElement) return;
+            
+            try {
+                // Verificar si estamos en un entorno válido (no file://)
+                if (window.location.protocol === 'file:') {
+                    // Mostrar placeholder si es file://
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'placeholder';
+                    placeholder.textContent = '👤';
+                    containerElement.innerHTML = '';
+                    containerElement.appendChild(placeholder);
+                    return;
+                }
+                
+                const profilePicRef = ref(storage, `profilePictures/${userId}`);
+                const url = await getDownloadURL(profilePicRef);
+                
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Foto de perfil';
+                containerElement.innerHTML = '';
+                containerElement.appendChild(img);
+            } catch (error) {
+                // Si no hay foto o hay error, mostrar placeholder
+                const errorCode = error.code || error.message || '';
+                if (!errorCode.includes('object-not-found') && 
+                    !errorCode.includes('404') && 
+                    !error.message.includes('object-not-found')) {
+                    // Solo loguear si no es un error de "no encontrado"
+                    console.log(`No se pudo cargar foto de perfil para usuario ${userId}:`, error.message);
+                }
+                
+                const placeholder = document.createElement('div');
+                placeholder.className = 'placeholder';
+                placeholder.textContent = '👤';
+                containerElement.innerHTML = '';
+                containerElement.appendChild(placeholder);
+            }
+        };
+
+        // Limpiar foto de perfil (mostrar placeholder)
+        function clearProfilePicture() {
+            const smallImg = document.getElementById('profilePictureImg');
+            const smallPlaceholder = document.getElementById('profilePicturePlaceholder');
+            if (smallImg) {
+                smallImg.src = '';
+                smallImg.style.display = 'none';
+            }
+            if (smallPlaceholder) smallPlaceholder.style.display = 'block';
+            
+            const largeImg = document.getElementById('profilePictureLargeImg');
+            const largePlaceholder = document.getElementById('profilePictureLargePlaceholder');
+            if (largeImg) {
+                largeImg.src = '';
+                largeImg.style.display = 'none';
+            }
+            if (largePlaceholder) largePlaceholder.style.display = 'block';
+        }
+
+        // Subir foto de perfil
+        window.uploadProfilePicture = async function(file) {
+            if (!window.currentUser || !file) return false;
+            
+            try {
+                // Verificar si estamos en un entorno válido (no file://)
+                if (window.location.protocol === 'file:') {
+                    alert('⚠️ Firebase Storage no funciona con file://. Por favor, usa un servidor web (GitHub Pages, servidor local, etc.) para subir fotos.');
+                    return false;
+                }
+                
+                // Validar que sea una imagen
+                if (!file.type.startsWith('image/')) {
+                    alert('Por favor, selecciona un archivo de imagen');
+                    return false;
+                }
+                
+                // Validar tamaño (máximo 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('La imagen es demasiado grande. Máximo 5MB');
+                    return false;
+                }
+                
+                const profilePicRef = ref(storage, `profilePictures/${window.currentUser.uid}`);
+                await uploadBytes(profilePicRef, file);
+                
+                // Obtener URL de descarga
+                const url = await getDownloadURL(profilePicRef);
+                
+                // Actualizar círculo pequeño
+                const smallImg = document.getElementById('profilePictureImg');
+                const smallPlaceholder = document.getElementById('profilePicturePlaceholder');
+                if (smallImg) {
+                    smallImg.src = url;
+                    smallImg.style.display = 'block';
+                    if (smallPlaceholder) smallPlaceholder.style.display = 'none';
+                }
+                
+                // Actualizar círculo grande en el modal
+                const largeImg = document.getElementById('profilePictureLargeImg');
+                const largePlaceholder = document.getElementById('profilePictureLargePlaceholder');
+                if (largeImg) {
+                    largeImg.src = url;
+                    largeImg.style.display = 'block';
+                    if (largePlaceholder) largePlaceholder.style.display = 'none';
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error al subir foto de perfil:', error);
+                
+                // Verificar tipo de error
+                const errorCode = error.code || error.message || '';
+                let errorMessage = 'Error al subir la foto. Intenta de nuevo.';
+                
+                if (errorCode.includes('CORS') || error.message.includes('CORS')) {
+                    errorMessage = '⚠️ Error de CORS. Asegúrate de servir el archivo desde un servidor web (no file://).';
+                } else if (errorCode.includes('unauthorized') || errorCode.includes('permission')) {
+                    errorMessage = '⚠️ Error de permisos. Verifica las reglas de Firebase Storage.';
+                } else if (errorCode.includes('quota') || errorCode.includes('storage/quota-exceeded')) {
+                    errorMessage = '⚠️ Se ha excedido la cuota de almacenamiento.';
+                }
+                
+                alert(errorMessage);
+                return false;
+            }
+        };
+
+        // Mostrar modal de perfil
+        window.showProfileModal = function() {
+            if (!window.currentUser) return;
+            
+            const modal = document.getElementById('profileModal');
+            const profileName = document.getElementById('profileName');
+            const profileEmail = document.getElementById('profileEmail');
+            
+            if (modal && profileName && profileEmail) {
+                profileName.textContent = window.currentUserName || '-';
+                profileEmail.textContent = window.currentUser.email || '-';
+                modal.style.display = 'flex';
+            }
+        };
+
+        // Ocultar modal de perfil
+        window.hideProfileModal = function() {
+            const modal = document.getElementById('profileModal');
+            const saveBtn = document.getElementById('profileSaveBtn');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            if (saveBtn) {
+                saveBtn.style.display = 'none';
+            }
+        };
 
         // ----------- GUARDAR PUNTUACIÓN -------------
         window.guardarPuntuacion = async function(nombre, puntos, nivel) {
