@@ -3218,13 +3218,276 @@
             max-width: 90%;
             max-height: 90%;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        .library-image-modal-content img {
+        .library-image-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-height: 60%;
+            overflow: hidden;
+        }
+
+        .library-image-container img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 10px;
+        }
+
+        .library-image-interactions {
+            padding: 20px;
+            max-height: 40%;
+            overflow-y: auto;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .library-image-likes {
+            margin-bottom: 20px;
+        }
+
+        .like-btn {
+            background: none;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .like-btn:hover {
+            border-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .like-btn.liked {
+            border-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .like-icon {
+            font-size: 1.2em;
+        }
+
+        .like-count {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .library-image-comments h4 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .comments-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .comment-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .comment-profile-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            overflow: hidden;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #667eea;
+        }
+
+        .comment-profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .comment-profile-picture .placeholder {
+            font-size: 1.5em;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .comment-text {
+            color: #333;
+            word-wrap: break-word;
+            margin-bottom: 8px;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .comment-like-btn {
+            background: none;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .comment-like-btn:hover {
+            background: #f7fafc;
+            color: #f56565;
+        }
+
+        .comment-like-btn.liked {
+            color: #f56565;
+        }
+
+        .comment-like-btn.liked .like-icon {
+            animation: likePulse 0.3s ease;
+        }
+
+        @keyframes likePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .comment-reply-btn {
+            background: none;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .comment-reply-btn:hover {
+            background: #f7fafc;
+            color: #667eea;
+        }
+
+        .comment-replies {
+            margin-top: 10px;
+            margin-left: 50px;
+            padding-left: 15px;
+            border-left: 2px solid #e2e8f0;
+        }
+
+        .comment-reply-item {
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #f0f4f8;
+            border-radius: 6px;
+        }
+
+        .comment-reply-input-container {
+            margin-top: 10px;
+            margin-left: 50px;
+            display: none;
+        }
+
+        .comment-reply-input-container.active {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .comment-reply-input {
+            flex: 1;
+            padding: 8px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .comment-reply-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .comment-reply-submit {
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .comment-reply-submit:hover {
+            background: #5568d3;
+        }
+
+        .comment-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .comment-submit-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .comment-submit-btn:hover {
+            background: #5568d3;
         }
 
         .library-image-modal-close {
@@ -4538,7 +4801,25 @@
     <div class="library-image-modal" id="libraryImageModal">
         <div class="library-image-modal-content">
             <button class="library-image-modal-close" id="libraryImageModalClose">✕</button>
-            <img id="libraryImageModalImg" src="" alt="Imagen">
+            <div class="library-image-container">
+                <img id="libraryImageModalImg" src="" alt="Imagen">
+            </div>
+            <div class="library-image-interactions">
+                <div class="library-image-likes">
+                    <button class="like-btn" id="libraryImageLikeBtn">
+                        <span class="like-icon">❤️</span>
+                        <span class="like-count" id="libraryImageLikeCount">0</span>
+                    </button>
+                </div>
+                <div class="library-image-comments">
+                    <h4>Comentarios</h4>
+                    <div class="comments-list" id="libraryImageCommentsList"></div>
+                    <div class="comment-input-container">
+                        <input type="text" id="libraryImageCommentInput" placeholder="Escribe un comentario..." class="comment-input">
+                        <button class="comment-submit-btn" id="libraryImageCommentSubmit">Enviar</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -6949,6 +7230,79 @@
             });
         }
 
+        // Event listeners para likes y comentarios
+        // Variables globales para la foto actual en el modal (declaradas antes de los event listeners)
+        window.currentFotoId = null;
+        window.currentFotoOwnerId = null;
+
+        // Event listeners para likes y comentarios (usando delegación de eventos)
+        document.addEventListener('click', async (e) => {
+            // Botón de like
+            if (e.target.closest('#libraryImageLikeBtn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Botón de like clickeado, currentFotoId:', window.currentFotoId);
+                if (window.currentFotoId && window.toggleFotoLike) {
+                    try {
+                        await window.toggleFotoLike(window.currentFotoId);
+                    } catch (error) {
+                        console.error('Error al dar like:', error);
+                        alert('Error al dar like. Por favor, intenta de nuevo.');
+                    }
+                } else {
+                    console.error('No hay fotoId o toggleFotoLike no está disponible');
+                    if (!window.currentFotoId) {
+                        alert('Error: No se pudo identificar la foto. Por favor, cierra y vuelve a abrir la imagen.');
+                    }
+                }
+            }
+            
+            // Botón de comentario
+            if (e.target.closest('#libraryImageCommentSubmit')) {
+                e.preventDefault();
+                e.stopPropagation();
+                const commentInput = document.getElementById('libraryImageCommentInput');
+                if (commentInput && window.currentFotoId && window.addFotoComment) {
+                    const comentario = commentInput.value.trim();
+                    console.log('Botón de comentario clickeado, fotoId:', window.currentFotoId, 'comentario:', comentario);
+                    if (comentario) {
+                        try {
+                            await window.addFotoComment(window.currentFotoId, comentario);
+                        } catch (error) {
+                            console.error('Error al agregar comentario:', error);
+                            alert('Error al agregar el comentario. Por favor, intenta de nuevo.');
+                        }
+                    } else {
+                        alert('Por favor, escribe un comentario antes de enviar.');
+                    }
+                } else {
+                    console.error('No hay fotoId, input o addFotoComment no está disponible');
+                    if (!window.currentFotoId) {
+                        alert('Error: No se pudo identificar la foto. Por favor, cierra y vuelve a abrir la imagen.');
+                    }
+                }
+            }
+        });
+
+        // Event listener para Enter en el campo de comentario
+        document.addEventListener('keypress', async (e) => {
+            if (e.target.id === 'libraryImageCommentInput' && e.key === 'Enter') {
+                e.preventDefault();
+                const commentInput = document.getElementById('libraryImageCommentInput');
+                if (commentInput && window.currentFotoId && window.addFotoComment) {
+                    const comentario = commentInput.value.trim();
+                    if (comentario) {
+                        try {
+                            await window.addFotoComment(window.currentFotoId, comentario);
+                        } catch (error) {
+                            console.error('Error al agregar comentario:', error);
+                            alert('Error al agregar el comentario. Por favor, intenta de nuevo.');
+                        }
+                    }
+                }
+            }
+        });
+
         const friendsModalClose = document.getElementById('friendsModalClose');
         if (friendsModalClose) {
             friendsModalClose.addEventListener('click', () => {
@@ -8223,7 +8577,8 @@
                 
                 libraryGrid.innerHTML = '';
                 
-                biblioteca.forEach((imageBase64, index) => {
+                // Usar Promise.all para esperar a que se generen todos los fotoIds
+                const items = await Promise.all(biblioteca.map(async (imageBase64, index) => {
                     const libraryItem = document.createElement('div');
                     libraryItem.className = 'library-item';
                     
@@ -8241,14 +8596,21 @@
                         }
                     };
                     
-                    libraryItem.onclick = () => {
-                        window.showLibraryImage(imageBase64);
+                    // Generar fotoId único
+                    const fotoId = await generateFotoId(imageBase64, window.currentUser.uid, index);
+                    console.log(`Foto ${index} - fotoId generado:`, fotoId);
+                    
+                    libraryItem.onclick = async () => {
+                        console.log('Click en foto, abriendo con fotoId:', fotoId);
+                        await window.showLibraryImage(imageBase64, fotoId, window.currentUser.uid);
                     };
                     
                     libraryItem.appendChild(img);
                     libraryItem.appendChild(removeBtn);
-                    libraryGrid.appendChild(libraryItem);
-                });
+                    return libraryItem;
+                }));
+                
+                items.forEach(item => libraryGrid.appendChild(item));
             } catch (error) {
                 console.error('Error al cargar biblioteca:', error);
             }
@@ -8276,7 +8638,8 @@
                 friendLibrarySection.style.display = 'block';
                 friendLibraryGrid.innerHTML = '';
                 
-                biblioteca.forEach((imageBase64) => {
+                // Usar Promise.all para esperar a que se generen todos los fotoIds
+                const items = await Promise.all(biblioteca.map(async (imageBase64, index) => {
                     const libraryItem = document.createElement('div');
                     libraryItem.className = 'friend-library-item';
                     
@@ -8284,13 +8647,20 @@
                     img.src = imageBase64;
                     img.alt = 'Foto de biblioteca';
                     
-                    libraryItem.onclick = () => {
-                        window.showLibraryImage(imageBase64);
+                    // Generar fotoId único
+                    const fotoId = await generateFotoId(imageBase64, friendId, index);
+                    console.log(`Foto amigo ${index} - fotoId generado:`, fotoId);
+                    
+                    libraryItem.onclick = async () => {
+                        console.log('Click en foto de amigo, abriendo con fotoId:', fotoId);
+                        await window.showLibraryImage(imageBase64, fotoId, friendId);
                     };
                     
                     libraryItem.appendChild(img);
-                    friendLibraryGrid.appendChild(libraryItem);
-                });
+                    return libraryItem;
+                }));
+                
+                items.forEach(item => friendLibraryGrid.appendChild(item));
             } catch (error) {
                 console.error('Error al cargar biblioteca del amigo:', error);
             }
@@ -8321,14 +8691,56 @@
             }
         };
 
+        // Generar ID único para una foto basado en su contenido
+        async function generateFotoId(imageBase64, userId, index) {
+            // Crear un hash del contenido completo de la imagen + userId para que sea único y estable
+            // Usar solo una parte del base64 para el hash (primeros 500 caracteres) para evitar problemas de tamaño
+            const contentToHash = imageBase64.substring(0, 500) + userId;
+            const hash = await hashString(contentToHash);
+            return `foto_${userId}_${hash}`;
+        }
+
+        // Función auxiliar para crear hash simple
+        async function hashString(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
+        }
+
         // Mostrar imagen en grande
-        window.showLibraryImage = function(imageBase64) {
+        window.showLibraryImage = async function(imageBase64, fotoId = null, ownerId = null) {
             const modal = document.getElementById('libraryImageModal');
             const modalImg = document.getElementById('libraryImageModalImg');
             
             if (modal && modalImg) {
                 modalImg.src = imageBase64;
+                window.currentFotoId = fotoId;
+                window.currentFotoOwnerId = ownerId;
+                console.log('Mostrando imagen, fotoId:', fotoId, 'ownerId:', ownerId);
                 modal.style.display = 'flex';
+                
+                // Cargar likes y comentarios si hay fotoId
+                if (fotoId) {
+                    try {
+                        await loadFotoLikes(fotoId);
+                        await loadFotoComments(fotoId);
+                    } catch (error) {
+                        console.error('Error al cargar likes/comentarios:', error);
+                    }
+                } else {
+                    console.warn('No hay fotoId, limpiando likes y comentarios');
+                    // Si no hay fotoId, limpiar likes y comentarios
+                    const likeCountEl = document.getElementById('libraryImageLikeCount');
+                    const commentsListEl = document.getElementById('libraryImageCommentsList');
+                    const likeBtn = document.getElementById('libraryImageLikeBtn');
+                    if (likeCountEl) likeCountEl.textContent = '0';
+                    if (commentsListEl) commentsListEl.innerHTML = '';
+                    if (likeBtn) likeBtn.classList.remove('liked');
+                }
+            } else {
+                console.error('Modal o imagen no encontrados');
             }
         };
 
@@ -8337,8 +8749,383 @@
             const modal = document.getElementById('libraryImageModal');
             if (modal) {
                 modal.style.display = 'none';
+                window.currentFotoId = null;
+                window.currentFotoOwnerId = null;
             }
         };
+
+        // ----------- LIKES Y COMENTARIOS DE FOTOS -------------
+        
+        // Dar like o quitar like a una foto
+        window.toggleFotoLike = async function(fotoId) {
+            if (!window.currentUser || !fotoId) {
+                console.error('toggleFotoLike: No hay usuario o fotoId', { user: !!window.currentUser, fotoId });
+                return false;
+            }
+            
+            try {
+                const userId = window.currentUser.uid;
+                console.log('toggleFotoLike: Buscando like para fotoId:', fotoId, 'userId:', userId);
+                const likesRef = collection(db, "fotoLikes");
+                const q = query(likesRef, where("fotoId", "==", fotoId), where("userId", "==", userId));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    // No hay like, agregar uno
+                    console.log('toggleFotoLike: Agregando like');
+                    await addDoc(likesRef, {
+                        fotoId: fotoId,
+                        userId: userId,
+                        timestamp: Date.now()
+                    });
+                } else {
+                    // Ya hay like, eliminarlo
+                    console.log('toggleFotoLike: Eliminando like');
+                    const deletePromises = snapshot.docs.map(docSnapshot => 
+                        deleteDoc(doc(db, "fotoLikes", docSnapshot.id))
+                    );
+                    await Promise.all(deletePromises);
+                }
+                
+                // Recargar likes
+                await loadFotoLikes(fotoId);
+                return true;
+            } catch (error) {
+                console.error('Error al dar like:', error);
+                alert('Error al dar like: ' + error.message);
+                return false;
+            }
+        };
+
+        // Cargar likes de una foto
+        async function loadFotoLikes(fotoId) {
+            if (!fotoId) return;
+            
+            try {
+                const likesRef = collection(db, "fotoLikes");
+                const q = query(likesRef, where("fotoId", "==", fotoId));
+                const snapshot = await getDocs(q);
+                
+                const likeCount = snapshot.size;
+                const likeCountEl = document.getElementById('libraryImageLikeCount');
+                if (likeCountEl) {
+                    likeCountEl.textContent = likeCount;
+                }
+                
+                // Verificar si el usuario actual dio like
+                if (window.currentUser) {
+                    const userLiked = snapshot.docs.some(doc => doc.data().userId === window.currentUser.uid);
+                    const likeBtn = document.getElementById('libraryImageLikeBtn');
+                    if (likeBtn) {
+                        if (userLiked) {
+                            likeBtn.classList.add('liked');
+                        } else {
+                            likeBtn.classList.remove('liked');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar likes:', error);
+            }
+        }
+
+        // Agregar comentario a una foto (o respuesta a un comentario)
+        window.addFotoComment = async function(fotoId, comentario, parentCommentId = null) {
+            if (!window.currentUser || !fotoId || !comentario || comentario.trim() === '') {
+                console.error('addFotoComment: Parámetros inválidos', { 
+                    user: !!window.currentUser, 
+                    fotoId, 
+                    comentario: comentario ? comentario.trim() : '' 
+                });
+                return false;
+            }
+            
+            try {
+                const userId = window.currentUser.uid;
+                console.log('addFotoComment: Agregando comentario para fotoId:', fotoId, 'parentCommentId:', parentCommentId);
+                const userDoc = await getDoc(doc(db, "usuarios", userId));
+                const nombreUsuario = userDoc.exists() ? (userDoc.data().nombre || 'Anónimo') : 'Anónimo';
+                
+                const comentariosRef = collection(db, "fotoComentarios");
+                const commentData = {
+                    fotoId: fotoId,
+                    userId: userId,
+                    nombreUsuario: nombreUsuario,
+                    comentario: comentario.trim(),
+                    timestamp: Date.now()
+                };
+                
+                // Si es una respuesta, agregar el parentCommentId
+                if (parentCommentId) {
+                    commentData.parentCommentId = parentCommentId;
+                }
+                
+                await addDoc(comentariosRef, commentData);
+                
+                console.log('addFotoComment: Comentario agregado exitosamente');
+                
+                // Recargar comentarios
+                await loadFotoComments(fotoId);
+                
+                // Limpiar inputs
+                const commentInput = document.getElementById('libraryImageCommentInput');
+                if (commentInput) {
+                    commentInput.value = '';
+                }
+                
+                // Ocultar inputs de respuesta
+                document.querySelectorAll('.comment-reply-input-container').forEach(container => {
+                    container.classList.remove('active');
+                    const input = container.querySelector('.comment-reply-input');
+                    if (input) input.value = '';
+                });
+                
+                return true;
+            } catch (error) {
+                console.error('Error al agregar comentario:', error);
+                alert('Error al agregar el comentario: ' + error.message);
+                return false;
+            }
+        };
+
+        // Dar like o quitar like a un comentario
+        window.toggleCommentLike = async function(commentId) {
+            if (!window.currentUser || !commentId) {
+                console.error('toggleCommentLike: No hay usuario o commentId');
+                return false;
+            }
+            
+            try {
+                const userId = window.currentUser.uid;
+                const likesRef = collection(db, "comentarioLikes");
+                const q = query(likesRef, where("commentId", "==", commentId), where("userId", "==", userId));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    // No hay like, agregar uno
+                    await addDoc(likesRef, {
+                        commentId: commentId,
+                        userId: userId,
+                        timestamp: Date.now()
+                    });
+                } else {
+                    // Ya hay like, eliminarlo
+                    const deletePromises = snapshot.docs.map(docSnapshot => 
+                        deleteDoc(doc(db, "comentarioLikes", docSnapshot.id))
+                    );
+                    await Promise.all(deletePromises);
+                }
+                
+                // Recargar comentarios para actualizar likes
+                if (window.currentFotoId) {
+                    await loadFotoComments(window.currentFotoId);
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error al dar like al comentario:', error);
+                return false;
+            }
+        };
+
+        // Cargar likes de un comentario
+        async function loadCommentLikes(commentId) {
+            if (!commentId) return { count: 0, userLiked: false };
+            
+            try {
+                const likesRef = collection(db, "comentarioLikes");
+                const q = query(likesRef, where("commentId", "==", commentId));
+                const snapshot = await getDocs(q);
+                
+                const count = snapshot.size;
+                const userLiked = window.currentUser ? 
+                    snapshot.docs.some(doc => doc.data().userId === window.currentUser.uid) : false;
+                
+                return { count, userLiked };
+            } catch (error) {
+                console.error('Error al cargar likes del comentario:', error);
+                return { count: 0, userLiked: false };
+            }
+        }
+
+        // Función auxiliar para crear un elemento de comentario
+        async function createCommentElement(data, isReply = false) {
+            const commentItem = document.createElement('div');
+            commentItem.className = isReply ? 'comment-reply-item' : 'comment-item';
+            commentItem.dataset.commentId = data.id;
+            
+            // Contenedor para foto de perfil
+            const profilePicContainer = document.createElement('div');
+            profilePicContainer.className = 'comment-profile-picture';
+            
+            // Cargar foto de perfil si hay userId
+            if (data.userId && window.loadUserProfilePicture) {
+                await window.loadUserProfilePicture(data.userId, profilePicContainer);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'placeholder';
+                placeholder.textContent = '👤';
+                profilePicContainer.appendChild(placeholder);
+            }
+            
+            // Contenedor para el contenido del comentario
+            const commentContent = document.createElement('div');
+            commentContent.className = 'comment-content';
+            
+            const author = document.createElement('div');
+            author.className = 'comment-author';
+            author.textContent = data.nombreUsuario || 'Anónimo';
+            
+            const text = document.createElement('div');
+            text.className = 'comment-text';
+            text.textContent = data.comentario;
+            
+            // Cargar likes del comentario
+            const likesData = await loadCommentLikes(data.id);
+            
+            // Acciones del comentario (tanto para comentarios principales como respuestas)
+            const actions = document.createElement('div');
+            actions.className = 'comment-actions';
+            
+            // Botón de like
+            const likeBtn = document.createElement('button');
+            likeBtn.className = 'comment-like-btn' + (likesData.userLiked ? ' liked' : '');
+            likeBtn.dataset.commentId = data.id;
+            likeBtn.innerHTML = `<span class="like-icon">${likesData.userLiked ? '❤️' : '🤍'}</span> <span class="like-count">${likesData.count}</span>`;
+            likeBtn.onclick = async (e) => {
+                e.stopPropagation();
+                if (window.toggleCommentLike) {
+                    await window.toggleCommentLike(data.id);
+                }
+            };
+            
+            // Botón de responder
+            const replyBtn = document.createElement('button');
+            replyBtn.className = 'comment-reply-btn';
+            replyBtn.textContent = '💬 Responder';
+            replyBtn.onclick = (e) => {
+                e.stopPropagation();
+                const replyContainer = commentItem.querySelector('.comment-reply-input-container');
+                if (replyContainer) {
+                    replyContainer.classList.toggle('active');
+                    if (replyContainer.classList.contains('active')) {
+                        const input = replyContainer.querySelector('.comment-reply-input');
+                        if (input) input.focus();
+                    }
+                }
+            };
+            
+            actions.appendChild(likeBtn);
+            actions.appendChild(replyBtn);
+            
+            // Contenedor para input de respuesta
+            const replyInputContainer = document.createElement('div');
+            replyInputContainer.className = 'comment-reply-input-container';
+            const replyInput = document.createElement('input');
+            replyInput.type = 'text';
+            replyInput.className = 'comment-reply-input';
+            replyInput.placeholder = 'Escribe una respuesta...';
+            const replySubmit = document.createElement('button');
+            replySubmit.className = 'comment-reply-submit';
+            replySubmit.textContent = 'Enviar';
+            replySubmit.onclick = async (e) => {
+                e.stopPropagation();
+                const replyText = replyInput.value.trim();
+                if (replyText && window.currentFotoId && window.addFotoComment) {
+                    await window.addFotoComment(window.currentFotoId, replyText, data.id);
+                }
+            };
+            replyInput.addEventListener('keypress', async (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const replyText = replyInput.value.trim();
+                    if (replyText && window.currentFotoId && window.addFotoComment) {
+                        await window.addFotoComment(window.currentFotoId, replyText, data.id);
+                    }
+                }
+            });
+            replyInputContainer.appendChild(replyInput);
+            replyInputContainer.appendChild(replySubmit);
+            
+            commentContent.appendChild(author);
+            commentContent.appendChild(text);
+            commentContent.appendChild(actions);
+            commentContent.appendChild(replyInputContainer);
+            
+            commentItem.appendChild(profilePicContainer);
+            commentItem.appendChild(commentContent);
+            
+            return commentItem;
+        }
+
+        // Cargar comentarios de una foto
+        async function loadFotoComments(fotoId) {
+            if (!fotoId) return;
+            
+            try {
+                const comentariosRef = collection(db, "fotoComentarios");
+                const q = query(comentariosRef, where("fotoId", "==", fotoId));
+                const snapshot = await getDocs(q);
+                
+                const commentsList = document.getElementById('libraryImageCommentsList');
+                if (!commentsList) return;
+                
+                commentsList.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    commentsList.innerHTML = '<div style="text-align: center; color: #718096; padding: 20px;">No hay comentarios aún. ¡Sé el primero en comentar!</div>';
+                    return;
+                }
+                
+                // Separar comentarios principales de respuestas
+                const allComments = snapshot.docs.map(docSnapshot => ({
+                    id: docSnapshot.id,
+                    ...docSnapshot.data()
+                }));
+                
+                const mainComments = allComments.filter(c => !c.parentCommentId).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                const replies = allComments.filter(c => c.parentCommentId);
+                
+                // Función recursiva para construir el árbol de comentarios y respuestas
+                async function buildCommentTree(comment, allReplies, depth = 0) {
+                    const element = await createCommentElement(comment, depth > 0);
+                    
+                    // Buscar respuestas directas a este comentario (puede ser comentario principal o respuesta)
+                    const directReplies = allReplies
+                        .filter(r => r.parentCommentId === comment.id)
+                        .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                    
+                    if (directReplies.length > 0) {
+                        const repliesContainer = document.createElement('div');
+                        repliesContainer.className = 'comment-replies';
+                        
+                        // Construir recursivamente las respuestas (que pueden tener sus propias respuestas)
+                        const replyElements = await Promise.all(directReplies.map(reply => 
+                            buildCommentTree(reply, allReplies, depth + 1)
+                        ));
+                        
+                        replyElements.forEach(replyEl => repliesContainer.appendChild(replyEl));
+                        element.appendChild(repliesContainer);
+                    }
+                    
+                    return element;
+                }
+                
+                // Crear comentarios principales con sus respuestas (y respuestas a respuestas)
+                const commentItems = await Promise.all(mainComments.map(mainComment => 
+                    buildCommentTree(mainComment, replies, 0)
+                ));
+                
+                // Agregar todos los comentarios al contenedor
+                commentItems.forEach(item => commentsList.appendChild(item));
+            } catch (error) {
+                console.error('Error al cargar comentarios:', error);
+                const commentsList = document.getElementById('libraryImageCommentsList');
+                if (commentsList) {
+                    commentsList.innerHTML = '<div style="text-align: center; color: #f56565; padding: 20px;">Error al cargar comentarios. Por favor, intenta de nuevo.</div>';
+                }
+            }
+        }
 
         // Eliminar amigo
         window.removeFriend = async function(friendId) {
