@@ -25,7 +25,9 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: fullWindowBackgroundMove 20s ease infinite;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -35,17 +37,117 @@
             overflow-x: hidden;
         }
 
+        /* Fondo animado siempre activo en la ventana de selección */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+            animation: fullWindowRadialMove 25s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+            animation: fullWindowShine 10s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Sobrescribir cuando hay modos de juego activos */
+        body.hell-mode,
+        body.war-mode,
+        body.easy-mode,
+        body.god-mode {
+            background-size: 100% 100%;
+            animation: none;
+        }
+
+        body.hell-mode::before,
+        body.war-mode::before,
+        body.easy-mode::before,
+        body.god-mode::before,
+        body.hell-mode::after,
+        body.war-mode::after,
+        body.easy-mode::after,
+        body.god-mode::after {
+            display: none;
+        }
+
+        @keyframes fullWindowBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 50%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            75% {
+                background-position: 0% 100%;
+            }
+        }
+
+        @keyframes fullWindowRadialMove {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            33% {
+                transform: translate(50px, -50px) rotate(120deg) scale(1.2);
+            }
+            66% {
+                transform: translate(-50px, 50px) rotate(240deg) scale(0.8);
+            }
+        }
+
+        @keyframes fullWindowShine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(200%) translateY(200%) rotate(45deg);
+            }
+        }
+
         body.hell-mode {
             background: linear-gradient(180deg, #1a0000 0%, #4a0000 30%, #8b0000 60%, #ff4500 100%);
+            background-size: 100% 100%;
+            animation: none;
             /* Desactivar animación de parpadeo para mejor rendimiento */
             /* animation: hellFlicker 0.5s ease-in-out infinite alternate; */
         }
 
+        body.hell-mode::before,
+        body.hell-mode::after {
+            display: none;
+        }
+
         body.war-mode {
             background: linear-gradient(180deg, #1a1a1a 0%, #2d1b1b 25%, #3d2525 50%, #4a2a2a 75%, #5a3535 100%);
+            background-size: 100% 100%;
+            animation: warFlicker 0.5s ease-in-out infinite alternate;
             position: relative;
             overflow-x: hidden;
-            animation: warFlicker 0.5s ease-in-out infinite alternate;
+        }
+
+        body.war-mode::before,
+        body.war-mode::after {
+            display: none;
         }
 
         @keyframes warFlicker {
@@ -61,6 +163,138 @@
             background: linear-gradient(135deg, #2d5016 0%, #4a7c2a 30%, #6ba84f 60%, #8bc34a 100%);
             position: relative;
             overflow-x: hidden;
+        }
+
+        body.god-mode {
+            background: linear-gradient(135deg, #0f0c29 0%, #1a0d3a 20%, #2d1b69 40%, #4c1d95 60%, #6366f1 80%, #8b5cf6 100%);
+            background-size: 400% 400%;
+            animation: galacticBackground 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body.god-mode::before,
+        body.god-mode::after {
+            display: none;
+        }
+
+        @keyframes galacticBackground {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Overlay para modo galáctico */
+        .galactic-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.god-mode .galactic-overlay {
+            opacity: 1;
+        }
+
+        /* Estrellas galácticas */
+        .galactic-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.8),
+                        0 0 12px rgba(167, 139, 250, 0.6),
+                        0 0 18px rgba(139, 92, 246, 0.4);
+            animation: starTwinkleGalactic 3s ease-in-out infinite;
+        }
+
+        .galactic-star.large {
+            width: 5px;
+            height: 5px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 1),
+                        0 0 20px rgba(167, 139, 250, 0.8),
+                        0 0 30px rgba(139, 92, 246, 0.6);
+        }
+
+        @keyframes starTwinkleGalactic {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        /* Nebulosa galáctica */
+        .galactic-nebula {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, 
+                rgba(139, 92, 246, 0.3) 0%, 
+                rgba(167, 139, 250, 0.2) 30%,
+                rgba(99, 102, 241, 0.1) 60%,
+                transparent 100%);
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: nebulaFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes nebulaFloat {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.5;
+            }
+            33% {
+                transform: translate(100px, -50px) scale(1.2);
+                opacity: 0.7;
+            }
+            66% {
+                transform: translate(-50px, 100px) scale(0.8);
+                opacity: 0.6;
+            }
+        }
+
+        /* Efectos en el contenedor cuando está en modo galáctico */
+        body.god-mode .container {
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.95) 0%, rgba(49, 46, 129, 0.95) 50%, rgba(76, 29, 149, 0.95) 100%);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.5), 
+                        0 0 50px rgba(139, 92, 246, 0.4),
+                        inset 0 0 30px rgba(167, 139, 250, 0.2);
+            border: 2px solid rgba(167, 139, 250, 0.5);
+        }
+
+        body.god-mode .container h1,
+        body.god-mode .container .score,
+        body.god-mode .container .streak-text,
+        body.god-mode .container .lives-text {
+            color: #e9d5ff;
+            text-shadow: 0 0 10px rgba(167, 139, 250, 0.8), 
+                         0 0 20px rgba(139, 92, 246, 0.6),
+                         0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        body.god-mode .container .score {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.6),
+                        inset 0 0 15px rgba(167, 139, 250, 0.3);
+        }
+
+        body.god-mode .container .streak-text {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.6),
+                        inset 0 0 15px rgba(167, 139, 250, 0.3);
         }
 
         /* Overlay para modo guerra */
@@ -1183,7 +1417,10 @@
 
         .difficulty-selector {
             text-align: center;
-            padding: 30px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .difficulty-selector h2 {
@@ -1201,25 +1438,27 @@
 
         .difficulty-btn {
             background: white;
-            border: 3px solid #667eea;
-            padding: 25px 40px;
-            border-radius: 15px;
-            font-size: 1.3em;
+            border: 2px solid #667eea;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-size: 1.2em;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-weight: 600;
             color: #333;
-            min-width: 200px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .difficulty-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .difficulty-btn.easy {
             border-color: #48bb78;
+            background: #f0fff4;
+            color: #22543d;
         }
 
         .difficulty-btn.easy:hover {
@@ -1229,6 +1468,8 @@
 
         .difficulty-btn.hard {
             border-color: #f56565;
+            background: #fff5f5;
+            color: #742a2a;
         }
 
         .difficulty-btn.hard:hover {
@@ -1238,11 +1479,22 @@
 
         .difficulty-btn.impossible {
             border-color: #2d3748;
+            background: #2d3748;
+            color: white;
         }
 
         .difficulty-btn.impossible:hover {
-            background: #2d3748;
+            background: #4a5568;
+        }
+
+        .difficulty-btn.god {
+            border-color: #6366f1;
+            background: #6366f1;
             color: white;
+        }
+
+        .difficulty-btn.god:hover {
+            background: #8b5cf6;
         }
 
         .difficulty-btn small {
@@ -1258,6 +1510,8 @@
             margin-top: 40px;
             padding-top: 30px;
             border-top: 2px solid #e2e8f0;
+            position: relative;
+            z-index: 10;
         }
 
         .ranking-buttons {
@@ -1265,6 +1519,8 @@
             gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 10;
         }
 
         .ranking-btn {
@@ -1278,6 +1534,9 @@
             font-weight: 600;
             color: #333;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
         }
 
         .ranking-btn:hover {
@@ -1310,6 +1569,18 @@
         .ranking-btn-impossible:hover {
             background: #2d3748;
             color: white;
+        }
+
+        .ranking-btn-god {
+            border-color: #6366f1;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+            color: white;
+        }
+
+        .ranking-btn-god:hover {
+            background: linear-gradient(135deg, #312e81 0%, #4c1d95 50%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.5);
         }
 
         .game-over {
@@ -1982,6 +2253,8 @@
             background: white;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
         }
 
         .difficulty-ranking-list {
@@ -4152,6 +4425,9 @@
         <div class="wave"></div>
         <div class="wave" style="animation-delay: 1s;"></div>
     </div>
+    
+    <!-- Overlay galáctico para modo Dios -->
+    <div class="galactic-overlay" id="galacticOverlay"></div>
     <!-- Pantalla de Login/Registro -->
     <div class="auth-container" id="authContainer">
         <div class="auth-box">
@@ -4400,6 +4676,7 @@
                 <button class="difficulty-btn easy" id="easyBtn">🟢 Fácil<br><small>Países de Europa</small></button>
                 <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
                 <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
+                <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Tribus y pueblos indígenas</small></button>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -4407,6 +4684,7 @@
                     <button class="ranking-btn ranking-btn-easy" id="viewRankingEasyBtn">🏆 Clasificación Fácil</button>
                     <button class="ranking-btn ranking-btn-hard" id="viewRankingHardBtn">🏆 Clasificación Difícil</button>
                     <button class="ranking-btn ranking-btn-impossible" id="viewRankingImpossibleBtn">🏆 Clasificación Imposible</button>
+                    <button class="ranking-btn ranking-btn-god" id="viewRankingGodBtn">🏆 Clasificación Dios</button>
                 </div>
                 <div class="difficulty-ranking-container" id="difficultyRankingContainer" style="display: none;">
                     <h3 id="difficultyRankingTitle" style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.5em; text-align: center;"></h3>
@@ -4469,9 +4747,11 @@
         let answered = false;
         let jokerAvailable = false;
         let jokerUsed = false;
-        let difficulty = null; // 'easy', 'hard' o 'impossible'
+        let difficulty = null; // 'easy', 'hard', 'impossible' o 'god'
         let timerInterval = null;
         let timeLeft = 20;
+        let usedCountries = []; // Para el modo Dios: países ya mostrados
+        let availableCountries = []; // Para el modo Dios: países disponibles
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -4753,6 +5033,95 @@
                     ];
                     countries = impossibleFallback.length > 0 ? impossibleFallback : countries;
                 }
+            } else if (difficulty === 'god') {
+                // Dios: TODOS los países sin filtros (examen completo de todas las banderas)
+                countries = [...allCountries]; // Usar todos los países disponibles
+                
+                // Inicializar arrays para tracking de países usados
+                availableCountries = [...allCountries];
+                usedCountries = [];
+                
+                console.log(`Modo Dios: ${countries.length} países cargados (examen completo sin repeticiones)`);
+                return; // Salir temprano, no aplicar más filtros
+            } else if (difficulty === 'god_old') {
+                // Código anterior (tribus) - desactivado
+                const tribalCountries = [
+                    // Países con poblaciones indígenas significativas
+                    'BO', 'PE', 'EC', 'GT', 'MX', 'PY', 'BR', 'CL', 'AR', 'CO', 'VE', 'PA', 'CR', 'HN', 'NI', 'SV',
+                    // Países de África con tribus
+                    'KE', 'TZ', 'UG', 'RW', 'ET', 'SD', 'SS', 'CM', 'CF', 'TD', 'NE', 'ML', 'BF', 'SN', 'GN', 'SL',
+                    'LR', 'CI', 'GH', 'TG', 'BJ', 'NG', 'GA', 'CG', 'CD', 'AO', 'ZM', 'ZW', 'BW', 'NA', 'MW', 'MZ',
+                    'MG', 'SO', 'DJ', 'ER', 'LY', 'TN', 'DZ', 'MA', 'MR', 'ML',
+                    // Países de Asia con tribus
+                    'MM', 'TH', 'LA', 'KH', 'VN', 'PH', 'ID', 'MY', 'BN', 'TL', 'PG', 'FJ', 'SB', 'VU', 'NC', 'PF',
+                    // Países de Oceanía con tribus
+                    'AU', 'NZ', 'PG', 'FJ', 'SB', 'VU', 'NC', 'PF', 'WS', 'TO', 'TV', 'KI', 'NR', 'PW', 'FM', 'MH',
+                    // Países de América del Norte con tribus
+                    'US', 'CA', 'MX', 'GT', 'BZ', 'SV', 'HN', 'NI', 'CR', 'PA',
+                    // Territorios y regiones con tribus
+                    'GF', 'GP', 'MQ', 'RE', 'YT', 'PF', 'NC', 'AS', 'GU', 'MP', 'VI', 'PR'
+                ];
+                
+                countries = allCountries.filter(country => {
+                    const code = country.cca2 || '';
+                    const region = country.region || '';
+                    const subregion = country.subregion || '';
+                    
+                    // Filtrar por código de países con tribus
+                    if (tribalCountries.includes(code)) {
+                        return true;
+                    }
+                    
+                    // Incluir países de América Latina (muchos tienen poblaciones indígenas)
+                    if (region === 'Americas' && (subregion === 'South America' || subregion === 'Central America')) {
+                        return true;
+                    }
+                    
+                    // Incluir países de África subsahariana (muchos tienen tribus)
+                    if (region === 'Africa' && subregion !== 'Northern Africa') {
+                        return true;
+                    }
+                    
+                    // Incluir países de Oceanía (muchos tienen pueblos indígenas)
+                    if (region === 'Oceania') {
+                        return true;
+                    }
+                    
+                    // Incluir algunos países de Asia con poblaciones tribales
+                    if (region === 'Asia' && (subregion === 'South-Eastern Asia' || subregion === 'Polynesia' || 
+                        subregion === 'Micronesia' || subregion === 'Melanesia')) {
+                        return true;
+                    }
+                    
+                    return false;
+                });
+                
+                // Si no hay suficientes, agregar algunos de la lista de respaldo
+                if (countries.length < 10) {
+                    const godFallback = [
+                        { name: { common: "Bolivia" }, cca2: "BO" },
+                        { name: { common: "Perú" }, cca2: "PE" },
+                        { name: { common: "Ecuador" }, cca2: "EC" },
+                        { name: { common: "Guatemala" }, cca2: "GT" },
+                        { name: { common: "México" }, cca2: "MX" },
+                        { name: { common: "Paraguay" }, cca2: "PY" },
+                        { name: { common: "Papúa Nueva Guinea" }, cca2: "PG" },
+                        { name: { common: "Fiyi" }, cca2: "FJ" },
+                        { name: { common: "Kenya" }, cca2: "KE" },
+                        { name: { common: "Tanzania" }, cca2: "TZ" },
+                        { name: { common: "Uganda" }, cca2: "UG" },
+                        { name: { common: "Filipinas" }, cca2: "PH" },
+                        { name: { common: "Indonesia" }, cca2: "ID" },
+                        { name: { common: "Malasia" }, cca2: "MY" },
+                        { name: { common: "Myanmar" }, cca2: "MM" },
+                        { name: { common: "Tailandia" }, cca2: "TH" },
+                        { name: { common: "Laos" }, cca2: "LA" },
+                        { name: { common: "Camboya" }, cca2: "KH" },
+                        { name: { common: "Vietnam" }, cca2: "VN" },
+                        { name: { common: "Timor Oriental" }, cca2: "TL" }
+                    ];
+                    countries = godFallback.length > 0 ? godFallback : countries;
+                }
             }
             
             console.log(`Nivel ${difficulty}: ${countries.length} países cargados`);
@@ -4929,12 +5298,19 @@
             lives = 3;
             updateHearts();
             document.getElementById('difficultySelector').style.display = 'none';
+            document.body.classList.remove('difficulty-selector-active');
             document.getElementById('loading').style.display = 'block';
             // Mostrar botón de ranking cuando se selecciona dificultad
             document.getElementById('viewRankingBtn').style.display = 'block';
             
+            // Reiniciar arrays para modo Dios
+            if (level === 'god') {
+                usedCountries = [];
+                availableCountries = [];
+            }
+            
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode');
             
             if (level === 'impossible') {
                 document.body.classList.add('hell-mode');
@@ -4962,9 +5338,94 @@
                 setInterval(() => {
                     createNatureEffects();
                 }, 3000);
+            } else if (level === 'god') {
+                document.body.classList.add('god-mode');
+                createGalacticStars();
+                // Recrear estrellas cada 5 segundos
+                setInterval(() => {
+                    createGalacticStars();
+                }, 5000);
             }
             
             loadCountries();
+        }
+
+        // Crear partículas flotantes para el selector de dificultad
+        function createDifficultySelectorParticles() {
+            const selector = document.getElementById('difficultySelector');
+            if (!selector) return;
+            
+            // Limpiar partículas anteriores
+            const existingParticles = selector.querySelectorAll('.floating-particle');
+            existingParticles.forEach(p => p.remove());
+            
+            // Crear 20 partículas flotantes
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'floating-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (6 + Math.random() * 4) + 's';
+                particle.style.width = (3 + Math.random() * 3) + 'px';
+                particle.style.height = particle.style.width;
+                selector.appendChild(particle);
+            }
+        }
+
+        // Crear estrellas galácticas
+        function createGalacticStars() {
+            const overlay = document.getElementById('galacticOverlay');
+            if (!overlay) return;
+            
+            // Crear estrellas pequeñas
+            for (let i = 0; i < 15; i++) {
+                const star = document.createElement('div');
+                star.className = 'galactic-star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 2) + 's';
+                overlay.appendChild(star);
+                
+                setTimeout(() => {
+                    if (overlay.contains(star)) {
+                        overlay.removeChild(star);
+                    }
+                }, 10000);
+            }
+            
+            // Crear estrellas grandes ocasionales
+            if (Math.random() > 0.5) {
+                const largeStar = document.createElement('div');
+                largeStar.className = 'galactic-star large';
+                largeStar.style.left = Math.random() * 100 + '%';
+                largeStar.style.top = Math.random() * 100 + '%';
+                largeStar.style.animationDelay = Math.random() * 2 + 's';
+                largeStar.style.animationDuration = (3 + Math.random() * 2) + 's';
+                overlay.appendChild(largeStar);
+                
+                setTimeout(() => {
+                    if (overlay.contains(largeStar)) {
+                        overlay.removeChild(largeStar);
+                    }
+                }, 10000);
+            }
+            
+            // Crear nebulosas ocasionales
+            if (Math.random() > 0.7) {
+                const nebula = document.createElement('div');
+                nebula.className = 'galactic-nebula';
+                nebula.style.left = Math.random() * 80 + 10 + '%';
+                nebula.style.top = Math.random() * 80 + 10 + '%';
+                overlay.appendChild(nebula);
+                
+                setTimeout(() => {
+                    if (overlay.contains(nebula)) {
+                        overlay.removeChild(nebula);
+                    }
+                }, 20000);
+            }
         }
 
         // Cargar países desde la API
@@ -5143,14 +5604,45 @@
 
         // Cargar nueva pregunta
         function loadNewQuestion() {
-            if (countries.length === 0) return;
+            if (difficulty === 'god') {
+                // Modo Dios: usar todos los países sin repetir
+                if (availableCountries.length === 0) {
+                    // Si se acabaron todos los países, reiniciar
+                    if (usedCountries.length > 0) {
+                        availableCountries = [...usedCountries];
+                        usedCountries = [];
+                    } else {
+                        // Si no hay países disponibles, usar todos los países cargados
+                        availableCountries = [...allCountries];
+                    }
+                }
+                
+                if (availableCountries.length === 0) {
+                    // Si aún no hay países, mostrar mensaje
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '✨ ¡Has completado el examen de todas las banderas del mundo! ¡Eres un verdadero Dios! ✨';
+                    messageEl.className = 'message correct';
+                    return;
+                }
+                
+                // Seleccionar país aleatorio de los disponibles
+                const randomIndex = Math.floor(Math.random() * availableCountries.length);
+                currentCountry = availableCountries[randomIndex];
+                
+                // Mover a usados y quitar de disponibles
+                usedCountries.push(currentCountry);
+                availableCountries.splice(randomIndex, 1);
+            } else {
+                // Modos normales: selección aleatoria con repetición
+                if (countries.length === 0) return;
+                
+                // Seleccionar país aleatorio
+                const randomIndex = Math.floor(Math.random() * countries.length);
+                currentCountry = countries[randomIndex];
+            }
 
             // Detener temporizador anterior
             stopTimer();
-
-            // Seleccionar país aleatorio
-            const randomIndex = Math.floor(Math.random() * countries.length);
-            currentCountry = countries[randomIndex];
 
             // Mostrar bandera usando emojis Unicode (siempre funcionan)
             const countryCode = currentCountry.cca2; // Código ISO de 2 letras
@@ -5532,7 +6024,7 @@
                 const ranking = await window.obtenerRanking(difficulty);
                 
                 if (ranking.length === 0) {
-                    const nivelTexto = difficulty === 'easy' ? 'Fácil' : (difficulty === 'hard' ? 'Difícil' : (difficulty === 'impossible' ? 'Imposible' : ''));
+                    const nivelTexto = difficulty === 'easy' ? 'Fácil' : (difficulty === 'hard' ? 'Difícil' : (difficulty === 'impossible' ? 'Imposible' : (difficulty === 'god' ? 'Dios' : '')));
                     rankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}</div>`;
                     return;
                 }
@@ -5597,6 +6089,8 @@
                 rankingTitle.textContent = '🏆 Top 10 Ranking - Difícil';
             } else if (difficulty === 'impossible') {
                 rankingTitle.textContent = '🏆 Top 10 Ranking - Imposible';
+            } else if (difficulty === 'god') {
+                rankingTitle.textContent = '✨ Top 10 Ranking - Dios';
             } else {
                 rankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -5612,10 +6106,15 @@
         }
 
         // Mostrar ranking por nivel específico (desde la pantalla de selección)
-        async function showRankingByLevel(level) {
+        window.showRankingByLevel = async function(level) {
             const difficultyRankingContainer = document.getElementById('difficultyRankingContainer');
             const difficultyRankingTitle = document.getElementById('difficultyRankingTitle');
             const difficultyRankingList = document.getElementById('difficultyRankingList');
+            
+            if (!difficultyRankingContainer || !difficultyRankingTitle || !difficultyRankingList) {
+                console.error('Elementos del ranking no encontrados');
+                return;
+            }
             
             // Actualizar título según el nivel
             if (level === 'easy') {
@@ -5624,6 +6123,8 @@
                 difficultyRankingTitle.textContent = '🏆 Top 10 Ranking - Difícil';
             } else if (level === 'impossible') {
                 difficultyRankingTitle.textContent = '🏆 Top 10 Ranking - Imposible';
+            } else if (level === 'god') {
+                difficultyRankingTitle.textContent = '✨ Top 10 Ranking - Dios';
             } else {
                 difficultyRankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -5634,7 +6135,9 @@
             
             // Scroll suave al ranking
             setTimeout(() => {
-                difficultyRankingContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                if (difficultyRankingContainer) {
+                    difficultyRankingContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
             }, 100);
         }
 
@@ -5654,7 +6157,7 @@
                 const ranking = await window.obtenerRanking(level);
                 
                 if (ranking.length === 0) {
-                    const nivelTexto = level === 'easy' ? 'Fácil' : (level === 'hard' ? 'Difícil' : (level === 'impossible' ? 'Imposible' : ''));
+                    const nivelTexto = level === 'easy' ? 'Fácil' : (level === 'hard' ? 'Difícil' : (level === 'impossible' ? 'Imposible' : (level === 'god' ? 'Dios' : '')));
                     difficultyRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -5739,7 +6242,7 @@
                 const ranking = await window.obtenerRanking(level);
                 
                 if (ranking.length === 0) {
-                    const nivelTexto = level === 'easy' ? 'Fácil' : (level === 'hard' ? 'Difícil' : (level === 'impossible' ? 'Imposible' : ''));
+                    const nivelTexto = level === 'easy' ? 'Fácil' : (level === 'hard' ? 'Difícil' : (level === 'impossible' ? 'Imposible' : (level === 'god' ? 'Dios' : '')));
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -5824,7 +6327,7 @@
                 const ranking = await window.obtenerRanking(difficulty);
                 
                 if (ranking.length === 0) {
-                    const nivelTexto = difficulty === 'easy' ? 'Fácil' : (difficulty === 'hard' ? 'Difícil' : (difficulty === 'impossible' ? 'Imposible' : ''));
+                    const nivelTexto = difficulty === 'easy' ? 'Fácil' : (difficulty === 'hard' ? 'Difícil' : (difficulty === 'impossible' ? 'Imposible' : (difficulty === 'god' ? 'Dios' : '')));
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -5913,11 +6416,12 @@
             answered = false;
             jokerAvailable = false;
             jokerUsed = false;
+            // Resetear difficulty
             difficulty = null;
             timeLeft = 20;
             
-            // Desactivar todos los modos
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode');
+            // Remover las clases de modo para que la pantalla de elegir nivel no tenga estilos del nivel anterior
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode');
             
             // Ocultar game over
             document.getElementById('gameOver').style.display = 'none';
@@ -5943,8 +6447,18 @@
             document.getElementById('viewRankingBtn').style.display = 'none';
             document.getElementById('mainRankingContainer').style.display = 'none';
             
+            // Ocultar contenedor de ranking de dificultad si está visible
+            const difficultyRankingContainer = document.getElementById('difficultyRankingContainer');
+            if (difficultyRankingContainer) {
+                difficultyRankingContainer.style.display = 'none';
+            }
+            
             // Mostrar selector de dificultad
             document.getElementById('difficultySelector').style.display = 'block';
+            document.body.classList.add('difficulty-selector-active');
+            
+            // Crear partículas flotantes en el selector de dificultad
+            createDifficultySelectorParticles();
             
             // Actualizar corazones
             updateHearts();
@@ -6261,10 +6775,22 @@
         document.getElementById('nextBtn').addEventListener('click', loadNewQuestion);
         document.getElementById('endAttemptBtn').addEventListener('click', endAttempt);
         
+        // Crear partículas en el selector de dificultad al cargar la página
+        const difficultySelector = document.getElementById('difficultySelector');
+        if (difficultySelector && (difficultySelector.style.display !== 'none' && difficultySelector.style.display !== '')) {
+            document.body.classList.add('difficulty-selector-active');
+            createDifficultySelectorParticles();
+        } else if (difficultySelector && !difficultySelector.style.display) {
+            // Si no tiene estilo display definido, está visible por defecto
+            document.body.classList.add('difficulty-selector-active');
+            createDifficultySelectorParticles();
+        }
+
         // Event listeners para selección de dificultad
         document.getElementById('easyBtn').addEventListener('click', () => selectDifficulty('easy'));
         document.getElementById('hardBtn').addEventListener('click', () => selectDifficulty('hard'));
         document.getElementById('impossibleBtn').addEventListener('click', () => selectDifficulty('impossible'));
+        document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
         document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
@@ -6553,13 +7079,140 @@
                 }
             });
         }
-        document.getElementById('viewRankingBtn').addEventListener('click', showMainRanking);
-        document.getElementById('closeRankingBtn').addEventListener('click', hideMainRanking);
+        const viewRankingBtn = document.getElementById('viewRankingBtn');
+        if (viewRankingBtn) {
+            viewRankingBtn.addEventListener('click', showMainRanking);
+        }
         
-        // Event listeners para botones de clasificación por nivel
-        document.getElementById('viewRankingEasyBtn').addEventListener('click', () => showRankingByLevel('easy'));
-        document.getElementById('viewRankingHardBtn').addEventListener('click', () => showRankingByLevel('hard'));
-        document.getElementById('viewRankingImpossibleBtn').addEventListener('click', () => showRankingByLevel('impossible'));
+        const closeRankingBtn = document.getElementById('closeRankingBtn');
+        if (closeRankingBtn) {
+            closeRankingBtn.addEventListener('click', hideMainRanking);
+        }
+        
+        // Función para inicializar los event listeners de los botones de clasificación
+        function initRankingButtons() {
+            // Event listeners para botones de clasificación por nivel usando delegación de eventos
+            const rankingButtonsContainer = document.querySelector('.ranking-buttons');
+            if (rankingButtonsContainer) {
+                // Remover listener anterior si existe para evitar duplicados
+                rankingButtonsContainer.removeEventListener('click', handleRankingButtonClick);
+                rankingButtonsContainer.addEventListener('click', handleRankingButtonClick);
+            }
+            
+            // También agregar listeners directos como respaldo
+            const viewRankingEasyBtn = document.getElementById('viewRankingEasyBtn');
+            if (viewRankingEasyBtn) {
+                viewRankingEasyBtn.removeEventListener('click', handleEasyRankingClick);
+                viewRankingEasyBtn.addEventListener('click', handleEasyRankingClick);
+            }
+            
+            const viewRankingHardBtn = document.getElementById('viewRankingHardBtn');
+            if (viewRankingHardBtn) {
+                viewRankingHardBtn.removeEventListener('click', handleHardRankingClick);
+                viewRankingHardBtn.addEventListener('click', handleHardRankingClick);
+            }
+            
+            const viewRankingImpossibleBtn = document.getElementById('viewRankingImpossibleBtn');
+            if (viewRankingImpossibleBtn) {
+                viewRankingImpossibleBtn.removeEventListener('click', handleImpossibleRankingClick);
+                viewRankingImpossibleBtn.addEventListener('click', handleImpossibleRankingClick);
+            }
+            
+            const viewRankingGodBtn = document.getElementById('viewRankingGodBtn');
+            if (viewRankingGodBtn) {
+                viewRankingGodBtn.removeEventListener('click', handleGodRankingClick);
+                viewRankingGodBtn.addEventListener('click', handleGodRankingClick);
+            }
+        }
+        
+        // Handler para delegación de eventos
+        function handleRankingButtonClick(e) {
+            // Buscar el botón clickeado (puede ser el botón mismo o un elemento hijo)
+            const button = e.target.closest('.ranking-btn') || e.target;
+            if (!button || !button.id) return;
+            
+            let level = null;
+            
+            if (button.id === 'viewRankingEasyBtn') {
+                level = 'easy';
+                console.log('Botón Clasificación Fácil clickeado');
+            } else if (button.id === 'viewRankingHardBtn') {
+                level = 'hard';
+                console.log('Botón Clasificación Difícil clickeado');
+            } else if (button.id === 'viewRankingImpossibleBtn') {
+                level = 'impossible';
+                console.log('Botón Clasificación Imposible clickeado');
+            } else if (button.id === 'viewRankingGodBtn') {
+                level = 'god';
+                console.log('Botón Clasificación Dios clickeado');
+            }
+            
+            if (level) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.showRankingByLevel) {
+                    window.showRankingByLevel(level);
+                } else {
+                    console.error('showRankingByLevel no está disponible');
+                }
+            }
+        }
+        
+        // Handlers individuales para cada botón
+        function handleEasyRankingClick(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Botón Clasificación Fácil clickeado (directo)');
+            if (window.showRankingByLevel) {
+                window.showRankingByLevel('easy');
+            } else {
+                console.error('showRankingByLevel no está disponible');
+            }
+        }
+        
+        function handleHardRankingClick(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Botón Clasificación Difícil clickeado (directo)');
+            if (window.showRankingByLevel) {
+                window.showRankingByLevel('hard');
+            } else {
+                console.error('showRankingByLevel no está disponible');
+            }
+        }
+        
+        function handleImpossibleRankingClick(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Botón Clasificación Imposible clickeado (directo)');
+            if (window.showRankingByLevel) {
+                window.showRankingByLevel('impossible');
+            } else {
+                console.error('showRankingByLevel no está disponible');
+            }
+        }
+        
+        function handleGodRankingClick(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Botón Clasificación Dios clickeado (directo)');
+            if (window.showRankingByLevel) {
+                window.showRankingByLevel('god');
+            } else {
+                console.error('showRankingByLevel no está disponible');
+            }
+        }
+        
+        // Inicializar los botones cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initRankingButtons);
+        } else {
+            // DOM ya está listo
+            initRankingButtons();
+        }
+        
+        // También inicializar después de un pequeño delay para asegurar que todo esté cargado
+        setTimeout(initRankingButtons, 100);
         
         // Event listeners para autenticación
         document.getElementById('loginTab').addEventListener('click', () => switchAuthTab('login'));
