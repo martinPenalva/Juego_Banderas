@@ -2179,28 +2179,33 @@
             position: absolute;
             top: 5px;
             right: 5px;
-            background: rgba(245, 101, 101, 0.9);
+            background: rgba(245, 101, 101, 0.95);
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 1em;
+            font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            opacity: 0;
+            opacity: 0.9;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .library-item:hover .library-item-remove {
             opacity: 1;
+            transform: scale(1.1);
         }
 
         .library-item-remove:hover {
             background: rgba(229, 62, 62, 1);
-            transform: scale(1.1);
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
         .friend-library-section {
@@ -5511,6 +5516,9 @@
                 // Cargar foto de perfil
                 loadProfilePicture();
                 
+                // Limpiar bibliotecas al cambiar de usuario
+                clearLibraries();
+                
                 // No cargar ranking automáticamente - el usuario debe hacer clic en el botón "Ver Tabla"
             } else {
                 window.currentUser = null;
@@ -5521,6 +5529,8 @@
                 document.getElementById('profilePictureContainer').style.display = 'none';
                 // Limpiar foto de perfil
                 clearProfilePicture();
+                // Limpiar bibliotecas
+                clearLibraries();
             }
         });
 
@@ -5600,6 +5610,30 @@
                 containerElement.appendChild(placeholder);
             }
         };
+
+        // Limpiar bibliotecas
+        function clearLibraries() {
+            // Limpiar biblioteca propia
+            const libraryGrid = document.getElementById('libraryGrid');
+            if (libraryGrid) {
+                libraryGrid.innerHTML = '';
+            }
+            
+            // Limpiar biblioteca del amigo
+            const friendLibraryGrid = document.getElementById('friendLibraryGrid');
+            const friendLibrarySection = document.getElementById('friendLibrarySection');
+            if (friendLibraryGrid) {
+                friendLibraryGrid.innerHTML = '';
+            }
+            if (friendLibrarySection) {
+                friendLibrarySection.style.display = 'none';
+            }
+            
+            // Cerrar modal de imagen si está abierto
+            if (window.hideLibraryImage) {
+                window.hideLibraryImage();
+            }
+        }
 
         // Limpiar foto de perfil (mostrar placeholder)
         function clearProfilePicture() {
@@ -5751,6 +5785,14 @@
                 // Cargar descripción
                 if (window.loadProfileDescription) {
                     window.loadProfileDescription();
+                }
+                
+                // Cargar biblioteca (limpiar primero para evitar mostrar fotos de otro usuario)
+                if (typeof clearLibraries === 'function') {
+                    clearLibraries();
+                }
+                if (window.loadLibrary) {
+                    window.loadLibrary();
                 }
             }
         };
@@ -5995,6 +6037,16 @@
                     if (scoresSection) {
                         scoresSection.style.display = 'none';
                     }
+                }
+                
+                // Limpiar biblioteca del amigo primero
+                const friendLibraryGrid = document.getElementById('friendLibraryGrid');
+                const friendLibrarySection = document.getElementById('friendLibrarySection');
+                if (friendLibraryGrid) {
+                    friendLibraryGrid.innerHTML = '';
+                }
+                if (friendLibrarySection) {
+                    friendLibrarySection.style.display = 'none';
                 }
                 
                 // Cargar biblioteca del amigo (solo visible para amigos)
