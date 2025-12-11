@@ -8693,11 +8693,12 @@
 
         // Generar ID único para una foto basado en su contenido
         async function generateFotoId(imageBase64, userId, index) {
-            // Crear un hash del contenido completo de la imagen + userId para que sea único y estable
-            // Usar solo una parte del base64 para el hash (primeros 500 caracteres) para evitar problemas de tamaño
-            const contentToHash = imageBase64.substring(0, 500) + userId;
+            // Crear un hash del contenido de la imagen + userId + index para que sea único para cada foto
+            // Incluir el índice para asegurar que cada foto tenga un ID único incluso si tienen contenido similar
+            // Usar una parte del base64 (primeros 1000 caracteres) + userId + index
+            const contentToHash = imageBase64.substring(0, 1000) + userId + '_' + index + '_' + imageBase64.length;
             const hash = await hashString(contentToHash);
-            return `foto_${userId}_${hash}`;
+            return `foto_${userId}_${index}_${hash}`;
         }
 
         // Función auxiliar para crear hash simple
@@ -8831,12 +8832,20 @@
 
         // Agregar comentario a una foto (o respuesta a un comentario)
         window.addFotoComment = async function(fotoId, comentario, parentCommentId = null) {
+            // Usar el fotoId del modal actual si no se proporciona uno
+            if (!fotoId && window.currentFotoId) {
+                fotoId = window.currentFotoId;
+                console.log('addFotoComment: Usando fotoId del modal actual:', fotoId);
+            }
+            
             if (!window.currentUser || !fotoId || !comentario || comentario.trim() === '') {
                 console.error('addFotoComment: Parámetros inválidos', { 
                     user: !!window.currentUser, 
                     fotoId, 
-                    comentario: comentario ? comentario.trim() : '' 
+                    comentario: comentario ? comentario.trim() : '',
+                    currentFotoId: window.currentFotoId
                 });
+                alert('Error: No se pudo identificar la foto. Por favor, cierra y vuelve a abrir la imagen.');
                 return false;
             }
             
@@ -8848,7 +8857,7 @@
                 
                 const comentariosRef = collection(db, "fotoComentarios");
                 const commentData = {
-                    fotoId: fotoId,
+                    fotoId: fotoId,  // Asegurar que el fotoId esté correctamente vinculado
                     userId: userId,
                     nombreUsuario: nombreUsuario,
                     comentario: comentario.trim(),
@@ -8862,9 +8871,9 @@
                 
                 await addDoc(comentariosRef, commentData);
                 
-                console.log('addFotoComment: Comentario agregado exitosamente');
+                console.log('addFotoComment: Comentario agregado exitosamente para fotoId:', fotoId);
                 
-                // Recargar comentarios
+                // Recargar comentarios usando el mismo fotoId
                 await loadFotoComments(fotoId);
                 
                 // Limpiar inputs
@@ -9060,12 +9069,17 @@
 
         // Cargar comentarios de una foto
         async function loadFotoComments(fotoId) {
-            if (!fotoId) return;
+            if (!fotoId) {
+                console.warn('loadFotoComments: No hay fotoId');
+                return;
+            }
             
             try {
+                console.log('loadFotoComments: Cargando comentarios para fotoId:', fotoId);
                 const comentariosRef = collection(db, "fotoComentarios");
                 const q = query(comentariosRef, where("fotoId", "==", fotoId));
                 const snapshot = await getDocs(q);
+                console.log('loadFotoComments: Encontrados', snapshot.size, 'comentarios para fotoId:', fotoId);
                 
                 const commentsList = document.getElementById('libraryImageCommentsList');
                 if (!commentsList) return;
