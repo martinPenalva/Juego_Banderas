@@ -1421,6 +1421,165 @@
             background: white;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .creator-info-btn {
+            margin-top: 30px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .creator-info-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .creator-info-profile-picture {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .creator-info-profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .creator-info-profile-picture .placeholder {
+            font-size: 2.5em;
+        }
+
+        .creator-info-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .creator-info-modal.active {
+            display: flex;
+        }
+
+        .creator-info-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            color: white;
+            text-align: center;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .creator-info-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .creator-info-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .creator-info-header {
+            margin-bottom: 30px;
+        }
+
+        .creator-info-header h3 {
+            font-size: 2em;
+            margin: 0 0 10px 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .creator-info-header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .creator-info-body {
+            margin-bottom: 30px;
+        }
+
+        .creator-info-body p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            white-space: pre-line;
+        }
+
+        .creator-info-message {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            backdrop-filter: blur(10px);
+        }
+
+        .creator-info-footer {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 20px;
         }
 
         .difficulty-selector h2 {
@@ -5046,6 +5205,26 @@
         </div>
     </div>
 
+    <!-- Modal de información del creador -->
+    <div class="creator-info-modal" id="creatorInfoModal">
+        <div class="creator-info-content">
+            <button class="creator-info-close" id="creatorInfoClose">✕</button>
+            <div class="creator-info-header">
+                <div class="creator-info-profile-picture" id="creatorInfoProfilePicture">
+                    <div class="placeholder">👤</div>
+                </div>
+                <h3 id="creatorInfoName">👨‍💻 Martin</h3>
+                <p id="creatorInfoRole">Creador de Banderas</p>
+            </div>
+            <div class="creator-info-body">
+                <p id="creatorInfoDescription">Cargando información...</p>
+            </div>
+            <div class="creator-info-footer">
+                <p>Gracias por jugar 🎮✨</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de búsqueda de amigos -->
     <div class="friends-modal" id="friendsModal" style="display: none;">
         <div class="friends-modal-content">
@@ -5189,11 +5368,14 @@
                     <button class="ranking-btn ranking-btn-impossible" id="viewRankingImpossibleBtn">🏆 Clasificación Imposible</button>
                     <button class="ranking-btn ranking-btn-god" id="viewRankingGodBtn">🏆 Clasificación Dios</button>
                 </div>
+            </div>
+            <div class="ranking-buttons-container">
                 <div class="difficulty-ranking-container" id="difficultyRankingContainer" style="display: none;">
                     <h3 id="difficultyRankingTitle" style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.5em; text-align: center;"></h3>
                     <div class="difficulty-ranking-list" id="difficultyRankingList"></div>
                 </div>
             </div>
+            <button class="creator-info-btn" id="creatorInfoBtn" title="Información del creador">ℹ️ Información del Creador</button>
         </div>
 
         <div class="loading" id="loading" style="display: none;">Cargando...</div>
@@ -7483,6 +7665,38 @@
             });
         }
 
+        // Event listeners para información del creador
+        const creatorInfoBtn = document.getElementById('creatorInfoBtn');
+        const creatorInfoModal = document.getElementById('creatorInfoModal');
+        const creatorInfoClose = document.getElementById('creatorInfoClose');
+
+        // La función loadCreatorInfo se define en el módulo de Firebase
+
+        if (creatorInfoBtn) {
+            creatorInfoBtn.addEventListener('click', async () => {
+                if (creatorInfoModal && window.loadCreatorInfo) {
+                    await window.loadCreatorInfo();
+                    creatorInfoModal.classList.add('active');
+                }
+            });
+        }
+
+        if (creatorInfoClose) {
+            creatorInfoClose.addEventListener('click', () => {
+                if (creatorInfoModal) {
+                    creatorInfoModal.classList.remove('active');
+                }
+            });
+        }
+
+        if (creatorInfoModal) {
+            creatorInfoModal.addEventListener('click', (e) => {
+                if (e.target === creatorInfoModal) {
+                    creatorInfoModal.classList.remove('active');
+                }
+            });
+        }
+
         // Event listeners para likes y comentarios
         // Variables globales para la foto actual en el modal (declaradas antes de los event listeners)
         window.currentFotoId = null;
@@ -7966,6 +8180,48 @@
 
         // Marcar que Firebase está listo
         window.firebaseReady = true;
+        
+        // Función para cargar información del creador por email
+        window.loadCreatorInfo = async function() {
+            const creatorEmail = 'mpenalvart1@educacion.navarra.es';
+            
+            try {
+                const usuariosRef = collection(db, "usuarios");
+                const q = query(usuariosRef, where("email", "==", creatorEmail));
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    const creatorDoc = querySnapshot.docs[0];
+                    const creatorData = creatorDoc.data();
+                    const creatorId = creatorDoc.id;
+                    
+                    // Cargar foto de perfil
+                    const profilePicContainer = document.getElementById('creatorInfoProfilePicture');
+                    if (profilePicContainer && window.loadUserProfilePicture) {
+                        await window.loadUserProfilePicture(creatorId, profilePicContainer);
+                    }
+                    
+                    // Actualizar información
+                    const nameEl = document.getElementById('creatorInfoName');
+                    const roleEl = document.getElementById('creatorInfoRole');
+                    const descEl = document.getElementById('creatorInfoDescription');
+                    
+                    if (nameEl) {
+                        nameEl.textContent = creatorData.nombre || '👨‍💻 Martin';
+                    }
+                    if (roleEl) {
+                        roleEl.textContent = 'Creador de Banderas';
+                    }
+                    if (descEl) {
+                        descEl.innerHTML = 'Hola! Soy Martin, el creador de Creador de Banderas 😎<br><br>Hice este juego para que te diviertas aprendiendo banderas del mundo, y de paso puedas: publicar fotos, comentar imágenes, agregar amigos, molestar un poquito a tus colegas en sus fotos y, claro, presumir tus puntuaciones como todo un campeón 🏆.<br><br>¡Jajaja, que lo disfrutes y que el juego te divierta tanto como a mí crearlo! 🎮✨';
+                    }
+                } else {
+                    console.log('Usuario creador no encontrado');
+                }
+            } catch (error) {
+                console.error('Error al cargar información del creador:', error);
+            }
+        };
 
         // Definir funciones de autenticación inmediatamente para que estén disponibles
         window.iniciarSesion = async function(email, password) {
@@ -8500,7 +8756,8 @@
                 const niveles = [
                     { key: 'easy', name: '🟢 Fácil' },
                     { key: 'hard', name: '🔴 Difícil' },
-                    { key: 'impossible', name: '⚫ Imposible' }
+                    { key: 'impossible', name: '⚫ Imposible' },
+                    { key: 'god', name: '✨ Dios' }
                 ];
                 
                 niveles.forEach(nivel => {
@@ -8668,7 +8925,8 @@
                 const niveles = [
                     { key: 'easy', name: '🟢 Fácil' },
                     { key: 'hard', name: '🔴 Difícil' },
-                    { key: 'impossible', name: '⚫ Imposible' }
+                    { key: 'impossible', name: '⚫ Imposible' },
+                    { key: 'god', name: '✨ Dios' }
                 ];
                 
                 niveles.forEach(nivel => {
