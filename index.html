@@ -3310,6 +3310,14 @@
             justify-content: center;
             flex-shrink: 0;
             font-size: 1.2em;
+            overflow: hidden;
+        }
+        
+        .active-chat-message-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
         .active-chat-message.sent .active-chat-message-picture {
@@ -4663,17 +4671,22 @@
             messageEl.textContent = '';
             messageEl.className = 'auth-message';
             
-            // Esperar a que window.iniciarSesion esté disponible
-            if (!window.iniciarSesion) {
-                // Esperar un poco y reintentar
-                await new Promise(resolve => setTimeout(resolve, 100));
-                if (!window.iniciarSesion) {
-                    messageEl.textContent = 'Error: El sistema de autenticación no está listo. Por favor, recarga la página.';
-                    messageEl.className = 'auth-message error';
-                    loginBtn.disabled = false;
-                    loginBtn.textContent = 'Iniciar Sesión';
-                    return;
+            // Verificar que window.iniciarSesion esté disponible
+            if (!window.iniciarSesion || !window.firebaseReady) {
+                // Intentar esperar un poco si el módulo está cargando
+                for (let i = 0; i < 30; i++) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    if (window.iniciarSesion && window.firebaseReady) break;
                 }
+            }
+            
+            if (!window.iniciarSesion || !window.firebaseReady) {
+                messageEl.textContent = 'Error: El sistema de autenticación no está listo. Por favor, espera unos segundos y vuelve a intentar, o recarga la página.';
+                messageEl.className = 'auth-message error';
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Iniciar Sesión';
+                console.error('window.iniciarSesion o firebaseReady no está disponible después de esperar');
+                return;
             }
             
             const result = await window.iniciarSesion(email, password);
@@ -4748,6 +4761,15 @@
             registerBtn.textContent = 'Registrando...';
             messageEl.textContent = '';
             messageEl.className = 'auth-message';
+            
+            // Verificar que la función esté disponible
+            if (!window.registrarUsuario) {
+                messageEl.textContent = 'Error: La función de registro no está disponible. Por favor, recarga la página.';
+                messageEl.className = 'auth-message error';
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Registrarse';
+                return;
+            }
             
             const result = await window.registrarUsuario(email, password, name);
             
@@ -5788,16 +5810,34 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
 
+        // Marcar que Firebase está listo
+        window.firebaseReady = true;
+
         // Definir funciones de autenticación inmediatamente para que estén disponibles
         window.iniciarSesion = async function(email, password) {
             try {
+                // Verificar que auth esté inicializado
+                if (!auth) {
+                    console.error("Auth no está inicializado");
+                    return { success: false, error: "Auth no está inicializado. Por favor, recarga la página." };
+                }
+                
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
                 // Obtener nombre de usuario desde Firestore
-                const userDoc = await getDoc(doc(db, "usuarios", user.uid));
-                if (userDoc.exists()) {
-                    window.currentUserName = userDoc.data().nombre;
+                if (db) {
+                    try {
+                        const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+                        if (userDoc.exists()) {
+                            window.currentUserName = userDoc.data().nombre;
+                        } else {
+                            window.currentUserName = user.email.split('@')[0];
+                        }
+                    } catch (dbError) {
+                        console.error("Error al obtener datos del usuario desde Firestore:", dbError);
+                        window.currentUserName = user.email.split('@')[0];
+                    }
                 } else {
                     window.currentUserName = user.email.split('@')[0];
                 }
@@ -5806,28 +5846,41 @@
                 return { success: true, user: user };
             } catch (error) {
                 console.error("Error al iniciar sesión: ", error);
-                return { success: false, error: error.message };
+                return { success: false, error: error.message || error.toString() };
             }
         };
 
         window.registrarUsuario = async function(email, password, nombre) {
             try {
+                // Verificar que auth esté inicializado
+                if (!auth) {
+                    console.error("Auth no está inicializado");
+                    return { success: false, error: "Auth no está inicializado. Por favor, recarga la página." };
+                }
+                
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
                 // Guardar nombre de usuario en Firestore
-                await setDoc(doc(db, "usuarios", user.uid), {
-                    nombre: nombre,
-                    email: email,
-                    fechaRegistro: Date.now()
-                });
+                if (db) {
+                    await setDoc(doc(db, "usuarios", user.uid), {
+                        nombre: nombre,
+                        email: email,
+                        fechaRegistro: Date.now(),
+                        amigos: [],
+                        mostrarPuntuaciones: true
+                    });
+                } else {
+                    console.error("Firestore no está inicializado");
+                    return { success: false, error: "Firestore no está inicializado. Por favor, recarga la página." };
+                }
                 
                 window.currentUser = user;
                 window.currentUserName = nombre;
                 return { success: true, user: user };
             } catch (error) {
                 console.error("Error al registrar: ", error);
-                return { success: false, error: error.message };
+                return { success: false, error: error.message || error.toString() };
             }
         };
 
@@ -6846,7 +6899,7 @@
                     where("chatId", "==", finalChatId)
                 );
                 
-                chatUnsubscribe = onSnapshot(q, (snapshot) => {
+                chatUnsubscribe = onSnapshot(q, async (snapshot) => {
                     const activeMessagesEl = document.getElementById('activeChatMessages');
                     if (!activeMessagesEl) {
                         console.error('No se encontró activeChatMessages en onSnapshot');
@@ -6873,10 +6926,10 @@
                         return timeA - timeB;
                     });
                     
-                    // Mostrar mensajes ordenados
-                    messages.forEach((messageData) => {
-                        displayMessage(messageData);
-                    });
+                    // Mostrar mensajes ordenados (cargar fotos de forma asíncrona)
+                    for (const messageData of messages) {
+                        await displayMessage(messageData);
+                    }
                     
                     // Scroll al final
                     setTimeout(() => {
@@ -6963,9 +7016,9 @@
                     });
                     
                     // Mostrar mensajes ordenados
-                    messages.forEach((messageData) => {
-                        displayMessage(messageData);
-                    });
+                    for (const messageData of messages) {
+                        await displayMessage(messageData);
+                    }
                 }
                 
                 // Scroll al final
@@ -6991,10 +7044,13 @@
                     const messagesEl = document.getElementById('activeChatMessages');
                     if (messagesEl) {
                         messagesEl.innerHTML = '';
+                        const messagesToDisplay = [];
                         snapshot.forEach((doc) => {
-                            const messageData = doc.data();
-                            displayMessage(messageData);
+                            messagesToDisplay.push(doc.data());
                         });
+                        for (const messageData of messagesToDisplay) {
+                            await displayMessage(messageData);
+                        }
                         setTimeout(() => {
                             messagesEl.scrollTop = messagesEl.scrollHeight;
                         }, 100);
@@ -7005,8 +7061,32 @@
             }
         }
 
+        // Cache de fotos de perfil para evitar cargar múltiples veces
+        const profilePicturesCache = {};
+        
+        // Cargar foto de perfil de un usuario
+        async function loadUserProfilePicture(userId) {
+            if (profilePicturesCache[userId]) {
+                return profilePicturesCache[userId];
+            }
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", userId));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const fotoPerfil = userData.fotoPerfil || null;
+                    profilePicturesCache[userId] = fotoPerfil;
+                    return fotoPerfil;
+                }
+            } catch (error) {
+                console.error('Error al cargar foto de perfil:', error);
+            }
+            
+            return null;
+        }
+        
         // Mostrar un mensaje en el chat
-        function displayMessage(messageData) {
+        async function displayMessage(messageData) {
             const messagesEl = document.getElementById('activeChatMessages');
             if (!messagesEl) return;
             
@@ -7016,7 +7096,23 @@
             
             const picture = document.createElement('div');
             picture.className = 'active-chat-message-picture';
-            picture.textContent = '👤';
+            
+            // Cargar foto de perfil del usuario que envió el mensaje
+            const userId = messageData.fromUserId;
+            const fotoPerfil = await loadUserProfilePicture(userId);
+            
+            if (fotoPerfil) {
+                const img = document.createElement('img');
+                img.src = fotoPerfil;
+                img.alt = 'Foto de perfil';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '50%';
+                picture.appendChild(img);
+            } else {
+                picture.textContent = '👤';
+            }
             
             const content = document.createElement('div');
             content.className = 'active-chat-message-content';
