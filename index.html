@@ -1580,6 +1580,33 @@
             font-size: 0.9em;
             opacity: 0.8;
             margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .recommendations-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        .recommendations-btn:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6);
+        }
+
+        .recommendations-btn:active {
+            transform: translateY(0);
         }
 
         .difficulty-selector h2 {
@@ -3724,6 +3751,11 @@
             padding-top: 5px;
             border-left: 3px solid #cbd5e0;
             position: relative;
+            display: none;
+        }
+
+        .comment-replies.show {
+            display: block;
         }
 
         .comment-replies::before {
@@ -3735,6 +3767,41 @@
             height: 20px;
             background: #667eea;
             border-radius: 0 0 0 3px;
+        }
+
+        .comment-replies-toggle {
+            margin-top: 10px;
+            margin-left: 55px;
+            padding: 8px 12px;
+            background: transparent;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+        }
+
+        .comment-replies-toggle:hover {
+            background: #f7fafc;
+            color: #764ba2;
+        }
+
+        .comment-replies-toggle .toggle-arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .comment-replies-toggle.expanded .toggle-arrow {
+            transform: rotate(90deg);
+        }
+
+        .comment-replies-toggle .reply-count {
+            color: #718096;
+            font-size: 0.85em;
         }
 
         .comment-reply-item {
@@ -4484,6 +4551,288 @@
             gap: 10px;
         }
 
+        /* Estilos para modal de recomendaciones */
+        .recommendations-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .recommendations-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .recommendations-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .recommendations-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .recommendations-modal-close {
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .recommendations-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
+        .recommendations-modal-body {
+            margin-bottom: 25px;
+        }
+
+        .recommendation-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 150px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .recommendation-textarea:focus {
+            border-color: #667eea;
+        }
+
+        .recommendations-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .recommendation-submit-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-submit-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Estilos para modal de correo (recomendaciones recibidas) */
+        .recommendations-inbox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .recommendations-inbox-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .recommendations-inbox-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .recommendations-inbox-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .recommendations-inbox-modal-close {
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .recommendations-inbox-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
+        .recommendations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .recommendation-item {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .recommendation-item-profile {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .recommendation-item-profile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .recommendation-item-profile .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e2e8f0;
+            font-size: 1.5em;
+        }
+
+        .recommendation-item-content {
+            flex: 1;
+        }
+
+        .recommendation-item-author {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .recommendation-item-text {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .recommendation-item-date {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        .recommendation-item-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .recommendation-delete-btn {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-delete-btn:hover {
+            background: #e53e3e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(245, 101, 101, 0.4);
+        }
+
+        .recommendation-item {
+            position: relative;
+        }
+
+        .profile-recommendations-inbox-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .profile-recommendations-inbox-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        }
+
+        .recommendations-inbox-modal-body {
+            margin-top: 20px;
+        }
+
         .inbox-request-item {
             display: flex;
             align-items: center;
@@ -5128,6 +5477,7 @@
                     <button class="profile-toggle-scores-btn" id="profileToggleScoresBtn">📊 Mostrar Puntuaciones</button>
                     <button class="profile-friends-btn" id="profileFriendsBtn">👥 Añadir Amigos</button>
                     <button class="profile-inbox-btn" id="profileInboxBtn">📬 Bandeja de Solicitudes</button>
+                    <button class="profile-recommendations-inbox-btn" id="profileRecommendationsInboxBtn" style="display: none;">📧 Correo de Recomendaciones</button>
                     <div class="profile-scores-section" id="profileScoresSection" style="display: none;">
                         <h3>Mis Puntuaciones Máximas</h3>
                         <div class="scores-list" id="scoresList"></div>
@@ -5220,7 +5570,40 @@
                 <p id="creatorInfoDescription">Cargando información...</p>
             </div>
             <div class="creator-info-footer">
+                <button class="recommendations-btn" id="recommendationsBtn">💡 Recomendaciones</button>
                 <p>Gracias por jugar 🎮✨</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de recomendaciones -->
+    <div class="recommendations-modal" id="recommendationsModal" style="display: none;">
+        <div class="recommendations-modal-content">
+            <div class="recommendations-modal-header">
+                <h2>💡 Enviar Recomendación</h2>
+                <button class="recommendations-modal-close" id="recommendationsModalClose">✕</button>
+            </div>
+            <div class="recommendations-modal-body">
+                <p style="margin-bottom: 15px; color: #4a5568;">Comparte tus ideas para mejorar el juego:</p>
+                <textarea id="recommendationText" class="recommendation-textarea" placeholder="Escribe tu recomendación o mejora aquí..." rows="6"></textarea>
+            </div>
+            <div class="recommendations-modal-footer">
+                <button class="recommendation-submit-btn" id="recommendationSubmitBtn">📧 Enviar a Creador</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de recomendaciones recibidas (correo) -->
+    <div class="recommendations-inbox-modal" id="recommendationsInboxModal" style="display: none;">
+        <div class="recommendations-inbox-modal-content">
+            <div class="recommendations-inbox-modal-header">
+                <h2>📧 Recomendaciones Recibidas</h2>
+                <button class="recommendations-inbox-modal-close" id="recommendationsInboxModalClose">✕</button>
+            </div>
+            <div class="recommendations-inbox-modal-body">
+                <div class="recommendations-list" id="recommendationsList">
+                    <div style="text-align: center; color: #718096; padding: 20px;">Cargando recomendaciones...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -7511,6 +7894,35 @@
             });
         }
 
+        const profileRecommendationsInboxBtn = document.getElementById('profileRecommendationsInboxBtn');
+        if (profileRecommendationsInboxBtn) {
+            profileRecommendationsInboxBtn.addEventListener('click', async () => {
+                const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
+                if (recommendationsInboxModal && window.loadRecommendations) {
+                    recommendationsInboxModal.style.display = 'flex';
+                    await window.loadRecommendations();
+                }
+            });
+        }
+
+        const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
+        const recommendationsInboxModalClose = document.getElementById('recommendationsInboxModalClose');
+        if (recommendationsInboxModalClose) {
+            recommendationsInboxModalClose.addEventListener('click', () => {
+                if (recommendationsInboxModal) {
+                    recommendationsInboxModal.style.display = 'none';
+                }
+            });
+        }
+
+        if (recommendationsInboxModal) {
+            recommendationsInboxModal.addEventListener('click', (e) => {
+                if (e.target === recommendationsInboxModal) {
+                    recommendationsInboxModal.style.display = 'none';
+                }
+            });
+        }
+
         const profileToggleScoresBtn = document.getElementById('profileToggleScoresBtn');
         if (profileToggleScoresBtn) {
             profileToggleScoresBtn.addEventListener('click', () => {
@@ -7693,6 +8105,59 @@
             creatorInfoModal.addEventListener('click', (e) => {
                 if (e.target === creatorInfoModal) {
                     creatorInfoModal.classList.remove('active');
+                }
+            });
+        }
+
+        // Event listeners para recomendaciones
+        const recommendationsBtn = document.getElementById('recommendationsBtn');
+        const recommendationsModal = document.getElementById('recommendationsModal');
+        const recommendationsModalClose = document.getElementById('recommendationsModalClose');
+        const recommendationSubmitBtn = document.getElementById('recommendationSubmitBtn');
+        const recommendationText = document.getElementById('recommendationText');
+
+        if (recommendationsBtn) {
+            recommendationsBtn.addEventListener('click', () => {
+                if (recommendationsModal) {
+                    recommendationsModal.style.display = 'flex';
+                    if (recommendationText) {
+                        recommendationText.value = '';
+                        recommendationText.focus();
+                    }
+                }
+            });
+        }
+
+        if (recommendationsModalClose) {
+            recommendationsModalClose.addEventListener('click', () => {
+                if (recommendationsModal) {
+                    recommendationsModal.style.display = 'none';
+                }
+            });
+        }
+
+        if (recommendationsModal) {
+            recommendationsModal.addEventListener('click', (e) => {
+                if (e.target === recommendationsModal) {
+                    recommendationsModal.style.display = 'none';
+                }
+            });
+        }
+
+        if (recommendationSubmitBtn) {
+            recommendationSubmitBtn.addEventListener('click', async () => {
+                if (window.sendRecommendation) {
+                    await window.sendRecommendation();
+                }
+            });
+        }
+
+        if (recommendationText) {
+            recommendationText.addEventListener('keypress', async (e) => {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    if (window.sendRecommendation) {
+                        await window.sendRecommendation();
+                    }
                 }
             });
         }
@@ -8154,7 +8619,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, doc, setDoc, getDoc, where, updateDoc, onSnapshot, writeBatch } 
+        import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, doc, setDoc, getDoc, where, updateDoc, onSnapshot, writeBatch, deleteDoc } 
             from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
             from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -8627,6 +9092,16 @@
                 if (activeChat) {
                     activeChat.style.display = 'none';
                 }
+
+                // Mostrar botón de correo solo para el creador
+                const recommendationsInboxBtn = document.getElementById('profileRecommendationsInboxBtn');
+                if (recommendationsInboxBtn && window.currentUser) {
+                    if (window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                        recommendationsInboxBtn.style.display = 'block';
+                    } else {
+                        recommendationsInboxBtn.style.display = 'none';
+                    }
+                }
             }
         };
 
@@ -8651,6 +9126,163 @@
             }
             if (friendProfileModal) {
                 friendProfileModal.style.display = 'none';
+            }
+        };
+
+        // Función para enviar recomendación
+        window.sendRecommendation = async function() {
+            if (!window.currentUser) {
+                alert('Debes iniciar sesión para enviar una recomendación');
+                return;
+            }
+
+            const recommendationText = document.getElementById('recommendationText');
+            if (!recommendationText) return;
+
+            const texto = recommendationText.value.trim();
+            if (!texto) {
+                alert('Por favor, escribe una recomendación antes de enviar');
+                return;
+            }
+
+            try {
+                // Obtener información del usuario actual
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                const userData = userDoc.exists() ? userDoc.data() : {};
+                const nombreUsuario = userData.nombre || window.currentUserName || 'Anónimo';
+
+                // Guardar recomendación en Firestore
+                const recommendationsRef = collection(db, "recomendaciones");
+                await addDoc(recommendationsRef, {
+                    texto: texto,
+                    userId: window.currentUser.uid,
+                    nombreUsuario: nombreUsuario,
+                    emailUsuario: window.currentUser.email,
+                    timestamp: Date.now(),
+                    destinatarioEmail: 'mpenalvart1@educacion.navarra.es'
+                });
+
+                alert('✅ Recomendación enviada exitosamente. ¡Gracias por tu feedback!');
+                recommendationText.value = '';
+                const recommendationsModal = document.getElementById('recommendationsModal');
+                if (recommendationsModal) {
+                    recommendationsModal.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error al enviar recomendación:', error);
+                alert('Error al enviar la recomendación. Por favor, intenta de nuevo.');
+            }
+        };
+
+        // Función para cargar recomendaciones recibidas
+        window.loadRecommendations = async function() {
+            if (!window.currentUser || window.currentUser.email !== 'mpenalvart1@educacion.navarra.es') {
+                return;
+            }
+
+            try {
+                const recommendationsRef = collection(db, "recomendaciones");
+                // Solo usar where, sin orderBy para evitar necesidad de índice compuesto
+                const q = query(
+                    recommendationsRef,
+                    where("destinatarioEmail", "==", 'mpenalvart1@educacion.navarra.es')
+                );
+                const snapshot = await getDocs(q);
+
+                const recommendationsList = document.getElementById('recommendationsList');
+                if (!recommendationsList) return;
+
+                recommendationsList.innerHTML = '';
+
+                if (snapshot.empty) {
+                    recommendationsList.innerHTML = '<div style="text-align: center; color: #718096; padding: 20px;">No hay recomendaciones aún.</div>';
+                    return;
+                }
+
+                // Convertir a array y ordenar por timestamp descendente en JavaScript
+                const recommendations = snapshot.docs.map(docSnapshot => ({
+                    id: docSnapshot.id,
+                    ...docSnapshot.data()
+                })).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                // Cargar cada recomendación
+                for (const data of recommendations) {
+                    const recommendationItem = document.createElement('div');
+                    recommendationItem.className = 'recommendation-item';
+
+                    // Contenedor de foto de perfil
+                    const profileContainer = document.createElement('div');
+                    profileContainer.className = 'recommendation-item-profile';
+                    
+                    if (data.userId && window.loadUserProfilePicture) {
+                        await window.loadUserProfilePicture(data.userId, profileContainer);
+                    } else {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'placeholder';
+                        placeholder.textContent = '👤';
+                        profileContainer.appendChild(placeholder);
+                    }
+
+                    // Contenido de la recomendación
+                    const content = document.createElement('div');
+                    content.className = 'recommendation-item-content';
+
+                    const author = document.createElement('div');
+                    author.className = 'recommendation-item-author';
+                    author.textContent = data.nombreUsuario || 'Anónimo';
+
+                    const text = document.createElement('div');
+                    text.className = 'recommendation-item-text';
+                    text.textContent = data.texto;
+
+                    const date = document.createElement('div');
+                    date.className = 'recommendation-item-date';
+                    const fecha = new Date(data.timestamp);
+                    date.textContent = fecha.toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    // Botón de eliminar
+                    const actions = document.createElement('div');
+                    actions.className = 'recommendation-item-actions';
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'recommendation-delete-btn';
+                    deleteBtn.textContent = '🗑️ Eliminar';
+                    deleteBtn.onclick = async () => {
+                        if (confirm('¿Estás seguro de que quieres eliminar esta recomendación?')) {
+                            try {
+                                await deleteDoc(doc(db, "recomendaciones", data.id));
+                                // Recargar recomendaciones después de eliminar
+                                await window.loadRecommendations();
+                            } catch (error) {
+                                console.error('Error al eliminar recomendación:', error);
+                                alert('Error al eliminar la recomendación. Por favor, intenta de nuevo.');
+                            }
+                        }
+                    };
+                    
+                    actions.appendChild(deleteBtn);
+
+                    content.appendChild(author);
+                    content.appendChild(text);
+                    content.appendChild(date);
+                    content.appendChild(actions);
+
+                    recommendationItem.appendChild(profileContainer);
+                    recommendationItem.appendChild(content);
+                    recommendationsList.appendChild(recommendationItem);
+                }
+            } catch (error) {
+                console.error('Error al cargar recomendaciones:', error);
+                const recommendationsList = document.getElementById('recommendationsList');
+                if (recommendationsList) {
+                    recommendationsList.innerHTML = '<div style="text-align: center; color: #f56565; padding: 20px;">Error al cargar recomendaciones.</div>';
+                }
             }
         };
 
@@ -9663,6 +10295,14 @@
                         .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
                     
                     if (directReplies.length > 0) {
+                        // Crear botón de flecha para mostrar/ocultar respuestas
+                        const toggleButton = document.createElement('button');
+                        toggleButton.className = 'comment-replies-toggle';
+                        toggleButton.innerHTML = `
+                            <span class="toggle-arrow">▶</span>
+                            <span class="reply-count">${directReplies.length} ${directReplies.length === 1 ? 'respuesta' : 'respuestas'}</span>
+                        `;
+                        
                         const repliesContainer = document.createElement('div');
                         repliesContainer.className = 'comment-replies';
                         
@@ -9673,6 +10313,21 @@
                         ));
                         
                         replyElements.forEach(replyEl => repliesContainer.appendChild(replyEl));
+                        
+                        // Funcionalidad para mostrar/ocultar respuestas
+                        toggleButton.onclick = (e) => {
+                            e.stopPropagation();
+                            const isExpanded = repliesContainer.classList.contains('show');
+                            if (isExpanded) {
+                                repliesContainer.classList.remove('show');
+                                toggleButton.classList.remove('expanded');
+                            } else {
+                                repliesContainer.classList.add('show');
+                                toggleButton.classList.add('expanded');
+                            }
+                        };
+                        
+                        element.appendChild(toggleButton);
                         element.appendChild(repliesContainer);
                     }
                     
