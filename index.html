@@ -1097,6 +1097,32 @@
             transform: translateY(0);
         }
 
+        .end-attempt-btn {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
+            width: fit-content;
+        }
+
+        .end-attempt-btn:hover {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.6);
+        }
+
+        .end-attempt-btn:active {
+            transform: translateY(0);
+        }
+
         .option.correct {
             background: #48bb78;
         }
@@ -2028,6 +2054,617 @@
             transform: none;
         }
 
+        .profile-friends-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .profile-friends-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .profile-inbox-btn {
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(246, 173, 85, 0.4);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .profile-inbox-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(246, 173, 85, 0.6);
+        }
+
+        .profile-friends-section {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 15px;
+        }
+
+        .profile-friends-section h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .friend-item-picture {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .friend-item-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .friend-item-name {
+            flex: 1;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .friend-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .friend-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-toggle-scores-btn {
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(159, 122, 234, 0.4);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .profile-toggle-scores-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(159, 122, 234, 0.6);
+        }
+
+        .profile-toggle-scores-btn.hidden {
+            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+        }
+
+        .profile-scores-section {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 15px;
+        }
+
+        .profile-scores-section h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .scores-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-item-level {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .score-item-points {
+            font-weight: bold;
+            color: #764ba2;
+            font-size: 1.1em;
+        }
+
+        /* Estilos para modal de perfil de amigo */
+        .friend-profile-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .friend-profile-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .friend-profile-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .friend-profile-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .friend-profile-modal-close {
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .friend-profile-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
+        .friend-profile-picture-large-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .friend-profile-picture-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            border: 5px solid white;
+            overflow: hidden;
+        }
+
+        .friend-profile-picture-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .friend-profile-picture-large-placeholder {
+            font-size: 5em;
+            color: white;
+        }
+
+        .friend-profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .friend-profile-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .friend-profile-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .friend-profile-info-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .friend-profile-info-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .friend-profile-scores-section {
+            width: 100%;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 15px;
+        }
+
+        .friend-profile-scores-section h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .friend-scores-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Estilos para modal de búsqueda de amigos */
+        .friends-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .friends-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .friends-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .friends-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .friends-modal-close {
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .friends-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
+        .friends-search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .friends-search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .friends-search-input:focus {
+            border-color: #667eea;
+        }
+
+        .friends-search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .friends-search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .friends-results {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .friend-result-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .friend-result-picture {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .friend-result-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .friend-result-info {
+            flex: 1;
+        }
+
+        .friend-result-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .friend-result-email {
+            color: #718096;
+            font-size: 0.9em;
+        }
+
+        .friend-result-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .send-request-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .send-request-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(72, 187, 120, 0.4);
+        }
+
+        .send-request-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Estilos para modal de bandeja */
+        .inbox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .inbox-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .inbox-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .inbox-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .inbox-modal-close {
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .inbox-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
+        .inbox-requests {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .inbox-request-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .inbox-request-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .accept-request-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .accept-request-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(72, 187, 120, 0.4);
+        }
+
+        .reject-request-btn {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .reject-request-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(245, 101, 101, 0.4);
+        }
+
         .profile-logout-btn {
             background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
             color: white;
@@ -2202,7 +2839,80 @@
                 </div>
                 <div class="profile-actions">
                     <button class="profile-save-btn" id="profileSaveBtn" style="display: none;">💾 Guardar Cambios</button>
+                    <button class="profile-toggle-scores-btn" id="profileToggleScoresBtn">📊 Mostrar Puntuaciones</button>
+                    <button class="profile-friends-btn" id="profileFriendsBtn">👥 Añadir Amigos</button>
+                    <button class="profile-inbox-btn" id="profileInboxBtn">📬 Bandeja de Solicitudes</button>
+                    <div class="profile-scores-section" id="profileScoresSection" style="display: none;">
+                        <h3>Mis Puntuaciones Máximas</h3>
+                        <div class="scores-list" id="scoresList"></div>
+                    </div>
+                    <div class="profile-friends-section" id="profileFriendsSection" style="display: none;">
+                        <h3>Mis Amigos</h3>
+                        <div class="friends-list" id="friendsList"></div>
+                    </div>
                     <button class="profile-logout-btn" id="profileLogoutBtn">🚪 Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de búsqueda de amigos -->
+    <div class="friends-modal" id="friendsModal" style="display: none;">
+        <div class="friends-modal-content">
+            <div class="friends-modal-header">
+                <h2>👥 Buscar Amigos</h2>
+                <button class="friends-modal-close" id="friendsModalClose">✕</button>
+            </div>
+            <div class="friends-modal-body">
+                <div class="friends-search-container">
+                    <input type="text" id="friendsSearchInput" class="friends-search-input" placeholder="Buscar por nombre...">
+                    <button class="friends-search-btn" id="friendsSearchBtn">🔍 Buscar</button>
+                </div>
+                <div class="friends-results" id="friendsResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de solicitudes recibidas -->
+    <div class="inbox-modal" id="inboxModal" style="display: none;">
+        <div class="inbox-modal-content">
+            <div class="inbox-modal-header">
+                <h2>📬 Solicitudes de Amistad</h2>
+                <button class="inbox-modal-close" id="inboxModalClose">✕</button>
+            </div>
+            <div class="inbox-modal-body">
+                <div class="inbox-requests" id="inboxRequests"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de perfil de amigo -->
+    <div class="friend-profile-modal" id="friendProfileModal" style="display: none;">
+        <div class="friend-profile-modal-content">
+            <div class="friend-profile-modal-header">
+                <h2>👤 Perfil de Amigo</h2>
+                <button class="friend-profile-modal-close" id="friendProfileModalClose">✕</button>
+            </div>
+            <div class="friend-profile-modal-body">
+                <div class="friend-profile-picture-large-container">
+                    <div class="friend-profile-picture-large" id="friendProfilePictureLarge">
+                        <img id="friendProfilePictureLargeImg" src="" alt="Foto de perfil" style="display: none;">
+                        <div class="friend-profile-picture-large-placeholder" id="friendProfilePictureLargePlaceholder">👤</div>
+                    </div>
+                </div>
+                <div class="friend-profile-info">
+                    <div class="friend-profile-info-item">
+                        <span class="friend-profile-info-label">Nombre:</span>
+                        <span class="friend-profile-info-value" id="friendProfileName">-</span>
+                    </div>
+                    <div class="friend-profile-info-item">
+                        <span class="friend-profile-info-label">Email:</span>
+                        <span class="friend-profile-info-value" id="friendProfileEmail">-</span>
+                    </div>
+                </div>
+                <div class="friend-profile-scores-section" id="friendProfileScoresSection" style="display: none;">
+                    <h3>Puntuaciones Máximas</h3>
+                    <div class="friend-scores-list" id="friendScoresList"></div>
                 </div>
             </div>
         </div>
@@ -2279,6 +2989,9 @@
             <button class="option" id="option3"></button>
             <button class="option" id="option4"></button>
         </div>
+
+        <!-- Botón para terminar intento -->
+        <button class="end-attempt-btn" id="endAttemptBtn" style="display: none;">⛔ Terminar Intento</button>
 
 
         <div class="message" id="message"></div>
@@ -2877,6 +3590,7 @@
                 
                 loadingEl.style.display = 'none';
                 document.getElementById('options').style.display = 'flex';
+                document.getElementById('endAttemptBtn').style.display = 'block';
                 loadNewQuestion();
             } catch (error) {
                 // Si todo falla, usar la lista de respaldo
@@ -3131,6 +3845,9 @@
             // Detener temporizador
             stopTimer();
             document.getElementById('timerContainer').style.display = 'none';
+            
+            // Ocultar botón de terminar intento
+            document.getElementById('endAttemptBtn').style.display = 'none';
             
             document.getElementById('finalScore').textContent = score;
             document.getElementById('maxStreak').textContent = maxStreak;
@@ -3502,6 +4219,25 @@
             }
         }
 
+        // Terminar intento (eliminar vidas y volver a selección de modos)
+        function endAttempt() {
+            // Confirmar acción
+            if (!confirm('¿Estás seguro de que quieres terminar este intento? Se perderá tu progreso actual.')) {
+                return;
+            }
+            
+            // Detener temporizador
+            stopTimer();
+            document.getElementById('timerContainer').style.display = 'none';
+            
+            // Eliminar todas las vidas para mostrar game over
+            lives = 0;
+            updateHearts();
+            
+            // Mostrar game over (como si hubiera perdido todas las vidas)
+            showGameOver();
+        }
+
         // Reiniciar juego
         function restartGame() {
             // Detener temporizador
@@ -3861,6 +4597,7 @@
         document.getElementById('option4').addEventListener('click', () => selectOption(4));
         document.getElementById('jokerBtn').addEventListener('click', useJoker);
         document.getElementById('nextBtn').addEventListener('click', loadNewQuestion);
+        document.getElementById('endAttemptBtn').addEventListener('click', endAttempt);
         
         // Event listeners para selección de dificultad
         document.getElementById('easyBtn').addEventListener('click', () => selectDifficulty('easy'));
@@ -3879,6 +4616,186 @@
                 }
                 // Luego cerrar sesión
                 await handleLogout();
+            });
+        }
+
+        // Event listeners para sistema de amigos
+        const profileFriendsBtn = document.getElementById('profileFriendsBtn');
+        if (profileFriendsBtn) {
+            profileFriendsBtn.addEventListener('click', () => {
+                if (window.showFriendsModal) {
+                    window.showFriendsModal();
+                }
+            });
+        }
+
+        const profileInboxBtn = document.getElementById('profileInboxBtn');
+        if (profileInboxBtn) {
+            profileInboxBtn.addEventListener('click', () => {
+                if (window.showInboxModal) {
+                    window.showInboxModal();
+                }
+            });
+        }
+
+        const profileToggleScoresBtn = document.getElementById('profileToggleScoresBtn');
+        if (profileToggleScoresBtn) {
+            profileToggleScoresBtn.addEventListener('click', () => {
+                if (window.toggleScoresVisibility) {
+                    window.toggleScoresVisibility();
+                }
+            });
+        }
+
+        const friendProfileModalClose = document.getElementById('friendProfileModalClose');
+        if (friendProfileModalClose) {
+            friendProfileModalClose.addEventListener('click', () => {
+                if (window.hideFriendProfileModal) {
+                    window.hideFriendProfileModal();
+                }
+            });
+        }
+
+        // Cerrar modal de perfil de amigo al hacer clic fuera
+        const friendProfileModal = document.getElementById('friendProfileModal');
+        if (friendProfileModal) {
+            friendProfileModal.addEventListener('click', (e) => {
+                if (e.target === friendProfileModal) {
+                    if (window.hideFriendProfileModal) {
+                        window.hideFriendProfileModal();
+                    }
+                }
+            });
+        }
+
+        const friendsModalClose = document.getElementById('friendsModalClose');
+        if (friendsModalClose) {
+            friendsModalClose.addEventListener('click', () => {
+                if (window.hideFriendsModal) {
+                    window.hideFriendsModal();
+                }
+            });
+        }
+
+        const inboxModalClose = document.getElementById('inboxModalClose');
+        if (inboxModalClose) {
+            inboxModalClose.addEventListener('click', () => {
+                if (window.hideInboxModal) {
+                    window.hideInboxModal();
+                }
+            });
+        }
+
+        // Cerrar modales al hacer clic fuera
+        const friendsModal = document.getElementById('friendsModal');
+        if (friendsModal) {
+            friendsModal.addEventListener('click', (e) => {
+                if (e.target === friendsModal) {
+                    if (window.hideFriendsModal) {
+                        window.hideFriendsModal();
+                    }
+                }
+            });
+        }
+
+        const inboxModal = document.getElementById('inboxModal');
+        if (inboxModal) {
+            inboxModal.addEventListener('click', (e) => {
+                if (e.target === inboxModal) {
+                    if (window.hideInboxModal) {
+                        window.hideInboxModal();
+                    }
+                }
+            });
+        }
+
+        // Búsqueda de usuarios
+        const friendsSearchBtn = document.getElementById('friendsSearchBtn');
+        const friendsSearchInput = document.getElementById('friendsSearchInput');
+        
+        async function performSearch() {
+            const searchTerm = friendsSearchInput.value.trim();
+            const resultsEl = document.getElementById('friendsResults');
+            
+            if (!resultsEl) return;
+            
+            if (searchTerm.length < 2) {
+                resultsEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">Escribe al menos 2 caracteres para buscar</div>';
+                return;
+            }
+            
+            resultsEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">Buscando...</div>';
+            
+            const users = await window.searchUsers(searchTerm);
+            
+            if (users.length === 0) {
+                resultsEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">No se encontraron usuarios</div>';
+                return;
+            }
+            
+            resultsEl.innerHTML = '';
+            users.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'friend-result-item';
+                
+                const picture = document.createElement('div');
+                picture.className = 'friend-result-picture';
+                if (user.fotoPerfil) {
+                    const img = document.createElement('img');
+                    img.src = user.fotoPerfil;
+                    picture.appendChild(img);
+                } else {
+                    picture.textContent = '👤';
+                }
+                
+                const info = document.createElement('div');
+                info.className = 'friend-result-info';
+                const name = document.createElement('div');
+                name.className = 'friend-result-name';
+                name.textContent = user.nombre;
+                const email = document.createElement('div');
+                email.className = 'friend-result-email';
+                email.textContent = user.email;
+                info.appendChild(name);
+                info.appendChild(email);
+                
+                const actions = document.createElement('div');
+                actions.className = 'friend-result-actions';
+                
+                const sendBtn = document.createElement('button');
+                sendBtn.className = 'send-request-btn';
+                sendBtn.textContent = '➕ Enviar Solicitud';
+                sendBtn.onclick = async () => {
+                    sendBtn.disabled = true;
+                    sendBtn.textContent = 'Enviando...';
+                    const success = await window.sendFriendRequest(user.id);
+                    if (success) {
+                        sendBtn.textContent = '✓ Enviada';
+                        sendBtn.disabled = true;
+                    } else {
+                        sendBtn.textContent = '➕ Enviar Solicitud';
+                        sendBtn.disabled = false;
+                    }
+                };
+                
+                actions.appendChild(sendBtn);
+                
+                userItem.appendChild(picture);
+                userItem.appendChild(info);
+                userItem.appendChild(actions);
+                resultsEl.appendChild(userItem);
+            });
+        }
+        
+        if (friendsSearchBtn) {
+            friendsSearchBtn.addEventListener('click', performSearch);
+        }
+        
+        if (friendsSearchInput) {
+            friendsSearchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
             });
         }
         document.getElementById('viewRankingBtn').addEventListener('click', showMainRanking);
@@ -4331,6 +5248,24 @@
                 profileName.textContent = window.currentUserName || '-';
                 profileEmail.textContent = window.currentUser.email || '-';
                 modal.style.display = 'flex';
+                
+                // Cargar lista de amigos
+                if (window.loadFriendsList) {
+                    window.loadFriendsList();
+                }
+                
+                // Cargar preferencia de mostrar puntuaciones
+                if (window.loadScoresPreference) {
+                    window.loadScoresPreference();
+                }
+                
+                // Cargar puntuaciones si están visibles
+                const scoresSection = document.getElementById('profileScoresSection');
+                if (scoresSection && scoresSection.style.display !== 'none') {
+                    if (window.loadUserScores) {
+                        window.loadUserScores();
+                    }
+                }
             }
         };
 
@@ -4338,13 +5273,639 @@
         window.hideProfileModal = function() {
             const modal = document.getElementById('profileModal');
             const saveBtn = document.getElementById('profileSaveBtn');
+            const friendsModal = document.getElementById('friendsModal');
+            const inboxModal = document.getElementById('inboxModal');
+            const friendProfileModal = document.getElementById('friendProfileModal');
             if (modal) {
                 modal.style.display = 'none';
             }
             if (saveBtn) {
                 saveBtn.style.display = 'none';
             }
+            if (friendsModal) {
+                friendsModal.style.display = 'none';
+            }
+            if (inboxModal) {
+                inboxModal.style.display = 'none';
+            }
+            if (friendProfileModal) {
+                friendProfileModal.style.display = 'none';
+            }
         };
+
+        // Cargar preferencia de mostrar puntuaciones
+        window.loadScoresPreference = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                if (userDoc.exists()) {
+                    const mostrarPuntuaciones = userDoc.data().mostrarPuntuaciones !== false; // Por defecto true
+                    const toggleBtn = document.getElementById('profileToggleScoresBtn');
+                    const scoresSection = document.getElementById('profileScoresSection');
+                    
+                    if (toggleBtn) {
+                        if (mostrarPuntuaciones) {
+                            toggleBtn.textContent = '🔒 Ocultar Puntuaciones';
+                            toggleBtn.classList.remove('hidden');
+                        } else {
+                            toggleBtn.textContent = '📊 Mostrar Puntuaciones';
+                            toggleBtn.classList.add('hidden');
+                        }
+                    }
+                    
+                    if (scoresSection) {
+                        scoresSection.style.display = mostrarPuntuaciones ? 'block' : 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar preferencia de puntuaciones:', error);
+            }
+        };
+
+        // Toggle mostrar/ocultar puntuaciones
+        window.toggleScoresVisibility = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                const currentValue = userDoc.exists() ? (userDoc.data().mostrarPuntuaciones !== false) : true;
+                const newValue = !currentValue;
+                
+                await updateDoc(doc(db, "usuarios", window.currentUser.uid), {
+                    mostrarPuntuaciones: newValue
+                });
+                
+                const toggleBtn = document.getElementById('profileToggleScoresBtn');
+                const scoresSection = document.getElementById('profileScoresSection');
+                
+                if (toggleBtn) {
+                    if (newValue) {
+                        toggleBtn.textContent = '🔒 Ocultar Puntuaciones';
+                        toggleBtn.classList.remove('hidden');
+                    } else {
+                        toggleBtn.textContent = '📊 Mostrar Puntuaciones';
+                        toggleBtn.classList.add('hidden');
+                    }
+                }
+                
+                if (scoresSection) {
+                    scoresSection.style.display = newValue ? 'block' : 'none';
+                }
+                
+                // Recargar puntuaciones si se muestran
+                if (newValue && window.loadUserScores) {
+                    await window.loadUserScores();
+                }
+            } catch (error) {
+                console.error('Error al actualizar preferencia de puntuaciones:', error);
+                alert('Error al actualizar la preferencia');
+            }
+        };
+
+        // Cargar puntuaciones del usuario actual
+        window.loadUserScores = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const scoresRef = collection(db, "puntuaciones");
+                const q = query(
+                    scoresRef,
+                    where("userId", "==", window.currentUser.uid)
+                );
+                const snapshot = await getDocs(q);
+                
+                const scoresByLevel = {};
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const nivel = data.nivel || 'unknown';
+                    const puntos = data.puntos || 0;
+                    
+                    // Guardar la puntuación máxima por nivel
+                    if (!scoresByLevel[nivel] || puntos > scoresByLevel[nivel]) {
+                        scoresByLevel[nivel] = puntos;
+                    }
+                });
+                
+                const scoresListEl = document.getElementById('scoresList');
+                if (!scoresListEl) return;
+                
+                scoresListEl.innerHTML = '';
+                
+                const niveles = [
+                    { key: 'easy', name: '🟢 Fácil' },
+                    { key: 'hard', name: '🔴 Difícil' },
+                    { key: 'impossible', name: '⚫ Imposible' }
+                ];
+                
+                niveles.forEach(nivel => {
+                    const scoreItem = document.createElement('div');
+                    scoreItem.className = 'score-item';
+                    
+                    const level = document.createElement('div');
+                    level.className = 'score-item-level';
+                    level.textContent = nivel.name;
+                    
+                    const points = document.createElement('div');
+                    points.className = 'score-item-points';
+                    points.textContent = scoresByLevel[nivel.key] || '0';
+                    
+                    scoreItem.appendChild(level);
+                    scoreItem.appendChild(points);
+                    scoresListEl.appendChild(scoreItem);
+                });
+            } catch (error) {
+                console.error('Error al cargar puntuaciones:', error);
+            }
+        };
+
+        // Mostrar perfil de un amigo
+        window.showFriendProfile = async function(friendId, friendData = null) {
+            if (!friendId) return;
+            
+            try {
+                // Cargar datos del amigo si no se proporcionaron
+                if (!friendData) {
+                    const friendDoc = await getDoc(doc(db, "usuarios", friendId));
+                    if (!friendDoc.exists()) {
+                        alert('Usuario no encontrado');
+                        return;
+                    }
+                    friendData = friendDoc.data();
+                }
+                
+                const modal = document.getElementById('friendProfileModal');
+                const nameEl = document.getElementById('friendProfileName');
+                const emailEl = document.getElementById('friendProfileEmail');
+                const pictureLarge = document.getElementById('friendProfilePictureLarge');
+                const pictureLargeImg = document.getElementById('friendProfilePictureLargeImg');
+                const pictureLargePlaceholder = document.getElementById('friendProfilePictureLargePlaceholder');
+                const scoresSection = document.getElementById('friendProfileScoresSection');
+                
+                if (!modal || !nameEl || !emailEl) return;
+                
+                // Mostrar información básica
+                nameEl.textContent = friendData.nombre || 'Sin nombre';
+                emailEl.textContent = friendData.email || '-';
+                
+                // Mostrar foto de perfil
+                if (friendData.fotoPerfil) {
+                    if (pictureLargeImg) {
+                        pictureLargeImg.src = friendData.fotoPerfil;
+                        pictureLargeImg.style.display = 'block';
+                    }
+                    if (pictureLargePlaceholder) {
+                        pictureLargePlaceholder.style.display = 'none';
+                    }
+                } else {
+                    if (pictureLargeImg) {
+                        pictureLargeImg.style.display = 'none';
+                    }
+                    if (pictureLargePlaceholder) {
+                        pictureLargePlaceholder.style.display = 'block';
+                    }
+                }
+                
+                // Verificar si el amigo tiene la opción de mostrar puntuaciones activada
+                const mostrarPuntuaciones = friendData.mostrarPuntuaciones !== false; // Por defecto true
+                
+                if (mostrarPuntuaciones) {
+                    // Cargar puntuaciones del amigo
+                    await loadFriendScores(friendId);
+                    if (scoresSection) {
+                        scoresSection.style.display = 'block';
+                    }
+                } else {
+                    if (scoresSection) {
+                        scoresSection.style.display = 'none';
+                    }
+                }
+                
+                modal.style.display = 'flex';
+            } catch (error) {
+                console.error('Error al cargar perfil de amigo:', error);
+                alert('Error al cargar el perfil del amigo');
+            }
+        };
+
+        // Cargar puntuaciones de un amigo
+        async function loadFriendScores(friendId) {
+            try {
+                const scoresRef = collection(db, "puntuaciones");
+                const q = query(
+                    scoresRef,
+                    where("userId", "==", friendId)
+                );
+                const snapshot = await getDocs(q);
+                
+                const scoresByLevel = {};
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const nivel = data.nivel || 'unknown';
+                    const puntos = data.puntos || 0;
+                    
+                    // Guardar la puntuación máxima por nivel
+                    if (!scoresByLevel[nivel] || puntos > scoresByLevel[nivel]) {
+                        scoresByLevel[nivel] = puntos;
+                    }
+                });
+                
+                const scoresListEl = document.getElementById('friendScoresList');
+                if (!scoresListEl) return;
+                
+                scoresListEl.innerHTML = '';
+                
+                const niveles = [
+                    { key: 'easy', name: '🟢 Fácil' },
+                    { key: 'hard', name: '🔴 Difícil' },
+                    { key: 'impossible', name: '⚫ Imposible' }
+                ];
+                
+                niveles.forEach(nivel => {
+                    const scoreItem = document.createElement('div');
+                    scoreItem.className = 'score-item';
+                    
+                    const level = document.createElement('div');
+                    level.className = 'score-item-level';
+                    level.textContent = nivel.name;
+                    
+                    const points = document.createElement('div');
+                    points.className = 'score-item-points';
+                    points.textContent = scoresByLevel[nivel.key] || '0';
+                    
+                    scoreItem.appendChild(level);
+                    scoreItem.appendChild(points);
+                    scoresListEl.appendChild(scoreItem);
+                });
+            } catch (error) {
+                console.error('Error al cargar puntuaciones del amigo:', error);
+            }
+        };
+
+        // Ocultar modal de perfil de amigo
+        window.hideFriendProfileModal = function() {
+            const modal = document.getElementById('friendProfileModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // ----------- SISTEMA DE AMIGOS -------------
+        // Buscar usuarios por nombre
+        window.searchUsers = async function(searchTerm) {
+            if (!searchTerm || searchTerm.trim().length < 2) {
+                return [];
+            }
+            
+            try {
+                const usersRef = collection(db, "usuarios");
+                const q = query(usersRef, where("nombre", ">=", searchTerm.trim()), where("nombre", "<=", searchTerm.trim() + "\uf8ff"));
+                const snapshot = await getDocs(q);
+                
+                const users = [];
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    // Excluir al usuario actual
+                    if (doc.id !== window.currentUser.uid) {
+                        users.push({
+                            id: doc.id,
+                            nombre: data.nombre || 'Sin nombre',
+                            email: data.email || '',
+                            fotoPerfil: data.fotoPerfil || null
+                        });
+                    }
+                });
+                
+                return users;
+            } catch (error) {
+                console.error('Error al buscar usuarios:', error);
+                return [];
+            }
+        };
+
+        // Enviar solicitud de amistad
+        window.sendFriendRequest = async function(toUserId) {
+            if (!window.currentUser || !toUserId) return false;
+            
+            try {
+                const fromUserId = window.currentUser.uid;
+                
+                // Verificar si ya existe una solicitud
+                const requestsRef = collection(db, "solicitudesAmistad");
+                const q = query(
+                    requestsRef,
+                    where("de", "==", fromUserId),
+                    where("para", "==", toUserId),
+                    where("estado", "==", "pendiente")
+                );
+                const existingRequest = await getDocs(q);
+                
+                if (!existingRequest.empty) {
+                    alert('Ya has enviado una solicitud a este usuario');
+                    return false;
+                }
+                
+                // Verificar si ya son amigos
+                const userDoc = await getDoc(doc(db, "usuarios", fromUserId));
+                if (userDoc.exists()) {
+                    const amigos = userDoc.data().amigos || [];
+                    if (amigos.includes(toUserId)) {
+                        alert('Ya son amigos');
+                        return false;
+                    }
+                }
+                
+                // Crear solicitud
+                await addDoc(collection(db, "solicitudesAmistad"), {
+                    de: fromUserId,
+                    para: toUserId,
+                    estado: "pendiente",
+                    fecha: Date.now()
+                });
+                
+                return true;
+            } catch (error) {
+                console.error('Error al enviar solicitud:', error);
+                return false;
+            }
+        };
+
+        // Cargar solicitudes recibidas
+        window.loadFriendRequests = async function() {
+            if (!window.currentUser) return [];
+            
+            try {
+                const requestsRef = collection(db, "solicitudesAmistad");
+                const q = query(
+                    requestsRef,
+                    where("para", "==", window.currentUser.uid),
+                    where("estado", "==", "pendiente")
+                );
+                const snapshot = await getDocs(q);
+                
+                const requests = [];
+                for (const docSnap of snapshot.docs) {
+                    const data = docSnap.data();
+                    const fromUserDoc = await getDoc(doc(db, "usuarios", data.de));
+                    if (fromUserDoc.exists()) {
+                        const userData = fromUserDoc.data();
+                        requests.push({
+                            id: docSnap.id,
+                            fromUserId: data.de,
+                            nombre: userData.nombre || 'Sin nombre',
+                            email: userData.email || '',
+                            fotoPerfil: userData.fotoPerfil || null,
+                            fecha: data.fecha
+                        });
+                    }
+                }
+                
+                return requests;
+            } catch (error) {
+                console.error('Error al cargar solicitudes:', error);
+                return [];
+            }
+        };
+
+        // Aceptar solicitud de amistad
+        window.acceptFriendRequest = async function(requestId, fromUserId) {
+            if (!window.currentUser) return false;
+            
+            try {
+                const currentUserId = window.currentUser.uid;
+                
+                // Actualizar estado de la solicitud
+                const requestRef = doc(db, "solicitudesAmistad", requestId);
+                await updateDoc(requestRef, {
+                    estado: "aceptada"
+                });
+                
+                // Agregar a la lista de amigos de ambos usuarios
+                const currentUserRef = doc(db, "usuarios", currentUserId);
+                const fromUserRef = doc(db, "usuarios", fromUserId);
+                
+                const currentUserDoc = await getDoc(currentUserRef);
+                const fromUserDoc = await getDoc(fromUserRef);
+                
+                const currentUserAmigos = currentUserDoc.exists() ? (currentUserDoc.data().amigos || []) : [];
+                const fromUserAmigos = fromUserDoc.exists() ? (fromUserDoc.data().amigos || []) : [];
+                
+                if (!currentUserAmigos.includes(fromUserId)) {
+                    currentUserAmigos.push(fromUserId);
+                }
+                if (!fromUserAmigos.includes(currentUserId)) {
+                    fromUserAmigos.push(currentUserId);
+                }
+                
+                await updateDoc(currentUserRef, {
+                    amigos: currentUserAmigos
+                });
+                
+                await updateDoc(fromUserRef, {
+                    amigos: fromUserAmigos
+                });
+                
+                return true;
+            } catch (error) {
+                console.error('Error al aceptar solicitud:', error);
+                return false;
+            }
+        };
+
+        // Rechazar solicitud de amistad
+        window.rejectFriendRequest = async function(requestId) {
+            try {
+                const requestRef = doc(db, "solicitudesAmistad", requestId);
+                await updateDoc(requestRef, {
+                    estado: "rechazada"
+                });
+                return true;
+            } catch (error) {
+                console.error('Error al rechazar solicitud:', error);
+                return false;
+            }
+        };
+
+        // Cargar lista de amigos
+        window.loadFriendsList = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                if (!userDoc.exists()) return;
+                
+                const amigos = userDoc.data().amigos || [];
+                const friendsListEl = document.getElementById('friendsList');
+                const friendsSection = document.getElementById('profileFriendsSection');
+                
+                if (!friendsListEl || !friendsSection) return;
+                
+                if (amigos.length === 0) {
+                    friendsSection.style.display = 'none';
+                    return;
+                }
+                
+                friendsSection.style.display = 'block';
+                friendsListEl.innerHTML = '';
+                
+                // Cargar información de cada amigo
+                for (const friendId of amigos) {
+                    try {
+                        const friendDoc = await getDoc(doc(db, "usuarios", friendId));
+                        if (friendDoc.exists()) {
+                            const friendData = friendDoc.data();
+                            const friendItem = document.createElement('div');
+                            friendItem.className = 'friend-item';
+                            
+                            const picture = document.createElement('div');
+                            picture.className = 'friend-item-picture';
+                            if (friendData.fotoPerfil) {
+                                const img = document.createElement('img');
+                                img.src = friendData.fotoPerfil;
+                                picture.appendChild(img);
+                            } else {
+                                picture.textContent = '👤';
+                            }
+                            
+                            const name = document.createElement('div');
+                            name.className = 'friend-item-name';
+                            name.textContent = friendData.nombre || 'Sin nombre';
+                            
+                            // Hacer el item clicable para ver el perfil del amigo
+                            friendItem.style.cursor = 'pointer';
+                            friendItem.onclick = () => {
+                                window.showFriendProfile(friendId, friendData);
+                            };
+                            
+                            friendItem.appendChild(picture);
+                            friendItem.appendChild(name);
+                            friendsListEl.appendChild(friendItem);
+                        }
+                    } catch (error) {
+                        console.error(`Error al cargar amigo ${friendId}:`, error);
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar lista de amigos:', error);
+            }
+        };
+
+        // Mostrar modal de búsqueda de amigos
+        window.showFriendsModal = function() {
+            const modal = document.getElementById('friendsModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.getElementById('friendsResults').innerHTML = '';
+                document.getElementById('friendsSearchInput').value = '';
+            }
+        };
+
+        // Ocultar modal de búsqueda de amigos
+        window.hideFriendsModal = function() {
+            const modal = document.getElementById('friendsModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Mostrar modal de bandeja
+        window.showInboxModal = async function() {
+            const modal = document.getElementById('inboxModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                await window.loadInboxRequests();
+            }
+        };
+
+        // Ocultar modal de bandeja
+        window.hideInboxModal = function() {
+            const modal = document.getElementById('inboxModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Cargar solicitudes en la bandeja
+        window.loadInboxRequests = async function() {
+            const requestsEl = document.getElementById('inboxRequests');
+            if (!requestsEl) return;
+            
+            requestsEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">Cargando...</div>';
+            
+            const requests = await window.loadFriendRequests();
+            
+            if (requests.length === 0) {
+                requestsEl.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">No tienes solicitudes pendientes</div>';
+                return;
+            }
+            
+            requestsEl.innerHTML = '';
+            requests.forEach(request => {
+                const requestItem = document.createElement('div');
+                requestItem.className = 'inbox-request-item';
+                
+                const picture = document.createElement('div');
+                picture.className = 'friend-result-picture';
+                if (request.fotoPerfil) {
+                    const img = document.createElement('img');
+                    img.src = request.fotoPerfil;
+                    picture.appendChild(img);
+                } else {
+                    picture.textContent = '👤';
+                }
+                
+                const info = document.createElement('div');
+                info.className = 'friend-result-info';
+                const name = document.createElement('div');
+                name.className = 'friend-result-name';
+                name.textContent = request.nombre;
+                const email = document.createElement('div');
+                email.className = 'friend-result-email';
+                email.textContent = request.email;
+                info.appendChild(name);
+                info.appendChild(email);
+                
+                const actions = document.createElement('div');
+                actions.className = 'inbox-request-actions';
+                
+                const acceptBtn = document.createElement('button');
+                acceptBtn.className = 'accept-request-btn';
+                acceptBtn.textContent = '✓ Aceptar';
+                acceptBtn.onclick = async () => {
+                    acceptBtn.disabled = true;
+                    const success = await window.acceptFriendRequest(request.id, request.fromUserId);
+                    if (success) {
+                        await window.loadInboxRequests();
+                        await window.loadFriendsList();
+                    } else {
+                        alert('Error al aceptar la solicitud');
+                        acceptBtn.disabled = false;
+                    }
+                };
+                
+                const rejectBtn = document.createElement('button');
+                rejectBtn.className = 'reject-request-btn';
+                rejectBtn.textContent = '✕ Rechazar';
+                rejectBtn.onclick = async () => {
+                    rejectBtn.disabled = true;
+                    const success = await window.rejectFriendRequest(request.id);
+                    if (success) {
+                        await window.loadInboxRequests();
+                    } else {
+                        alert('Error al rechazar la solicitud');
+                        rejectBtn.disabled = false;
+                    }
+                };
+                
+                actions.appendChild(acceptBtn);
+                actions.appendChild(rejectBtn);
+                
+                requestItem.appendChild(picture);
+                requestItem.appendChild(info);
+                requestItem.appendChild(actions);
+                requestsEl.appendChild(requestItem);
+            });
+        }
 
         // ----------- GUARDAR PUNTUACIÓN -------------
         window.guardarPuntuacion = async function(nombre, puntos, nivel) {
