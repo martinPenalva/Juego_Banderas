@@ -4381,6 +4381,91 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
+        .friend-item-message {
+            position: relative;
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(66, 153, 225, 0.4);
+            flex-shrink: 0;
+        }
+
+        .friend-item-message:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.6);
+        }
+
+        .friend-item-message.has-unread {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            box-shadow: 0 2px 8px rgba(245, 101, 101, 0.5);
+            animation: messageIconPulse 2s ease-in-out infinite;
+        }
+
+        .friend-item-message.has-unread:hover {
+            box-shadow: 0 4px 12px rgba(245, 101, 101, 0.7);
+        }
+
+        @keyframes messageIconPulse {
+            0%, 100% {
+                box-shadow: 0 2px 8px rgba(245, 101, 101, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(245, 101, 101, 0.8), 0 4px 12px rgba(245, 101, 101, 0.6);
+            }
+        }
+
+        .friend-item-message-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f56565;
+            color: white;
+            border-radius: 50%;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            font-weight: bold;
+            border: 2px solid white;
+            padding: 0 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            animation: badgeBounce 1s ease-in-out infinite;
+        }
+
+        .friend-item-remove {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(245, 101, 101, 0.4);
+            flex-shrink: 0;
+        }
+
+        .friend-item-remove:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(245, 101, 101, 0.6);
+        }
+
         .profile-toggle-scores-btn {
             background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
             color: white;
@@ -6134,10 +6219,23 @@
             }
 
             .friend-item-message {
+                width: 32px;
+                height: 32px;
+                font-size: 1em;
+            }
+
+            .friend-item-message-badge {
+                min-width: 18px;
+                height: 18px;
+                font-size: 0.65em;
+                top: -4px;
+                right: -4px;
+            }
+
+            .friend-item-remove {
                 width: 28px;
                 height: 28px;
-                font-size: 0.75em;
-                right: 40px;
+                font-size: 0.9em;
             }
         }
     </style>
@@ -12058,9 +12156,38 @@
                         return timeA - timeB;
                     });
                     
+                    // Marcar todos los mensajes no leídos como leídos (el receptor tiene el chat abierto)
+                    const unreadMessages = messages.filter(msg => 
+                        msg.toUserId === window.currentUser.uid && !msg.read
+                    );
+                    
+                    if (unreadMessages.length > 0) {
+                        const batch = writeBatch(db);
+                        unreadMessages.forEach(msg => {
+                            const msgRef = doc(db, "mensajes", msg.id);
+                            batch.update(msgRef, { read: true });
+                            // Actualizar inmediatamente en la UI local
+                            msg.read = true;
+                        });
+                        try {
+                            await batch.commit();
+                            // Actualizar la lista de amigos para reflejar que ya no hay mensajes no leídos
+                            if (window.loadFriendsList) {
+                                await window.loadFriendsList();
+                            }
+                        } catch (error) {
+                            console.error('Error al marcar mensajes como leídos:', error);
+                        }
+                    }
+                    
                     // Mostrar mensajes ordenados (cargar fotos de forma asíncrona)
                     for (const messageData of messages) {
                         await displayMessage(messageData);
+                    }
+                    
+                    // Configurar listeners para actualizar indicadores de leído en tiempo real
+                    if (window.setupReadStatusListeners) {
+                        setupReadStatusListeners(messages);
                     }
                     
                     // Scroll al final
@@ -12237,6 +12364,8 @@
                         unreadMessages.forEach(msg => {
                             const msgRef = doc(db, "mensajes", msg.id);
                             batch.update(msgRef, { read: true });
+                            // Actualizar inmediatamente en la UI
+                            msg.read = true;
                         });
                         try {
                             await batch.commit();
@@ -12249,6 +12378,9 @@
                     for (const messageData of messages) {
                         await displayMessage(messageData);
                     }
+                    
+                    // Configurar listeners para actualizar indicadores de leído en tiempo real
+                    setupReadStatusListeners(messages);
                 }
                 
                 // Scroll al final
@@ -12320,6 +12452,52 @@
             return null;
         }
         
+        // Set para rastrear mensajes que ya tienen listeners configurados
+        if (!window.messageListenersSet) {
+            window.messageListenersSet = new Set();
+        }
+        
+        // Configurar listeners para indicadores de leído
+        function setupReadStatusListeners(messages) {
+            if (!messages || !Array.isArray(messages)) return;
+            
+            messages.forEach(msg => {
+                if (msg.id && msg.fromUserId === window.currentUser.uid) {
+                    // Si ya tiene un listener, no crear otro
+                    if (window.messageListenersSet && window.messageListenersSet.has(msg.id)) {
+                        return;
+                    }
+                    
+                    // Agregar al set de listeners
+                    if (!window.messageListenersSet) {
+                        window.messageListenersSet = new Set();
+                    }
+                    window.messageListenersSet.add(msg.id);
+                    
+                    const msgRef = doc(db, "mensajes", msg.id);
+                    // Usar onSnapshot para escuchar cambios en tiempo real
+                    onSnapshot(msgRef, (docSnapshot) => {
+                        if (docSnapshot.exists()) {
+                            const updatedData = docSnapshot.data();
+                            // Buscar el indicador de leído específico de este mensaje
+                            const readIndicator = document.querySelector(`.message-read-indicator[data-message-id="${msg.id}"]`);
+                            if (readIndicator) {
+                                if (updatedData.read) {
+                                    readIndicator.textContent = '✓✓';
+                                    readIndicator.classList.add('read');
+                                    readIndicator.title = 'Leído';
+                                } else {
+                                    readIndicator.textContent = '✓';
+                                    readIndicator.classList.remove('read');
+                                    readIndicator.title = 'Enviado';
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
         // Mostrar un mensaje en el chat
         async function displayMessage(messageData) {
             const messagesEl = document.getElementById('activeChatMessages');
@@ -12365,6 +12543,7 @@
             if (isSent) {
                 const readIndicator = document.createElement('span');
                 readIndicator.className = 'message-read-indicator';
+                readIndicator.setAttribute('data-message-id', messageData.id || '');
                 if (messageData.read) {
                     readIndicator.textContent = '✓✓';
                     readIndicator.classList.add('read');
@@ -12377,7 +12556,7 @@
             }
             
             content.appendChild(time);
-            
+            messageDiv.setAttribute('data-message-id', messageData.id || '');
             messageDiv.appendChild(picture);
             messageDiv.appendChild(content);
             messagesEl.appendChild(messageDiv);
@@ -12509,6 +12688,11 @@
             if (chatUnsubscribe) {
                 chatUnsubscribe();
                 chatUnsubscribe = null;
+            }
+            
+            // Limpiar el set de listeners al cerrar el chat
+            if (window.messageListenersSet) {
+                window.messageListenersSet.clear();
             }
             
             currentChatFriendId = null;
@@ -12877,15 +13061,41 @@
                             name.className = 'friend-item-name';
                             name.textContent = friendData.nombre || 'Sin nombre';
                             
+                            // Contar mensajes no leídos del amigo
+                            const messagesRef = collection(db, "mensajes");
+                            const chatId1 = `${window.currentUser.uid}_${friendId}`;
+                            const chatId2 = `${friendId}_${window.currentUser.uid}`;
+                            const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
+                            
+                            const unreadQuery = query(
+                                messagesRef,
+                                where("chatId", "==", finalChatId),
+                                where("toUserId", "==", window.currentUser.uid),
+                                where("read", "==", false)
+                            );
+                            const unreadSnapshot = await getDocs(unreadQuery);
+                            const unreadCount = unreadSnapshot.size;
+                            
                             // Botón para enviar mensaje
                             const messageBtn = document.createElement('button');
                             messageBtn.className = 'friend-item-message';
+                            if (unreadCount > 0) {
+                                messageBtn.classList.add('has-unread');
+                            }
                             messageBtn.textContent = '💬';
-                            messageBtn.title = 'Enviar mensaje';
+                            messageBtn.title = unreadCount > 0 ? `${unreadCount} mensaje${unreadCount > 1 ? 's' : ''} no leído${unreadCount > 1 ? 's' : ''}` : 'Enviar mensaje';
                             messageBtn.onclick = async (e) => {
                                 e.stopPropagation(); // Evitar que se abra el perfil
                                 await window.openChat(friendId, friendData);
                             };
+                            
+                            // Agregar badge de notificación si hay mensajes no leídos
+                            if (unreadCount > 0) {
+                                const badge = document.createElement('span');
+                                badge.className = 'friend-item-message-badge';
+                                badge.textContent = unreadCount > 9 ? '9+' : unreadCount.toString();
+                                messageBtn.appendChild(badge);
+                            }
                             
                             // Botón para eliminar amigo
                             const removeBtn = document.createElement('button');
@@ -13254,27 +13464,50 @@
             return false;
         };
 
-        // Función para mostrar notificación
-        window.showNotification = function(title, options = {}) {
-            if (!('Notification' in window) || Notification.permission !== 'granted') {
+        // Función para mostrar notificación - mejorada para móvil
+        window.showNotification = async function(title, options = {}) {
+            if (!('Notification' in window)) {
+                console.log('Este navegador no soporta notificaciones');
                 return;
+            }
+
+            // Solicitar permisos si no están concedidos
+            if (Notification.permission !== 'granted') {
+                const permission = await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    console.log('Permisos de notificaciones denegados');
+                    return;
+                }
             }
 
             const notificationOptions = {
                 body: options.body || '',
                 icon: options.icon || 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg',
                 badge: 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg',
-                tag: options.tag || 'notification',
+                tag: options.tag || `notification-${Date.now()}`,
                 requireInteraction: options.requireInteraction || false,
+                vibrate: options.vibrate || [200, 100, 200],
                 ...options
             };
 
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.ready.then(registration => {
-                    registration.showNotification(title, notificationOptions);
-                });
-            } else {
-                new Notification(title, notificationOptions);
+            try {
+                if ('serviceWorker' in navigator) {
+                    const registration = await navigator.serviceWorker.ready;
+                    await registration.showNotification(title, notificationOptions);
+                } else {
+                    new Notification(title, notificationOptions);
+                }
+            } catch (error) {
+                console.error('Error al mostrar notificación:', error);
+                // Fallback a notificación básica
+                try {
+                    new Notification(title, {
+                        body: options.body || '',
+                        icon: options.icon || 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg'
+                    });
+                } catch (fallbackError) {
+                    console.error('Error en fallback de notificación:', fallbackError);
+                }
             }
         };
 
@@ -13312,7 +13545,7 @@
                 lastNotificationCheck.messages = unreadCount;
             });
 
-            // Verificar mensajes de chat
+            // Verificar mensajes de chat - mejorado para móvil
             const chatMessagesRef = collection(db, "mensajes");
             const chatMessagesQuery = query(
                 chatMessagesRef,
@@ -13320,17 +13553,62 @@
                 where("read", "==", false)
             );
             
-            onSnapshot(chatMessagesQuery, (snapshot) => {
-                const unreadChatCount = snapshot.size;
-                if (unreadChatCount > lastNotificationCheck.chatMessages) {
-                    const newChatMessages = unreadChatCount - lastNotificationCheck.chatMessages;
-                    window.showNotification('💬 Nuevo mensaje de chat', {
-                        body: `Tienes ${newChatMessages} nuevo${newChatMessages > 1 ? 's' : ''} mensaje${newChatMessages > 1 ? 's' : ''} de chat`,
-                        tag: 'chat-message',
-                        requireInteraction: false
-                    });
+            let lastChatMessageIds = new Set();
+            
+            onSnapshot(chatMessagesQuery, async (snapshot) => {
+                const currentMessageIds = new Set();
+                const newMessages = [];
+                
+                snapshot.forEach((docSnapshot) => {
+                    const messageData = docSnapshot.data();
+                    const messageId = docSnapshot.id;
+                    currentMessageIds.add(messageId);
+                    
+                    // Si es un mensaje nuevo que no estaba antes
+                    if (!lastChatMessageIds.has(messageId)) {
+                        newMessages.push({ ...messageData, id: messageId });
+                    }
+                });
+                
+                // Solo mostrar notificación si hay mensajes nuevos
+                if (newMessages.length > 0) {
+                    // Obtener información del remitente del último mensaje
+                    const lastMessage = newMessages[newMessages.length - 1];
+                    const senderId = lastMessage.fromUserId;
+                    
+                    // Obtener nombre del remitente
+                    try {
+                        const senderDoc = await getDoc(doc(db, "usuarios", senderId));
+                        const senderName = senderDoc.exists() ? (senderDoc.data().nombre || 'Alguien') : 'Alguien';
+                        
+                        const notificationBody = newMessages.length === 1 
+                            ? `${senderName}: ${(lastMessage.text || 'Nuevo mensaje').substring(0, 50)}${(lastMessage.text || '').length > 50 ? '...' : ''}`
+                            : `${senderName} y otros: ${newMessages.length} nuevos mensajes`;
+                        
+                        await window.showNotification('💬 Nuevo mensaje de chat', {
+                            body: notificationBody,
+                            tag: `chat-${senderId}-${Date.now()}`,
+                            requireInteraction: false,
+                            vibrate: [200, 100, 200]
+                        });
+                    } catch (error) {
+                        console.error('Error al obtener nombre del remitente:', error);
+                        await window.showNotification('💬 Nuevo mensaje de chat', {
+                            body: `Tienes ${newMessages.length} nuevo${newMessages.length > 1 ? 's' : ''} mensaje${newMessages.length > 1 ? 's' : ''}`,
+                            tag: `chat-${Date.now()}`,
+                            requireInteraction: false,
+                            vibrate: [200, 100, 200]
+                        });
+                    }
+                    
+                    // Actualizar la lista de amigos para mostrar los badges de notificación
+                    if (window.loadFriendsList) {
+                        await window.loadFriendsList();
+                    }
                 }
-                lastNotificationCheck.chatMessages = unreadChatCount;
+                
+                lastChatMessageIds = currentMessageIds;
+                lastNotificationCheck.chatMessages = snapshot.size;
             });
 
             // Verificar likes y comentarios en fotos
@@ -13404,6 +13682,190 @@
                 }
             });
         };
+
+        // ========== DETECCIÓN DE CONEXIÓN A INTERNET ==========
+        
+        // Modal para mostrar cuando no hay conexión
+        const noConnectionModal = document.createElement('div');
+        noConnectionModal.id = 'noConnectionModal';
+        noConnectionModal.className = 'no-connection-modal';
+        noConnectionModal.style.display = 'none';
+        noConnectionModal.innerHTML = `
+            <div class="no-connection-modal-content">
+                <div class="no-connection-icon">📡</div>
+                <h2>¡Ups! Se perdió la conexión</h2>
+                <p class="no-connection-message">Parece que tu internet se fue de vacaciones... 😅<br>
+                Sin conexión no podemos guardar tus progresos ni chatear con tus amigos.</p>
+                <button class="no-connection-ok-btn" id="noConnectionOkBtn">OK</button>
+            </div>
+        `;
+        document.body.appendChild(noConnectionModal);
+
+        // Estilos para el modal de sin conexión
+        const noConnectionStyles = document.createElement('style');
+        noConnectionStyles.textContent = `
+            .no-connection-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+            }
+
+            .no-connection-modal-content {
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                max-width: 400px;
+                width: 90%;
+                text-align: center;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                animation: slideUp 0.3s ease;
+            }
+
+            @keyframes slideUp {
+                from {
+                    transform: translateY(50px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            .no-connection-icon {
+                font-size: 4em;
+                margin-bottom: 20px;
+                animation: bounce 1s ease-in-out infinite;
+            }
+
+            @keyframes bounce {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            .no-connection-modal-content h2 {
+                color: #2d3748;
+                margin-bottom: 15px;
+                font-size: 1.8em;
+            }
+
+            .no-connection-message {
+                color: #718096;
+                font-size: 1.1em;
+                line-height: 1.6;
+                margin-bottom: 30px;
+            }
+
+            .no-connection-ok-btn {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                padding: 15px 40px;
+                border-radius: 50px;
+                font-size: 1.1em;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            }
+
+            .no-connection-ok-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            }
+
+            .no-connection-ok-btn:active {
+                transform: translateY(0);
+            }
+        `;
+        document.head.appendChild(noConnectionStyles);
+
+        // Función para mostrar el modal de sin conexión
+        window.showNoConnectionModal = function() {
+            const modal = document.getElementById('noConnectionModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        };
+
+        // Función para cerrar el modal y cerrar sesión
+        const noConnectionOkBtn = document.getElementById('noConnectionOkBtn');
+        if (noConnectionOkBtn) {
+            noConnectionOkBtn.addEventListener('click', async () => {
+                const modal = document.getElementById('noConnectionModal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+                
+                // Cerrar sesión
+                if (window.cerrarSesion) {
+                    await window.cerrarSesion();
+                } else if (window.handleLogout) {
+                    await window.handleLogout();
+                } else if (auth && window.currentUser) {
+                    try {
+                        await signOut(auth);
+                        window.currentUser = null;
+                        window.currentUserName = null;
+                        document.getElementById('authContainer').style.display = 'flex';
+                        document.getElementById('gameContainer').style.display = 'none';
+                        document.getElementById('profilePictureContainer').style.display = 'none';
+                    } catch (error) {
+                        console.error('Error al cerrar sesión:', error);
+                        // Forzar cierre de sesión localmente si falla
+                        window.currentUser = null;
+                        window.currentUserName = null;
+                        document.getElementById('authContainer').style.display = 'flex';
+                        document.getElementById('gameContainer').style.display = 'none';
+                        document.getElementById('profilePictureContainer').style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Detectar pérdida de conexión
+        let connectionLostShown = false;
+        
+        window.addEventListener('offline', () => {
+            if (window.currentUser && !connectionLostShown) {
+                connectionLostShown = true;
+                setTimeout(() => {
+                    window.showNoConnectionModal();
+                }, 1000); // Esperar 1 segundo para confirmar que realmente no hay conexión
+            }
+        });
+
+        window.addEventListener('online', () => {
+            connectionLostShown = false;
+            const modal = document.getElementById('noConnectionModal');
+            if (modal && modal.style.display !== 'none') {
+                modal.style.display = 'none';
+            }
+        });
+
+        // También verificar periódicamente la conexión usando navigator.onLine
+        setInterval(() => {
+            if (window.currentUser && !navigator.onLine && !connectionLostShown) {
+                connectionLostShown = true;
+                setTimeout(() => {
+                    window.showNoConnectionModal();
+                }, 1000);
+            } else if (navigator.onLine) {
+                connectionLostShown = false;
+            }
+        }, 5000); // Verificar cada 5 segundos
     </script>
 </body>
 </html>
