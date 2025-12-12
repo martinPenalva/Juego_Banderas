@@ -4127,6 +4127,35 @@
             animation: notificationPulse 2s ease-in-out infinite;
         }
 
+        .profile-chats-section {
+            width: 100%;
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-chats-section h3 {
+            margin: 0 0 20px 0;
+            color: #1a202c;
+            font-size: 1.4em;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .profile-chats-section h3::before {
+            content: '💬';
+            font-size: 1.3em;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
         /* Estilos para lista de chats */
         .chats-list {
             display: flex;
@@ -6334,8 +6363,12 @@
                         <div class="scores-list" id="scoresList"></div>
                     </div>
                     <div class="profile-friends-section" id="profileFriendsSection" style="display: none;">
-                        <h3>Mis Amigos</h3>
+                        <h3>👥 Mis Amigos</h3>
                         <div class="friends-list" id="friendsList"></div>
+                    </div>
+                    <div class="profile-chats-section" id="profileChatsSection" style="display: none;">
+                        <h3>Conversaciones</h3>
+                        <div class="chats-list" id="chatsList"></div>
                     </div>
                     <div class="profile-active-chat" id="profileActiveChat" style="display: none;">
                         <div class="active-chat-header">
@@ -6352,10 +6385,6 @@
                             <input type="text" id="activeChatInput" class="active-chat-input" placeholder="Escribe un mensaje..." maxlength="500">
                             <button class="active-chat-send-btn" id="activeChatSendBtn">Enviar</button>
                         </div>
-                    </div>
-                    <div class="profile-chats-section" id="profileChatsSection" style="display: none;">
-                        <h3>💬 Chats</h3>
-                        <div class="chats-list" id="chatsList"></div>
                     </div>
                     <div class="profile-library-section" id="profileLibrarySection">
                         <h3>📚 BIBLIOTECA</h3>
@@ -10093,6 +10122,11 @@
                     window.loadFriendsList();
                 }
                 
+                // Cargar lista de chats automáticamente
+                if (window.loadChatsList) {
+                    window.loadChatsList();
+                }
+                
                 // Cargar preferencia de mostrar puntuaciones
                 if (window.loadScoresPreference) {
                     window.loadScoresPreference();
@@ -10119,13 +10153,40 @@
                     window.loadLibrary();
                 }
                 
-                // NO cargar la lista de chats automáticamente
-                // Solo se abrirá cuando el usuario haga clic en el botón de mensaje de un amigo
+                // Mostrar la sección de chats si hay amigos (aunque esté colapsada)
                 const chatsSection = document.getElementById('profileChatsSection');
-                const activeChat = document.getElementById('profileActiveChat');
                 if (chatsSection) {
-                    chatsSection.style.display = 'none';
+                    // Verificar si hay amigos para mostrar la sección
+                    try {
+                        const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                        if (userDoc.exists()) {
+                            const amigos = userDoc.data().amigos || [];
+                            if (amigos.length > 0) {
+                                chatsSection.style.display = 'block';
+                                chatsSection.classList.add('collapsed'); // Empezar colapsado
+                            } else {
+                                chatsSection.style.display = 'none';
+                            }
+                        } else {
+                            // Si no existe el documento, ocultar la sección
+                            chatsSection.style.display = 'none';
+                        }
+                    } catch (error) {
+                        console.error('Error al verificar amigos para mostrar sección de chats:', error);
+                        // Si hay error, mostrar la sección de todos modos (el usuario puede tener amigos)
+                        chatsSection.style.display = 'block';
+                        chatsSection.classList.add('collapsed');
+                    }
                 }
+                
+                // Los dropdowns empiezan cerrados por defecto
+                const friendsSection = document.getElementById('profileFriendsSection');
+                if (friendsSection) {
+                    friendsSection.classList.add('collapsed'); // Empezar colapsado
+                }
+                
+                // El chat activo no se abre automáticamente - solo cuando se hace clic en el botón de mensaje
+                const activeChat = document.getElementById('profileActiveChat');
                 if (activeChat) {
                     activeChat.style.display = 'none';
                 }
@@ -12133,10 +12194,11 @@
                 // Limpiar mensajes anteriores
                 messagesEl.innerHTML = '';
                 
-                // Cargar mensajes
-                await loadChatMessages(friendId);
+                // Mostrar el chat activo (pero NO expandir el desplegable de chats)
+                activeChat.style.display = 'block';
                 
-                // Escuchar nuevos mensajes en tiempo real
+                // NO cargar la lista completa de chats - solo cargar esta conversación
+                // Escuchar nuevos mensajes en tiempo real (esto también carga los mensajes iniciales)
                 const messagesRef = collection(db, "mensajes");
                 // Usar el chatId más pequeño alfabéticamente para mantener consistencia
                 const chatId1 = `${window.currentUser.uid}_${friendId}`;
@@ -12150,10 +12212,16 @@
                 );
                 
                 chatUnsubscribe = onSnapshot(q, async (snapshot) => {
+                    const activeChat = document.getElementById('profileActiveChat');
                     const activeMessagesEl = document.getElementById('activeChatMessages');
-                    if (!activeMessagesEl) {
-                        console.error('No se encontró activeChatMessages en onSnapshot');
-                        return;
+                    
+                    // Verificar que el chat activo esté visible y que este listener es para el chat actual
+                    if (!activeChat || !activeMessagesEl || activeChat.style.display === 'none') {
+                        return; // El chat no está visible, no mostrar mensajes
+                    }
+                    
+                    if (currentChatFriendId !== friendId) {
+                        return; // Este listener es para un chat diferente, ignorar
                     }
                     
                     // Limpiar mensajes anteriores
@@ -12161,15 +12229,23 @@
                     
                     // Obtener todos los mensajes y ordenarlos por timestamp
                     const messages = [];
+                    const messageIds = new Set(); // Para evitar duplicados
+                    
                     snapshot.forEach((doc) => {
                         const messageData = doc.data();
-                        messages.push({
-                            ...messageData,
-                            id: doc.id
-                        });
+                        const messageId = doc.id;
+                        
+                        // Evitar duplicados
+                        if (!messageIds.has(messageId)) {
+                            messageIds.add(messageId);
+                            messages.push({
+                                ...messageData,
+                                id: messageId
+                            });
+                        }
                     });
                     
-                    // Ordenar por timestamp si no se usó orderBy
+                    // Ordenar por timestamp
                     messages.sort((a, b) => {
                         const timeA = a.timestamp || 0;
                         const timeB = b.timestamp || 0;
@@ -12191,10 +12267,12 @@
                         });
                         try {
                             await batch.commit();
-                            // Actualizar la lista de amigos para reflejar que ya no hay mensajes no leídos
-                            if (window.loadFriendsList) {
-                                await window.loadFriendsList();
-                            }
+                            // Actualizar la lista de chats para quitar badges después de marcar como leídos
+                            setTimeout(async () => {
+                                if (window.loadChatsList) {
+                                    await window.loadChatsList();
+                                }
+                            }, 500);
                         } catch (error) {
                             console.error('Error al marcar mensajes como leídos:', error);
                         }
@@ -12218,11 +12296,8 @@
                     console.error('Error en onSnapshot:', error);
                 });
                 
-                // Ocultar sección de chats cuando se abre un chat activo
-                const chatsSection = document.getElementById('profileChatsSection');
-                if (chatsSection) {
-                    chatsSection.style.display = 'none';
-                }
+                // NO ocultar la sección de chats - debe permanecer visible siempre
+                // La sección de chats permanece visible para acceso rápido
                 
                 // Mostrar chat activo y asegurarse de que no esté minimizado
                 activeChat.style.display = 'flex';
@@ -12354,9 +12429,7 @@
                 
                 messagesEl.innerHTML = '';
                 
-                if (snapshot.empty) {
-                    console.log('No hay mensajes en este chat');
-                } else {
+                if (!snapshot.empty) {
                     // Obtener todos los mensajes y ordenarlos por timestamp
                     const messages = [];
                     snapshot.forEach((docSnapshot) => {
@@ -12520,8 +12593,27 @@
 
         // Mostrar un mensaje en el chat
         async function displayMessage(messageData) {
+            const activeChat = document.getElementById('profileActiveChat');
             const messagesEl = document.getElementById('activeChatMessages');
-            if (!messagesEl) return;
+            
+            // Verificar que el chat activo esté visible antes de mostrar mensajes
+            if (!activeChat || !messagesEl || activeChat.style.display === 'none') {
+                return; // El chat no está visible, no mostrar mensajes fuera del chat
+            }
+            
+            // Verificar que hay un chat activo
+            if (!currentChatFriendId) {
+                return; // No hay chat activo, no mostrar mensajes
+            }
+            
+            // Verificar si el mensaje ya existe para evitar duplicados
+            const messageId = messageData.id;
+            if (messageId) {
+                const existingMessage = messagesEl.querySelector(`[data-message-id="${messageId}"]`);
+                if (existingMessage) {
+                    return; // El mensaje ya está mostrado, no duplicar
+                }
+            }
             
             const isSent = messageData.fromUserId === window.currentUser.uid;
             const messageDiv = document.createElement('div');
@@ -12703,6 +12795,8 @@
                 );
                 
                 const snapshot = await getDocs(q);
+                if (snapshot.empty) return; // No hay mensajes no leídos
+                
                 const batch = writeBatch(db);
                 
                 snapshot.forEach((doc) => {
@@ -12710,24 +12804,32 @@
                 });
                 
                 await batch.commit();
+                
+                // Actualizar la lista de chats para quitar badges
+                setTimeout(async () => {
+                    if (window.loadChatsList) {
+                        await window.loadChatsList();
+                    }
+                }, 300);
             } catch (error) {
                 console.error('Error al marcar mensajes como leídos:', error);
             }
         }
 
         // Cerrar chat
-        window.closeChat = function() {
+        window.closeChat = async function() {
             const activeChat = document.getElementById('profileActiveChat');
             if (activeChat) {
                 activeChat.style.display = 'none';
             }
             
-            // Mostrar sección de chats cuando se cierra el chat activo
-            const chatsSection = document.getElementById('profileChatsSection');
-            if (chatsSection) {
-                chatsSection.style.display = 'block';
+            // Limpiar mensajes al cerrar para evitar que aparezcan fuera del chat
+            const messagesEl = document.getElementById('activeChatMessages');
+            if (messagesEl) {
+                messagesEl.innerHTML = '';
             }
             
+            // Desactivar listener de mensajes en tiempo real
             if (chatUnsubscribe) {
                 chatUnsubscribe();
                 chatUnsubscribe = null;
@@ -12738,7 +12840,14 @@
                 window.messageListenersSet.clear();
             }
             
+            // Limpiar el chat activo actual
             currentChatFriendId = null;
+            
+            // NO actualizar automáticamente la lista de chats al cerrar
+            // Solo se actualiza cuando el usuario abre el desplegable manualmente
+            if (window.loadFriendsList) {
+                await window.loadFriendsList();
+            }
         };
 
         // Cargar lista de chats
@@ -12760,6 +12869,7 @@
                     return;
                 }
                 
+                // La sección de chats siempre debe estar visible si hay amigos
                 chatsSection.style.display = 'block';
                 chatsListEl.innerHTML = '';
                 
@@ -12825,9 +12935,7 @@
                             if (unreadCount > 0) {
                                 chatItem.classList.add('has-unread');
                             }
-                            chatItem.onclick = () => {
-                                window.openChat(friendId, friendData);
-                            };
+                            // NO agregar onclick al item completo - solo se abre con el botón de mensaje
                             
                             const picture = document.createElement('div');
                             picture.className = 'chat-item-picture';
@@ -12857,8 +12965,32 @@
                             info.appendChild(name);
                             info.appendChild(lastMsg);
                             
+                            // Botón para abrir el chat (solo se abre al hacer clic aquí)
+                            const messageBtn = document.createElement('button');
+                            messageBtn.className = 'friend-item-message';
+                            if (unreadCount > 0) {
+                                messageBtn.classList.add('has-unread');
+                            }
+                            messageBtn.textContent = '💬';
+                            messageBtn.title = unreadCount > 0 ? `${unreadCount} mensaje${unreadCount > 1 ? 's' : ''} no leído${unreadCount > 1 ? 's' : ''}` : 'Abrir chat';
+                            messageBtn.style.marginLeft = 'auto';
+                            messageBtn.style.flexShrink = '0';
+                            messageBtn.onclick = async (e) => {
+                                e.stopPropagation(); // Evitar que se propague el evento
+                                await window.openChat(friendId, friendData);
+                            };
+                            
+                            // Agregar badge de notificación si hay mensajes no leídos
+                            if (unreadCount > 0) {
+                                const badge = document.createElement('span');
+                                badge.className = 'friend-item-message-badge';
+                                badge.textContent = unreadCount > 9 ? '9+' : unreadCount.toString();
+                                messageBtn.appendChild(badge);
+                            }
+                            
                             chatItem.appendChild(picture);
                             chatItem.appendChild(info);
+                            chatItem.appendChild(messageBtn);
                             
                             if (unreadCount > 0) {
                                 const unread = document.createElement('div');
@@ -13045,6 +13177,8 @@
             }
         };
 
+        // Funciones para expandir/colapsar secciones desplegables
+
         // Rechazar solicitud de amistad
         window.rejectFriendRequest = async function(requestId) {
             try {
@@ -13104,42 +13238,6 @@
                             name.className = 'friend-item-name';
                             name.textContent = friendData.nombre || 'Sin nombre';
                             
-                            // Contar mensajes no leídos del amigo
-                            const messagesRef = collection(db, "mensajes");
-                            const chatId1 = `${window.currentUser.uid}_${friendId}`;
-                            const chatId2 = `${friendId}_${window.currentUser.uid}`;
-                            const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
-                            
-                            const unreadQuery = query(
-                                messagesRef,
-                                where("chatId", "==", finalChatId),
-                                where("toUserId", "==", window.currentUser.uid),
-                                where("read", "==", false)
-                            );
-                            const unreadSnapshot = await getDocs(unreadQuery);
-                            const unreadCount = unreadSnapshot.size;
-                            
-                            // Botón para enviar mensaje
-                            const messageBtn = document.createElement('button');
-                            messageBtn.className = 'friend-item-message';
-                            if (unreadCount > 0) {
-                                messageBtn.classList.add('has-unread');
-                            }
-                            messageBtn.textContent = '💬';
-                            messageBtn.title = unreadCount > 0 ? `${unreadCount} mensaje${unreadCount > 1 ? 's' : ''} no leído${unreadCount > 1 ? 's' : ''}` : 'Enviar mensaje';
-                            messageBtn.onclick = async (e) => {
-                                e.stopPropagation(); // Evitar que se abra el perfil
-                                await window.openChat(friendId, friendData);
-                            };
-                            
-                            // Agregar badge de notificación si hay mensajes no leídos
-                            if (unreadCount > 0) {
-                                const badge = document.createElement('span');
-                                badge.className = 'friend-item-message-badge';
-                                badge.textContent = unreadCount > 9 ? '9+' : unreadCount.toString();
-                                messageBtn.appendChild(badge);
-                            }
-                            
                             // Botón para eliminar amigo
                             const removeBtn = document.createElement('button');
                             removeBtn.className = 'friend-item-remove';
@@ -13163,7 +13261,6 @@
                             
                             friendItem.appendChild(picture);
                             friendItem.appendChild(name);
-                            friendItem.appendChild(messageBtn);
                             friendItem.appendChild(removeBtn);
                             friendsListEl.appendChild(friendItem);
                         }
@@ -13452,7 +13549,7 @@
         // ========== SISTEMA DE NOTIFICACIONES PUSH ==========
         
         // Registrar Service Worker para notificaciones
-        if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
             window.addEventListener('load', async () => {
                 try {
                     // Crear service worker inline mejorado para FCM y notificaciones push
@@ -13549,12 +13646,16 @@
                     const swUrl = URL.createObjectURL(blob);
                     
                     const registration = await navigator.serviceWorker.register(swUrl);
-                    console.log('Service Worker registrado:', registration);
+                    // Service Worker registrado exitosamente (solo log en desarrollo)
+                    // console.log('Service Worker registrado:', registration);
                     
                     // Esperar a que el Service Worker esté listo
                     await navigator.serviceWorker.ready;
                 } catch (error) {
-                    console.error('Error al registrar Service Worker:', error);
+                    // Solo mostrar error si no es por protocolo file:// (normal al abrir archivo local)
+                    if (!error.message.includes('file://') && !error.message.includes('null')) {
+                        console.error('Error al registrar Service Worker:', error);
+                    }
                 }
             });
         }
@@ -13562,7 +13663,7 @@
         // Función para mostrar notificación - mejorada para móvil
         window.showNotification = async function(title, options = {}) {
             if (!('Notification' in window)) {
-                console.log('Este navegador no soporta notificaciones');
+                // Navegador no soporta notificaciones (silencioso)
                 return;
             }
 
@@ -13570,11 +13671,11 @@
             if (Notification.permission === 'default') {
                 const permission = await Notification.requestPermission();
                 if (permission !== 'granted') {
-                    console.log('Permisos de notificaciones denegados');
+                    // Permisos denegados (silencioso)
                     return;
                 }
             } else if (Notification.permission !== 'granted') {
-                console.log('Permisos de notificaciones no concedidos');
+                // Permisos no concedidos (silencioso)
                 return;
             }
 
@@ -13591,11 +13692,18 @@
             };
 
             try {
-                if ('serviceWorker' in navigator) {
-                    const registration = await navigator.serviceWorker.ready;
-                    // Usar el Service Worker para mostrar notificaciones (funciona en segundo plano)
-                    await registration.showNotification(title, notificationOptions);
-                    console.log('Notificación mostrada a través de Service Worker');
+                if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+                    try {
+                        const registration = await navigator.serviceWorker.ready;
+                        // Usar el Service Worker para mostrar notificaciones (funciona en segundo plano)
+                        await registration.showNotification(title, notificationOptions);
+                    } catch (swError) {
+                        // Si falla el Service Worker, usar notificación estándar
+                        const notification = new Notification(title, notificationOptions);
+                        if (!notificationOptions.requireInteraction) {
+                            setTimeout(() => notification.close(), 5000);
+                        }
+                    }
                 } else {
                     // Fallback si no hay Service Worker
                     const notification = new Notification(title, notificationOptions);
@@ -13629,7 +13737,12 @@
         // Función para obtener y guardar el token FCM
         window.requestFCMToken = async function() {
             if (!messaging || !window.currentUser) {
-                console.log('FCM no disponible o usuario no autenticado');
+                // FCM no disponible (silencioso)
+                return null;
+            }
+            
+            // Verificar que no estemos en file:// (FCM no funciona en archivos locales)
+            if (window.location.protocol === 'file:') {
                 return null;
             }
             
@@ -13637,7 +13750,7 @@
                 // Solicitar permisos de notificación
                 const permission = await Notification.requestPermission();
                 if (permission !== 'granted') {
-                    console.log('Permisos de notificación no concedidos');
+                    // Permisos no concedidos (silencioso)
                     return null;
                 }
                 
@@ -13647,7 +13760,8 @@
                 });
                 
                 if (currentToken) {
-                    console.log('Token FCM obtenido:', currentToken);
+                    // Token FCM obtenido exitosamente (solo log en desarrollo)
+                    // console.log('Token FCM obtenido:', currentToken);
                     
                     // Guardar el token en Firestore
                     const userRef = doc(db, "usuarios", window.currentUser.uid);
@@ -13658,8 +13772,7 @@
                     
                     // Escuchar mensajes cuando la app está activa
                     onMessage(messaging, (payload) => {
-                        console.log('Mensaje recibido cuando la app está activa:', payload);
-                        // Mostrar notificación local
+                        // Mostrar notificación local cuando la app está activa
                         if (payload.notification) {
                             window.showNotification(payload.notification.title, {
                                 body: payload.notification.body,
@@ -13671,11 +13784,15 @@
                     
                     return currentToken;
                 } else {
-                    console.log('No se pudo obtener el token FCM');
+                    // No se pudo obtener el token FCM (silencioso)
                     return null;
                 }
             } catch (error) {
-                console.error('Error al obtener token FCM:', error);
+                // Solo mostrar errores importantes (no errores de permisos o protocolo)
+                if (!error.message.includes('messaging/unsupported-browser') && 
+                    !error.message.includes('messaging/permission-blocked')) {
+                    console.error('Error al obtener token FCM:', error);
+                }
                 return null;
             }
         };
@@ -13696,7 +13813,7 @@
                 const fcmToken = userData.fcmToken;
                 
                 if (!fcmToken) {
-                    console.log('El usuario no tiene token FCM');
+                    // Usuario no tiene token FCM (silencioso, es normal)
                     return false;
                 }
                 
@@ -13767,28 +13884,23 @@
 
             // Si ya está concedido, retornar
             if (Notification.permission === 'granted') {
-                console.log('Permisos de notificaciones ya concedidos');
                 return true;
             }
 
             // Si está denegado, no intentar de nuevo
             if (Notification.permission === 'denied') {
-                console.log('Permisos de notificaciones denegados previamente');
                 return false;
             }
 
             // Solicitar permisos
             try {
                 const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    console.log('Permisos de notificaciones concedidos');
-                    return true;
-                } else {
-                    console.log('Permisos de notificaciones denegados');
-                    return false;
-                }
+                return permission === 'granted';
             } catch (error) {
-                console.error('Error al solicitar permisos:', error);
+                // Solo mostrar errores importantes
+                if (error.message && !error.message.includes('User denied')) {
+                    console.error('Error al solicitar permisos:', error);
+                }
                 return false;
             }
         };
@@ -13799,13 +13911,11 @@
 
             // Asegurarse de que los permisos estén concedidos
             if (Notification.permission !== 'granted') {
-                console.log('Solicitando permisos de notificación...');
                 await window.requestNotificationPermission();
             }
             
-            // Si los permisos no están concedidos, no configurar listeners
+            // Si los permisos no están concedidos, no configurar listeners (silencioso)
             if (Notification.permission !== 'granted') {
-                console.log('Permisos de notificación no concedidos. Las notificaciones no funcionarán.');
                 return;
             }
 
