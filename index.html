@@ -3304,6 +3304,37 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
         }
 
+        /* Estilos para imágenes de biblioteca con interacciones */
+        .library-item.has-interactions {
+            border: 3px solid #f56565;
+            box-shadow: 0 0 20px rgba(245, 101, 101, 0.6), 0 4px 15px rgba(0, 0, 0, 0.25);
+            animation: imageNotificationGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes imageNotificationGlow {
+            0%, 100% {
+                border-color: #f56565;
+                box-shadow: 0 0 20px rgba(245, 101, 101, 0.6), 0 4px 15px rgba(0, 0, 0, 0.25);
+            }
+            50% {
+                border-color: #ff6b9d;
+                box-shadow: 0 0 30px rgba(245, 101, 101, 0.8), 0 6px 20px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .library-item.has-interactions::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(245, 101, 101, 0.1) 0%, rgba(66, 153, 225, 0.1) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
         .library-item img {
             width: 100%;
             height: 100%;
@@ -4022,6 +4053,268 @@
         .profile-inbox-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(246, 173, 85, 0.6);
+        }
+
+        .profile-mailbox-btn {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.4);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .profile-mailbox-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66, 153, 225, 0.6);
+        }
+
+        .profile-send-mail-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .profile-send-mail-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.6);
+        }
+
+        /* Indicador de notificación */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f56565;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75em;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .profile-mailbox-btn.has-notifications,
+        .profile-inbox-btn.has-notifications,
+        .profile-friends-btn.has-notifications,
+        .profile-library-section.has-notifications,
+        .profile-chats-section.has-notifications {
+            position: relative;
+            animation: notificationPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(245, 101, 101, 0.6), 0 4px 15px rgba(66, 153, 225, 0.4) !important;
+        }
+
+        .profile-chats-section.has-notifications h3 {
+            animation: notificationPulse 2s ease-in-out infinite;
+        }
+
+        /* Estilos para lista de chats */
+        .chats-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .chat-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+        }
+
+        .chat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Estilos para chat items con mensajes no leídos */
+        .chat-item.has-unread {
+            border: 2px solid #f56565;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+            animation: chatItemPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(245, 101, 101, 0.4), 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes chatItemPulse {
+            0%, 100% {
+                border-color: #f56565;
+                box-shadow: 0 0 20px rgba(245, 101, 101, 0.4), 0 4px 15px rgba(0, 0, 0, 0.15);
+            }
+            50% {
+                border-color: #ff6b9d;
+                box-shadow: 0 0 30px rgba(245, 101, 101, 0.6), 0 6px 20px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        .chat-item.has-unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #f56565 0%, #ff6b9d 100%);
+            border-radius: 12px 0 0 12px;
+        }
+
+        .chat-item-picture {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .chat-item.has-unread .chat-item-picture {
+            border: 3px solid #f56565;
+            box-shadow: 0 0 15px rgba(245, 101, 101, 0.5);
+            animation: pictureGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pictureGlow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(245, 101, 101, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(245, 101, 101, 0.8);
+            }
+        }
+
+        .chat-item-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .chat-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-item-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+            font-size: 1em;
+        }
+
+        .chat-item.has-unread .chat-item-name {
+            color: #c53030;
+            font-weight: 700;
+        }
+
+        .chat-item-last-message {
+            font-size: 0.9em;
+            color: #718096;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .chat-item.has-unread .chat-item-last-message {
+            color: #e53e3e;
+            font-weight: 500;
+        }
+
+        .chat-item-unread {
+            background: #f56565;
+            color: white;
+            border-radius: 50%;
+            min-width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75em;
+            font-weight: bold;
+            padding: 0 6px;
+            box-shadow: 0 2px 8px rgba(245, 101, 101, 0.5);
+            animation: badgeBounce 1s ease-in-out infinite;
+        }
+
+        @keyframes badgeBounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes notificationPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(245, 101, 101, 0.6), 0 4px 15px rgba(66, 153, 225, 0.4);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 0 30px rgba(245, 101, 101, 0.8), 0 6px 20px rgba(66, 153, 225, 0.6);
+            }
+        }
+
+        .profile-mailbox-btn.has-notifications {
+            border: 2px solid #f56565;
+            background: linear-gradient(135deg, #f56565 0%, #4299e1 100%) !important;
+        }
+
+        .profile-inbox-btn.has-notifications {
+            border: 2px solid #f6ad55;
+            background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%) !important;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f56565;
+            color: white;
+            border-radius: 50%;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75em;
+            font-weight: bold;
+            border: 2px solid white;
+            padding: 0 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .notification-badge.large {
+            min-width: 24px;
+            height: 24px;
+            font-size: 0.85em;
         }
 
         .profile-friends-section {
@@ -4747,6 +5040,8 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+            background: #e2e8f0;
         }
 
         .recommendation-item-profile .placeholder {
@@ -4806,6 +5101,68 @@
             box-shadow: 0 4px 10px rgba(245, 101, 101, 0.4);
         }
 
+        .recommendation-reply-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-reply-btn:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.4);
+        }
+
+        .recommendation-reply-form {
+            margin-top: 15px;
+            padding: 15px;
+            background: #edf2f7;
+            border-radius: 8px;
+            border-left: 3px solid #4299e1;
+        }
+
+        .recommendation-reply-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .recommendation-reply-textarea:focus {
+            border-color: #4299e1;
+        }
+
+        .recommendation-reply-submit-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-reply-submit-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(72, 187, 120, 0.4);
+        }
+
         .recommendation-item {
             position: relative;
         }
@@ -4831,6 +5188,335 @@
 
         .recommendations-inbox-modal-body {
             margin-top: 20px;
+        }
+
+        /* Estilos para modal de buzón de correo */
+        .mailbox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .mailbox-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .mailbox-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .mailbox-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .mailbox-modal-close {
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .mailbox-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
+        .mailbox-messages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .mailbox-message-item {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 4px solid #4299e1;
+            position: relative;
+        }
+
+        .mailbox-message-item.unread {
+            border-left-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .mailbox-message-profile {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid #e2e8f0;
+            background: #e2e8f0;
+        }
+
+        .mailbox-message-profile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .mailbox-message-profile .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e2e8f0;
+            font-size: 1.5em;
+        }
+
+        .mailbox-message-content {
+            flex: 1;
+        }
+
+        .mailbox-message-sender {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .mailbox-message-text {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .mailbox-message-date {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        .mailbox-message-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .mailbox-message-delete-btn {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mailbox-message-delete-btn:hover {
+            background: #e53e3e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(245, 101, 101, 0.4);
+        }
+
+        /* Estilos para modal de enviar mensaje */
+        .send-mail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .send-mail-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .send-mail-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .send-mail-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .send-mail-modal-close {
+            background: #f56565;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .send-mail-modal-close:hover {
+            background: #e53e3e;
+            transform: rotate(90deg);
+        }
+
+        .send-mail-search-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .send-mail-search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .send-mail-search-input:focus {
+            border-color: #4299e1;
+        }
+
+        .send-mail-search-btn {
+            padding: 12px 20px;
+            background: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .send-mail-search-btn:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+
+        .send-mail-results {
+            margin-bottom: 20px;
+        }
+
+        .send-mail-result-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .send-mail-result-item:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+
+        .send-mail-compose {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .send-mail-recipient {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f7fafc;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .send-mail-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 150px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .send-mail-textarea:focus {
+            border-color: #4299e1;
+        }
+
+        .send-mail-submit-btn {
+            width: 100%;
+            padding: 12px 24px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .send-mail-submit-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
         }
 
         .inbox-request-item {
@@ -5281,6 +5967,9 @@
             font-size: 0.75em;
             margin-top: 5px;
             opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .active-chat-message.sent .active-chat-message-time {
@@ -5289,6 +5978,68 @@
 
         .active-chat-message.received .active-chat-message-time {
             color: #718096;
+        }
+
+        .message-read-indicator {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-left: 4px;
+            font-weight: bold;
+        }
+
+        .active-chat-message.sent .message-read-indicator.read {
+            color: #a0f0a0;
+        }
+
+        /* Animación de escribiendo */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            background: #f7fafc;
+            border-radius: 18px;
+            margin: 5px 0;
+            font-size: 0.85em;
+            color: #718096;
+            max-width: fit-content;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            margin-left: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #718096;
+            border-radius: 50%;
+            animation: typingDot 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingDot {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
         }
 
         .active-chat-input-container {
@@ -5477,6 +6228,8 @@
                     <button class="profile-toggle-scores-btn" id="profileToggleScoresBtn">📊 Mostrar Puntuaciones</button>
                     <button class="profile-friends-btn" id="profileFriendsBtn">👥 Añadir Amigos</button>
                     <button class="profile-inbox-btn" id="profileInboxBtn">📬 Bandeja de Solicitudes</button>
+                    <button class="profile-mailbox-btn" id="profileMailboxBtn">📮 Buzón de Correo</button>
+                    <button class="profile-send-mail-btn" id="profileSendMailBtn" style="display: none;">✉️ Enviar Mensaje</button>
                     <button class="profile-recommendations-inbox-btn" id="profileRecommendationsInboxBtn" style="display: none;">📧 Correo de Recomendaciones</button>
                     <div class="profile-scores-section" id="profileScoresSection" style="display: none;">
                         <h3>Mis Puntuaciones Máximas</h3>
@@ -5603,6 +6356,43 @@
             <div class="recommendations-inbox-modal-body">
                 <div class="recommendations-list" id="recommendationsList">
                     <div style="text-align: center; color: #718096; padding: 20px;">Cargando recomendaciones...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de buzón de correo -->
+    <div class="mailbox-modal" id="mailboxModal" style="display: none;">
+        <div class="mailbox-modal-content">
+            <div class="mailbox-modal-header">
+                <h2>📮 Buzón de Correo</h2>
+                <button class="mailbox-modal-close" id="mailboxModalClose">✕</button>
+            </div>
+            <div class="mailbox-modal-body">
+                <div class="mailbox-messages-list" id="mailboxMessagesList">
+                    <div style="text-align: center; color: #718096; padding: 20px;">Cargando mensajes...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para enviar mensaje (solo para mpenalvart1) -->
+    <div class="send-mail-modal" id="sendMailModal" style="display: none;">
+        <div class="send-mail-modal-content">
+            <div class="send-mail-modal-header">
+                <h2>✉️ Enviar Mensaje</h2>
+                <button class="send-mail-modal-close" id="sendMailModalClose">✕</button>
+            </div>
+            <div class="send-mail-modal-body">
+                <div class="send-mail-search-container">
+                    <input type="text" id="sendMailSearchInput" class="send-mail-search-input" placeholder="Buscar usuario por nombre o email...">
+                    <button class="send-mail-search-btn" id="sendMailSearchBtn">🔍 Buscar</button>
+                </div>
+                <div class="send-mail-results" id="sendMailResults"></div>
+                <div class="send-mail-compose" id="sendMailCompose" style="display: none;">
+                    <div class="send-mail-recipient" id="sendMailRecipient"></div>
+                    <textarea id="sendMailMessageText" class="send-mail-textarea" placeholder="Escribe tu mensaje aquí..." rows="6"></textarea>
+                    <button class="send-mail-submit-btn" id="sendMailSubmitBtn">📤 Enviar</button>
                 </div>
             </div>
         </div>
@@ -7905,6 +8695,102 @@
             });
         }
 
+        // Event listeners para buzón de correo
+        const profileMailboxBtn = document.getElementById('profileMailboxBtn');
+        if (profileMailboxBtn) {
+            profileMailboxBtn.addEventListener('click', async () => {
+                const mailboxModal = document.getElementById('mailboxModal');
+                if (mailboxModal && window.loadMailboxMessages) {
+                    mailboxModal.style.display = 'flex';
+                    await window.loadMailboxMessages();
+                }
+            });
+        }
+
+        const mailboxModal = document.getElementById('mailboxModal');
+        const mailboxModalClose = document.getElementById('mailboxModalClose');
+        if (mailboxModalClose) {
+            mailboxModalClose.addEventListener('click', () => {
+                if (mailboxModal) {
+                    mailboxModal.style.display = 'none';
+                }
+            });
+        }
+
+        if (mailboxModal) {
+            mailboxModal.addEventListener('click', (e) => {
+                if (e.target === mailboxModal) {
+                    mailboxModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Event listeners para enviar mensaje (solo mpenalvart1)
+        const profileSendMailBtn = document.getElementById('profileSendMailBtn');
+        if (profileSendMailBtn) {
+            profileSendMailBtn.addEventListener('click', () => {
+                const sendMailModal = document.getElementById('sendMailModal');
+                if (sendMailModal) {
+                    sendMailModal.style.display = 'flex';
+                    const searchInput = document.getElementById('sendMailSearchInput');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.focus();
+                    }
+                }
+            });
+        }
+
+        const sendMailModal = document.getElementById('sendMailModal');
+        const sendMailModalClose = document.getElementById('sendMailModalClose');
+        if (sendMailModalClose) {
+            sendMailModalClose.addEventListener('click', () => {
+                if (sendMailModal) {
+                    sendMailModal.style.display = 'none';
+                    // Limpiar formulario
+                    const compose = document.getElementById('sendMailCompose');
+                    const results = document.getElementById('sendMailResults');
+                    if (compose) compose.style.display = 'none';
+                    if (results) results.innerHTML = '';
+                }
+            });
+        }
+
+        if (sendMailModal) {
+            sendMailModal.addEventListener('click', (e) => {
+                if (e.target === sendMailModal) {
+                    sendMailModal.style.display = 'none';
+                }
+            });
+        }
+
+        const sendMailSearchBtn = document.getElementById('sendMailSearchBtn');
+        if (sendMailSearchBtn) {
+            sendMailSearchBtn.addEventListener('click', async () => {
+                if (window.searchUsersForMail) {
+                    await window.searchUsersForMail();
+                }
+            });
+        }
+
+        const sendMailSearchInput = document.getElementById('sendMailSearchInput');
+        if (sendMailSearchInput) {
+            sendMailSearchInput.addEventListener('keypress', async (e) => {
+                if (e.key === 'Enter' && window.searchUsersForMail) {
+                    await window.searchUsersForMail();
+                }
+            });
+        }
+
+        const sendMailSubmitBtn = document.getElementById('sendMailSubmitBtn');
+        if (sendMailSubmitBtn) {
+            sendMailSubmitBtn.addEventListener('click', async () => {
+                if (window.sendMailToUser) {
+                    await window.sendMailToUser();
+                }
+            });
+        }
+
         const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
         const recommendationsInboxModalClose = document.getElementById('recommendationsInboxModalClose');
         if (recommendationsInboxModalClose) {
@@ -8830,6 +9716,14 @@
                 // Limpiar bibliotecas al cambiar de usuario
                 clearLibraries();
                 
+                // Solicitar permisos de notificaciones y configurar sistema de notificaciones
+                if (window.requestNotificationPermission) {
+                    await window.requestNotificationPermission();
+                }
+                if (window.setupNotificationListeners) {
+                    await window.setupNotificationListeners();
+                }
+                
                 // No cargar ranking automáticamente - el usuario debe hacer clic en el botón "Ver Tabla"
             } else {
                 window.currentUser = null;
@@ -8890,6 +9784,9 @@
             if (!userId || !containerElement) return;
             
             try {
+                // Limpiar el contenedor primero
+                containerElement.innerHTML = '';
+                
                 // Obtener documento del usuario desde Firestore
                 const userDocRef = doc(db, "usuarios", userId);
                 const userDoc = await getDoc(userDocRef);
@@ -8897,17 +9794,39 @@
                 if (userDoc.exists() && userDoc.data().fotoPerfil) {
                     const fotoBase64 = userDoc.data().fotoPerfil;
                     
-                    const img = document.createElement('img');
-                    img.src = fotoBase64;
-                    img.alt = 'Foto de perfil';
-                    containerElement.innerHTML = '';
-                    containerElement.appendChild(img);
+                    // Verificar que la foto no esté vacía
+                    if (fotoBase64 && fotoBase64.trim() !== '') {
+                        const img = document.createElement('img');
+                        img.src = fotoBase64;
+                        img.alt = 'Foto de perfil';
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        img.style.display = 'block';
+                        
+                        // Manejar errores de carga de imagen
+                        img.onerror = () => {
+                            console.log(`Error al cargar imagen para usuario ${userId}`);
+                            const placeholder = document.createElement('div');
+                            placeholder.className = 'placeholder';
+                            placeholder.textContent = '👤';
+                            containerElement.innerHTML = '';
+                            containerElement.appendChild(placeholder);
+                        };
+                        
+                        containerElement.appendChild(img);
+                    } else {
+                        // Foto vacía, mostrar placeholder
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'placeholder';
+                        placeholder.textContent = '👤';
+                        containerElement.appendChild(placeholder);
+                    }
                 } else {
                     // No hay foto, mostrar placeholder
                     const placeholder = document.createElement('div');
                     placeholder.className = 'placeholder';
                     placeholder.textContent = '👤';
-                    containerElement.innerHTML = '';
                     containerElement.appendChild(placeholder);
                 }
             } catch (error) {
@@ -9039,7 +9958,7 @@
         };
 
         // Mostrar modal de perfil
-        window.showProfileModal = function() {
+        window.showProfileModal = async function() {
             if (!window.currentUser) return;
             
             const modal = document.getElementById('profileModal');
@@ -9101,6 +10020,21 @@
                     } else {
                         recommendationsInboxBtn.style.display = 'none';
                     }
+                }
+
+                // Mostrar botón de enviar mensaje solo para mpenalvart1
+                const sendMailBtn = document.getElementById('profileSendMailBtn');
+                if (sendMailBtn && window.currentUser) {
+                    if (window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                        sendMailBtn.style.display = 'block';
+                    } else {
+                        sendMailBtn.style.display = 'none';
+                    }
+                }
+
+                // Cargar notificaciones y marcadores
+                if (window.loadProfileNotifications) {
+                    await window.loadProfileNotifications();
                 }
             }
         };
@@ -9213,6 +10147,8 @@
                     // Contenedor de foto de perfil
                     const profileContainer = document.createElement('div');
                     profileContainer.className = 'recommendation-item-profile';
+                    // Limpiar el contenedor primero
+                    profileContainer.innerHTML = '';
                     
                     if (data.userId && window.loadUserProfilePicture) {
                         await window.loadUserProfilePicture(data.userId, profileContainer);
@@ -9246,10 +10182,27 @@
                         minute: '2-digit'
                     });
 
-                    // Botón de eliminar
+                    // Botones de acción
                     const actions = document.createElement('div');
                     actions.className = 'recommendation-item-actions';
                     
+                    // Botón de responder
+                    const replyBtn = document.createElement('button');
+                    replyBtn.className = 'recommendation-reply-btn';
+                    replyBtn.textContent = '💬 Responder';
+                    replyBtn.onclick = () => {
+                        // Mostrar formulario de respuesta
+                        const replyForm = recommendationItem.querySelector('.recommendation-reply-form');
+                        if (replyForm) {
+                            replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+                            const textarea = replyForm.querySelector('.recommendation-reply-textarea');
+                            if (textarea && replyForm.style.display === 'block') {
+                                textarea.focus();
+                            }
+                        }
+                    };
+                    
+                    // Botón de eliminar
                     const deleteBtn = document.createElement('button');
                     deleteBtn.className = 'recommendation-delete-btn';
                     deleteBtn.textContent = '🗑️ Eliminar';
@@ -9266,12 +10219,66 @@
                         }
                     };
                     
+                    actions.appendChild(replyBtn);
                     actions.appendChild(deleteBtn);
+
+                    // Formulario de respuesta (oculto por defecto)
+                    const replyForm = document.createElement('div');
+                    replyForm.className = 'recommendation-reply-form';
+                    replyForm.style.display = 'none';
+                    
+                    const replyTextarea = document.createElement('textarea');
+                    replyTextarea.className = 'recommendation-reply-textarea';
+                    replyTextarea.placeholder = 'Escribe tu respuesta...';
+                    replyTextarea.rows = 4;
+                    
+                    const replySubmitBtn = document.createElement('button');
+                    replySubmitBtn.className = 'recommendation-reply-submit-btn';
+                    replySubmitBtn.textContent = '📤 Enviar Respuesta';
+                    replySubmitBtn.onclick = async () => {
+                        const respuestaTexto = replyTextarea.value.trim();
+                        if (!respuestaTexto) {
+                            alert('Por favor, escribe una respuesta');
+                            return;
+                        }
+
+                        try {
+                            // Obtener información del remitente (mpenalvart1)
+                            const remitenteDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                            const remitenteData = remitenteDoc.exists() ? remitenteDoc.data() : {};
+                            const nombreRemitente = remitenteData.nombre || window.currentUserName || 'Martin';
+
+                            // Guardar respuesta como mensaje en el buzón del usuario que envió la recomendación
+                            const messagesRef = collection(db, "mensajesCorreo");
+                            await addDoc(messagesRef, {
+                                remitenteId: window.currentUser.uid,
+                                nombreRemitente: nombreRemitente,
+                                emailRemitente: window.currentUser.email,
+                                destinatarioId: data.userId,
+                                texto: `Respuesta a tu recomendación: "${data.texto.substring(0, 50)}${data.texto.length > 50 ? '...' : ''}"\n\n${respuestaTexto}`,
+                                timestamp: Date.now(),
+                                leido: false,
+                                esRespuestaRecomendacion: true,
+                                recomendacionId: data.id
+                            });
+
+                            alert('✅ Respuesta enviada exitosamente');
+                            replyTextarea.value = '';
+                            replyForm.style.display = 'none';
+                        } catch (error) {
+                            console.error('Error al enviar respuesta:', error);
+                            alert('Error al enviar la respuesta. Por favor, intenta de nuevo.');
+                        }
+                    };
+                    
+                    replyForm.appendChild(replyTextarea);
+                    replyForm.appendChild(replySubmitBtn);
 
                     content.appendChild(author);
                     content.appendChild(text);
                     content.appendChild(date);
                     content.appendChild(actions);
+                    content.appendChild(replyForm);
 
                     recommendationItem.appendChild(profileContainer);
                     recommendationItem.appendChild(content);
@@ -9283,6 +10290,550 @@
                 if (recommendationsList) {
                     recommendationsList.innerHTML = '<div style="text-align: center; color: #f56565; padding: 20px;">Error al cargar recomendaciones.</div>';
                 }
+            }
+        };
+
+        // Función para cargar mensajes del buzón de correo
+        window.loadMailboxMessages = async function() {
+            if (!window.currentUser) return;
+
+            try {
+                const messagesRef = collection(db, "mensajesCorreo");
+                const q = query(
+                    messagesRef,
+                    where("destinatarioId", "==", window.currentUser.uid)
+                );
+                const snapshot = await getDocs(q);
+
+                const messagesList = document.getElementById('mailboxMessagesList');
+                if (!messagesList) return;
+
+                messagesList.innerHTML = '';
+
+                if (snapshot.empty) {
+                    messagesList.innerHTML = '<div style="text-align: center; color: #718096; padding: 20px;">No hay mensajes en tu buzón.</div>';
+                    return;
+                }
+
+                // Convertir a array y ordenar por timestamp descendente
+                const messages = snapshot.docs.map(docSnapshot => ({
+                    id: docSnapshot.id,
+                    ...docSnapshot.data()
+                })).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                // Cargar cada mensaje
+                for (const data of messages) {
+                    const messageItem = document.createElement('div');
+                    messageItem.className = 'mailbox-message-item' + (data.leido ? '' : ' unread');
+
+                    // Contenedor de foto de perfil
+                    const profileContainer = document.createElement('div');
+                    profileContainer.className = 'mailbox-message-profile';
+                    
+                    if (data.remitenteId && window.loadUserProfilePicture) {
+                        await window.loadUserProfilePicture(data.remitenteId, profileContainer);
+                    } else {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'placeholder';
+                        placeholder.textContent = '👤';
+                        profileContainer.appendChild(placeholder);
+                    }
+
+                    // Contenido del mensaje
+                    const content = document.createElement('div');
+                    content.className = 'mailbox-message-content';
+
+                    const sender = document.createElement('div');
+                    sender.className = 'mailbox-message-sender';
+                    sender.textContent = data.nombreRemitente || 'Anónimo';
+
+                    const text = document.createElement('div');
+                    text.className = 'mailbox-message-text';
+                    text.textContent = data.texto;
+
+                    const date = document.createElement('div');
+                    date.className = 'mailbox-message-date';
+                    const fecha = new Date(data.timestamp);
+                    date.textContent = fecha.toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    // Botón de eliminar
+                    const actions = document.createElement('div');
+                    actions.className = 'mailbox-message-actions';
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'mailbox-message-delete-btn';
+                    deleteBtn.textContent = '🗑️ Eliminar';
+                    deleteBtn.onclick = async () => {
+                        if (confirm('¿Estás seguro de que quieres eliminar este mensaje?')) {
+                            try {
+                                await deleteDoc(doc(db, "mensajesCorreo", data.id));
+                                // Marcar como leído si no estaba leído
+                                if (!data.leido) {
+                                    await updateDoc(doc(db, "mensajesCorreo", data.id), {
+                                        leido: true
+                                    });
+                                }
+                                await window.loadMailboxMessages();
+                            } catch (error) {
+                                console.error('Error al eliminar mensaje:', error);
+                                alert('Error al eliminar el mensaje. Por favor, intenta de nuevo.');
+                            }
+                        }
+                    };
+                    
+                    actions.appendChild(deleteBtn);
+
+                    content.appendChild(sender);
+                    content.appendChild(text);
+                    content.appendChild(date);
+                    content.appendChild(actions);
+
+                    messageItem.appendChild(profileContainer);
+                    messageItem.appendChild(content);
+                    messagesList.appendChild(messageItem);
+
+                    // Marcar como leído si no estaba leído
+                    if (!data.leido) {
+                        try {
+                            await updateDoc(doc(db, "mensajesCorreo", data.id), {
+                                leido: true
+                            });
+                        } catch (error) {
+                            console.error('Error al marcar mensaje como leído:', error);
+                        }
+                    }
+                }
+
+                // Actualizar notificaciones después de cargar mensajes
+                if (window.loadProfileNotifications) {
+                    await window.loadProfileNotifications();
+                }
+            } catch (error) {
+                console.error('Error al cargar mensajes del buzón:', error);
+                const messagesList = document.getElementById('mailboxMessagesList');
+                if (messagesList) {
+                    messagesList.innerHTML = '<div style="text-align: center; color: #f56565; padding: 20px;">Error al cargar mensajes.</div>';
+                }
+            }
+        };
+
+        // Función para buscar usuarios y enviar mensaje (solo para mpenalvart1)
+        window.searchUsersForMail = async function() {
+            if (!window.currentUser || window.currentUser.email !== 'mpenalvart1@educacion.navarra.es') {
+                return;
+            }
+
+            const searchInput = document.getElementById('sendMailSearchInput');
+            const resultsDiv = document.getElementById('sendMailResults');
+            if (!searchInput || !resultsDiv) return;
+
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            if (!searchTerm) {
+                alert('Por favor, escribe un nombre o email para buscar');
+                return;
+            }
+
+            try {
+                const usuariosRef = collection(db, "usuarios");
+                const snapshot = await getDocs(usuariosRef);
+                
+                resultsDiv.innerHTML = '';
+
+                const matches = [];
+                snapshot.forEach(docSnapshot => {
+                    const userData = docSnapshot.data();
+                    const nombre = (userData.nombre || '').toLowerCase();
+                    const email = (userData.email || '').toLowerCase();
+                    
+                    if (nombre.includes(searchTerm) || email.includes(searchTerm)) {
+                        matches.push({
+                            id: docSnapshot.id,
+                            ...userData
+                        });
+                    }
+                });
+
+                if (matches.length === 0) {
+                    resultsDiv.innerHTML = '<div style="text-align: center; color: #718096; padding: 20px;">No se encontraron usuarios.</div>';
+                    return;
+                }
+
+                // Botón "Para todos"
+                const sendToAllBtn = document.createElement('button');
+                sendToAllBtn.className = 'send-mail-to-all-btn';
+                sendToAllBtn.textContent = '📢 Enviar a Todos los Usuarios';
+                sendToAllBtn.style.cssText = 'width: 100%; padding: 12px; margin-bottom: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: 600; transition: all 0.3s ease;';
+                sendToAllBtn.onmouseover = function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
+                };
+                sendToAllBtn.onmouseout = function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                };
+                sendToAllBtn.onclick = () => {
+                    const compose = document.getElementById('sendMailCompose');
+                    const recipient = document.getElementById('sendMailRecipient');
+                    const messageText = document.getElementById('sendMailMessageText');
+                    
+                    if (compose && recipient && messageText) {
+                        compose.style.display = 'block';
+                        recipient.innerHTML = 'Para: Todos los usuarios';
+                        messageText.value = '';
+                        messageText.focus();
+                        
+                        // Guardar indicador de "todos"
+                        compose.dataset.recipientId = 'ALL_USERS';
+                        compose.dataset.recipientName = 'Todos los usuarios';
+                        compose.dataset.recipientEmail = '';
+                    }
+                };
+                resultsDiv.appendChild(sendToAllBtn);
+
+                // Mostrar resultados
+                for (const user of matches) {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'send-mail-result-item';
+                    
+                    const profilePic = document.createElement('div');
+                    profilePic.className = 'mailbox-message-profile';
+                    profilePic.style.width = '40px';
+                    profilePic.style.height = '40px';
+                    
+                    // Limpiar el contenedor primero
+                    profilePic.innerHTML = '';
+                    
+                    // Cargar foto de perfil con await
+                    if (window.loadUserProfilePicture) {
+                        await window.loadUserProfilePicture(user.id, profilePic);
+                    } else {
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'placeholder';
+                        placeholder.textContent = '👤';
+                        profilePic.appendChild(placeholder);
+                    }
+
+                    const userInfo = document.createElement('div');
+                    userInfo.style.flex = '1';
+                    userInfo.innerHTML = `
+                        <div style="font-weight: 600; color: #333;">${user.nombre || 'Sin nombre'}</div>
+                        <div style="font-size: 0.9em; color: #718096;">${user.email || ''}</div>
+                    `;
+
+                    resultItem.appendChild(profilePic);
+                    resultItem.appendChild(userInfo);
+                    
+                    resultItem.onclick = () => {
+                        // Mostrar formulario de composición
+                        const compose = document.getElementById('sendMailCompose');
+                        const recipient = document.getElementById('sendMailRecipient');
+                        const messageText = document.getElementById('sendMailMessageText');
+                        
+                        if (compose && recipient && messageText) {
+                            compose.style.display = 'block';
+                            recipient.innerHTML = `Para: ${user.nombre || 'Sin nombre'} (${user.email || ''})`;
+                            messageText.value = '';
+                            messageText.focus();
+                            
+                            // Guardar ID del destinatario
+                            compose.dataset.recipientId = user.id;
+                            compose.dataset.recipientName = user.nombre || 'Sin nombre';
+                            compose.dataset.recipientEmail = user.email || '';
+                        }
+                    };
+
+                    resultsDiv.appendChild(resultItem);
+                }
+            } catch (error) {
+                console.error('Error al buscar usuarios:', error);
+                resultsDiv.innerHTML = '<div style="text-align: center; color: #f56565; padding: 20px;">Error al buscar usuarios.</div>';
+            }
+        };
+
+        // Función para enviar mensaje a un usuario
+        window.sendMailToUser = async function() {
+            if (!window.currentUser || window.currentUser.email !== 'mpenalvart1@educacion.navarra.es') {
+                return;
+            }
+
+            const compose = document.getElementById('sendMailCompose');
+            const messageText = document.getElementById('sendMailMessageText');
+            
+            if (!compose || !messageText) return;
+
+            const recipientId = compose.dataset.recipientId;
+            const recipientName = compose.dataset.recipientName;
+            const texto = messageText.value.trim();
+
+            if (!recipientId) {
+                alert('Por favor, selecciona un destinatario primero');
+                return;
+            }
+
+            if (!texto) {
+                alert('Por favor, escribe un mensaje');
+                return;
+            }
+
+            try {
+                // Obtener información del remitente
+                const remitenteDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                const remitenteData = remitenteDoc.exists() ? remitenteDoc.data() : {};
+                const nombreRemitente = remitenteData.nombre || window.currentUserName || 'Martin';
+
+                const messagesRef = collection(db, "mensajesCorreo");
+
+                // Si es "Para todos", enviar a todos los usuarios
+                if (recipientId === 'ALL_USERS') {
+                    const usuariosRef = collection(db, "usuarios");
+                    const usuariosSnapshot = await getDocs(usuariosRef);
+                    
+                    let sentCount = 0;
+                    const batch = writeBatch(db);
+                    let batchCount = 0;
+                    const BATCH_LIMIT = 500; // Límite de Firestore
+
+                    for (const userDoc of usuariosSnapshot.docs) {
+                        const userId = userDoc.id;
+                        // No enviar a uno mismo
+                        if (userId === window.currentUser.uid) continue;
+
+                        const messageRef = doc(messagesRef);
+                        batch.set(messageRef, {
+                            remitenteId: window.currentUser.uid,
+                            nombreRemitente: nombreRemitente,
+                            emailRemitente: window.currentUser.email,
+                            destinatarioId: userId,
+                            texto: texto,
+                            timestamp: Date.now(),
+                            leido: false
+                        });
+
+                        batchCount++;
+                        sentCount++;
+
+                        // Ejecutar batch cuando llegue al límite
+                        if (batchCount >= BATCH_LIMIT) {
+                            await batch.commit();
+                            batchCount = 0;
+                        }
+                    }
+
+                    // Ejecutar batch restante
+                    if (batchCount > 0) {
+                        await batch.commit();
+                    }
+
+                    alert(`✅ Mensaje enviado exitosamente a ${sentCount} usuarios`);
+                } else {
+                    // Enviar a un usuario específico
+                    await addDoc(messagesRef, {
+                        remitenteId: window.currentUser.uid,
+                        nombreRemitente: nombreRemitente,
+                        emailRemitente: window.currentUser.email,
+                        destinatarioId: recipientId,
+                        texto: texto,
+                        timestamp: Date.now(),
+                        leido: false
+                    });
+
+                    alert('✅ Mensaje enviado exitosamente');
+                }
+
+                messageText.value = '';
+                compose.style.display = 'none';
+                const results = document.getElementById('sendMailResults');
+                if (results) results.innerHTML = '';
+                const searchInput = document.getElementById('sendMailSearchInput');
+                if (searchInput) searchInput.value = '';
+
+                // Enviar notificación (si está implementado)
+                if (window.sendNotification && recipientId !== 'ALL_USERS') {
+                    await window.sendNotification(recipientId, 'Nuevo mensaje', `${nombreRemitente} te ha enviado un mensaje`);
+                }
+            } catch (error) {
+                console.error('Error al enviar mensaje:', error);
+                alert('Error al enviar el mensaje. Por favor, intenta de nuevo.');
+            }
+        };
+
+        // Función para cargar notificaciones del perfil
+        window.loadProfileNotifications = async function() {
+            if (!window.currentUser) return;
+
+            try {
+                const userId = window.currentUser.uid;
+                let totalNotifications = 0;
+
+                // 1. Verificar mensajes nuevos en el buzón de correo
+                const messagesRef = collection(db, "mensajesCorreo");
+                const messagesQuery = query(
+                    messagesRef,
+                    where("destinatarioId", "==", userId),
+                    where("leido", "==", false)
+                );
+                const messagesSnapshot = await getDocs(messagesQuery);
+                const unreadMessages = messagesSnapshot.size;
+                
+                if (unreadMessages > 0) {
+                    totalNotifications += unreadMessages;
+                    const mailboxBtn = document.getElementById('profileMailboxBtn');
+                    if (mailboxBtn) {
+                        mailboxBtn.classList.add('has-notifications');
+                        // Remover badge anterior si existe
+                        const existingBadge = mailboxBtn.querySelector('.notification-badge');
+                        if (existingBadge) existingBadge.remove();
+                        
+                        const badge = document.createElement('span');
+                        badge.className = 'notification-badge';
+                        badge.textContent = unreadMessages > 99 ? '99+' : unreadMessages.toString();
+                        mailboxBtn.appendChild(badge);
+                    }
+                } else {
+                    const mailboxBtn = document.getElementById('profileMailboxBtn');
+                    if (mailboxBtn) {
+                        mailboxBtn.classList.remove('has-notifications');
+                        const existingBadge = mailboxBtn.querySelector('.notification-badge');
+                        if (existingBadge) existingBadge.remove();
+                    }
+                }
+
+                // 2. Verificar likes y comentarios en fotos del usuario
+                // Primero obtener todas las fotos del usuario
+                const fotosRef = collection(db, "fotos");
+                const fotosQuery = query(fotosRef, where("userId", "==", userId));
+                const fotosSnapshot = await getDocs(fotosQuery);
+                
+                let unreadLikes = 0;
+                let unreadComments = 0;
+                const fotosIds = [];
+                
+                fotosSnapshot.forEach(docSnapshot => {
+                    fotosIds.push(docSnapshot.id);
+                });
+
+                if (fotosIds.length > 0) {
+                    // Verificar likes nuevos (likes que el usuario no ha visto)
+                    // Por simplicidad, contamos todos los likes en las fotos del usuario
+                    // En una implementación más avanzada, se podría rastrear qué likes ya se vieron
+                    const likesRef = collection(db, "fotoLikes");
+                    for (const fotoId of fotosIds) {
+                        const likesQuery = query(likesRef, where("fotoId", "==", fotoId));
+                        const likesSnapshot = await getDocs(likesQuery);
+                        unreadLikes += likesSnapshot.size;
+                    }
+
+                    // Verificar comentarios nuevos
+                    const commentsRef = collection(db, "fotoComentarios");
+                    for (const fotoId of fotosIds) {
+                        const commentsQuery = query(commentsRef, where("fotoId", "==", fotoId));
+                        const commentsSnapshot = await getDocs(commentsQuery);
+                        unreadComments += commentsSnapshot.size;
+                    }
+                }
+
+                // Mostrar badge en la sección de biblioteca si hay likes o comentarios
+                if (unreadLikes > 0 || unreadComments > 0) {
+                    const librarySection = document.getElementById('profileLibrarySection');
+                    if (librarySection) {
+                        librarySection.classList.add('has-notifications');
+                        // Remover badge anterior si existe
+                        const existingBadge = librarySection.querySelector('.notification-badge');
+                        if (existingBadge) existingBadge.remove();
+                        
+                        const badge = document.createElement('span');
+                        badge.className = 'notification-badge large';
+                        const totalInteractions = unreadLikes + unreadComments;
+                        badge.textContent = totalInteractions > 99 ? '99+' : totalInteractions.toString();
+                        badge.title = `${unreadLikes} likes, ${unreadComments} comentarios`;
+                        librarySection.appendChild(badge);
+                    }
+                } else {
+                    const librarySection = document.getElementById('profileLibrarySection');
+                    if (librarySection) {
+                        librarySection.classList.remove('has-notifications');
+                        const existingBadge = librarySection.querySelector('.notification-badge');
+                        if (existingBadge) existingBadge.remove();
+                    }
+                }
+
+                // 3. Verificar mensajes nuevos en chats
+                const chatMessagesRef = collection(db, "mensajes");
+                const chatMessagesQuery = query(
+                    chatMessagesRef,
+                    where("toUserId", "==", userId),
+                    where("read", "==", false)
+                );
+                const chatMessagesSnapshot = await getDocs(chatMessagesQuery);
+                const unreadChatMessages = chatMessagesSnapshot.size;
+
+                if (unreadChatMessages > 0) {
+                    const chatsSection = document.getElementById('profileChatsSection');
+                    if (chatsSection) {
+                        chatsSection.classList.add('has-notifications');
+                        // Remover badge anterior si existe
+                        const existingBadge = chatsSection.querySelector('.notification-badge');
+                        if (existingBadge) existingBadge.remove();
+                        
+                        const badge = document.createElement('span');
+                        badge.className = 'notification-badge large';
+                        badge.textContent = unreadChatMessages > 99 ? '99+' : unreadChatMessages.toString();
+                        badge.title = `${unreadChatMessages} mensajes no leídos`;
+                        // Agregar el badge al título
+                        const chatsTitle = chatsSection.querySelector('h3');
+                        if (chatsTitle) {
+                            chatsTitle.style.position = 'relative';
+                            chatsTitle.appendChild(badge);
+                        } else {
+                            chatsSection.appendChild(badge);
+                        }
+                    }
+                } else {
+                    const chatsSection = document.getElementById('profileChatsSection');
+                    if (chatsSection) {
+                        chatsSection.classList.remove('has-notifications');
+                        const existingBadge = chatsSection.querySelector('.notification-badge');
+                        if (existingBadge) existingBadge.remove();
+                    }
+                }
+
+                // 4. Verificar solicitudes de amistad pendientes
+                const userDoc = await getDoc(doc(db, "usuarios", userId));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const solicitudesRecibidas = userData.solicitudesRecibidas || [];
+                    
+                    if (solicitudesRecibidas.length > 0) {
+                        const inboxBtn = document.getElementById('profileInboxBtn');
+                        if (inboxBtn) {
+                            inboxBtn.classList.add('has-notifications');
+                            // Remover badge anterior si existe
+                            const existingBadge = inboxBtn.querySelector('.notification-badge');
+                            if (existingBadge) existingBadge.remove();
+                            
+                            const badge = document.createElement('span');
+                            badge.className = 'notification-badge';
+                            badge.textContent = solicitudesRecibidas.length > 99 ? '99+' : solicitudesRecibidas.length.toString();
+                            inboxBtn.appendChild(badge);
+                        }
+                    } else {
+                        const inboxBtn = document.getElementById('profileInboxBtn');
+                        if (inboxBtn) {
+                            inboxBtn.classList.remove('has-notifications');
+                            const existingBadge = inboxBtn.querySelector('.notification-badge');
+                            if (existingBadge) existingBadge.remove();
+                        }
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error al cargar notificaciones del perfil:', error);
             }
         };
 
@@ -9743,8 +11294,32 @@
                     const fotoId = await generateFotoId(imageBase64, window.currentUser.uid, index);
                     console.log(`Foto ${index} - fotoId generado:`, fotoId);
                     
+                    // Guardar fotoId en el elemento para poder encontrarlo después
+                    libraryItem.setAttribute('data-foto-id', fotoId);
+                    
+                    // Verificar si esta foto tiene interacciones (likes o comentarios)
+                    try {
+                        const likesRef = collection(db, "fotoLikes");
+                        const likesQuery = query(likesRef, where("fotoId", "==", fotoId));
+                        const likesSnapshot = await getDocs(likesQuery);
+                        const hasLikes = likesSnapshot.size > 0;
+                        
+                        const commentsRef = collection(db, "fotoComentarios");
+                        const commentsQuery = query(commentsRef, where("fotoId", "==", fotoId));
+                        const commentsSnapshot = await getDocs(commentsQuery);
+                        const hasComments = commentsSnapshot.size > 0;
+                        
+                        if (hasLikes || hasComments) {
+                            libraryItem.classList.add('has-interactions');
+                        }
+                    } catch (error) {
+                        console.error('Error al verificar interacciones:', error);
+                    }
+                    
                     libraryItem.onclick = async () => {
                         console.log('Click en foto, abriendo con fotoId:', fotoId);
+                        // Quitar el estilo de "has-interactions" al abrir la foto
+                        libraryItem.classList.remove('has-interactions');
                         await window.showLibraryImage(imageBase64, fotoId, window.currentUser.uid);
                     };
                     
@@ -10514,6 +12089,86 @@
                 // Focus en el input
                 if (chatInput) {
                     setTimeout(() => chatInput.focus(), 200);
+                    
+                    // Detectar cuando el usuario está escribiendo
+                    let typingTimeout;
+                    const typingChatId1 = `${window.currentUser.uid}_${friendId}`;
+                    const typingChatId2 = `${friendId}_${window.currentUser.uid}`;
+                    const typingFinalChatId = typingChatId1 < typingChatId2 ? typingChatId1 : typingChatId2;
+                    
+                    chatInput.addEventListener('input', async () => {
+                        // Actualizar estado de "escribiendo" en Firestore
+                        const typingRef = doc(db, "typingStatus", `${typingFinalChatId}_${window.currentUser.uid}`);
+                        await setDoc(typingRef, {
+                            isTyping: true,
+                            timestamp: Date.now()
+                        }, { merge: true });
+                        
+                        // Limpiar timeout anterior
+                        clearTimeout(typingTimeout);
+                        
+                        // Después de 3 segundos sin escribir, marcar como no escribiendo
+                        typingTimeout = setTimeout(async () => {
+                            await setDoc(typingRef, {
+                                isTyping: false,
+                                timestamp: Date.now()
+                            }, { merge: true });
+                        }, 3000);
+                    });
+                }
+                
+                // Escuchar cuando el amigo está escribiendo
+                const typingChatId1 = `${window.currentUser.uid}_${friendId}`;
+                const typingChatId2 = `${friendId}_${window.currentUser.uid}`;
+                const typingFinalChatId = typingChatId1 < typingChatId2 ? typingChatId1 : typingChatId2;
+                
+                const typingStatusRef = doc(db, "typingStatus", `${typingFinalChatId}_${friendId}`);
+                const typingUnsubscribe = onSnapshot(typingStatusRef, (docSnapshot) => {
+                    const messagesEl = document.getElementById('activeChatMessages');
+                    if (!messagesEl) return;
+                    
+                    // Remover indicador anterior si existe
+                    const existingTyping = messagesEl.querySelector('.typing-indicator');
+                    if (existingTyping) {
+                        existingTyping.remove();
+                    }
+                    
+                    if (docSnapshot.exists()) {
+                        const data = docSnapshot.data();
+                        // Verificar que el estado de "escribiendo" sea reciente (últimos 5 segundos)
+                        const isRecent = data.timestamp && (Date.now() - data.timestamp) < 5000;
+                        
+                        if (data.isTyping && isRecent) {
+                            // Mostrar indicador de escribiendo
+                            const typingIndicator = document.createElement('div');
+                            typingIndicator.className = 'typing-indicator';
+                            typingIndicator.innerHTML = `
+                                <span>${friendData.nombre || 'Amigo'} está escribiendo</span>
+                                <div class="typing-dots">
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                </div>
+                            `;
+                            messagesEl.appendChild(typingIndicator);
+                            
+                            // Scroll al final
+                            setTimeout(() => {
+                                messagesEl.scrollTop = messagesEl.scrollHeight;
+                            }, 100);
+                        }
+                    }
+                });
+                
+                // Guardar unsubscribe para limpiarlo después
+                if (chatUnsubscribe) {
+                    const oldUnsubscribe = chatUnsubscribe;
+                    chatUnsubscribe = () => {
+                        oldUnsubscribe();
+                        typingUnsubscribe();
+                    };
+                } else {
+                    chatUnsubscribe = typingUnsubscribe;
                 }
                 
                 // Marcar mensajes como leídos
@@ -10557,11 +12212,11 @@
                 } else {
                     // Obtener todos los mensajes y ordenarlos por timestamp
                     const messages = [];
-                    snapshot.forEach((doc) => {
-                        const messageData = doc.data();
+                    snapshot.forEach((docSnapshot) => {
+                        const messageData = docSnapshot.data();
                         messages.push({
                             ...messageData,
-                            id: doc.id
+                            id: docSnapshot.id
                         });
                     });
                     
@@ -10571,6 +12226,24 @@
                         const timeB = b.timestamp || 0;
                         return timeA - timeB;
                     });
+                    
+                    // Marcar todos los mensajes no leídos como leídos antes de mostrarlos
+                    const unreadMessages = messages.filter(msg => 
+                        msg.toUserId === window.currentUser.uid && !msg.read
+                    );
+                    
+                    if (unreadMessages.length > 0) {
+                        const batch = writeBatch(db);
+                        unreadMessages.forEach(msg => {
+                            const msgRef = doc(db, "mensajes", msg.id);
+                            batch.update(msgRef, { read: true });
+                        });
+                        try {
+                            await batch.commit();
+                        } catch (error) {
+                            console.error('Error al marcar mensajes como leídos:', error);
+                        }
+                    }
                     
                     // Mostrar mensajes ordenados
                     for (const messageData of messages) {
@@ -10582,6 +12255,11 @@
                 setTimeout(() => {
                     messagesEl.scrollTop = messagesEl.scrollHeight;
                 }, 100);
+
+                // Actualizar notificaciones después de cargar mensajes
+                if (window.loadProfileNotifications) {
+                    await window.loadProfileNotifications();
+                }
             } catch (error) {
                 console.error('Error al cargar mensajes:', error);
                 // Si hay error de índice, intentar sin orderBy
@@ -10682,6 +12360,22 @@
             time.className = 'active-chat-message-time';
             const date = messageData.timestamp ? new Date(messageData.timestamp) : new Date();
             time.textContent = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            
+            // Agregar indicador de leído solo para mensajes enviados
+            if (isSent) {
+                const readIndicator = document.createElement('span');
+                readIndicator.className = 'message-read-indicator';
+                if (messageData.read) {
+                    readIndicator.textContent = '✓✓';
+                    readIndicator.classList.add('read');
+                    readIndicator.title = 'Leído';
+                } else {
+                    readIndicator.textContent = '✓';
+                    readIndicator.title = 'Enviado';
+                }
+                time.appendChild(readIndicator);
+            }
+            
             content.appendChild(time);
             
             messageDiv.appendChild(picture);
@@ -10712,6 +12406,13 @@
                     timestamp: Date.now(),
                     read: false
                 });
+                
+                // Marcar como no escribiendo
+                const typingRef = doc(db, "typingStatus", `${finalChatId}_${window.currentUser.uid}`);
+                await setDoc(typingRef, {
+                    isTyping: false,
+                    timestamp: Date.now()
+                }, { merge: true });
                 
                 // Limpiar input
                 chatInput.value = '';
@@ -10893,6 +12594,10 @@
                             
                             const chatItem = document.createElement('div');
                             chatItem.className = 'chat-item';
+                            // Agregar clase si tiene mensajes no leídos
+                            if (unreadCount > 0) {
+                                chatItem.classList.add('has-unread');
+                            }
                             chatItem.onclick = () => {
                                 window.openChat(friendId, friendData);
                             };
@@ -10940,6 +12645,11 @@
                     } catch (error) {
                         console.error(`Error al cargar chat con ${friendId}:`, error);
                     }
+                }
+
+                // Actualizar notificaciones después de cargar chats
+                if (window.loadProfileNotifications) {
+                    await window.loadProfileNotifications();
                 }
             } catch (error) {
                 console.error('Error al cargar lista de chats:', error);
@@ -11484,6 +13194,215 @@
                 console.error("Error al obtener ranking: ", e);
                 return [];
             }
+        };
+
+        // ========== SISTEMA DE NOTIFICACIONES PUSH ==========
+        
+        // Registrar Service Worker para notificaciones
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    // Crear service worker inline
+                    const swCode = `
+                        self.addEventListener('install', (event) => {
+                            self.skipWaiting();
+                        });
+                        
+                        self.addEventListener('activate', (event) => {
+                            event.waitUntil(self.clients.claim());
+                        });
+                        
+                        self.addEventListener('notificationclick', (event) => {
+                            event.notification.close();
+                            event.waitUntil(
+                                clients.openWindow('/')
+                            );
+                        });
+                    `;
+                    
+                    const blob = new Blob([swCode], { type: 'application/javascript' });
+                    const swUrl = URL.createObjectURL(blob);
+                    
+                    const registration = await navigator.serviceWorker.register(swUrl);
+                    console.log('Service Worker registrado:', registration);
+                } catch (error) {
+                    console.error('Error al registrar Service Worker:', error);
+                }
+            });
+        }
+
+        // Solicitar permisos de notificaciones
+        window.requestNotificationPermission = async function() {
+            if (!('Notification' in window)) {
+                console.log('Este navegador no soporta notificaciones');
+                return false;
+            }
+
+            if (Notification.permission === 'granted') {
+                console.log('Permisos de notificaciones ya concedidos');
+                return true;
+            }
+
+            if (Notification.permission !== 'denied') {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    console.log('Permisos de notificaciones concedidos');
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        // Función para mostrar notificación
+        window.showNotification = function(title, options = {}) {
+            if (!('Notification' in window) || Notification.permission !== 'granted') {
+                return;
+            }
+
+            const notificationOptions = {
+                body: options.body || '',
+                icon: options.icon || 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg',
+                badge: 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg',
+                tag: options.tag || 'notification',
+                requireInteraction: options.requireInteraction || false,
+                ...options
+            };
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.showNotification(title, notificationOptions);
+                });
+            } else {
+                new Notification(title, notificationOptions);
+            }
+        };
+
+        // Configurar listeners para notificaciones en tiempo real
+        window.setupNotificationListeners = async function() {
+            if (!window.currentUser) return;
+
+            const userId = window.currentUser.uid;
+            let lastNotificationCheck = {
+                messages: 0,
+                likes: 0,
+                comments: 0,
+                requests: 0,
+                chatMessages: 0
+            };
+
+            // Verificar mensajes del buzón de correo
+            const messagesRef = collection(db, "mensajesCorreo");
+            const messagesQuery = query(
+                messagesRef,
+                where("destinatarioId", "==", userId),
+                where("leido", "==", false)
+            );
+            
+            onSnapshot(messagesQuery, (snapshot) => {
+                const unreadCount = snapshot.size;
+                if (unreadCount > lastNotificationCheck.messages) {
+                    const newMessages = unreadCount - lastNotificationCheck.messages;
+                    window.showNotification('📮 Nuevo mensaje', {
+                        body: `Tienes ${newMessages} nuevo${newMessages > 1 ? 's' : ''} mensaje${newMessages > 1 ? 's' : ''} en tu buzón`,
+                        tag: 'mailbox-message',
+                        requireInteraction: false
+                    });
+                }
+                lastNotificationCheck.messages = unreadCount;
+            });
+
+            // Verificar mensajes de chat
+            const chatMessagesRef = collection(db, "mensajes");
+            const chatMessagesQuery = query(
+                chatMessagesRef,
+                where("toUserId", "==", userId),
+                where("read", "==", false)
+            );
+            
+            onSnapshot(chatMessagesQuery, (snapshot) => {
+                const unreadChatCount = snapshot.size;
+                if (unreadChatCount > lastNotificationCheck.chatMessages) {
+                    const newChatMessages = unreadChatCount - lastNotificationCheck.chatMessages;
+                    window.showNotification('💬 Nuevo mensaje de chat', {
+                        body: `Tienes ${newChatMessages} nuevo${newChatMessages > 1 ? 's' : ''} mensaje${newChatMessages > 1 ? 's' : ''} de chat`,
+                        tag: 'chat-message',
+                        requireInteraction: false
+                    });
+                }
+                lastNotificationCheck.chatMessages = unreadChatCount;
+            });
+
+            // Verificar likes y comentarios en fotos
+            const fotosRef = collection(db, "fotos");
+            const fotosQuery = query(fotosRef, where("userId", "==", userId));
+            
+            onSnapshot(fotosQuery, async (fotosSnapshot) => {
+                const fotosIds = [];
+                fotosSnapshot.forEach(docSnapshot => {
+                    fotosIds.push(docSnapshot.id);
+                });
+
+                if (fotosIds.length > 0) {
+                    // Verificar likes
+                    const likesRef = collection(db, "fotoLikes");
+                    let totalLikes = 0;
+                    for (const fotoId of fotosIds) {
+                        const likesQuery = query(likesRef, where("fotoId", "==", fotoId));
+                        const likesSnapshot = await getDocs(likesQuery);
+                        totalLikes += likesSnapshot.size;
+                    }
+
+                    if (totalLikes > lastNotificationCheck.likes) {
+                        const newLikes = totalLikes - lastNotificationCheck.likes;
+                        window.showNotification('❤️ Nuevo like', {
+                            body: `Tu foto recibió ${newLikes} nuevo${newLikes > 1 ? 's' : ''} like${newLikes > 1 ? 's' : ''}`,
+                            tag: 'photo-like',
+                            requireInteraction: false
+                        });
+                    }
+                    lastNotificationCheck.likes = totalLikes;
+
+                    // Verificar comentarios
+                    const commentsRef = collection(db, "fotoComentarios");
+                    let totalComments = 0;
+                    for (const fotoId of fotosIds) {
+                        const commentsQuery = query(commentsRef, where("fotoId", "==", fotoId));
+                        const commentsSnapshot = await getDocs(commentsQuery);
+                        totalComments += commentsSnapshot.size;
+                    }
+
+                    if (totalComments > lastNotificationCheck.comments) {
+                        const newComments = totalComments - lastNotificationCheck.comments;
+                        window.showNotification('💬 Nuevo comentario', {
+                            body: `Tu foto recibió ${newComments} nuevo${newComments > 1 ? 's' : ''} comentario${newComments > 1 ? 's' : ''}`,
+                            tag: 'photo-comment',
+                            requireInteraction: false
+                        });
+                    }
+                    lastNotificationCheck.comments = totalComments;
+                }
+            });
+
+            // Verificar solicitudes de amistad
+            const userDocRef = doc(db, "usuarios", userId);
+            onSnapshot(userDocRef, (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    const userData = docSnapshot.data();
+                    const solicitudesRecibidas = userData.solicitudesRecibidas || [];
+                    const requestsCount = solicitudesRecibidas.length;
+
+                    if (requestsCount > lastNotificationCheck.requests) {
+                        const newRequests = requestsCount - lastNotificationCheck.requests;
+                        window.showNotification('👥 Nueva solicitud de amistad', {
+                            body: `Tienes ${newRequests} nueva${newRequests > 1 ? 's' : ''} solicitud${newRequests > 1 ? 'es' : ''} de amistad`,
+                            tag: 'friend-request',
+                            requireInteraction: false
+                        });
+                    }
+                    lastNotificationCheck.requests = requestsCount;
+                }
+            });
         };
     </script>
 </body>
