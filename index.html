@@ -11592,9 +11592,17 @@
 
         const profileInboxBtn = document.getElementById('profileInboxBtn');
         if (profileInboxBtn) {
-            profileInboxBtn.addEventListener('click', () => {
+            profileInboxBtn.addEventListener('click', async () => {
                 if (window.showInboxModal) {
-                    window.showInboxModal();
+                    await window.showInboxModal();
+                }
+                // Si es la cuenta de mpenalvart1, también abrir el modal de recomendaciones
+                if (window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                    const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
+                    if (recommendationsInboxModal && window.loadRecommendations) {
+                        recommendationsInboxModal.style.display = 'flex';
+                        await window.loadRecommendations();
+                    }
                 }
             });
         }
@@ -13793,14 +13801,17 @@
                     activeChat.style.display = 'none';
                 }
 
-                // Mostrar botón de correo solo para el creador
+                // Ocultar botón de correo de recomendaciones para mpenalvart1 (se combina con bandeja)
                 const recommendationsInboxBtn = document.getElementById('profileRecommendationsInboxBtn');
                 if (recommendationsInboxBtn && window.currentUser) {
-                    if (window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
-                        recommendationsInboxBtn.style.display = 'block';
-                    } else {
-                        recommendationsInboxBtn.style.display = 'none';
-                    }
+                    // Siempre ocultar para mpenalvart1, ya que se combina con la bandeja
+                    recommendationsInboxBtn.style.display = 'none';
+                }
+                
+                // Cambiar el texto del botón de bandeja para mpenalvart1
+                const profileInboxBtn = document.getElementById('profileInboxBtn');
+                if (profileInboxBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                    profileInboxBtn.textContent = '📬 Bandeja y Recomendaciones';
                 }
 
                 // Mostrar botón de enviar mensaje solo para mpenalvart1
@@ -13877,6 +13888,7 @@
                 const nombreUsuario = userData.nombre || window.currentUserName || 'Anónimo';
 
                 // Guardar recomendación en Firestore
+                // Todas las recomendaciones se envían a la cuenta de mpenalvart1@educacion.navarra.es
                 const recommendationsRef = collection(db, "recomendaciones");
                 await addDoc(recommendationsRef, {
                     texto: texto,
@@ -13884,7 +13896,7 @@
                     nombreUsuario: nombreUsuario,
                     emailUsuario: window.currentUser.email,
                     timestamp: Date.now(),
-                    destinatarioEmail: 'mpenalvart1@educacion.navarra.es'
+                    destinatarioEmail: 'mpenalvart1@educacion.navarra.es' // Todas las recomendaciones van a esta cuenta
                 });
 
                 alert('✅ Recomendación enviada exitosamente. ¡Gracias por tu feedback!');
@@ -17660,25 +17672,43 @@
         window.loadChatsList = async function() {
             if (!window.currentUser) return;
             
+            // Prevenir ejecuciones simultáneas
+            if (window.loadingChatsList) {
+                return;
+            }
+            window.loadingChatsList = true;
+            
             try {
                 const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
-                if (!userDoc.exists()) return;
+                if (!userDoc.exists()) {
+                    window.loadingChatsList = false;
+                    return;
+                }
                 
                 const amigos = userDoc.data().amigos || [];
                 const grupos = userDoc.data().grupos || [];
                 const chatsListEl = document.getElementById('chatsList');
                 const chatsSection = document.getElementById('profileChatsSection');
                 
-                if (!chatsListEl || !chatsSection) return;
+                if (!chatsListEl || !chatsSection) {
+                    window.loadingChatsList = false;
+                    return;
+                }
                 
                 if (amigos.length === 0 && grupos.length === 0) {
                     chatsSection.style.display = 'none';
+                    window.loadingChatsList = false;
                     return;
                 }
                 
                 // La sección de chats siempre debe estar visible si hay amigos o grupos
                 chatsSection.style.display = 'block';
+                
+                // Limpiar completamente la lista antes de agregar nuevos elementos
                 chatsListEl.innerHTML = '';
+                
+                // Usar un Set para rastrear chats ya agregados y evitar duplicados
+                const addedChats = new Set();
                 
                 // Obtener últimos mensajes de cada amigo
                 for (const friendId of amigos) {
@@ -17806,7 +17836,12 @@
                                 chatItem.appendChild(unread);
                             }
                             
-                            chatsListEl.appendChild(chatItem);
+                            // Verificar que no esté duplicado antes de agregar
+                            const chatKey = `friend_${friendId}`;
+                            if (!addedChats.has(chatKey)) {
+                                addedChats.add(chatKey);
+                                chatsListEl.appendChild(chatItem);
+                            }
                         }
                     } catch (error) {
                         console.error(`Error al cargar chat con ${friendId}:`, error);
@@ -17965,7 +18000,12 @@
                                 chatItem.appendChild(unread);
                             }
                             
-                            chatsListEl.appendChild(chatItem);
+                            // Verificar que no esté duplicado antes de agregar
+                            const groupChatKey = `group_${grupoId}`;
+                            if (!addedChats.has(groupChatKey)) {
+                                addedChats.add(groupChatKey);
+                                chatsListEl.appendChild(chatItem);
+                            }
                         }
                     } catch (error) {
                         console.error(`Error al cargar grupo ${grupoId}:`, error);
@@ -17978,6 +18018,9 @@
                 }
             } catch (error) {
                 console.error('Error al cargar lista de chats:', error);
+            } finally {
+                // Liberar el flag siempre, incluso si hay error
+                window.loadingChatsList = false;
             }
         };
 
