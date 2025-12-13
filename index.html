@@ -2969,7 +2969,8 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
             border: 3px solid white;
-            overflow: hidden;
+            overflow: visible;
+            position: relative;
         }
 
         .profile-picture-circle:hover {
@@ -2977,11 +2978,13 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
-        .profile-picture-circle img {
+        .profile-picture-circle > img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
+            position: relative;
+            z-index: 1;
         }
 
         .profile-picture-placeholder {
@@ -3094,15 +3097,19 @@
             justify-content: center;
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
             border: 5px solid white;
-            overflow: hidden;
+            overflow: visible;
+            position: relative;
         }
 
-        .profile-picture-large img {
+        .profile-picture-large > img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
+            position: relative;
+            z-index: 1;
         }
+
 
         .profile-picture-large-placeholder {
             font-size: 5em;
@@ -3125,6 +3132,1632 @@
         .profile-upload-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Selector de estilos para foto de perfil */
+        .profile-style-selector {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .profile-style-selector-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .profile-style-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .profile-style-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 3px solid transparent;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+        }
+
+        .profile-style-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-style-option.selected {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 4px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Botón de expandir estilos */
+        .profile-style-expand-btn,
+        .profile-decoration-expand-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 3px dashed #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .profile-decoration-expand-btn {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5em;
+        }
+
+        .profile-style-expand-btn:hover,
+        .profile-decoration-expand-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border-color: #764ba2;
+        }
+
+        /* Opciones adicionales ocultas */
+        .profile-style-options-extra,
+        .profile-decoration-options-extra {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            animation: fadeInExpand 0.3s ease;
+        }
+
+        .profile-decoration-options-extra {
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+        }
+
+        .profile-style-options-extra.show,
+        .profile-decoration-options-extra.show {
+            display: grid;
+        }
+
+        @keyframes fadeInExpand {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-style-option .style-preview {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Estilos de foto de perfil */
+        /* .profile-picture-style-classic usa los estilos por defecto */
+
+        .profile-picture-style-gold {
+            border-color: #ffd700 !important;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-gradient {
+            border: 5px solid transparent !important;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #667eea, #764ba2, #f093fb) border-box !important;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5) !important;
+        }
+
+        .profile-picture-style-neon {
+            border-color: #00ffff !important;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 
+                        0 0 40px rgba(0, 255, 255, 0.4),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-vintage {
+            border-color: #8b4513 !important;
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.5),
+                        inset 0 0 20px rgba(139, 69, 19, 0.2) !important;
+            filter: sepia(20%);
+        }
+
+        .profile-picture-style-rainbow {
+            border: 5px solid transparent !important;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3) border-box !important;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5) !important;
+        }
+
+        .profile-picture-style-diamond {
+            border-color: #c0c0c0 !important;
+            box-shadow: 0 0 30px rgba(192, 192, 192, 0.8),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-fire {
+            border-color: #ff4500 !important;
+            box-shadow: 0 0 25px rgba(255, 69, 0, 0.8),
+                        0 0 50px rgba(255, 140, 0, 0.4),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-ice {
+            border-color: #87ceeb !important;
+            box-shadow: 0 0 25px rgba(135, 206, 235, 0.8),
+                        0 0 50px rgba(173, 216, 230, 0.4),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-heart {
+            border-color: #ff69b4 !important;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.6),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-silver {
+            border-color: #a8a8a8 !important;
+            box-shadow: 0 0 20px rgba(168, 168, 168, 0.6),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-copper {
+            border-color: #b87333 !important;
+            box-shadow: 0 0 20px rgba(184, 115, 51, 0.6),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-emerald {
+            border-color: #50c878 !important;
+            box-shadow: 0 0 25px rgba(80, 200, 120, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-sapphire {
+            border-color: #0f52ba !important;
+            box-shadow: 0 0 25px rgba(15, 82, 186, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-ruby {
+            border-color: #e0115f !important;
+            box-shadow: 0 0 25px rgba(224, 17, 95, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-amethyst {
+            border-color: #9966cc !important;
+            box-shadow: 0 0 25px rgba(153, 102, 204, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-sunset {
+            border: 5px solid transparent !important;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #ff6b6b, #ffa500, #ffd700) border-box !important;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5) !important;
+        }
+
+        .profile-picture-style-ocean {
+            border: 5px solid transparent !important;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #006994, #00a8cc, #87ceeb) border-box !important;
+            box-shadow: 0 8px 25px rgba(0, 105, 148, 0.5) !important;
+        }
+
+        .profile-picture-style-forest {
+            border: 5px solid transparent !important;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #2d5016, #4a7c2a, #6ba84f) border-box !important;
+            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.5) !important;
+        }
+
+        .profile-picture-style-cosmic {
+            border-color: #8b00ff !important;
+            box-shadow: 0 0 30px rgba(139, 0, 255, 0.8),
+                        0 0 60px rgba(139, 0, 255, 0.4),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        /* Estilos animados */
+        .profile-picture-style-burning {
+            border-color: #ff4500 !important;
+            position: relative;
+            animation: burningEffect 2s ease-in-out infinite !important;
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.8),
+                        0 0 60px rgba(255, 140, 0, 0.6),
+                        0 0 90px rgba(255, 200, 0, 0.4),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-burning::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, 
+                rgba(255, 69, 0, 0.6) 0%,
+                rgba(255, 140, 0, 0.6) 25%,
+                rgba(255, 200, 0, 0.6) 50%,
+                rgba(255, 140, 0, 0.6) 75%,
+                rgba(255, 69, 0, 0.6) 100%);
+            background-size: 200% 200%;
+            animation: fireGradient 3s linear infinite;
+            z-index: -1;
+            filter: blur(8px);
+        }
+
+        .profile-particle.fire-particle {
+            font-size: 0.9em;
+            animation: fireFloatAround 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(255, 69, 0, 0.8));
+        }
+
+        @keyframes fireFloatAround {
+            0%, 100% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 0)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, -30px))) scale(1.2) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes burningEffect {
+            0%, 100% {
+                filter: brightness(1) contrast(1) hue-rotate(0deg);
+                transform: scale(1);
+            }
+            25% {
+                filter: brightness(1.2) contrast(1.1) hue-rotate(5deg);
+                transform: scale(1.02);
+            }
+            50% {
+                filter: brightness(1.1) contrast(1.15) hue-rotate(-5deg);
+                transform: scale(0.98);
+            }
+            75% {
+                filter: brightness(1.15) contrast(1.05) hue-rotate(3deg);
+                transform: scale(1.01);
+            }
+        }
+
+        @keyframes fireGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .profile-picture-style-pulse {
+            border-color: #667eea !important;
+            animation: pulseGlow 2s ease-in-out infinite !important;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6),
+                        0 0 40px rgba(102, 126, 234, 0.4),
+                        0 0 60px rgba(102, 126, 234, 0.2),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.6),
+                            0 0 40px rgba(102, 126, 234, 0.4),
+                            0 0 60px rgba(102, 126, 234, 0.2),
+                            0 8px 25px rgba(0, 0, 0, 0.3);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.8),
+                            0 0 60px rgba(102, 126, 234, 0.6),
+                            0 0 90px rgba(102, 126, 234, 0.4),
+                            0 8px 25px rgba(0, 0, 0, 0.3);
+                transform: scale(1.05);
+            }
+        }
+
+        .profile-picture-style-rainbow-animated {
+            border: 5px solid transparent !important;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3) border-box !important;
+            background-size: 300% 300% !important;
+            animation: rainbowRotate 3s linear infinite !important;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5) !important;
+        }
+
+        @keyframes rainbowRotate {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .profile-picture-style-shimmer {
+            border-color: #c0c0c0 !important;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(192, 192, 192, 0.8),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 30%,
+                rgba(255, 255, 255, 0.5) 50%,
+                transparent 70%);
+            animation: shimmerMove 3s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmerMove {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        .profile-picture-style-neon-pulse {
+            border-color: #00ffff !important;
+            animation: neonPulse 1.5s ease-in-out infinite !important;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 
+                        0 0 40px rgba(0, 255, 255, 0.6),
+                        0 0 60px rgba(0, 255, 255, 0.4),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 
+                            0 0 40px rgba(0, 255, 255, 0.6),
+                            0 0 60px rgba(0, 255, 255, 0.4),
+                            0 8px 25px rgba(0, 0, 0, 0.3);
+                filter: brightness(1);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(0, 255, 255, 1), 
+                            0 0 60px rgba(0, 255, 255, 0.8),
+                            0 0 90px rgba(0, 255, 255, 0.6),
+                            0 8px 25px rgba(0, 0, 0, 0.3);
+                filter: brightness(1.3);
+            }
+        }
+
+        .profile-picture-style-waves {
+            border-color: #00a8cc !important;
+            position: relative;
+            box-shadow: 0 0 25px rgba(0, 168, 204, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-waves::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 3px solid rgba(0, 168, 204, 0.6);
+            animation: waveExpand 2s ease-out infinite;
+            z-index: -1;
+        }
+
+        .profile-picture-style-waves::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 3px solid rgba(0, 168, 204, 0.4);
+            animation: waveExpand 2s ease-out infinite 0.5s;
+            z-index: -1;
+        }
+
+        @keyframes waveExpand {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        .profile-picture-style-electric {
+            border-color: #ffd700 !important;
+            animation: electricFlicker 0.1s linear infinite !important;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8),
+                        0 0 50px rgba(255, 215, 0, 0.6),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        @keyframes electricFlicker {
+            0%, 100% {
+                filter: brightness(1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+            }
+            25% {
+                filter: brightness(1.2) drop-shadow(0 0 10px rgba(255, 215, 0, 1));
+            }
+            50% {
+                filter: brightness(0.9) drop-shadow(0 0 3px rgba(255, 215, 0, 0.6));
+            }
+            75% {
+                filter: brightness(1.1) drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
+            }
+        }
+
+        .profile-picture-style-magma {
+            border-color: #ff4500 !important;
+            position: relative;
+            animation: magmaFlow 4s ease-in-out infinite !important;
+            box-shadow: 0 0 30px rgba(255, 69, 0, 0.8),
+                        0 0 60px rgba(255, 140, 0, 0.6),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-picture-style-magma::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, 
+                rgba(255, 69, 0, 0.8) 0%,
+                rgba(255, 140, 0, 0.8) 50%,
+                rgba(255, 200, 0, 0.8) 100%);
+            background-size: 200% 200%;
+            animation: magmaGradient 3s ease infinite;
+            z-index: -1;
+            filter: blur(10px);
+        }
+
+        @keyframes magmaFlow {
+            0%, 100% {
+                filter: brightness(1) hue-rotate(0deg);
+            }
+            50% {
+                filter: brightness(1.2) hue-rotate(10deg);
+            }
+        }
+
+        @keyframes magmaGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Contenedor para partículas animadas */
+        .profile-particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: visible;
+        }
+
+        .profile-particle {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Estilos con efectos de gotas y salpicaduras */
+        .profile-picture-style-rain {
+            border-color: #87ceeb !important;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 0 25px rgba(135, 206, 235, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-particle.rain-drop {
+            width: 3px;
+            height: 15px;
+            background: linear-gradient(to bottom, 
+                rgba(135, 206, 235, 0.8) 0%,
+                rgba(135, 206, 235, 0.4) 100%);
+            border-radius: 2px;
+            animation: dropFallAround 2s linear infinite;
+        }
+
+        @keyframes dropFall {
+            0% {
+                transform: translateY(0) scaleY(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(200px) scaleY(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes dropFallAround {
+            0% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) scaleY(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 0)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, 250px))) scaleY(0.5);
+                opacity: 0;
+            }
+        }
+
+        .profile-picture-style-splash {
+            border-color: #00a8cc !important;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 0 25px rgba(0, 168, 204, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-particle.splash {
+            width: 25px;
+            height: 12px;
+            background: radial-gradient(ellipse at center,
+                rgba(0, 168, 204, 0.6) 0%,
+                rgba(0, 168, 204, 0.3) 50%,
+                transparent 100%);
+            border-radius: 50%;
+            animation: splashEffectAround 2s ease-out infinite;
+        }
+
+        @keyframes splashEffect {
+            0% {
+                transform: translateX(-50%) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.5);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(-50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes splashEffectAround {
+            0% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 0)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, 0))) scale(1.5);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 0)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, 0))) scale(2);
+                opacity: 0;
+            }
+        }
+
+        .profile-picture-style-drops {
+            border-color: #4a90e2 !important;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 0 25px rgba(74, 144, 226, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-particle.drop-emoji {
+            font-size: 1em;
+            animation: dropFallEmojiAround 2s ease-in infinite;
+            filter: drop-shadow(0 2px 4px rgba(74, 144, 226, 0.5));
+        }
+
+        @keyframes dropFallEmoji {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(180px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes dropFallEmojiAround {
+            0% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 0)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, 200px))) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .profile-picture-style-particles {
+            border-color: #ffd700 !important;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-particle.particle-star {
+            font-size: 0.7em;
+            animation: particleFloatAround 3s ease-in-out infinite;
+        }
+
+        @keyframes particleFloat1 {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            25% {
+                transform: translateY(-15px) translateX(10px) rotate(90deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-30px) translateX(-10px) rotate(180deg);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translateY(-15px) translateX(5px) rotate(270deg);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes particleFloat2 {
+            0%, 100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0.7;
+            }
+            25% {
+                transform: translateY(-15px) translateX(-10px) rotate(-90deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-30px) translateX(10px) rotate(-180deg);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translateY(-15px) translateX(-5px) rotate(-270deg);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes particleFloatAround {
+            0%, 100% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) rotate(0deg);
+                opacity: 0.7;
+            }
+            25% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 15px)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, -15px))) rotate(90deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) - var(--particle-move-x, 15px)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, -30px))) rotate(180deg);
+                opacity: 0.8;
+            }
+            75% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 10px)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, -15px))) rotate(270deg);
+                opacity: 0.9;
+            }
+        }
+
+        .profile-picture-style-snow {
+            border-color: #e0f2fe !important;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 0 25px rgba(224, 242, 254, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-particle.snowflake {
+            font-size: 0.8em;
+            animation: snowFallAround 3s linear infinite;
+            filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.5));
+        }
+
+        @keyframes snowFall {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(200px) translateX(20px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes snowFallAround {
+            0% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 20px)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, 250px))) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .profile-picture-style-sparkles {
+            border-color: #fbbf24 !important;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-particle.sparkle {
+            font-size: 0.6em;
+            animation: sparkleFloatAround 2.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1) rotate(0deg);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(-25px) scale(1.3) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes sparkleFloatAround {
+            0%, 100% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) scale(1) rotate(0deg);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 10px)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, -25px))) scale(1.3) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        .profile-picture-style-bubbles {
+            border-color: #60a5fa !important;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 0 25px rgba(96, 165, 250, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-particle.bubble {
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(96, 165, 250, 0.6);
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%,
+                rgba(96, 165, 250, 0.4) 0%,
+                transparent 70%);
+            animation: bubbleRiseAround 3s ease-out infinite;
+        }
+
+        @keyframes bubbleRise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-100px) scale(1.2);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-200px) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes bubbleRiseAround {
+            0% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 0)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, -100px))) scale(1.2);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 0)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, -200px))) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .profile-picture-style-confetti {
+            border-color: #f472b6 !important;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 0 25px rgba(244, 114, 182, 0.7),
+                        0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .profile-particle.confetti {
+            font-size: 0.7em;
+            animation: confettiFallAround 2s ease-in infinite;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(180px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes confettiFallAround {
+            0% {
+                transform: translate(-50%, -50%) translate(var(--particle-offset-x, 0), var(--particle-offset-y, 0)) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) translate(calc(var(--particle-offset-x, 0) + var(--particle-move-x, 0)), calc(var(--particle-offset-y, 0) + var(--particle-move-y, 200px))) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Ajustar grosor de borde para círculo pequeño */
+        .profile-picture-circle.profile-picture-style-gold,
+        .profile-picture-circle.profile-picture-style-neon,
+        .profile-picture-circle.profile-picture-style-vintage,
+        .profile-picture-circle.profile-picture-style-diamond,
+        .profile-picture-circle.profile-picture-style-fire,
+        .profile-picture-circle.profile-picture-style-ice,
+        .profile-picture-circle.profile-picture-style-heart {
+            border-width: 3px !important;
+        }
+
+        .profile-picture-circle.profile-picture-style-gradient,
+        .profile-picture-circle.profile-picture-style-rainbow,
+        .profile-picture-circle.profile-picture-style-sunset,
+        .profile-picture-circle.profile-picture-style-ocean,
+        .profile-picture-circle.profile-picture-style-forest,
+        .profile-picture-circle.profile-picture-style-rainbow-animated {
+            border-width: 3px !important;
+        }
+
+        /* Asegurar que los estilos animados funcionen en círculo pequeño */
+        .profile-picture-circle.profile-picture-style-burning::before,
+        .profile-picture-circle.profile-picture-style-magma::before {
+            filter: blur(5px);
+        }
+
+        .profile-picture-circle.profile-picture-style-shimmer::after {
+            animation: shimmerMove 3s linear infinite;
+        }
+
+        .profile-picture-circle.profile-picture-style-waves::before,
+        .profile-picture-circle.profile-picture-style-waves::after {
+            border-width: 2px;
+        }
+
+        .profile-picture-circle.profile-picture-style-silver,
+        .profile-picture-circle.profile-picture-style-copper,
+        .profile-picture-circle.profile-picture-style-emerald,
+        .profile-picture-circle.profile-picture-style-sapphire,
+        .profile-picture-circle.profile-picture-style-ruby,
+        .profile-picture-circle.profile-picture-style-amethyst,
+        .profile-picture-circle.profile-picture-style-cosmic,
+        .profile-picture-circle.profile-picture-style-burning,
+        .profile-picture-circle.profile-picture-style-pulse,
+        .profile-picture-circle.profile-picture-style-rainbow-animated,
+        .profile-picture-circle.profile-picture-style-shimmer,
+        .profile-picture-circle.profile-picture-style-neon-pulse,
+        .profile-picture-circle.profile-picture-style-waves,
+        .profile-picture-circle.profile-picture-style-electric,
+        .profile-picture-circle.profile-picture-style-magma,
+        .profile-picture-circle.profile-picture-style-rain,
+        .profile-picture-circle.profile-picture-style-splash,
+        .profile-picture-circle.profile-picture-style-drops,
+        .profile-picture-circle.profile-picture-style-particles,
+        .profile-picture-circle.profile-picture-style-snow,
+        .profile-picture-circle.profile-picture-style-sparkles,
+        .profile-picture-circle.profile-picture-style-bubbles,
+        .profile-picture-circle.profile-picture-style-confetti {
+            border-width: 3px !important;
+        }
+
+        /* Ajustes para partículas en círculo pequeño */
+        .profile-picture-circle .profile-particle {
+            font-size: 0.5em;
+        }
+
+        .profile-picture-circle .profile-particle.rain-drop {
+            width: 2px;
+            height: 10px;
+        }
+
+        .profile-picture-circle .profile-particle.splash {
+            width: 15px;
+            height: 8px;
+        }
+
+        .profile-picture-circle .profile-particle.bubble {
+            width: 8px;
+            height: 8px;
+        }
+
+        @keyframes dropFallSmall {
+            0% {
+                transform: translateY(0) scaleY(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) scaleY(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes dropFallEmojiSmall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes snowFallSmall {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) translateX(10px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes bubbleRiseSmall {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-50px) scale(1.2);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        @keyframes confettiFallSmall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Animaciones de preview para los botones */
+        @keyframes burningPreview {
+            0%, 100% { filter: brightness(1) hue-rotate(0deg); transform: scale(1); }
+            50% { filter: brightness(1.2) hue-rotate(5deg); transform: scale(1.05); }
+        }
+
+        @keyframes pulsePreview {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes rainbowPreview {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes shimmerPreview {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes neonPreview {
+            0%, 100% { filter: brightness(1); box-shadow: 0 0 10px rgba(0,255,255,0.8); }
+            50% { filter: brightness(1.3); box-shadow: 0 0 20px rgba(0,255,255,1); }
+        }
+
+        @keyframes electricPreview {
+            0%, 100% { filter: brightness(1); }
+            25% { filter: brightness(1.2); }
+            50% { filter: brightness(0.9); }
+            75% { filter: brightness(1.1); }
+        }
+
+        @keyframes magmaPreview {
+            0% { background-position: 0% 50%; filter: brightness(1); }
+            50% { background-position: 100% 50%; filter: brightness(1.2); }
+            100% { background-position: 0% 50%; filter: brightness(1); }
+        }
+
+        /* Animaciones de preview para efectos de gotas y partículas */
+        @keyframes dropPreview {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(30px); opacity: 0; }
+        }
+
+        @keyframes splashPreview {
+            0% { transform: translateX(-50%) scale(0); opacity: 1; }
+            100% { transform: translateX(-50%) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes dropEmojiPreview {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(30px) rotate(180deg); opacity: 0; }
+        }
+
+        @keyframes particlePreview {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-10px) rotate(180deg); opacity: 1; }
+        }
+
+        @keyframes snowPreview {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(30px) rotate(180deg); opacity: 0; }
+        }
+
+        @keyframes sparklePreview {
+            0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.6; }
+            50% { transform: translateY(-10px) scale(1.2) rotate(90deg); opacity: 1; }
+        }
+
+        @keyframes bubblePreview {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
+        }
+
+        @keyframes confettiPreview {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(30px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Decoraciones de foto de perfil */
+        .profile-picture-large,
+        .profile-picture-circle,
+        .ranking-profile-picture {
+            position: relative;
+        }
+
+        .profile-decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+            user-select: none;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Orejas de gato - Círculo grande (150px) */
+        .profile-picture-large .decoration-cat-ears {
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-picture-large .decoration-cat-ears::before,
+        .profile-picture-large .decoration-cat-ears::after {
+            content: '🐱';
+            position: absolute;
+            font-size: 1.2em;
+            top: 0;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .profile-picture-large .decoration-cat-ears::before {
+            left: -35px;
+        }
+
+        .profile-picture-large .decoration-cat-ears::after {
+            right: -35px;
+        }
+
+        /* Orejas de perro - Círculo grande */
+        .profile-picture-large .decoration-dog-ears {
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-picture-large .decoration-dog-ears::before,
+        .profile-picture-large .decoration-dog-ears::after {
+            content: '🐶';
+            position: absolute;
+            font-size: 1.2em;
+            top: 0;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .profile-picture-large .decoration-dog-ears::before {
+            left: -35px;
+        }
+
+        .profile-picture-large .decoration-dog-ears::after {
+            right: -35px;
+        }
+
+        /* Orejas de conejo - Círculo grande */
+        .profile-picture-large .decoration-rabbit-ears {
+            top: -25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-picture-large .decoration-rabbit-ears::before,
+        .profile-picture-large .decoration-rabbit-ears::after {
+            content: '🐰';
+            position: absolute;
+            font-size: 1em;
+            top: 0;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .profile-picture-large .decoration-rabbit-ears::before {
+            left: -40px;
+        }
+
+        .profile-picture-large .decoration-rabbit-ears::after {
+            right: -40px;
+        }
+
+        /* Corona - Círculo grande */
+        .profile-picture-large .decoration-crown {
+            top: -12%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5em;
+            line-height: 1;
+            filter: drop-shadow(0 3px 6px rgba(255, 215, 0, 0.6));
+        }
+
+        /* Sombrero - Círculo grande */
+        .profile-picture-large .decoration-hat {
+            top: -18%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.2em;
+            line-height: 1;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Gafas - Círculo grande */
+        .profile-picture-large .decoration-glasses {
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Bigote - Círculo grande */
+        .profile-picture-large .decoration-mustache {
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8em;
+            line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Corazones flotantes - Círculo grande */
+        .profile-picture-large .decoration-hearts {
+            top: -8%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5em;
+            line-height: 1;
+            animation: floatHearts 2s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(255, 20, 147, 0.5));
+        }
+
+        @keyframes floatHearts {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-12px);
+            }
+        }
+
+        /* Estrellas - Círculo grande */
+        .profile-picture-large .decoration-stars {
+            top: -8%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5em;
+            line-height: 1;
+            animation: twinkleStars 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.5));
+        }
+
+        @keyframes twinkleStars {
+            0%, 100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: translateX(-50%) scale(1.3);
+            }
+        }
+
+        /* Antenas de alien - Círculo grande */
+        .profile-picture-large .decoration-alien {
+            top: -25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-picture-large .decoration-alien::before,
+        .profile-picture-large .decoration-alien::after {
+            content: '👽';
+            position: absolute;
+            font-size: 0.9em;
+            top: 0;
+            filter: drop-shadow(0 2px 4px rgba(0, 255, 0, 0.5));
+        }
+
+        .profile-picture-large .decoration-alien::before {
+            left: -30px;
+        }
+
+        .profile-picture-large .decoration-alien::after {
+            right: -30px;
+        }
+
+        /* Ajustes para círculo pequeño (60px) */
+        .profile-picture-circle .profile-decoration {
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Orejas de gato - Círculo pequeño */
+        .profile-picture-circle .decoration-cat-ears {
+            top: -25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-picture-circle .decoration-cat-ears::before,
+        .profile-picture-circle .decoration-cat-ears::after {
+            content: '🐱';
+            position: absolute;
+            font-size: 0.7em;
+            top: 0;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .profile-picture-circle .decoration-cat-ears::before {
+            left: -18px;
+        }
+
+        .profile-picture-circle .decoration-cat-ears::after {
+            right: -18px;
+        }
+
+        /* Orejas de perro - Círculo pequeño */
+        .profile-picture-circle .decoration-dog-ears {
+            top: -25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-picture-circle .decoration-dog-ears::before,
+        .profile-picture-circle .decoration-dog-ears::after {
+            content: '🐶';
+            position: absolute;
+            font-size: 0.7em;
+            top: 0;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .profile-picture-circle .decoration-dog-ears::before {
+            left: -18px;
+        }
+
+        .profile-picture-circle .decoration-dog-ears::after {
+            right: -18px;
+        }
+
+        /* Orejas de conejo - Círculo pequeño */
+        .profile-picture-circle .decoration-rabbit-ears {
+            top: -30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-picture-circle .decoration-rabbit-ears::before,
+        .profile-picture-circle .decoration-rabbit-ears::after {
+            content: '🐰';
+            position: absolute;
+            font-size: 0.6em;
+            top: 0;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .profile-picture-circle .decoration-rabbit-ears::before {
+            left: -20px;
+        }
+
+        .profile-picture-circle .decoration-rabbit-ears::after {
+            right: -20px;
+        }
+
+        /* Corona - Círculo pequeño */
+        .profile-picture-circle .decoration-crown {
+            top: -18%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            line-height: 1;
+            filter: drop-shadow(0 2px 3px rgba(255, 215, 0, 0.6));
+        }
+
+        /* Sombrero - Círculo pequeño */
+        .profile-picture-circle .decoration-hat {
+            top: -25%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1em;
+            line-height: 1;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Gafas - Círculo pequeño */
+        .profile-picture-circle .decoration-glasses {
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1em;
+            line-height: 1;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Bigote - Círculo pequeño */
+        .profile-picture-circle .decoration-mustache {
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9em;
+            line-height: 1;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Corazones flotantes - Círculo pequeño */
+        .profile-picture-circle .decoration-hearts {
+            top: -12%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            line-height: 1;
+            animation: floatHeartsSmall 2s ease-in-out infinite;
+            filter: drop-shadow(0 1px 2px rgba(255, 20, 147, 0.5));
+        }
+
+        @keyframes floatHeartsSmall {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-8px);
+            }
+        }
+
+        /* Estrellas - Círculo pequeño */
+        .profile-picture-circle .decoration-stars {
+            top: -12%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            line-height: 1;
+            animation: twinkleStarsSmall 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 1px 2px rgba(255, 215, 0, 0.5));
+        }
+
+        @keyframes twinkleStarsSmall {
+            0%, 100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: translateX(-50%) scale(1.2);
+            }
+        }
+
+        /* Antenas de alien - Círculo pequeño */
+        .profile-picture-circle .decoration-alien {
+            top: -30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: auto;
+        }
+
+        .profile-picture-circle .decoration-alien::before,
+        .profile-picture-circle .decoration-alien::after {
+            content: '👽';
+            position: absolute;
+            font-size: 0.5em;
+            top: 0;
+            filter: drop-shadow(0 1px 2px rgba(0, 255, 0, 0.5));
+        }
+
+        .profile-picture-circle .decoration-alien::before {
+            left: -15px;
+        }
+
+        .profile-picture-circle .decoration-alien::after {
+            right: -15px;
+        }
+
+        /* Nuevas decoraciones - Círculo grande */
+        .profile-picture-large .decoration-unicorn,
+        .profile-picture-large .decoration-panda,
+        .profile-picture-large .decoration-bear,
+        .profile-picture-large .decoration-fox,
+        .profile-picture-large .decoration-lion,
+        .profile-picture-large .decoration-tiger,
+        .profile-picture-large .decoration-cowboy,
+        .profile-picture-large .decoration-party,
+        .profile-picture-large .decoration-rocket,
+        .profile-picture-large .decoration-fire-emoji,
+        .profile-picture-large .decoration-lightning,
+        .profile-picture-large .decoration-rainbow-emoji,
+        .profile-picture-large .decoration-sun,
+        .profile-picture-large .decoration-moon,
+        .profile-picture-large .decoration-flower,
+        .profile-picture-large .decoration-butterfly {
+            top: -8%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5em;
+            line-height: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Decoraciones para ranking también */
+        .ranking-profile-picture .profile-decoration {
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Nuevas decoraciones - Círculo pequeño */
+        .profile-picture-circle .decoration-unicorn,
+        .profile-picture-circle .decoration-panda,
+        .profile-picture-circle .decoration-bear,
+        .profile-picture-circle .decoration-fox,
+        .profile-picture-circle .decoration-lion,
+        .profile-picture-circle .decoration-tiger,
+        .profile-picture-circle .decoration-cowboy,
+        .profile-picture-circle .decoration-party,
+        .profile-picture-circle .decoration-rocket,
+        .profile-picture-circle .decoration-fire-emoji,
+        .profile-picture-circle .decoration-lightning,
+        .profile-picture-circle .decoration-rainbow-emoji,
+        .profile-picture-circle .decoration-sun,
+        .profile-picture-circle .decoration-moon,
+        .profile-picture-circle .decoration-flower,
+        .profile-picture-circle .decoration-butterfly {
+            top: -12%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            line-height: 1;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+        }
+
+        /* Selector de decoraciones */
+        .profile-decoration-selector {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .profile-decoration-selector-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .profile-decoration-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .profile-decoration-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 3px solid transparent;
+            overflow: visible;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .profile-decoration-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-decoration-option.selected {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 4px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        .profile-decoration-option[data-decoration="none"] {
+            font-size: 1em;
         }
 
         .profile-info {
@@ -6643,6 +8276,175 @@
                         📷 Cambiar Foto
                     </label>
                     <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
+                    <div class="profile-style-selector">
+                        <label class="profile-style-selector-label">🎨 Estilo de Foto:</label>
+                        <div class="profile-style-options" id="profileStyleOptions">
+                            <div class="profile-style-option" data-style="classic" title="Clásico">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="gold" title="Dorado">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); border: 3px solid #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.6);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="gradient" title="Gradiente">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2, #f093fb); border: 3px solid transparent; box-shadow: 0 4px 15px rgba(102,126,234,0.5);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="neon" title="Neón">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #00ffff 0%, #0080ff 100%); border: 3px solid #00ffff; box-shadow: 0 0 20px rgba(0,255,255,0.8);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="vintage" title="Vintage">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%); border: 3px solid #8b4513; box-shadow: 0 4px 15px rgba(139,69,19,0.5);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="rainbow" title="Arcoíris">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); border: 3px solid transparent;"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="diamond" title="Diamante">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%); border: 3px solid #c0c0c0; box-shadow: 0 0 30px rgba(192,192,192,0.8);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="fire" title="Fuego">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #ff4500 0%, #ff8c00 100%); border: 3px solid #ff4500; box-shadow: 0 0 25px rgba(255,69,0,0.8);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="ice" title="Hielo">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #87ceeb 0%, #b0e0e6 100%); border: 3px solid #87ceeb; box-shadow: 0 0 25px rgba(135,206,235,0.8);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="heart" title="Corazón">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%); border: 3px solid #ff69b4; box-shadow: 0 0 20px rgba(255,105,180,0.6);"></div>
+                            </div>
+                            <div class="profile-style-expand-btn" id="profileStyleExpandBtn" title="Ver más estilos">+</div>
+                        </div>
+                        <div class="profile-style-options-extra" id="profileStyleOptionsExtra">
+                            <div class="profile-style-option" data-style="silver" title="Plata">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%); border: 3px solid #a8a8a8; box-shadow: 0 0 20px rgba(168,168,168,0.6);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="copper" title="Cobre">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #b87333 0%, #cd7f32 100%); border: 3px solid #b87333; box-shadow: 0 0 20px rgba(184,115,51,0.6);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="emerald" title="Esmeralda">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #50c878 0%, #00ff7f 100%); border: 3px solid #50c878; box-shadow: 0 0 25px rgba(80,200,120,0.7);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="sapphire" title="Zafiro">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #0f52ba 0%, #4169e1 100%); border: 3px solid #0f52ba; box-shadow: 0 0 25px rgba(15,82,186,0.7);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="ruby" title="Rubí">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #e0115f 0%, #ff0040 100%); border: 3px solid #e0115f; box-shadow: 0 0 25px rgba(224,17,95,0.7);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="amethyst" title="Amatista">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #9966cc 0%, #b19cd9 100%); border: 3px solid #9966cc; box-shadow: 0 0 25px rgba(153,102,204,0.7);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="sunset" title="Atardecer">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #ffa500, #ffd700); border: 3px solid transparent; box-shadow: 0 4px 15px rgba(255,107,107,0.5);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="ocean" title="Océano">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #006994, #00a8cc, #87ceeb); border: 3px solid transparent; box-shadow: 0 4px 15px rgba(0,105,148,0.5);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="forest" title="Bosque">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #2d5016, #4a7c2a, #6ba84f); border: 3px solid transparent; box-shadow: 0 4px 15px rgba(45,80,22,0.5);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="cosmic" title="Cósmico">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #1a0033, #4b0082, #8b00ff); border: 3px solid #8b00ff; box-shadow: 0 0 30px rgba(139,0,255,0.8);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="burning" title="🔥 Quemándose">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #ff4500, #ff8c00, #ffd700); border: 3px solid #ff4500; box-shadow: 0 0 20px rgba(255,69,0,0.8); animation: burningPreview 2s ease-in-out infinite;"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="pulse" title="💓 Pulso">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); border: 3px solid #667eea; box-shadow: 0 0 15px rgba(102,126,234,0.6); animation: pulsePreview 2s ease-in-out infinite;"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="rainbow-animated" title="🌈 Arcoíris Animado">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3); background-size: 300% 300%; border: 3px solid transparent; animation: rainbowPreview 3s linear infinite;"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="shimmer" title="✨ Brillo">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #c0c0c0, #e8e8e8); border: 3px solid #c0c0c0; box-shadow: 0 0 20px rgba(192,192,192,0.8); position: relative; overflow: hidden;">
+                                    <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%); animation: shimmerPreview 3s linear infinite;"></div>
+                                </div>
+                            </div>
+                            <div class="profile-style-option" data-style="neon-pulse" title="💡 Neón Parpadeante">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #00ffff, #0080ff); border: 3px solid #00ffff; box-shadow: 0 0 20px rgba(0,255,255,0.8); animation: neonPreview 1.5s ease-in-out infinite;"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="waves" title="🌊 Ondas">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #00a8cc, #87ceeb); border: 3px solid #00a8cc; box-shadow: 0 0 20px rgba(0,168,204,0.7);"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="electric" title="⚡ Eléctrico">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #ffd700, #ffed4e); border: 3px solid #ffd700; box-shadow: 0 0 20px rgba(255,215,0,0.8); animation: electricPreview 0.1s linear infinite;"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="magma" title="🌋 Magma">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #ff4500, #ff8c00, #ffd700); background-size: 200% 200%; border: 3px solid #ff4500; box-shadow: 0 0 20px rgba(255,69,0,0.8); animation: magmaPreview 3s ease infinite;"></div>
+                            </div>
+                            <div class="profile-style-option" data-style="rain" title="🌧️ Lluvia">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #87ceeb, #b0e0e6); border: 3px solid #87ceeb; box-shadow: 0 0 20px rgba(135,206,235,0.7); position: relative; overflow: visible;">
+                                    <div style="position: absolute; top: -20px; left: 20%; width: 3px; height: 15px; background: rgba(135,206,235,0.6); border-radius: 2px; animation: dropPreview 1.5s linear infinite;"></div>
+                                </div>
+                            </div>
+                            <div class="profile-style-option" data-style="splash" title="💦 Salpicadura">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #00a8cc, #87ceeb); border: 3px solid #00a8cc; box-shadow: 0 0 20px rgba(0,168,204,0.7); position: relative; overflow: visible;">
+                                    <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 20px; height: 10px; background: radial-gradient(ellipse, rgba(0,168,204,0.5) 0%, transparent 70%); border-radius: 50%; animation: splashPreview 2s ease-out infinite;"></div>
+                                </div>
+                            </div>
+                            <div class="profile-style-option" data-style="drops" title="💧 Gotas">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #4a90e2, #87ceeb); border: 3px solid #4a90e2; box-shadow: 0 0 20px rgba(74,144,226,0.7); position: relative; overflow: visible;">
+                                    <div style="position: absolute; top: -25px; left: 30%; font-size: 0.9em; animation: dropEmojiPreview 2s ease-in infinite;">💧</div>
+                                </div>
+                            </div>
+                            <div class="profile-style-option" data-style="particles" title="✨ Partículas">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #ffd700, #ffed4e); border: 3px solid #ffd700; box-shadow: 0 0 20px rgba(255,215,0,0.7); position: relative; overflow: visible;">
+                                    <div style="position: absolute; top: -15px; left: 25%; font-size: 0.7em; animation: particlePreview 3s ease-in-out infinite;">✨</div>
+                                </div>
+                            </div>
+                            <div class="profile-style-option" data-style="snow" title="❄️ Nieve">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #e0f2fe, #ffffff); border: 3px solid #e0f2fe; box-shadow: 0 0 20px rgba(224,242,254,0.7); position: relative; overflow: visible;">
+                                    <div style="position: absolute; top: -20px; left: 20%; font-size: 0.8em; animation: snowPreview 3s linear infinite;">❄️</div>
+                                </div>
+                            </div>
+                            <div class="profile-style-option" data-style="sparkles" title="⭐ Destellos">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #fcd34d); border: 3px solid #fbbf24; box-shadow: 0 0 20px rgba(251,191,36,0.7); position: relative; overflow: visible;">
+                                    <div style="position: absolute; top: -15px; left: 30%; font-size: 0.6em; animation: sparklePreview 2.5s ease-in-out infinite;">⭐</div>
+                                </div>
+                            </div>
+                            <div class="profile-style-option" data-style="bubbles" title="🫧 Burbujas">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #60a5fa, #93c5fd); border: 3px solid #60a5fa; box-shadow: 0 0 20px rgba(96,165,250,0.7); position: relative; overflow: visible;">
+                                    <div style="position: absolute; bottom: -12px; left: 25%; width: 12px; height: 12px; border: 2px solid rgba(96,165,250,0.6); border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(96,165,250,0.4) 0%, transparent 70%); animation: bubblePreview 3s ease-out infinite;"></div>
+                                </div>
+                            </div>
+                            <div class="profile-style-option" data-style="confetti" title="🎉 Confeti">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #f472b6, #f9a8d4); border: 3px solid #f472b6; box-shadow: 0 0 20px rgba(244,114,182,0.7); position: relative; overflow: visible;">
+                                    <div style="position: absolute; top: -20px; left: 30%; font-size: 0.7em; animation: confettiPreview 2s ease-in infinite;">🎉</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-decoration-selector">
+                        <label class="profile-decoration-selector-label">✨ Decoraciones:</label>
+                        <div class="profile-decoration-options" id="profileDecorationOptions">
+                            <div class="profile-decoration-option" data-decoration="none" title="Sin decoración">🚫</div>
+                            <div class="profile-decoration-option" data-decoration="cat-ears" title="Orejas de gato">🐱</div>
+                            <div class="profile-decoration-option" data-decoration="dog-ears" title="Orejas de perro">🐶</div>
+                            <div class="profile-decoration-option" data-decoration="rabbit-ears" title="Orejas de conejo">🐰</div>
+                            <div class="profile-decoration-option" data-decoration="crown" title="Corona">👑</div>
+                            <div class="profile-decoration-option" data-decoration="hat" title="Sombrero">🎩</div>
+                            <div class="profile-decoration-option" data-decoration="glasses" title="Gafas">🕶️</div>
+                            <div class="profile-decoration-option" data-decoration="mustache" title="Bigote">👨</div>
+                            <div class="profile-decoration-option" data-decoration="hearts" title="Corazones">❤️</div>
+                            <div class="profile-decoration-option" data-decoration="stars" title="Estrellas">⭐</div>
+                            <div class="profile-decoration-option" data-decoration="alien" title="Alien">👽</div>
+                            <div class="profile-decoration-expand-btn" id="profileDecorationExpandBtn" title="Ver más decoraciones">+</div>
+                        </div>
+                        <div class="profile-decoration-options-extra" id="profileDecorationOptionsExtra">
+                            <div class="profile-decoration-option" data-decoration="unicorn" title="Unicornio">🦄</div>
+                            <div class="profile-decoration-option" data-decoration="panda" title="Panda">🐼</div>
+                            <div class="profile-decoration-option" data-decoration="bear" title="Oso">🐻</div>
+                            <div class="profile-decoration-option" data-decoration="fox" title="Zorro">🦊</div>
+                            <div class="profile-decoration-option" data-decoration="lion" title="León">🦁</div>
+                            <div class="profile-decoration-option" data-decoration="tiger" title="Tigre">🐯</div>
+                            <div class="profile-decoration-option" data-decoration="cowboy" title="Cowboy">🤠</div>
+                            <div class="profile-decoration-option" data-decoration="party" title="Fiesta">🎉</div>
+                            <div class="profile-decoration-option" data-decoration="rocket" title="Cohete">🚀</div>
+                            <div class="profile-decoration-option" data-decoration="fire-emoji" title="Fuego">🔥</div>
+                            <div class="profile-decoration-option" data-decoration="lightning" title="Rayo">⚡</div>
+                            <div class="profile-decoration-option" data-decoration="rainbow-emoji" title="Arcoíris">🌈</div>
+                            <div class="profile-decoration-option" data-decoration="sun" title="Sol">☀️</div>
+                            <div class="profile-decoration-option" data-decoration="moon" title="Luna">🌙</div>
+                            <div class="profile-decoration-option" data-decoration="flower" title="Flor">🌸</div>
+                            <div class="profile-decoration-option" data-decoration="butterfly" title="Mariposa">🦋</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="profile-info">
                     <div class="profile-info-item">
@@ -6975,7 +8777,7 @@
                 <button class="difficulty-btn easy" id="easyBtn">🟢 Fácil<br><small>Países de Europa</small></button>
                 <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
                 <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
-                <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Tribus y pueblos indígenas</small></button>
+                <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -7057,74 +8859,74 @@
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
-            { name: { common: "España" }, cca2: "ES" },
-            { name: { common: "Francia" }, cca2: "FR" },
-            { name: { common: "Alemania" }, cca2: "DE" },
-            { name: { common: "Italia" }, cca2: "IT" },
-            { name: { common: "Reino Unido" }, cca2: "GB" },
-            { name: { common: "Estados Unidos" }, cca2: "US" },
-            { name: { common: "México" }, cca2: "MX" },
-            { name: { common: "Argentina" }, cca2: "AR" },
-            { name: { common: "Brasil" }, cca2: "BR" },
-            { name: { common: "Chile" }, cca2: "CL" },
-            { name: { common: "Colombia" }, cca2: "CO" },
-            { name: { common: "Perú" }, cca2: "PE" },
-            { name: { common: "Venezuela" }, cca2: "VE" },
-            { name: { common: "Ecuador" }, cca2: "EC" },
-            { name: { common: "Uruguay" }, cca2: "UY" },
-            { name: { common: "Paraguay" }, cca2: "PY" },
-            { name: { common: "Bolivia" }, cca2: "BO" },
-            { name: { common: "Cuba" }, cca2: "CU" },
-            { name: { common: "República Dominicana" }, cca2: "DO" },
-            { name: { common: "Panamá" }, cca2: "PA" },
-            { name: { common: "Costa Rica" }, cca2: "CR" },
-            { name: { common: "Guatemala" }, cca2: "GT" },
-            { name: { common: "Honduras" }, cca2: "HN" },
-            { name: { common: "El Salvador" }, cca2: "SV" },
-            { name: { common: "Nicaragua" }, cca2: "NI" },
-            { name: { common: "Japón" }, cca2: "JP" },
-            { name: { common: "China" }, cca2: "CN" },
-            { name: { common: "India" }, cca2: "IN" },
-            { name: { common: "Rusia" }, cca2: "RU" },
-            { name: { common: "Canadá" }, cca2: "CA" },
-            { name: { common: "Australia" }, cca2: "AU" },
-            { name: { common: "Nueva Zelanda" }, cca2: "NZ" },
-            { name: { common: "Sudáfrica" }, cca2: "ZA" },
-            { name: { common: "Egipto" }, cca2: "EG" },
-            { name: { common: "Marruecos" }, cca2: "MA" },
-            { name: { common: "Turquía" }, cca2: "TR" },
-            { name: { common: "Grecia" }, cca2: "GR" },
-            { name: { common: "Portugal" }, cca2: "PT" },
-            { name: { common: "Países Bajos" }, cca2: "NL" },
-            { name: { common: "Bélgica" }, cca2: "BE" },
-            { name: { common: "Suiza" }, cca2: "CH" },
-            { name: { common: "Austria" }, cca2: "AT" },
-            { name: { common: "Suecia" }, cca2: "SE" },
-            { name: { common: "Noruega" }, cca2: "NO" },
-            { name: { common: "Dinamarca" }, cca2: "DK" },
-            { name: { common: "Finlandia" }, cca2: "FI" },
-            { name: { common: "Polonia" }, cca2: "PL" },
-            { name: { common: "República Checa" }, cca2: "CZ" },
-            { name: { common: "Hungría" }, cca2: "HU" },
-            { name: { common: "Rumania" }, cca2: "RO" },
-            { name: { common: "Bulgaria" }, cca2: "BG" },
-            { name: { common: "Croacia" }, cca2: "HR" },
-            { name: { common: "Serbia" }, cca2: "RS" },
-            { name: { common: "Ucrania" }, cca2: "UA" },
-            { name: { common: "Israel" }, cca2: "IL" },
-            { name: { common: "Arabia Saudí" }, cca2: "SA" },
-            { name: { common: "Irán" }, cca2: "IR" },
-            { name: { common: "Irak" }, cca2: "IQ" },
-            { name: { common: "Pakistán" }, cca2: "PK" },
-            { name: { common: "Bangladesh" }, cca2: "BD" },
-            { name: { common: "Tailandia" }, cca2: "TH" },
-            { name: { common: "Vietnam" }, cca2: "VN" },
-            { name: { common: "Corea del Sur" }, cca2: "KR" },
-            { name: { common: "Corea del Norte" }, cca2: "KP" },
-            { name: { common: "Filipinas" }, cca2: "PH" },
-            { name: { common: "Indonesia" }, cca2: "ID" },
-            { name: { common: "Malasia" }, cca2: "MY" },
-            { name: { common: "Singapur" }, cca2: "SG" }
+            { name: { common: "España" }, cca2: "ES", capital: ["Madrid"] },
+            { name: { common: "Francia" }, cca2: "FR", capital: ["Paris"] },
+            { name: { common: "Alemania" }, cca2: "DE", capital: ["Berlin"] },
+            { name: { common: "Italia" }, cca2: "IT", capital: ["Rome"] },
+            { name: { common: "Reino Unido" }, cca2: "GB", capital: ["London"] },
+            { name: { common: "Estados Unidos" }, cca2: "US", capital: ["Washington, D.C."] },
+            { name: { common: "México" }, cca2: "MX", capital: ["Mexico City"] },
+            { name: { common: "Argentina" }, cca2: "AR", capital: ["Buenos Aires"] },
+            { name: { common: "Brasil" }, cca2: "BR", capital: ["Brasília"] },
+            { name: { common: "Chile" }, cca2: "CL", capital: ["Santiago"] },
+            { name: { common: "Colombia" }, cca2: "CO", capital: ["Bogotá"] },
+            { name: { common: "Perú" }, cca2: "PE", capital: ["Lima"] },
+            { name: { common: "Venezuela" }, cca2: "VE", capital: ["Caracas"] },
+            { name: { common: "Ecuador" }, cca2: "EC", capital: ["Quito"] },
+            { name: { common: "Uruguay" }, cca2: "UY", capital: ["Montevideo"] },
+            { name: { common: "Paraguay" }, cca2: "PY", capital: ["Asunción"] },
+            { name: { common: "Bolivia" }, cca2: "BO", capital: ["Sucre"] },
+            { name: { common: "Cuba" }, cca2: "CU", capital: ["Havana"] },
+            { name: { common: "República Dominicana" }, cca2: "DO", capital: ["Santo Domingo"] },
+            { name: { common: "Panamá" }, cca2: "PA", capital: ["Panama City"] },
+            { name: { common: "Costa Rica" }, cca2: "CR", capital: ["San José"] },
+            { name: { common: "Guatemala" }, cca2: "GT", capital: ["Guatemala City"] },
+            { name: { common: "Honduras" }, cca2: "HN", capital: ["Tegucigalpa"] },
+            { name: { common: "El Salvador" }, cca2: "SV", capital: ["San Salvador"] },
+            { name: { common: "Nicaragua" }, cca2: "NI", capital: ["Managua"] },
+            { name: { common: "Japón" }, cca2: "JP", capital: ["Tokyo"] },
+            { name: { common: "China" }, cca2: "CN", capital: ["Beijing"] },
+            { name: { common: "India" }, cca2: "IN", capital: ["New Delhi"] },
+            { name: { common: "Rusia" }, cca2: "RU", capital: ["Moscow"] },
+            { name: { common: "Canadá" }, cca2: "CA", capital: ["Ottawa"] },
+            { name: { common: "Australia" }, cca2: "AU", capital: ["Canberra"] },
+            { name: { common: "Nueva Zelanda" }, cca2: "NZ", capital: ["Wellington"] },
+            { name: { common: "Sudáfrica" }, cca2: "ZA", capital: ["Cape Town"] },
+            { name: { common: "Egipto" }, cca2: "EG", capital: ["Cairo"] },
+            { name: { common: "Marruecos" }, cca2: "MA", capital: ["Rabat"] },
+            { name: { common: "Turquía" }, cca2: "TR", capital: ["Ankara"] },
+            { name: { common: "Grecia" }, cca2: "GR", capital: ["Athens"] },
+            { name: { common: "Portugal" }, cca2: "PT", capital: ["Lisbon"] },
+            { name: { common: "Países Bajos" }, cca2: "NL", capital: ["Amsterdam"] },
+            { name: { common: "Bélgica" }, cca2: "BE", capital: ["Brussels"] },
+            { name: { common: "Suiza" }, cca2: "CH", capital: ["Bern"] },
+            { name: { common: "Austria" }, cca2: "AT", capital: ["Vienna"] },
+            { name: { common: "Suecia" }, cca2: "SE", capital: ["Stockholm"] },
+            { name: { common: "Noruega" }, cca2: "NO", capital: ["Oslo"] },
+            { name: { common: "Dinamarca" }, cca2: "DK", capital: ["Copenhagen"] },
+            { name: { common: "Finlandia" }, cca2: "FI", capital: ["Helsinki"] },
+            { name: { common: "Polonia" }, cca2: "PL", capital: ["Warsaw"] },
+            { name: { common: "República Checa" }, cca2: "CZ", capital: ["Prague"] },
+            { name: { common: "Hungría" }, cca2: "HU", capital: ["Budapest"] },
+            { name: { common: "Rumania" }, cca2: "RO", capital: ["Bucharest"] },
+            { name: { common: "Bulgaria" }, cca2: "BG", capital: ["Sofia"] },
+            { name: { common: "Croacia" }, cca2: "HR", capital: ["Zagreb"] },
+            { name: { common: "Serbia" }, cca2: "RS", capital: ["Belgrade"] },
+            { name: { common: "Ucrania" }, cca2: "UA", capital: ["Kyiv"] },
+            { name: { common: "Israel" }, cca2: "IL", capital: ["Jerusalem"] },
+            { name: { common: "Arabia Saudí" }, cca2: "SA", capital: ["Riyadh"] },
+            { name: { common: "Irán" }, cca2: "IR", capital: ["Tehran"] },
+            { name: { common: "Irak" }, cca2: "IQ", capital: ["Baghdad"] },
+            { name: { common: "Pakistán" }, cca2: "PK", capital: ["Islamabad"] },
+            { name: { common: "Bangladesh" }, cca2: "BD", capital: ["Dhaka"] },
+            { name: { common: "Tailandia" }, cca2: "TH", capital: ["Bangkok"] },
+            { name: { common: "Vietnam" }, cca2: "VN", capital: ["Hanoi"] },
+            { name: { common: "Corea del Sur" }, cca2: "KR", capital: ["Seoul"] },
+            { name: { common: "Corea del Norte" }, cca2: "KP", capital: ["Pyongyang"] },
+            { name: { common: "Filipinas" }, cca2: "PH", capital: ["Manila"] },
+            { name: { common: "Indonesia" }, cca2: "ID", capital: ["Jakarta"] },
+            { name: { common: "Malasia" }, cca2: "MY", capital: ["Kuala Lumpur"] },
+            { name: { common: "Singapur" }, cca2: "SG", capital: ["Singapore"] }
         ];
 
         // Aplicar filtro según dificultad
@@ -7936,11 +9738,26 @@
                 availableCountries.splice(randomIndex, 1);
             } else {
                 // Modos normales: selección aleatoria con repetición
-                if (countries.length === 0) return;
+                if (countries.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay países disponibles para este modo. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    console.error('Error: No hay países disponibles en el modo', difficulty);
+                    return;
+                }
                 
                 // Seleccionar país aleatorio
                 const randomIndex = Math.floor(Math.random() * countries.length);
                 currentCountry = countries[randomIndex];
+                
+                // Verificar que el país seleccionado sea válido
+                if (!currentCountry || !currentCountry.name || !currentCountry.name.common) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ Error al seleccionar país. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    console.error('Error: País seleccionado no es válido', currentCountry);
+                    return;
+                }
             }
 
             // Detener temporizador anterior
@@ -8996,6 +10813,13 @@
         // Manejar selección de opción
         function selectOption(optionNumber) {
             if (answered) return;
+            
+            // Verificar que currentCountry esté definido
+            if (!currentCountry || !currentCountry.name || !currentCountry.name.common) {
+                console.error('Error: currentCountry no está definido');
+                alert('Error: No hay país seleccionado. Por favor, recarga la página.');
+                return;
+            }
 
             // Detener temporizador
             stopTimer();
@@ -9968,6 +11792,131 @@
             });
         }
         
+        // Event listeners para selector de estilos de foto de perfil
+        const profileStyleOptions = document.getElementById('profileStyleOptions');
+        if (profileStyleOptions) {
+            profileStyleOptions.addEventListener('click', async (e) => {
+                const styleOption = e.target.closest('.profile-style-option');
+                if (styleOption) {
+                    const selectedStyle = styleOption.dataset.style;
+                    
+                    // Actualizar selección visual
+                    const allOptions = profileStyleOptions.querySelectorAll('.profile-style-option');
+                    allOptions.forEach(option => option.classList.remove('selected'));
+                    styleOption.classList.add('selected');
+                    
+                    // Guardar estilo
+                    if (window.saveProfilePictureStyle) {
+                        const success = await window.saveProfilePictureStyle(selectedStyle);
+                        if (success) {
+                            // Actualizar también la foto de perfil pequeña
+                            if (window.loadProfilePicture) {
+                                await window.loadProfilePicture();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Event listeners para selector de decoraciones de foto de perfil
+        const profileDecorationOptions = document.getElementById('profileDecorationOptions');
+        const profileDecorationOptionsExtra = document.getElementById('profileDecorationOptionsExtra');
+        if (profileDecorationOptions) {
+            profileDecorationOptions.addEventListener('click', async (e) => {
+                const decorationOption = e.target.closest('.profile-decoration-option');
+                if (decorationOption) {
+                    const selectedDecoration = decorationOption.dataset.decoration;
+                    
+                    // Actualizar selección visual (incluyendo opciones extra)
+                    const allOptions = document.querySelectorAll('.profile-decoration-option');
+                    allOptions.forEach(option => option.classList.remove('selected'));
+                    decorationOption.classList.add('selected');
+                    
+                    // Guardar decoración
+                    if (window.saveProfilePictureDecoration) {
+                        const success = await window.saveProfilePictureDecoration(selectedDecoration);
+                        if (success) {
+                            // Actualizar también la foto de perfil pequeña
+                            if (window.loadProfilePicture) {
+                                await window.loadProfilePicture();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Event listener para opciones extra de decoraciones
+        if (profileDecorationOptionsExtra) {
+            profileDecorationOptionsExtra.addEventListener('click', async (e) => {
+                const decorationOption = e.target.closest('.profile-decoration-option');
+                if (decorationOption) {
+                    const selectedDecoration = decorationOption.dataset.decoration;
+                    
+                    // Actualizar selección visual (incluyendo opciones principales)
+                    const allOptions = document.querySelectorAll('.profile-decoration-option');
+                    allOptions.forEach(option => option.classList.remove('selected'));
+                    decorationOption.classList.add('selected');
+                    
+                    // Guardar decoración
+                    if (window.saveProfilePictureDecoration) {
+                        const success = await window.saveProfilePictureDecoration(selectedDecoration);
+                        if (success) {
+                            // Actualizar también la foto de perfil pequeña
+                            if (window.loadProfilePicture) {
+                                await window.loadProfilePicture();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Event listeners para botones de expansión
+        const profileStyleExpandBtn = document.getElementById('profileStyleExpandBtn');
+        const profileStyleOptionsExtra = document.getElementById('profileStyleOptionsExtra');
+        if (profileStyleExpandBtn && profileStyleOptionsExtra) {
+            profileStyleExpandBtn.addEventListener('click', () => {
+                profileStyleOptionsExtra.classList.toggle('show');
+                profileStyleExpandBtn.textContent = profileStyleOptionsExtra.classList.contains('show') ? '−' : '+';
+            });
+        }
+
+        const profileDecorationExpandBtn = document.getElementById('profileDecorationExpandBtn');
+        if (profileDecorationExpandBtn && profileDecorationOptionsExtra) {
+            profileDecorationExpandBtn.addEventListener('click', () => {
+                profileDecorationOptionsExtra.classList.toggle('show');
+                profileDecorationExpandBtn.textContent = profileDecorationOptionsExtra.classList.contains('show') ? '−' : '+';
+            });
+        }
+
+        // Event listener para opciones extra de estilos
+        if (profileStyleOptionsExtra) {
+            profileStyleOptionsExtra.addEventListener('click', async (e) => {
+                const styleOption = e.target.closest('.profile-style-option');
+                if (styleOption) {
+                    const selectedStyle = styleOption.dataset.style;
+                    
+                    // Actualizar selección visual (incluyendo opciones principales)
+                    const allOptions = document.querySelectorAll('.profile-style-option');
+                    allOptions.forEach(option => option.classList.remove('selected'));
+                    styleOption.classList.add('selected');
+                    
+                    // Guardar estilo
+                    if (window.saveProfilePictureStyle) {
+                        const success = await window.saveProfilePictureStyle(selectedStyle);
+                        if (success) {
+                            // Actualizar también la foto de perfil pequeña
+                            if (window.loadProfilePicture) {
+                                await window.loadProfilePicture();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
         // Hacer funciones disponibles globalmente
         window.updateUserDisplay = updateUserDisplay;
         window.loadMainRanking = loadMainRanking;
@@ -10060,7 +12009,7 @@
                         roleEl.textContent = 'Creador de Banderas';
                     }
                     if (descEl) {
-                        descEl.innerHTML = 'Hola! Soy Martin, el creador de Creador de Banderas 😎<br><br>Hice este juego para que te diviertas aprendiendo banderas del mundo, y de paso puedas: publicar fotos, comentar imágenes, agregar amigos, molestar un poquito a tus colegas en sus fotos y, claro, presumir tus puntuaciones como todo un campeón 🏆.<br><br>¡Jajaja, que lo disfrutes y que el juego te divierta tanto como a mí crearlo! 🎮✨';
+                        descEl.innerHTML = 'Hola! Soy Martin, el creador de este juego de adivinar banderas 😎<br><br>Hice este juego para que te diviertas aprendiendo banderas del mundo, y de paso puedas: publicar fotos, comentar imágenes, agregar amigos, molestar un poquito a tus colegas en sus fotos y, claro, presumir tus puntuaciones como todo un campeón 🏆.<br><br>¡Jajaja, que lo disfrutes y que el juego te divierta tanto como a mí crearlo! 🎮✨';
                     }
                 } else {
                     console.log('Usuario creador no encontrado');
@@ -10249,6 +12198,42 @@
                 const userDocRef = doc(db, "usuarios", window.currentUser.uid);
                 const userDoc = await getDoc(userDocRef);
                 
+                // Obtener estilo de foto de perfil (por defecto 'classic')
+                const profileStyle = userDoc.exists() && userDoc.data().profilePictureStyle 
+                    ? userDoc.data().profilePictureStyle 
+                    : 'classic';
+                
+                // Obtener decoración de foto de perfil (por defecto 'none')
+                const profileDecoration = userDoc.exists() && userDoc.data().profilePictureDecoration 
+                    ? userDoc.data().profilePictureDecoration 
+                    : 'none';
+                
+                // Aplicar estilo al círculo pequeño
+                const smallCircle = document.getElementById('profilePictureCircle');
+                if (smallCircle) {
+                    smallCircle.className = 'profile-picture-circle';
+                    if (profileStyle !== 'classic') {
+                        smallCircle.classList.add(`profile-picture-style-${profileStyle}`);
+                        // Crear partículas si el estilo las necesita
+                        createParticlesAround(smallCircle, profileStyle);
+                    }
+                    // Aplicar decoración
+                    applyDecoration(smallCircle, profileDecoration);
+                }
+                
+                // Aplicar estilo al círculo grande
+                const largeCircle = document.getElementById('profilePictureLarge');
+                if (largeCircle) {
+                    largeCircle.className = 'profile-picture-large';
+                    if (profileStyle !== 'classic') {
+                        largeCircle.classList.add(`profile-picture-style-${profileStyle}`);
+                        // Crear partículas si el estilo las necesita
+                        createParticlesAround(largeCircle, profileStyle);
+                    }
+                    // Aplicar decoración
+                    applyDecoration(largeCircle, profileDecoration);
+                }
+                
                 if (userDoc.exists() && userDoc.data().fotoPerfil) {
                     const fotoBase64 = userDoc.data().fotoPerfil;
                     
@@ -10279,6 +12264,211 @@
             }
         };
 
+        // Función para crear partículas distribuidas alrededor de la imagen
+        function createParticlesAround(containerElement, style) {
+            if (!containerElement) return;
+            
+            // Eliminar partículas existentes
+            const existingParticles = containerElement.querySelector('.profile-particles-container');
+            if (existingParticles) {
+                existingParticles.remove();
+            }
+            
+            // Estilos que necesitan partículas
+            const particleStyles = {
+                'rain': { class: 'rain-drop', count: 12, emoji: null },
+                'splash': { class: 'splash', count: 10, emoji: null },
+                'drops': { class: 'drop-emoji', count: 10, emoji: '💧' },
+                'particles': { class: 'particle-star', count: 12, emoji: '✨' },
+                'snow': { class: 'snowflake', count: 12, emoji: '❄️' },
+                'sparkles': { class: 'sparkle', count: 12, emoji: '⭐' },
+                'bubbles': { class: 'bubble', count: 10, emoji: null },
+                'confetti': { class: 'confetti', count: 12, emoji: ['🎉', '🎊', '🎈', '🎁'] },
+                'burning': { class: 'fire-particle', count: 10, emoji: '🔥' }
+            };
+            
+            const config = particleStyles[style];
+            if (!config) return;
+            
+            // Crear contenedor de partículas
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'profile-particles-container';
+            containerElement.appendChild(particlesContainer);
+            
+            // Calcular el radio del círculo (aproximado)
+            const isLarge = containerElement.classList.contains('profile-picture-large');
+            const radius = isLarge ? 75 : 30; // Radio aproximado del círculo
+            const moveDistance = isLarge ? 250 : 120; // Distancia de movimiento
+            
+            // Crear partículas distribuidas alrededor del círculo
+            for (let i = 0; i < config.count; i++) {
+                const particle = document.createElement('div');
+                particle.className = `profile-particle ${config.class}`;
+                
+                // Calcular posición alrededor del círculo (360 grados distribuidos)
+                const angle = (i * 360) / config.count;
+                const angleRad = (angle * Math.PI) / 180;
+                
+                // Calcular posición inicial (en el borde del círculo)
+                const startX = Math.cos(angleRad) * radius;
+                const startY = Math.sin(angleRad) * radius;
+                
+                // Calcular movimiento según el tipo de efecto
+                let moveX = 0;
+                let moveY = 0;
+                
+                if (style === 'rain' || style === 'drops' || style === 'snow' || style === 'confetti') {
+                    // Efectos que caen: movimiento hacia abajo con variación lateral
+                    moveX = (Math.random() - 0.5) * (isLarge ? 40 : 20);
+                    moveY = moveDistance + Math.random() * (isLarge ? 60 : 30);
+                } else if (style === 'bubbles') {
+                    // Burbujas suben: movimiento hacia arriba con variación
+                    moveX = (Math.random() - 0.5) * (isLarge ? 30 : 15);
+                    moveY = -moveDistance - Math.random() * (isLarge ? 60 : 30);
+                } else if (style === 'splash') {
+                    // Salpicaduras: se expanden desde el borde hacia afuera
+                    moveX = Math.cos(angleRad) * (isLarge ? 50 : 25);
+                    moveY = Math.sin(angleRad) * (isLarge ? 50 : 25);
+                } else if (style === 'particles' || style === 'sparkles') {
+                    // Partículas flotantes: movimiento aleatorio en todas direcciones
+                    moveX = (Math.random() - 0.5) * (isLarge ? 50 : 25);
+                    moveY = (Math.random() - 0.5) * (isLarge ? 50 : 25);
+                } else if (style === 'burning') {
+                    // Fuego: movimiento hacia arriba con variación
+                    moveX = (Math.random() - 0.5) * (isLarge ? 25 : 12);
+                    moveY = -(isLarge ? 40 : 20) - Math.random() * (isLarge ? 30 : 15);
+                }
+                
+                // Establecer posición inicial (centrada en el borde del círculo)
+                particle.style.left = `calc(50% + ${startX}px)`;
+                particle.style.top = `calc(50% + ${startY}px)`;
+                particle.style.transform = 'translate(-50%, -50%)';
+                particle.style.setProperty('--particle-offset-x', '0px');
+                particle.style.setProperty('--particle-offset-y', '0px');
+                particle.style.setProperty('--particle-move-x', `${moveX}px`);
+                particle.style.setProperty('--particle-move-y', `${moveY}px`);
+                
+                // Agregar contenido (emoji o nada)
+                if (config.emoji) {
+                    if (Array.isArray(config.emoji)) {
+                        particle.textContent = config.emoji[Math.floor(Math.random() * config.emoji.length)];
+                    } else {
+                        particle.textContent = config.emoji;
+                    }
+                }
+                
+                // Delay aleatorio para cada partícula
+                const delay = (i * 0.15) + (Math.random() * 0.3);
+                particle.style.animationDelay = `${delay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Función auxiliar para aplicar decoración a un contenedor
+        function applyDecoration(containerElement, decoration) {
+            if (!containerElement || !decoration || decoration === 'none') {
+                // Eliminar decoraciones existentes
+                const existingDecoration = containerElement.querySelector('.profile-decoration');
+                if (existingDecoration) {
+                    existingDecoration.remove();
+                }
+                return;
+            }
+
+            // Eliminar decoración anterior
+            const existingDecoration = containerElement.querySelector('.profile-decoration');
+            if (existingDecoration) {
+                existingDecoration.remove();
+            }
+
+            // Crear nueva decoración
+            const decorationEl = document.createElement('div');
+            decorationEl.className = `profile-decoration decoration-${decoration}`;
+            
+            // Configurar contenido según el tipo de decoración
+            // Las decoraciones de orejas y alien usan ::before y ::after en CSS
+            switch(decoration) {
+                case 'cat-ears':
+                case 'dog-ears':
+                case 'rabbit-ears':
+                case 'alien':
+                    // Estas decoraciones usan ::before y ::after definidos en CSS
+                    decorationEl.textContent = '';
+                    break;
+                case 'crown':
+                    decorationEl.textContent = '👑';
+                    break;
+                case 'hat':
+                    decorationEl.textContent = '🎩';
+                    break;
+                case 'glasses':
+                    decorationEl.textContent = '🕶️';
+                    break;
+                case 'mustache':
+                    decorationEl.textContent = '👨';
+                    break;
+                case 'hearts':
+                    decorationEl.textContent = '❤️';
+                    break;
+                case 'stars':
+                    decorationEl.textContent = '⭐';
+                    break;
+                case 'unicorn':
+                    decorationEl.textContent = '🦄';
+                    break;
+                case 'panda':
+                    decorationEl.textContent = '🐼';
+                    break;
+                case 'bear':
+                    decorationEl.textContent = '🐻';
+                    break;
+                case 'fox':
+                    decorationEl.textContent = '🦊';
+                    break;
+                case 'lion':
+                    decorationEl.textContent = '🦁';
+                    break;
+                case 'tiger':
+                    decorationEl.textContent = '🐯';
+                    break;
+                case 'cowboy':
+                    decorationEl.textContent = '🤠';
+                    break;
+                case 'party':
+                    decorationEl.textContent = '🎉';
+                    break;
+                case 'rocket':
+                    decorationEl.textContent = '🚀';
+                    break;
+                case 'fire-emoji':
+                    decorationEl.textContent = '🔥';
+                    break;
+                case 'lightning':
+                    decorationEl.textContent = '⚡';
+                    break;
+                case 'rainbow-emoji':
+                    decorationEl.textContent = '🌈';
+                    break;
+                case 'sun':
+                    decorationEl.textContent = '☀️';
+                    break;
+                case 'moon':
+                    decorationEl.textContent = '🌙';
+                    break;
+                case 'flower':
+                    decorationEl.textContent = '🌸';
+                    break;
+                case 'butterfly':
+                    decorationEl.textContent = '🦋';
+                    break;
+                default:
+                    return;
+            }
+
+            containerElement.appendChild(decorationEl);
+        }
+
         // Cargar foto de perfil de un usuario específico (para ranking) desde Firestore
         window.loadUserProfilePicture = async function(userId, containerElement) {
             if (!userId || !containerElement) return;
@@ -10290,6 +12480,24 @@
                 // Obtener documento del usuario desde Firestore
                 const userDocRef = doc(db, "usuarios", userId);
                 const userDoc = await getDoc(userDocRef);
+                
+                // Obtener estilo de foto de perfil (por defecto 'classic')
+                const profileStyle = userDoc.exists() && userDoc.data().profilePictureStyle 
+                    ? userDoc.data().profilePictureStyle 
+                    : 'classic';
+                
+                // Obtener decoración de foto de perfil (por defecto 'none')
+                const profileDecoration = userDoc.exists() && userDoc.data().profilePictureDecoration 
+                    ? userDoc.data().profilePictureDecoration 
+                    : 'none';
+                
+                // Aplicar clase de estilo al contenedor
+                containerElement.className = containerElement.className.replace(/profile-picture-style-\w+/g, '').trim();
+                if (profileStyle !== 'classic') {
+                    containerElement.classList.add(`profile-picture-style-${profileStyle}`);
+                    // Crear partículas si el estilo las necesita
+                    createParticlesAround(containerElement, profileStyle);
+                }
                 
                 if (userDoc.exists() && userDoc.data().fotoPerfil) {
                     const fotoBase64 = userDoc.data().fotoPerfil;
@@ -10315,6 +12523,12 @@
                         };
                         
                         containerElement.appendChild(img);
+                        
+                        // Crear partículas si el estilo las necesita (después de agregar la imagen)
+                        createParticlesAround(containerElement, profileStyle);
+                        
+                        // Aplicar decoración
+                        applyDecoration(containerElement, profileDecoration);
                     } else {
                         // Foto vacía, mostrar placeholder
                         const placeholder = document.createElement('div');
@@ -10457,6 +12671,158 @@
             }
         };
 
+        // Guardar estilo de foto de perfil
+        window.saveProfilePictureStyle = async function(style) {
+            if (!window.currentUser || !style) return false;
+            
+            try {
+                const userDocRef = doc(db, "usuarios", window.currentUser.uid);
+                await updateDoc(userDocRef, {
+                    profilePictureStyle: style
+                });
+                
+                console.log(`✅ Estilo de foto de perfil guardado: ${style}`);
+                
+                // Actualizar estilos en los círculos
+                const smallCircle = document.getElementById('profilePictureCircle');
+                if (smallCircle) {
+                    smallCircle.className = 'profile-picture-circle';
+                    if (style !== 'classic') {
+                        smallCircle.classList.add(`profile-picture-style-${style}`);
+                        // Crear partículas si el estilo las necesita
+                        createParticlesAround(smallCircle, style);
+                    }
+                }
+                
+                const largeCircle = document.getElementById('profilePictureLarge');
+                if (largeCircle) {
+                    largeCircle.className = 'profile-picture-large';
+                    if (style !== 'classic') {
+                        largeCircle.classList.add(`profile-picture-style-${style}`);
+                        // Crear partículas si el estilo las necesita
+                        createParticlesAround(largeCircle, style);
+                    }
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error al guardar estilo de foto de perfil:', error);
+                return false;
+            }
+        };
+
+        // Cargar estilo de foto de perfil
+        window.loadProfilePictureStyle = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDocRef = doc(db, "usuarios", window.currentUser.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                const profileStyle = userDoc.exists() && userDoc.data().profilePictureStyle 
+                    ? userDoc.data().profilePictureStyle 
+                    : 'classic';
+                
+                // Estilos que están en las opciones extra
+                const extraStyles = ['silver', 'copper', 'emerald', 'sapphire', 'ruby', 'amethyst', 'sunset', 'ocean', 'forest', 'cosmic', 'burning', 'pulse', 'rainbow-animated', 'shimmer', 'neon-pulse', 'waves', 'electric', 'magma', 'rain', 'splash', 'drops', 'particles', 'snow', 'sparkles', 'bubbles', 'confetti'];
+                
+                // Si el estilo está en las opciones extra, expandir la sección
+                if (extraStyles.includes(profileStyle)) {
+                    const profileStyleOptionsExtra = document.getElementById('profileStyleOptionsExtra');
+                    const profileStyleExpandBtn = document.getElementById('profileStyleExpandBtn');
+                    if (profileStyleOptionsExtra && profileStyleExpandBtn) {
+                        profileStyleOptionsExtra.classList.add('show');
+                        profileStyleExpandBtn.textContent = '−';
+                    }
+                }
+                
+                // Actualizar selector de estilos
+                const styleOptions = document.querySelectorAll('.profile-style-option');
+                styleOptions.forEach(option => {
+                    option.classList.remove('selected');
+                    if (option.dataset.style === profileStyle) {
+                        option.classList.add('selected');
+                    }
+                });
+                
+                return profileStyle;
+            } catch (error) {
+                console.error('Error al cargar estilo de foto de perfil:', error);
+                return 'classic';
+            }
+        };
+
+        // Guardar decoración de foto de perfil
+        window.saveProfilePictureDecoration = async function(decoration) {
+            if (!window.currentUser || !decoration) return false;
+            
+            try {
+                const userDocRef = doc(db, "usuarios", window.currentUser.uid);
+                await updateDoc(userDocRef, {
+                    profilePictureDecoration: decoration
+                });
+                
+                console.log(`✅ Decoración de foto de perfil guardada: ${decoration}`);
+                
+                // Aplicar decoración a los círculos
+                const smallCircle = document.getElementById('profilePictureCircle');
+                if (smallCircle) {
+                    applyDecoration(smallCircle, decoration);
+                }
+                
+                const largeCircle = document.getElementById('profilePictureLarge');
+                if (largeCircle) {
+                    applyDecoration(largeCircle, decoration);
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Error al guardar decoración de foto de perfil:', error);
+                return false;
+            }
+        };
+
+        // Cargar decoración de foto de perfil
+        window.loadProfilePictureDecoration = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const userDocRef = doc(db, "usuarios", window.currentUser.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                const profileDecoration = userDoc.exists() && userDoc.data().profilePictureDecoration 
+                    ? userDoc.data().profilePictureDecoration 
+                    : 'none';
+                
+                // Decoraciones que están en las opciones extra
+                const extraDecorations = ['unicorn', 'panda', 'bear', 'fox', 'lion', 'tiger', 'cowboy', 'party', 'rocket', 'fire-emoji', 'lightning', 'rainbow-emoji', 'sun', 'moon', 'flower', 'butterfly'];
+                
+                // Si la decoración está en las opciones extra, expandir la sección
+                if (extraDecorations.includes(profileDecoration)) {
+                    const profileDecorationOptionsExtra = document.getElementById('profileDecorationOptionsExtra');
+                    const profileDecorationExpandBtn = document.getElementById('profileDecorationExpandBtn');
+                    if (profileDecorationOptionsExtra && profileDecorationExpandBtn) {
+                        profileDecorationOptionsExtra.classList.add('show');
+                        profileDecorationExpandBtn.textContent = '−';
+                    }
+                }
+                
+                // Actualizar selector de decoraciones
+                const decorationOptions = document.querySelectorAll('.profile-decoration-option');
+                decorationOptions.forEach(option => {
+                    option.classList.remove('selected');
+                    if (option.dataset.decoration === profileDecoration) {
+                        option.classList.add('selected');
+                    }
+                });
+                
+                return profileDecoration;
+            } catch (error) {
+                console.error('Error al cargar decoración de foto de perfil:', error);
+                return 'none';
+            }
+        };
+
         // Mostrar modal de perfil
         window.showProfileModal = async function() {
             if (!window.currentUser) return;
@@ -10469,6 +12835,16 @@
                 profileName.textContent = window.currentUserName || '-';
                 profileEmail.textContent = window.currentUser.email || '-';
                 modal.style.display = 'flex';
+                
+                // Cargar estilo de foto de perfil
+                if (window.loadProfilePictureStyle) {
+                    await window.loadProfilePictureStyle();
+                }
+                
+                // Cargar decoración de foto de perfil
+                if (window.loadProfilePictureDecoration) {
+                    await window.loadProfilePictureDecoration();
+                }
                 
                 // Cargar lista de amigos
                 if (window.loadFriendsList) {
