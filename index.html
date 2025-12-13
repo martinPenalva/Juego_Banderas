@@ -11596,14 +11596,7 @@
                 if (window.showInboxModal) {
                     await window.showInboxModal();
                 }
-                // Si es la cuenta de mpenalvart1, también abrir el modal de recomendaciones
-                if (window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
-                    const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
-                    if (recommendationsInboxModal && window.loadRecommendations) {
-                        recommendationsInboxModal.style.display = 'flex';
-                        await window.loadRecommendations();
-                    }
-                }
+                // Ya no se abren las recomendaciones aquí, van en el buzón
             });
         }
 
@@ -11622,10 +11615,20 @@
         const profileMailboxBtn = document.getElementById('profileMailboxBtn');
         if (profileMailboxBtn) {
             profileMailboxBtn.addEventListener('click', async () => {
-                const mailboxModal = document.getElementById('mailboxModal');
-                if (mailboxModal && window.loadMailboxMessages) {
-                    mailboxModal.style.display = 'flex';
-                    await window.loadMailboxMessages();
+                // Para mpenalvart1, el buzón muestra las recomendaciones
+                if (window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                    const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
+                    if (recommendationsInboxModal && window.loadRecommendations) {
+                        recommendationsInboxModal.style.display = 'flex';
+                        await window.loadRecommendations();
+                    }
+                } else {
+                    // Para otros usuarios, muestra los mensajes del buzón normal
+                    const mailboxModal = document.getElementById('mailboxModal');
+                    if (mailboxModal && window.loadMailboxMessages) {
+                        mailboxModal.style.display = 'flex';
+                        await window.loadMailboxMessages();
+                    }
                 }
             });
         }
@@ -13801,17 +13804,22 @@
                     activeChat.style.display = 'none';
                 }
 
-                // Ocultar botón de correo de recomendaciones para mpenalvart1 (se combina con bandeja)
+                // Ocultar botón de correo de recomendaciones para mpenalvart1 (se combina con buzón)
                 const recommendationsInboxBtn = document.getElementById('profileRecommendationsInboxBtn');
                 if (recommendationsInboxBtn && window.currentUser) {
-                    // Siempre ocultar para mpenalvart1, ya que se combina con la bandeja
+                    // Siempre ocultar para mpenalvart1, ya que se combina con el buzón
                     recommendationsInboxBtn.style.display = 'none';
                 }
                 
-                // Cambiar el texto del botón de bandeja para mpenalvart1
-                const profileInboxBtn = document.getElementById('profileInboxBtn');
-                if (profileInboxBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
-                    profileInboxBtn.textContent = '📬 Bandeja y Recomendaciones';
+                // El botón de bandeja solo muestra solicitudes de amistad para todos los usuarios
+                // (las recomendaciones van en el buzón para mpenalvart1)
+                
+                // Cambiar el texto del botón de buzón para mpenalvart1
+                const profileMailboxBtn = document.getElementById('profileMailboxBtn');
+                if (profileMailboxBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                    profileMailboxBtn.textContent = '📮 Buzón y Recomendaciones';
+                } else if (profileMailboxBtn && window.currentUser) {
+                    profileMailboxBtn.textContent = '📮 Buzón de Correo';
                 }
 
                 // Mostrar botón de enviar mensaje solo para mpenalvart1
