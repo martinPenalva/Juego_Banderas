@@ -22,7 +22,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
@@ -3773,6 +3773,25 @@
         .comment-reply-btn:hover {
             background: #f7fafc;
             color: #667eea;
+        }
+
+        .comment-delete-btn {
+            background: none;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+            padding: 5px 10px;
+            border-radius: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .comment-delete-btn:hover {
+            background: #f7fafc;
+            color: #f56565;
         }
 
         .comment-replies {
@@ -10886,12 +10905,6 @@
                         if (confirm('¿Estás seguro de que quieres eliminar este mensaje?')) {
                             try {
                                 await deleteDoc(doc(db, "mensajesCorreo", data.id));
-                                // Marcar como leído si no estaba leído
-                                if (!data.leido) {
-                                    await updateDoc(doc(db, "mensajesCorreo", data.id), {
-                                        leido: true
-                                    });
-                                }
                                 await window.loadMailboxMessages();
                             } catch (error) {
                                 console.error('Error al eliminar mensaje:', error);
@@ -12300,6 +12313,30 @@
             actions.appendChild(likeBtn);
             actions.appendChild(replyBtn);
             
+            // Botón de eliminar (solo si el comentario pertenece al usuario actual)
+            if (window.currentUser && data.userId === window.currentUser.uid) {
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'comment-delete-btn';
+                deleteBtn.textContent = '🗑️ Eliminar';
+                deleteBtn.onclick = async (e) => {
+                    e.stopPropagation();
+                    if (confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
+                        try {
+                            const fotoId = data.fotoId || window.currentFotoId;
+                            if (!fotoId) {
+                                alert('Error: No se pudo identificar la foto. Por favor, cierra y vuelve a abrir la imagen.');
+                                return;
+                            }
+                            await deleteComment(data.id, fotoId);
+                        } catch (error) {
+                            console.error('Error al eliminar comentario:', error);
+                            alert('Error al eliminar el comentario. Por favor, intenta de nuevo.');
+                        }
+                    }
+                };
+                actions.appendChild(deleteBtn);
+            }
+            
             // Contenedor para input de respuesta
             const replyInputContainer = document.createElement('div');
             replyInputContainer.className = 'comment-reply-input-container';
@@ -12338,6 +12375,50 @@
             commentItem.appendChild(commentContent);
             
             return commentItem;
+        }
+
+        // Función para eliminar un comentario y sus respuestas asociadas
+        async function deleteComment(commentId, fotoId) {
+            if (!commentId || !fotoId) {
+                console.error('deleteComment: Parámetros inválidos');
+                return;
+            }
+
+            try {
+                // Función recursiva para eliminar un comentario y todas sus respuestas
+                async function deleteCommentAndReplies(commentIdToDelete) {
+                    // Buscar todas las respuestas a este comentario
+                    const comentariosRef = collection(db, "fotoComentarios");
+                    const repliesQuery = query(comentariosRef, where("parentCommentId", "==", commentIdToDelete));
+                    const repliesSnapshot = await getDocs(repliesQuery);
+                    
+                    // Eliminar todas las respuestas recursivamente
+                    for (const replyDoc of repliesSnapshot.docs) {
+                        await deleteCommentAndReplies(replyDoc.id);
+                    }
+                    
+                    // Eliminar todos los likes asociados a este comentario
+                    const likesRef = collection(db, "comentarioLikes");
+                    const likesQuery = query(likesRef, where("commentId", "==", commentIdToDelete));
+                    const likesSnapshot = await getDocs(likesQuery);
+                    
+                    for (const likeDoc of likesSnapshot.docs) {
+                        await deleteDoc(doc(db, "comentarioLikes", likeDoc.id));
+                    }
+                    
+                    // Eliminar el comentario
+                    await deleteDoc(doc(db, "fotoComentarios", commentIdToDelete));
+                }
+                
+                // Eliminar el comentario y todas sus respuestas
+                await deleteCommentAndReplies(commentId);
+                
+                // Recargar los comentarios de la foto
+                await loadFotoComments(fotoId);
+            } catch (error) {
+                console.error('Error al eliminar comentario:', error);
+                throw error;
+            }
         }
 
         // Cargar comentarios de una foto
