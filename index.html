@@ -1579,6 +1579,22 @@
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
+        .group-add-members-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .group-add-members-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+        }
+
         .group-info-name {
             text-align: center;
             font-size: 1.5em;
@@ -9175,7 +9191,10 @@
                 </div>
                 <div class="group-info-name" id="groupInfoName"></div>
                 <div class="group-info-members">
-                    <h3>Miembros del grupo</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0;">Miembros del grupo</h3>
+                        <button id="groupAddMembersBtn" class="group-add-members-btn" style="display: none;">➕ Añadir Usuarios</button>
+                    </div>
                     <div id="groupInfoMembersList" class="group-info-members-list"></div>
                 </div>
             </div>
@@ -11771,6 +11790,19 @@
             createGroupModalClose.addEventListener('click', () => {
                 if (createGroupModal) {
                     createGroupModal.style.display = 'none';
+                    // Limpiar variables cuando se cierra el modal
+                    window.currentAddMembersGroupId = null;
+                    window.currentAddMembersExistingMembers = null;
+                    window.selectedGroupUsers = [];
+                    // Restaurar título y botón
+                    const modalTitle = createGroupModal.querySelector('h2');
+                    if (modalTitle) {
+                        modalTitle.textContent = 'Crear Grupo';
+                    }
+                    const groupNextBtn = document.getElementById('groupNextBtn');
+                    if (groupNextBtn) {
+                        groupNextBtn.textContent = 'Siguiente';
+                    }
                 }
             });
         }
@@ -11779,6 +11811,19 @@
             createGroupModal.addEventListener('click', (e) => {
                 if (e.target === createGroupModal) {
                     createGroupModal.style.display = 'none';
+                    // Limpiar variables cuando se cierra el modal
+                    window.currentAddMembersGroupId = null;
+                    window.currentAddMembersExistingMembers = null;
+                    window.selectedGroupUsers = [];
+                    // Restaurar título y botón
+                    const modalTitle = createGroupModal.querySelector('h2');
+                    if (modalTitle) {
+                        modalTitle.textContent = 'Crear Grupo';
+                    }
+                    const groupNextBtn = document.getElementById('groupNextBtn');
+                    if (groupNextBtn) {
+                        groupNextBtn.textContent = 'Siguiente';
+                    }
                 }
             });
         }
@@ -11804,18 +11849,27 @@
 
         const groupNextBtn = document.getElementById('groupNextBtn');
         if (groupNextBtn) {
-            groupNextBtn.addEventListener('click', () => {
+            groupNextBtn.addEventListener('click', async () => {
                 if (window.selectedGroupUsers && window.selectedGroupUsers.length > 0) {
-                    const createGroupModal = document.getElementById('createGroupModal');
-                    const createGroupNameModal = document.getElementById('createGroupNameModal');
-                    if (createGroupModal) createGroupModal.style.display = 'none';
-                    if (createGroupNameModal) {
-                        createGroupNameModal.style.display = 'flex';
-                        if (window.updateGroupNamePreview) window.updateGroupNamePreview();
-                        const nameInput = document.getElementById('groupNameInput');
-                        if (nameInput) {
-                            nameInput.value = '';
-                            nameInput.focus();
+                    // Si estamos añadiendo miembros a un grupo existente
+                    if (window.currentAddMembersGroupId) {
+                        const userIds = window.selectedGroupUsers.map(u => u.id);
+                        if (window.addMembersToGroup) {
+                            await window.addMembersToGroup(window.currentAddMembersGroupId, userIds);
+                        }
+                    } else {
+                        // Si estamos creando un nuevo grupo
+                        const createGroupModal = document.getElementById('createGroupModal');
+                        const createGroupNameModal = document.getElementById('createGroupNameModal');
+                        if (createGroupModal) createGroupModal.style.display = 'none';
+                        if (createGroupNameModal) {
+                            createGroupNameModal.style.display = 'flex';
+                            if (window.updateGroupNamePreview) window.updateGroupNamePreview();
+                            const nameInput = document.getElementById('groupNameInput');
+                            if (nameInput) {
+                                nameInput.value = '';
+                                nameInput.focus();
+                            }
                         }
                     }
                 }
@@ -11828,6 +11882,19 @@
                 const createGroupModal = document.getElementById('createGroupModal');
                 if (createGroupModal) {
                     createGroupModal.style.display = 'none';
+                    // Limpiar variables cuando se cierra el modal
+                    window.currentAddMembersGroupId = null;
+                    window.currentAddMembersExistingMembers = null;
+                    window.selectedGroupUsers = [];
+                    // Restaurar título y botón
+                    const modalTitle = createGroupModal.querySelector('h2');
+                    if (modalTitle) {
+                        modalTitle.textContent = 'Crear Grupo';
+                    }
+                    const groupNextBtn = document.getElementById('groupNextBtn');
+                    if (groupNextBtn) {
+                        groupNextBtn.textContent = 'Siguiente';
+                    }
                 }
             });
         }
@@ -11905,6 +11972,18 @@
                 if (groupInfoModal && groupInfoModal.dataset.grupoId) {
                     if (window.changeGroupPicture) {
                         await window.changeGroupPicture(groupInfoModal.dataset.grupoId);
+                    }
+                }
+            });
+        }
+
+        const groupAddMembersBtn = document.getElementById('groupAddMembersBtn');
+        if (groupAddMembersBtn) {
+            groupAddMembersBtn.addEventListener('click', async () => {
+                const groupInfoModal = document.getElementById('groupInfoModal');
+                if (groupInfoModal && groupInfoModal.dataset.grupoId) {
+                    if (window.showAddMembersModal) {
+                        await window.showAddMembersModal(groupInfoModal.dataset.grupoId);
                     }
                 }
             });
@@ -16088,6 +16167,11 @@
                     where("grupoId", "==", grupoId)
                 );
                 
+                // Flag para prevenir ejecuciones simultáneas
+                if (!window.groupChatLoading) {
+                    window.groupChatLoading = {};
+                }
+                
                 chatUnsubscribe = onSnapshot(q, async (snapshot) => {
                     const activeChat = document.getElementById('profileActiveChat');
                     const activeMessagesEl = document.getElementById('activeChatMessages');
@@ -16100,32 +16184,42 @@
                         return;
                     }
                     
-                    activeMessagesEl.innerHTML = '';
+                    // Prevenir ejecuciones simultáneas para este grupo
+                    if (window.groupChatLoading[grupoId]) {
+                        return;
+                    }
+                    window.groupChatLoading[grupoId] = true;
                     
-                    const messages = [];
-                    const messageIds = new Set();
-                    
-                    snapshot.forEach((doc) => {
-                        const messageData = doc.data();
-                        const messageId = doc.id;
+                    try {
+                        // Recopilar todos los mensajes del snapshot
+                        const messages = [];
+                        const messageIds = new Set();
                         
-                        if (!messageIds.has(messageId)) {
-                            messageIds.add(messageId);
-                            messages.push({
-                                ...messageData,
-                                id: messageId
-                            });
-                        }
-                    });
-                    
-                    messages.sort((a, b) => {
-                        const timeA = a.timestamp || 0;
-                        const timeB = b.timestamp || 0;
-                        return timeA - timeB;
-                    });
-                    
-                    // Cargar nombres de usuarios para cada mensaje
-                    for (const message of messages) {
+                        snapshot.forEach((doc) => {
+                            const messageData = doc.data();
+                            const messageId = doc.id;
+                            
+                            if (!messageIds.has(messageId)) {
+                                messageIds.add(messageId);
+                                messages.push({
+                                    ...messageData,
+                                    id: messageId
+                                });
+                            }
+                        });
+                        
+                        // Ordenar mensajes por timestamp
+                        messages.sort((a, b) => {
+                            const timeA = a.timestamp || 0;
+                            const timeB = b.timestamp || 0;
+                            return timeA - timeB;
+                        });
+                        
+                        // Limpiar y volver a renderizar todos los mensajes
+                        activeMessagesEl.innerHTML = '';
+                        
+                        // Cargar nombres de usuarios para cada mensaje
+                        for (const message of messages) {
                         const remitenteDoc = await getDoc(doc(db, "usuarios", message.remitenteId));
                         const remitenteNombre = remitenteDoc.exists() ? remitenteDoc.data().nombre : 'Usuario';
                         const isSent = message.remitenteId === window.currentUser.uid;
@@ -16186,26 +16280,33 @@
                         
                         content.appendChild(time);
                         
-                        // Agregar doble click para marcar como leído (solo para mensajes recibidos)
-                        if (!isSent) {
-                            messageEl.addEventListener('dblclick', async () => {
-                                const leidoPor = message.leidoPor || [];
-                                if (!leidoPor.includes(window.currentUser.uid)) {
-                                    const messageRef = doc(db, "mensajesGrupo", message.id);
-                                    leidoPor.push(window.currentUser.uid);
-                                    await updateDoc(messageRef, { leidoPor: leidoPor });
-                                }
-                            });
-                            messageEl.style.cursor = 'pointer';
-                            messageEl.title = 'Doble click para marcar como leído';
+                            // Agregar doble click para marcar como leído (solo para mensajes recibidos)
+                            if (!isSent) {
+                                messageEl.addEventListener('dblclick', async () => {
+                                    const leidoPor = message.leidoPor || [];
+                                    if (!leidoPor.includes(window.currentUser.uid)) {
+                                        const messageRef = doc(db, "mensajesGrupo", message.id);
+                                        leidoPor.push(window.currentUser.uid);
+                                        await updateDoc(messageRef, { leidoPor: leidoPor });
+                                    }
+                                });
+                                messageEl.style.cursor = 'pointer';
+                                messageEl.title = 'Doble click para marcar como leído';
+                            }
+                            
+                            messageEl.setAttribute('data-message-id', message.id || '');
+                            messageEl.appendChild(content);
+                            activeMessagesEl.appendChild(messageEl);
                         }
                         
-                        messageEl.appendChild(content);
-                        activeMessagesEl.appendChild(messageEl);
+                        // Scroll al final
+                        activeMessagesEl.scrollTop = activeMessagesEl.scrollHeight;
+                    } finally {
+                        // Liberar el flag después de un pequeño delay para evitar ejecuciones muy rápidas
+                        setTimeout(() => {
+                            window.groupChatLoading[grupoId] = false;
+                        }, 100);
                     }
-                    
-                    // Scroll al final
-                    activeMessagesEl.scrollTop = activeMessagesEl.scrollHeight;
                 });
                 
                 // Marcar mensajes como leídos (solo los que no fueron enviados por el usuario actual)
@@ -16824,6 +16925,11 @@
                 chatUnsubscribe = null;
             }
             
+            // Limpiar flags de carga de chat de grupo
+            if (window.groupChatLoading && currentChatGroupId) {
+                delete window.groupChatLoading[currentChatGroupId];
+            }
+            
             // Limpiar variables de chat
             currentChatFriendId = null;
             currentChatGroupId = null;
@@ -16926,13 +17032,29 @@
                 return;
             }
             
-            if (users.length === 0) {
-                resultsContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 20px;">No se encontraron usuarios</div>';
+            // Filtrar usuarios que ya están en el grupo (si estamos añadiendo miembros)
+            let usuariosFiltrados = users;
+            if (window.currentAddMembersExistingMembers) {
+                usuariosFiltrados = users.filter(user => 
+                    !window.currentAddMembersExistingMembers.includes(user.id) &&
+                    user.id !== window.currentUser.uid
+                );
+            } else {
+                // Filtrar el usuario actual cuando se crea un grupo
+                usuariosFiltrados = users.filter(user => user.id !== window.currentUser.uid);
+            }
+            
+            if (usuariosFiltrados.length === 0) {
+                if (window.currentAddMembersExistingMembers) {
+                    resultsContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 20px;">No se encontraron usuarios nuevos para agregar</div>';
+                } else {
+                    resultsContainer.innerHTML = '<div style="color: #999; text-align: center; padding: 20px;">No se encontraron usuarios</div>';
+                }
                 return;
             }
             
             resultsContainer.innerHTML = '';
-            users.forEach((user) => {
+            usuariosFiltrados.forEach((user) => {
                 const isSelected = window.selectedGroupUsers.some(u => u.id === user.id);
                 const item = document.createElement('div');
                 item.className = `group-search-result-item ${isSelected ? 'selected' : ''}`;
@@ -17087,6 +17209,16 @@
                     }
                 }
                 
+                // Mostrar/ocultar botón de añadir usuarios (solo para creador)
+                const groupAddMembersBtn = document.getElementById('groupAddMembersBtn');
+                if (groupAddMembersBtn) {
+                    if (isCreator || isSpecialUser) {
+                        groupAddMembersBtn.style.display = 'block';
+                    } else {
+                        groupAddMembersBtn.style.display = 'none';
+                    }
+                }
+                
                 // Cargar lista de miembros
                 groupInfoMembersList.innerHTML = '';
                 const miembros = grupoData.miembros || [];
@@ -17184,7 +17316,142 @@
                 
             } catch (error) {
                 console.error('Error al mostrar información del grupo:', error);
-                alert('Error al cargar la información del grupo');
+            }
+        };
+
+        // Función para mostrar modal de añadir usuarios al grupo
+        window.showAddMembersModal = async function(grupoId) {
+            if (!window.currentUser || !grupoId) return;
+            
+            try {
+                // Obtener datos del grupo para filtrar miembros existentes
+                const grupoDoc = await getDoc(doc(db, "gruposChat", grupoId));
+                if (!grupoDoc.exists()) {
+                    alert('Grupo no encontrado');
+                    return;
+                }
+                
+                const grupoData = grupoDoc.data();
+                const miembrosExistentes = grupoData.miembros || [];
+                
+                // Guardar grupoId y miembros existentes para usar en la búsqueda
+                window.currentAddMembersGroupId = grupoId;
+                window.currentAddMembersExistingMembers = miembrosExistentes;
+                
+                // Limpiar selección anterior
+                window.selectedGroupUsers = [];
+                if (window.updateGroupSelectedUsers) window.updateGroupSelectedUsers();
+                if (window.updateGroupSearchResults) window.updateGroupSearchResults([]);
+                
+                // Cerrar modal de información del grupo
+                const groupInfoModal = document.getElementById('groupInfoModal');
+                if (groupInfoModal) {
+                    groupInfoModal.style.display = 'none';
+                }
+                
+                // Abrir modal de crear grupo (reutilizamos el mismo modal)
+                const createGroupModal = document.getElementById('createGroupModal');
+                if (createGroupModal) {
+                    createGroupModal.style.display = 'flex';
+                    const searchInput = document.getElementById('groupUserSearch');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        searchInput.focus();
+                    }
+                    // Cambiar título del modal y texto del botón
+                    const modalTitle = createGroupModal.querySelector('h2');
+                    if (modalTitle) {
+                        modalTitle.textContent = 'Añadir Usuarios al Grupo';
+                    }
+                    const groupNextBtn = document.getElementById('groupNextBtn');
+                    if (groupNextBtn) {
+                        groupNextBtn.textContent = 'Añadir';
+                    }
+                }
+            } catch (error) {
+                console.error('Error al abrir modal de añadir usuarios:', error);
+                alert('Error al abrir el modal de añadir usuarios');
+            }
+        };
+
+        // Función para añadir usuarios al grupo
+        window.addMembersToGroup = async function(grupoId, userIds) {
+            if (!window.currentUser || !grupoId || !userIds || userIds.length === 0) return;
+            
+            try {
+                const grupoRef = doc(db, "gruposChat", grupoId);
+                const grupoDoc = await getDoc(grupoRef);
+                
+                if (!grupoDoc.exists()) {
+                    alert('Grupo no encontrado');
+                    return;
+                }
+                
+                const grupoData = grupoDoc.data();
+                const isCreator = grupoData.creadorId === window.currentUser.uid;
+                const isSpecialUser = window.currentUser.email === 'mpenalvart1@educacion.navarra.es';
+                
+                if (!isCreator && !isSpecialUser) {
+                    alert('Solo el creador del grupo puede añadir usuarios');
+                    return;
+                }
+                
+                // Obtener miembros actuales
+                const miembrosActuales = grupoData.miembros || [];
+                
+                // Filtrar usuarios que ya están en el grupo
+                const nuevosMiembros = userIds.filter(id => !miembrosActuales.includes(id));
+                
+                if (nuevosMiembros.length === 0) {
+                    alert('Todos los usuarios seleccionados ya están en el grupo');
+                    return;
+                }
+                
+                // Agregar nuevos miembros
+                const todosLosMiembros = [...miembrosActuales, ...nuevosMiembros];
+                
+                // Actualizar grupo en Firestore
+                await updateDoc(grupoRef, { miembros: todosLosMiembros });
+                
+                // Agregar el grupo a la lista de grupos de cada nuevo miembro
+                for (const miembroId of nuevosMiembros) {
+                    const miembroRef = doc(db, "usuarios", miembroId);
+                    const miembroDoc = await getDoc(miembroRef);
+                    
+                    if (miembroDoc.exists()) {
+                        const grupos = miembroDoc.data().grupos || [];
+                        if (!grupos.includes(grupoId)) {
+                            grupos.push(grupoId);
+                            await updateDoc(miembroRef, { grupos: grupos });
+                        }
+                    }
+                }
+                
+                alert(`${nuevosMiembros.length} usuario${nuevosMiembros.length > 1 ? 's' : ''} añadido${nuevosMiembros.length > 1 ? 's' : ''} al grupo`);
+                
+                // Cerrar modal de crear grupo
+                const createGroupModal = document.getElementById('createGroupModal');
+                if (createGroupModal) {
+                    createGroupModal.style.display = 'none';
+                }
+                
+                // Limpiar selección
+                window.selectedGroupUsers = [];
+                window.currentAddMembersGroupId = null;
+                window.currentAddMembersExistingMembers = null;
+                
+                // Recargar información del grupo si está abierto
+                if (window.showGroupInfo) {
+                    await window.showGroupInfo(grupoId);
+                }
+                
+                // Recargar lista de chats
+                if (window.loadChatsList) {
+                    await window.loadChatsList();
+                }
+            } catch (error) {
+                console.error('Error al añadir usuarios al grupo:', error);
+                alert('Error al añadir usuarios al grupo');
             }
         };
 
