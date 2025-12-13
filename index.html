@@ -6202,15 +6202,6 @@
             background: #f7fafc;
         }
 
-        #imagePreviewContainer {
-            flex-shrink: 0;
-            max-height: 150px;
-            overflow-y: auto;
-            padding-bottom: 5px;
-            width: 100%;
-            order: 1;
-        }
-        
         /* Asegurar que el wrapper con el botón de enviar siempre sea visible */
         .active-chat-input-wrapper {
             display: flex !important;
@@ -6684,23 +6675,13 @@
                             <div class="emoji-picker" id="emojiPicker">
                                 <div class="emoji-grid" id="emojiGrid"></div>
                             </div>
-                            <div id="imagePreviewContainer"></div>
                             <div class="active-chat-input-wrapper">
                                 <div class="active-chat-actions">
                                     <button class="active-chat-action-btn" id="emojiBtn" title="Emojis">😀</button>
-                                    <div class="image-menu-container" style="position: relative;">
-                                        <button class="active-chat-action-btn" id="imageBtn" title="Enviar imagen">📷</button>
-                                        <div class="image-menu" id="imageMenu" style="display: none;">
-                                            <button class="image-menu-item" id="galleryBtn">📁 Galería</button>
-                                            <button class="image-menu-item" id="cameraBtn">📷 Cámara</button>
-                                        </div>
-                                    </div>
                                 </div>
                                 <textarea id="activeChatInput" class="active-chat-input" placeholder="Escribe un mensaje..." maxlength="500" rows="1"></textarea>
                                 <button class="active-chat-send-btn" id="activeChatSendBtn">Enviar</button>
                             </div>
-                            <input type="file" id="chatImageInputGallery" class="chat-image-input" accept="image/*">
-                            <input type="file" id="chatImageInputCamera" class="chat-image-input" accept="image/*" capture="environment">
                         </div>
                     </div>
                     <div class="profile-library-section" id="profileLibrarySection">
@@ -9298,15 +9279,8 @@
         const activeChatInput = document.getElementById('activeChatInput');
         const activeChatClose = document.getElementById('activeChatClose');
         const emojiBtn = document.getElementById('emojiBtn');
-        const imageBtn = document.getElementById('imageBtn');
-        const imageMenu = document.getElementById('imageMenu');
-        const galleryBtn = document.getElementById('galleryBtn');
-        const cameraBtn = document.getElementById('cameraBtn');
         const emojiPicker = document.getElementById('emojiPicker');
         const emojiGrid = document.getElementById('emojiGrid');
-        const chatImageInputGallery = document.getElementById('chatImageInputGallery');
-        const chatImageInputCamera = document.getElementById('chatImageInputCamera');
-        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
         
         // Emojis populares
         const commonEmojis = ['😀', '😂', '😍', '🥰', '😎', '😊', '🙂', '🤗', '😴', '😋', 
@@ -9350,96 +9324,6 @@
                 emojiPicker.classList.remove('show');
             }
         });
-        
-        // Menú de selección de imagen (Galería o Cámara)
-        if (imageBtn && imageMenu) {
-            imageBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // Toggle del menú
-                const isVisible = imageMenu.style.display === 'block';
-                imageMenu.style.display = isVisible ? 'none' : 'block';
-            });
-        }
-        
-        // Cerrar menú al hacer clic fuera
-        document.addEventListener('click', (e) => {
-            if (imageMenu && imageBtn && !imageMenu.contains(e.target) && !imageBtn.contains(e.target)) {
-                imageMenu.style.display = 'none';
-            }
-        });
-        
-        // Botón de galería
-        if (galleryBtn && chatImageInputGallery) {
-            galleryBtn.addEventListener('click', () => {
-                imageMenu.style.display = 'none';
-                chatImageInputGallery.click();
-            });
-        }
-        
-        // Botón de cámara
-        if (cameraBtn && chatImageInputCamera) {
-            cameraBtn.addEventListener('click', () => {
-                imageMenu.style.display = 'none';
-                chatImageInputCamera.click();
-            });
-        }
-        
-        // Función para manejar la selección de imagen
-        function handleImageSelection(file, inputElement) {
-            if (file) {
-                if (file.size > 5 * 1024 * 1024) { // 5MB máximo
-                    alert('La imagen es demasiado grande. Máximo 5MB.');
-                    inputElement.value = '';
-                    return;
-                }
-                window.selectedImageFile = file;
-                // Mostrar preview
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    imagePreviewContainer.innerHTML = `
-                        <div class="image-preview">
-                            <img src="${event.target.result}" alt="Preview">
-                            <button class="image-preview-remove" onclick="document.getElementById('chatImageInputGallery').value = ''; document.getElementById('chatImageInputCamera').value = ''; document.getElementById('imagePreviewContainer').innerHTML = ''; window.selectedImageFile = null;">✕</button>
-                        </div>
-                    `;
-                    
-                    // Asegurar que el botón de enviar sea visible
-                    const sendBtn = document.getElementById('activeChatSendBtn');
-                    if (sendBtn) {
-                        sendBtn.style.display = 'flex';
-                        sendBtn.style.visibility = 'visible';
-                        sendBtn.style.opacity = '1';
-                    }
-                    
-                    // Scroll al contenedor de entrada para ver el botón
-                    setTimeout(() => {
-                        const inputContainer = document.querySelector('.active-chat-input-container');
-                        if (inputContainer) {
-                            inputContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                        }
-                    }, 100);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        
-        // Manejar selección de imagen desde galería
-        // Variable global para la imagen seleccionada
-        window.selectedImageFile = null;
-        if (chatImageInputGallery) {
-            chatImageInputGallery.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                handleImageSelection(file, e.target);
-            });
-        }
-        
-        // Manejar selección de imagen desde cámara
-        if (chatImageInputCamera) {
-            chatImageInputCamera.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                handleImageSelection(file, e.target);
-            });
-        }
         
         // Autoajustar altura del textarea
         if (activeChatInput) {
@@ -13097,20 +12981,7 @@
             const content = document.createElement('div');
             content.className = 'active-chat-message-content';
             
-            // Mostrar imagen si existe
-            if (messageData.imageUrl) {
-                const imageDiv = document.createElement('img');
-                imageDiv.className = 'active-chat-message-image';
-                imageDiv.src = messageData.imageUrl;
-                imageDiv.alt = 'Imagen compartida';
-                imageDiv.addEventListener('click', () => {
-                    // Abrir imagen en ventana nueva o modal
-                    window.open(messageData.imageUrl, '_blank');
-                });
-                content.appendChild(imageDiv);
-            }
-            
-            // Mostrar texto si existe
+            // Mostrar texto
             if (messageData.text) {
                 const text = document.createElement('div');
                 text.textContent = messageData.text;
@@ -13153,10 +13024,9 @@
             if (!chatInput) return;
             
             const text = chatInput.value.trim();
-            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
             
-            // Si no hay texto ni imagen, no enviar
-            if (!text && !window.selectedImageFile) return;
+            // Si no hay texto, no enviar
+            if (!text) return;
             
             // Deshabilitar botón de enviar mientras se procesa
             const sendBtn = document.getElementById('activeChatSendBtn');
@@ -13170,163 +13040,11 @@
                 const chatId2 = `${currentChatFriendId}_${window.currentUser.uid}`;
                 const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
                 
-                let imageUrl = null;
-                
-                // Subir imagen si existe
-                if (window.selectedImageFile) {
-                    try {
-                        // Verificar que no estemos en file:// o localhost no configurado
-                        const isFileProtocol = window.location.protocol === 'file:';
-                        const isLocalhost = window.location.hostname === 'localhost' || 
-                                           window.location.hostname === '127.0.0.1' || 
-                                           window.location.hostname === '';
-                        
-                        if (isFileProtocol) {
-                            const errorMsg = '⚠️ ERROR: No se pueden subir imágenes desde file://\n\n' +
-                                           'SOLUCIÓN:\n' +
-                                           '1. Abre la app desde un servidor web\n' +
-                                           '2. Usa GitHub Pages: https://tu-usuario.github.io/Juego_Banderas/\n' +
-                                           '3. O servidor local:\n' +
-                                           '   • Python: python -m http.server 8000\n' +
-                                           '   • Node: npx http-server\n' +
-                                           '   • VS Code: Live Server extension\n\n' +
-                                           'Luego abre: http://localhost:8000';
-                            alert(errorMsg);
-                            if (sendBtn) {
-                                sendBtn.disabled = false;
-                                sendBtn.textContent = 'Enviar';
-                            }
-                            return;
-                        }
-                        
-                        const storage = getStorage();
-                        const timestamp = Date.now();
-                        
-                        // Sanitizar el nombre del archivo: eliminar espacios y caracteres especiales
-                        const originalName = window.selectedImageFile.name;
-                        
-                        // Encontrar la extensión real (después del último punto)
-                        const lastDotIndex = originalName.lastIndexOf('.');
-                        let fileNameWithoutExt = '';
-                        let fileExtension = '';
-                        
-                        if (lastDotIndex > 0 && lastDotIndex < originalName.length - 1) {
-                            fileNameWithoutExt = originalName.substring(0, lastDotIndex);
-                            fileExtension = originalName.substring(lastDotIndex + 1);
-                        } else {
-                            fileNameWithoutExt = originalName;
-                            fileExtension = '';
-                        }
-                        
-                        // Sanitizar solo el nombre sin la extensión
-                        let sanitizedName = fileNameWithoutExt
-                            .replace(/\s+/g, '_') // Reemplazar espacios con guiones bajos
-                            .replace(/[^a-zA-Z0-9._-]/g, '') // Eliminar caracteres especiales
-                            .replace(/_{2,}/g, '_') // Reemplazar múltiples guiones bajos con uno solo
-                            .replace(/^_+|_+$/g, '') // Eliminar guiones bajos al inicio y final
-                            .toLowerCase(); // Convertir a minúsculas
-                        
-                        // Asegurar que el nombre sanitizado no termine con extensión común
-                        const commonExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-                        for (const ext of commonExts) {
-                            if (sanitizedName.endsWith('.' + ext)) {
-                                sanitizedName = sanitizedName.substring(0, sanitizedName.length - ext.length - 1);
-                            }
-                        }
-                        
-                        // Construir el nombre final asegurando una sola extensión
-                        let cleanFileName = '';
-                        if (fileExtension && commonExts.includes(fileExtension.toLowerCase())) {
-                            cleanFileName = `${window.currentUser.uid}_${timestamp}_${sanitizedName}.${fileExtension.toLowerCase()}`;
-                        } else if (fileExtension) {
-                            cleanFileName = `${window.currentUser.uid}_${timestamp}_${sanitizedName}.${fileExtension.toLowerCase()}`;
-                        } else {
-                            // Si no hay extensión, usar 'jpg' por defecto
-                            cleanFileName = `${window.currentUser.uid}_${timestamp}_${sanitizedName}.jpg`;
-                        }
-                        
-                        // Verificación final: eliminar cualquier doble extensión que pueda quedar
-                        cleanFileName = cleanFileName.replace(/\.(jpg|jpeg|png|gif|webp)\.(jpg|jpeg|png|gif|webp)$/i, (match, ext1, ext2) => {
-                            return '.' + ext2.toLowerCase();
-                        });
-                        
-                        const imageRef = ref(storage, `chat_images/${cleanFileName}`);
-                        
-                        // Configurar metadata para la imagen
-                        const metadata = {
-                            contentType: window.selectedImageFile.type || 'image/jpeg',
-                            customMetadata: {
-                                uploadedBy: window.currentUser.uid,
-                                uploadedAt: new Date().toISOString(),
-                                chatId: finalChatId
-                            }
-                        };
-                        
-                        await uploadBytes(imageRef, window.selectedImageFile, metadata);
-                        imageUrl = await getDownloadURL(imageRef);
-                        
-                        // Limpiar preview
-                        if (imagePreviewContainer) {
-                            imagePreviewContainer.innerHTML = '';
-                        }
-                        if (chatImageInputGallery) {
-                            chatImageInputGallery.value = '';
-                        }
-                        if (chatImageInputCamera) {
-                            chatImageInputCamera.value = '';
-                        }
-                        window.selectedImageFile = null;
-                    } catch (error) {
-                        console.error('Error al subir imagen:', error);
-                        let errorMessage = '❌ Error al subir la imagen.';
-                        
-                        // Detectar errores de CORS incluso si no están en error.code
-                        const errorString = JSON.stringify(error).toLowerCase();
-                        const isCorsError = errorString.includes('cors') || 
-                                          errorString.includes('cross-origin') ||
-                                          error.message?.includes('CORS') ||
-                                          error.message?.includes('cors') ||
-                                          (window.location.protocol === 'file:');
-                        
-                        if (isCorsError || window.location.protocol === 'file:') {
-                            errorMessage = '⚠️ ERROR DE CORS\n\n' +
-                                         'Estás abriendo el archivo desde file://\n\n' +
-                                         'SOLUCIÓN: Abre desde un servidor web:\n' +
-                                         '• http://localhost:8000 (servidor local)\n' +
-                                         '• GitHub Pages (producción)';
-                        } else if (error.code === 'storage/unauthorized') {
-                            errorMessage = 'No tienes permisos para subir imágenes. Verifica Firebase Storage.';
-                        } else if (error.code === 'storage/canceled') {
-                            errorMessage = 'La subida fue cancelada.';
-                        } else if (error.code === 'storage/unknown') {
-                            errorMessage = 'Error desconocido. Verifica tu conexión a internet.';
-                        } else if (error.code === 'storage/quota-exceeded') {
-                            errorMessage = 'Se ha excedido la cuota de almacenamiento.';
-                        } else if (error.code) {
-                            errorMessage = `Error: ${error.code}`;
-                        }
-                        
-                        // Si es error de CORS desde GitHub Pages, dar instrucciones específicas
-                        if (isCorsError && window.location.hostname.includes('github.io')) {
-                            errorMessage += '\n\n⚠️ IMPORTANTE: Firebase Storage necesita configurarse para permitir GitHub Pages.\n\n' +
-                                          'Ve a Firebase Console → Storage → Rules y asegúrate de tener permisos correctos.';
-                        }
-                        
-                        alert(errorMessage);
-                        if (sendBtn) {
-                            sendBtn.disabled = false;
-                            sendBtn.textContent = 'Enviar';
-                        }
-                        return;
-                    }
-                }
-                
                 await addDoc(collection(db, "mensajes"), {
                     chatId: finalChatId,
                     fromUserId: window.currentUser.uid,
                     toUserId: currentChatFriendId,
-                    text: text || '',
-                    imageUrl: imageUrl,
+                    text: text,
                     timestamp: Date.now(),
                     read: false
                 });
@@ -13334,7 +13052,7 @@
                 // Enviar notificación push al destinatario (si tiene token FCM)
                 try {
                     const senderName = window.currentUserName || 'Alguien';
-                    let messagePreview = text || (imageUrl ? '📷 Imagen' : '');
+                    let messagePreview = text;
                     if (messagePreview.length > 50) {
                         messagePreview = messagePreview.substring(0, 50) + '...';
                     }
@@ -13484,28 +13202,6 @@
                 messagesEl.innerHTML = '';
             }
             
-            // Limpiar preview de imagen
-            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-            if (imagePreviewContainer) {
-                imagePreviewContainer.innerHTML = '';
-            }
-            
-            // Limpiar inputs de imagen
-            const chatImageInputGallery = document.getElementById('chatImageInputGallery');
-            const chatImageInputCamera = document.getElementById('chatImageInputCamera');
-            if (chatImageInputGallery) {
-                chatImageInputGallery.value = '';
-            }
-            if (chatImageInputCamera) {
-                chatImageInputCamera.value = '';
-            }
-            window.selectedImageFile = null;
-            
-            // Cerrar menú de imagen si está abierto
-            const imageMenu = document.getElementById('imageMenu');
-            if (imageMenu) {
-                imageMenu.style.display = 'none';
-            }
             
             // Ocultar emoji picker
             const emojiPicker = document.getElementById('emojiPicker');
