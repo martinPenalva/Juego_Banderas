@@ -5914,12 +5914,25 @@
             background: white;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
+            display: none;
             flex-direction: column;
             max-height: 500px;
             transition: all 0.3s ease;
             position: relative;
             z-index: 10;
+        }
+
+        .profile-active-chat.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            max-height: 100vh;
+            margin: 0;
+            border-radius: 0;
+            z-index: 9999;
+            display: flex;
         }
 
         .profile-active-chat.minimized {
@@ -5945,6 +5958,11 @@
             border-radius: 15px 15px 0 0;
             cursor: pointer;
             transition: border-radius 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .profile-active-chat.fullscreen .active-chat-header {
+            border-radius: 0;
         }
 
         .active-chat-header-info {
@@ -5976,22 +5994,23 @@
             font-size: 1.1em;
         }
 
-        .active-chat-minimize {
+        .active-chat-close {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.2em;
+            font-size: 1.3em;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
+            font-weight: bold;
         }
 
-        .active-chat-minimize:hover {
+        .active-chat-close:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: scale(1.1);
         }
@@ -6005,6 +6024,12 @@
             gap: 10px;
             max-height: 350px;
             min-height: 200px;
+        }
+
+        .profile-active-chat.fullscreen .active-chat-messages {
+            max-height: calc(100vh - 300px);
+            min-height: calc(100vh - 300px);
+            overflow-y: auto;
         }
 
         .active-chat-message {
@@ -6158,11 +6183,66 @@
 
         .active-chat-input-container {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             padding: 15px;
             border-top: 1px solid #e2e8f0;
             background: #f7fafc;
             border-radius: 0 0 15px 15px;
+            flex-shrink: 0;
+            overflow: visible;
+            position: relative;
+            z-index: 10;
+        }
+
+        .profile-active-chat.fullscreen .active-chat-input-container {
+            border-radius: 0;
+            position: sticky;
+            bottom: 0;
+            background: #f7fafc;
+        }
+
+        #imagePreviewContainer {
+            flex-shrink: 0;
+            max-height: 150px;
+            overflow-y: auto;
+            padding-bottom: 5px;
+            width: 100%;
+            order: 1;
+        }
+        
+        /* Asegurar que el wrapper con el botón de enviar siempre sea visible */
+        .active-chat-input-wrapper {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            width: 100%;
+            flex-shrink: 0;
+            order: 2;
+            position: relative;
+            z-index: 11;
+        }
+        
+        /* Asegurar que el botón de enviar siempre sea visible */
+        #activeChatSendBtn {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative;
+            z-index: 12;
+        }
+
+        .active-chat-input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .active-chat-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
 
         .active-chat-input {
@@ -6173,10 +6253,40 @@
             font-size: 1em;
             outline: none;
             transition: border-color 0.3s ease;
+            resize: none;
+            min-height: 40px;
+            max-height: 120px;
+            font-family: inherit;
         }
 
         .active-chat-input:focus {
             border-color: #667eea;
+        }
+
+        .chat-image-input {
+            display: none;
+        }
+
+        .active-chat-action-btn {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .active-chat-action-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            transform: scale(1.1);
         }
 
         .active-chat-send-btn {
@@ -6188,6 +6298,12 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            flex-shrink: 0;
+            min-width: 80px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .active-chat-send-btn:hover {
@@ -6195,10 +6311,179 @@
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
+        .active-chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Selector de emojis */
+        .emoji-picker {
+            position: absolute;
+            bottom: 80px;
+            right: 15px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            width: 300px;
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .profile-active-chat.fullscreen .emoji-picker {
+            bottom: 100px;
+        }
+
+        .emoji-picker.show {
+            display: block;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+        }
+
+        .emoji-item {
+            font-size: 1.5em;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .emoji-item:hover {
+            background: #f0f0f0;
+            transform: scale(1.2);
+        }
+
+        /* Menú de selección de imagen */
+        .image-menu-container {
+            position: relative;
+        }
+
+        .image-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            margin-bottom: 10px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 10001;
+            min-width: 150px;
+            overflow: hidden;
+        }
+
+        .image-menu-item {
+            width: 100%;
+            padding: 12px 16px;
+            background: white;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .image-menu-item:hover {
+            background: #f7fafc;
+        }
+
+        .image-menu-item:first-child {
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* Vista previa de imagen */
+        .image-preview {
+            position: relative;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: inline-block;
+            max-width: 250px;
+        }
+
+        .image-preview img {
+            width: 100%;
+            max-width: 250px;
+            max-height: 150px;
+            object-fit: contain;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .image-preview-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(245, 101, 101, 0.9);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-remove:hover {
+            background: #f56565;
+            transform: scale(1.1);
+        }
+
+        /* Mensaje con imagen */
+        .active-chat-message-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 10px;
+            margin-top: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .active-chat-message-image:hover {
+            transform: scale(1.05);
+        }
+
         @media (max-width: 768px) {
             /* Estilos responsive para chat */
-            .profile-active-chat {
+            .profile-active-chat.fullscreen {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+            }
+            
+            .profile-active-chat:not(.fullscreen) {
                 max-height: 400px;
+            }
+            
+            .emoji-picker {
+                width: 250px;
+                max-height: 200px;
+            }
+            
+            .emoji-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            
+            .image-menu {
+                left: auto;
+                right: 0;
             }
 
             .active-chat-header {
@@ -6378,12 +6663,30 @@
                                 </div>
                                 <div class="active-chat-header-name" id="activeChatHeaderName">Amigo</div>
                             </div>
-                            <button class="active-chat-minimize" id="activeChatMinimize">➖</button>
+                            <button class="active-chat-close" id="activeChatClose" title="Cerrar chat">✕</button>
                         </div>
                         <div class="active-chat-messages" id="activeChatMessages"></div>
                         <div class="active-chat-input-container">
-                            <input type="text" id="activeChatInput" class="active-chat-input" placeholder="Escribe un mensaje..." maxlength="500">
-                            <button class="active-chat-send-btn" id="activeChatSendBtn">Enviar</button>
+                            <div class="emoji-picker" id="emojiPicker">
+                                <div class="emoji-grid" id="emojiGrid"></div>
+                            </div>
+                            <div id="imagePreviewContainer"></div>
+                            <div class="active-chat-input-wrapper">
+                                <div class="active-chat-actions">
+                                    <button class="active-chat-action-btn" id="emojiBtn" title="Emojis">😀</button>
+                                    <div class="image-menu-container" style="position: relative;">
+                                        <button class="active-chat-action-btn" id="imageBtn" title="Enviar imagen">📷</button>
+                                        <div class="image-menu" id="imageMenu" style="display: none;">
+                                            <button class="image-menu-item" id="galleryBtn">📁 Galería</button>
+                                            <button class="image-menu-item" id="cameraBtn">📷 Cámara</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <textarea id="activeChatInput" class="active-chat-input" placeholder="Escribe un mensaje..." maxlength="500" rows="1"></textarea>
+                                <button class="active-chat-send-btn" id="activeChatSendBtn">Enviar</button>
+                            </div>
+                            <input type="file" id="chatImageInputGallery" class="chat-image-input" accept="image/*">
+                            <input type="file" id="chatImageInputCamera" class="chat-image-input" accept="image/*" capture="environment">
                         </div>
                     </div>
                     <div class="profile-library-section" id="profileLibrarySection">
@@ -8979,7 +9282,151 @@
         // Event listeners para chat
         const activeChatSendBtn = document.getElementById('activeChatSendBtn');
         const activeChatInput = document.getElementById('activeChatInput');
-        const activeChatMinimize = document.getElementById('activeChatMinimize');
+        const activeChatClose = document.getElementById('activeChatClose');
+        const emojiBtn = document.getElementById('emojiBtn');
+        const imageBtn = document.getElementById('imageBtn');
+        const imageMenu = document.getElementById('imageMenu');
+        const galleryBtn = document.getElementById('galleryBtn');
+        const cameraBtn = document.getElementById('cameraBtn');
+        const emojiPicker = document.getElementById('emojiPicker');
+        const emojiGrid = document.getElementById('emojiGrid');
+        const chatImageInputGallery = document.getElementById('chatImageInputGallery');
+        const chatImageInputCamera = document.getElementById('chatImageInputCamera');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        
+        // Emojis populares
+        const commonEmojis = ['😀', '😂', '😍', '🥰', '😎', '😊', '🙂', '🤗', '😴', '😋', 
+                             '🤔', '😮', '😱', '👍', '👎', '❤️', '💯', '🔥', '⭐', '🎉',
+                             '😢', '😡', '🤯', '💪', '👏', '🙌', '🤝', '🙏', '💖', '💕',
+                             '🎂', '🎁', '🎈', '🎊', '⚽', '🏀', '🏆', '🎮', '🎵', '🎬',
+                             '🌍', '🌎', '🌏', '🌞', '🌙', '⭐', '🌟', '🌈', '☀️', '⛈️',
+                             '🚀', '✈️', '🚗', '🚕', '🚙', '🚌', '🚎', '🏎️', '🚓', '🚑',
+                             '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯'];
+        
+        // Cargar emojis en el grid
+        if (emojiGrid) {
+            commonEmojis.forEach(emoji => {
+                const emojiItem = document.createElement('div');
+                emojiItem.className = 'emoji-item';
+                emojiItem.textContent = emoji;
+                emojiItem.addEventListener('click', () => {
+                    if (activeChatInput) {
+                        activeChatInput.value += emoji;
+                        activeChatInput.focus();
+                        // Autoajustar altura del textarea
+                        activeChatInput.style.height = 'auto';
+                        activeChatInput.style.height = activeChatInput.scrollHeight + 'px';
+                    }
+                });
+                emojiGrid.appendChild(emojiItem);
+            });
+        }
+        
+        // Toggle emoji picker
+        if (emojiBtn && emojiPicker) {
+            emojiBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                emojiPicker.classList.toggle('show');
+            });
+        }
+        
+        // Cerrar emoji picker al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (emojiPicker && emojiBtn && !emojiPicker.contains(e.target) && !emojiBtn.contains(e.target)) {
+                emojiPicker.classList.remove('show');
+            }
+        });
+        
+        // Menú de selección de imagen (Galería o Cámara)
+        if (imageBtn && imageMenu) {
+            imageBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Toggle del menú
+                const isVisible = imageMenu.style.display === 'block';
+                imageMenu.style.display = isVisible ? 'none' : 'block';
+            });
+        }
+        
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (imageMenu && imageBtn && !imageMenu.contains(e.target) && !imageBtn.contains(e.target)) {
+                imageMenu.style.display = 'none';
+            }
+        });
+        
+        // Botón de galería
+        if (galleryBtn && chatImageInputGallery) {
+            galleryBtn.addEventListener('click', () => {
+                imageMenu.style.display = 'none';
+                chatImageInputGallery.click();
+            });
+        }
+        
+        // Botón de cámara
+        if (cameraBtn && chatImageInputCamera) {
+            cameraBtn.addEventListener('click', () => {
+                imageMenu.style.display = 'none';
+                chatImageInputCamera.click();
+            });
+        }
+        
+        // Función para manejar la selección de imagen
+        function handleImageSelection(file, inputElement) {
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { // 5MB máximo
+                    alert('La imagen es demasiado grande. Máximo 5MB.');
+                    inputElement.value = '';
+                    return;
+                }
+                window.selectedImageFile = file;
+                // Mostrar preview
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    imagePreviewContainer.innerHTML = `
+                        <div class="image-preview">
+                            <img src="${event.target.result}" alt="Preview">
+                            <button class="image-preview-remove" onclick="document.getElementById('chatImageInputGallery').value = ''; document.getElementById('chatImageInputCamera').value = ''; document.getElementById('imagePreviewContainer').innerHTML = ''; window.selectedImageFile = null;">✕</button>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Manejar selección de imagen desde galería
+        // Variable global para la imagen seleccionada
+        window.selectedImageFile = null;
+        if (chatImageInputGallery) {
+            chatImageInputGallery.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                handleImageSelection(file, e.target);
+            });
+        }
+        
+        // Manejar selección de imagen desde cámara
+        if (chatImageInputCamera) {
+            chatImageInputCamera.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                handleImageSelection(file, e.target);
+            });
+        }
+        
+        // Autoajustar altura del textarea
+        if (activeChatInput) {
+            activeChatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            activeChatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (window.sendChatMessage) {
+                        window.sendChatMessage();
+                    }
+                }
+            });
+        }
         
         if (activeChatSendBtn) {
             activeChatSendBtn.addEventListener('click', () => {
@@ -8989,38 +9436,11 @@
             });
         }
         
-        if (activeChatInput) {
-            activeChatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    if (window.sendChatMessage) {
-                        window.sendChatMessage();
-                    }
-                }
-            });
-        }
-        
-        if (activeChatMinimize) {
-            activeChatMinimize.addEventListener('click', (e) => {
+        if (activeChatClose) {
+            activeChatClose.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (window.toggleChatMinimize) {
-                    window.toggleChatMinimize();
-                }
-            });
-        }
-        
-        // Hacer que el header sea clicable para maximizar si está minimizado
-        const activeChatHeader = document.querySelector('.active-chat-header');
-        if (activeChatHeader) {
-            activeChatHeader.addEventListener('click', (e) => {
-                // No hacer nada si se hace clic en el botón de minimizar
-                if (e.target === activeChatMinimize || e.target.closest('.active-chat-minimize')) {
-                    return;
-                }
-                const activeChat = document.getElementById('profileActiveChat');
-                if (activeChat && activeChat.classList.contains('minimized')) {
-                    if (window.toggleChatMinimize) {
-                        window.toggleChatMinimize();
-                    }
+                if (window.closeChat) {
+                    window.closeChat();
                 }
             });
         }
@@ -12194,8 +12614,15 @@
                 // Limpiar mensajes anteriores
                 messagesEl.innerHTML = '';
                 
-                // Mostrar el chat activo (pero NO expandir el desplegable de chats)
-                activeChat.style.display = 'block';
+                // Mostrar el chat activo en pantalla completa
+                activeChat.style.display = 'flex';
+                activeChat.classList.add('fullscreen');
+                
+                // Ocultar otros elementos del perfil
+                const profileContent = document.querySelector('.profile-content');
+                if (profileContent) {
+                    profileContent.style.display = 'none';
+                }
                 
                 // NO cargar la lista completa de chats - solo cargar esta conversación
                 // Escuchar nuevos mensajes en tiempo real (esto también carga los mensajes iniciales)
@@ -12299,9 +12726,7 @@
                 // NO ocultar la sección de chats - debe permanecer visible siempre
                 // La sección de chats permanece visible para acceso rápido
                 
-                // Mostrar chat activo y asegurarse de que no esté minimizado
-                activeChat.style.display = 'flex';
-                activeChat.classList.remove('minimized');
+                // El chat ya está en pantalla completa
                 
                 // Hacer scroll hacia el chat activo
                 setTimeout(() => {
@@ -12642,9 +13067,25 @@
             const content = document.createElement('div');
             content.className = 'active-chat-message-content';
             
-            const text = document.createElement('div');
-            text.textContent = messageData.text || '';
-            content.appendChild(text);
+            // Mostrar imagen si existe
+            if (messageData.imageUrl) {
+                const imageDiv = document.createElement('img');
+                imageDiv.className = 'active-chat-message-image';
+                imageDiv.src = messageData.imageUrl;
+                imageDiv.alt = 'Imagen compartida';
+                imageDiv.addEventListener('click', () => {
+                    // Abrir imagen en ventana nueva o modal
+                    window.open(messageData.imageUrl, '_blank');
+                });
+                content.appendChild(imageDiv);
+            }
+            
+            // Mostrar texto si existe
+            if (messageData.text) {
+                const text = document.createElement('div');
+                text.textContent = messageData.text;
+                content.appendChild(text);
+            }
             
             const time = document.createElement('div');
             time.className = 'active-chat-message-time';
@@ -12682,18 +13123,96 @@
             if (!chatInput) return;
             
             const text = chatInput.value.trim();
-            if (!text) return;
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            
+            // Si no hay texto ni imagen, no enviar
+            if (!text && !window.selectedImageFile) return;
+            
+            // Deshabilitar botón de enviar mientras se procesa
+            const sendBtn = document.getElementById('activeChatSendBtn');
+            if (sendBtn) {
+                sendBtn.disabled = true;
+                sendBtn.textContent = 'Enviando...';
+            }
             
             try {
                 const chatId1 = `${window.currentUser.uid}_${currentChatFriendId}`;
                 const chatId2 = `${currentChatFriendId}_${window.currentUser.uid}`;
                 const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
                 
+                let imageUrl = null;
+                
+                // Subir imagen si existe
+                if (window.selectedImageFile) {
+                    try {
+                        // Verificar que no estemos en file://
+                        if (window.location.protocol === 'file:') {
+                            alert('⚠️ Error: No se pueden subir imágenes cuando se abre el archivo directamente desde el sistema de archivos.\n\nPor favor, usa un servidor local o sube la aplicación a GitHub Pages.\n\nPara desarrollo local, puedes usar:\n- Python: python -m http.server 8000\n- Node.js: npx http-server\n- VS Code: Live Server extension');
+                            if (sendBtn) {
+                                sendBtn.disabled = false;
+                                sendBtn.textContent = 'Enviar';
+                            }
+                            return;
+                        }
+                        
+                        const storage = getStorage();
+                        const timestamp = Date.now();
+                        
+                        // Sanitizar el nombre del archivo: eliminar espacios y caracteres especiales
+                        const originalName = window.selectedImageFile.name;
+                        const fileExtension = originalName.split('.').pop();
+                        const sanitizedName = originalName
+                            .replace(/\s+/g, '_') // Reemplazar espacios con guiones bajos
+                            .replace(/[^a-zA-Z0-9._-]/g, '') // Eliminar caracteres especiales
+                            .replace(/_{2,}/g, '_') // Reemplazar múltiples guiones bajos con uno solo
+                            .toLowerCase(); // Convertir a minúsculas
+                        
+                        const finalFileName = `${window.currentUser.uid}_${timestamp}_${sanitizedName}.${fileExtension}`;
+                        const imageRef = ref(storage, `chat_images/${finalFileName}`);
+                        
+                        await uploadBytes(imageRef, window.selectedImageFile);
+                        imageUrl = await getDownloadURL(imageRef);
+                        
+                        // Limpiar preview
+                        if (imagePreviewContainer) {
+                            imagePreviewContainer.innerHTML = '';
+                        }
+                        if (chatImageInputGallery) {
+                            chatImageInputGallery.value = '';
+                        }
+                        if (chatImageInputCamera) {
+                            chatImageInputCamera.value = '';
+                        }
+                        window.selectedImageFile = null;
+                    } catch (error) {
+                        console.error('Error al subir imagen:', error);
+                        let errorMessage = 'Error al subir la imagen.';
+                        
+                        if (error.code === 'storage/unauthorized') {
+                            errorMessage = 'No tienes permisos para subir imágenes. Verifica la configuración de Firebase Storage.';
+                        } else if (error.code === 'storage/canceled') {
+                            errorMessage = 'La subida de la imagen fue cancelada.';
+                        } else if (error.code === 'storage/unknown') {
+                            errorMessage = 'Error desconocido al subir la imagen. Verifica tu conexión a internet.';
+                        } else if (error.message && error.message.includes('CORS')) {
+                            errorMessage = 'Error de CORS. Asegúrate de abrir la aplicación desde un servidor web (no desde file://).';
+                        }
+                        
+                        alert(errorMessage);
+                        if (sendBtn) {
+                            sendBtn.disabled = false;
+                            sendBtn.textContent = 'Enviar';
+                        }
+                        return;
+                    }
+                }
+                
                 await addDoc(collection(db, "mensajes"), {
                     chatId: finalChatId,
                     fromUserId: window.currentUser.uid,
                     toUserId: currentChatFriendId,
-                    text: text,
+                    text: text || '',
+                    imageUrl: imageUrl,
                     timestamp: Date.now(),
                     read: false
                 });
@@ -12701,7 +13220,10 @@
                 // Enviar notificación push al destinatario (si tiene token FCM)
                 try {
                     const senderName = window.currentUserName || 'Alguien';
-                    const messagePreview = text.length > 50 ? text.substring(0, 50) + '...' : text;
+                    let messagePreview = text || (imageUrl ? '📷 Imagen' : '');
+                    if (messagePreview.length > 50) {
+                        messagePreview = messagePreview.substring(0, 50) + '...';
+                    }
                     
                     if (window.sendPushNotification) {
                         await window.sendPushNotification(
@@ -12728,8 +13250,15 @@
                     timestamp: Date.now()
                 }, { merge: true });
                 
-                // Limpiar input
+                // Limpiar input y resetear altura
                 chatInput.value = '';
+                chatInput.style.height = 'auto';
+                
+                // Restaurar botón de enviar
+                if (sendBtn) {
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Enviar';
+                }
                 
                 // El onSnapshot se encargará de actualizar automáticamente en tiempo real
                 // Scroll al final después de enviar (el onSnapshot también lo hará)
@@ -12741,6 +13270,11 @@
                 }, 200);
             } catch (error) {
                 console.error('Error al enviar mensaje:', error);
+                // Restaurar botón en caso de error
+                if (sendBtn) {
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Enviar';
+                }
                 alert('Error al enviar el mensaje');
             }
         };
@@ -12748,7 +13282,7 @@
         // Minimizar/maximizar chat
         window.toggleChatMinimize = function() {
             const activeChat = document.getElementById('profileActiveChat');
-            const minimizeBtn = document.getElementById('activeChatMinimize');
+            // Botón de cerrar ya no existe, usar activeChatClose
             if (!activeChat) {
                 console.error('No se encontró profileActiveChat');
                 return;
@@ -12821,12 +13355,48 @@
             const activeChat = document.getElementById('profileActiveChat');
             if (activeChat) {
                 activeChat.style.display = 'none';
+                activeChat.classList.remove('fullscreen');
+            }
+            
+            // Mostrar contenido del perfil nuevamente
+            const profileContent = document.querySelector('.profile-content');
+            if (profileContent) {
+                profileContent.style.display = 'block';
             }
             
             // Limpiar mensajes al cerrar para evitar que aparezcan fuera del chat
             const messagesEl = document.getElementById('activeChatMessages');
             if (messagesEl) {
                 messagesEl.innerHTML = '';
+            }
+            
+            // Limpiar preview de imagen
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            if (imagePreviewContainer) {
+                imagePreviewContainer.innerHTML = '';
+            }
+            
+            // Limpiar inputs de imagen
+            const chatImageInputGallery = document.getElementById('chatImageInputGallery');
+            const chatImageInputCamera = document.getElementById('chatImageInputCamera');
+            if (chatImageInputGallery) {
+                chatImageInputGallery.value = '';
+            }
+            if (chatImageInputCamera) {
+                chatImageInputCamera.value = '';
+            }
+            window.selectedImageFile = null;
+            
+            // Cerrar menú de imagen si está abierto
+            const imageMenu = document.getElementById('imageMenu');
+            if (imageMenu) {
+                imageMenu.style.display = 'none';
+            }
+            
+            // Ocultar emoji picker
+            const emojiPicker = document.getElementById('emojiPicker');
+            if (emojiPicker) {
+                emojiPicker.classList.remove('show');
             }
             
             // Desactivar listener de mensajes en tiempo real
