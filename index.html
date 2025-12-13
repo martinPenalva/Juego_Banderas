@@ -13204,33 +13204,65 @@
                         
                         // Sanitizar el nombre del archivo: eliminar espacios y caracteres especiales
                         const originalName = window.selectedImageFile.name;
+                        
+                        // Encontrar la extensión real (después del último punto)
                         const lastDotIndex = originalName.lastIndexOf('.');
-                        const fileNameWithoutExt = lastDotIndex > 0 ? originalName.substring(0, lastDotIndex) : originalName;
-                        const fileExtension = lastDotIndex > 0 ? originalName.substring(lastDotIndex + 1) : '';
+                        let fileNameWithoutExt = '';
+                        let fileExtension = '';
+                        
+                        if (lastDotIndex > 0 && lastDotIndex < originalName.length - 1) {
+                            fileNameWithoutExt = originalName.substring(0, lastDotIndex);
+                            fileExtension = originalName.substring(lastDotIndex + 1);
+                        } else {
+                            fileNameWithoutExt = originalName;
+                            fileExtension = '';
+                        }
                         
                         // Sanitizar solo el nombre sin la extensión
-                        const sanitizedName = fileNameWithoutExt
+                        let sanitizedName = fileNameWithoutExt
                             .replace(/\s+/g, '_') // Reemplazar espacios con guiones bajos
                             .replace(/[^a-zA-Z0-9._-]/g, '') // Eliminar caracteres especiales
                             .replace(/_{2,}/g, '_') // Reemplazar múltiples guiones bajos con uno solo
                             .replace(/^_+|_+$/g, '') // Eliminar guiones bajos al inicio y final
                             .toLowerCase(); // Convertir a minúsculas
                         
-                        // Construir el nombre final (asegurar que no tenga doble extensión)
-                        const finalFileName = fileExtension 
-                            ? `${window.currentUser.uid}_${timestamp}_${sanitizedName}.${fileExtension.toLowerCase()}`
-                            : `${window.currentUser.uid}_${timestamp}_${sanitizedName}`;
-                        
-                        // Verificar y corregir doble extensión si existe
-                        let cleanFileName = finalFileName;
-                        const doubleExtPattern = /\.(jpg|jpeg|png|gif|webp)\.(jpg|jpeg|png|gif|webp)$/i;
-                        if (doubleExtPattern.test(cleanFileName)) {
-                            cleanFileName = cleanFileName.replace(doubleExtPattern, (match, ext1, ext2) => `.${ext2.toLowerCase()}`);
+                        // Asegurar que el nombre sanitizado no termine con extensión común
+                        const commonExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                        for (const ext of commonExts) {
+                            if (sanitizedName.endsWith('.' + ext)) {
+                                sanitizedName = sanitizedName.substring(0, sanitizedName.length - ext.length - 1);
+                            }
                         }
+                        
+                        // Construir el nombre final asegurando una sola extensión
+                        let cleanFileName = '';
+                        if (fileExtension && commonExts.includes(fileExtension.toLowerCase())) {
+                            cleanFileName = `${window.currentUser.uid}_${timestamp}_${sanitizedName}.${fileExtension.toLowerCase()}`;
+                        } else if (fileExtension) {
+                            cleanFileName = `${window.currentUser.uid}_${timestamp}_${sanitizedName}.${fileExtension.toLowerCase()}`;
+                        } else {
+                            // Si no hay extensión, usar 'jpg' por defecto
+                            cleanFileName = `${window.currentUser.uid}_${timestamp}_${sanitizedName}.jpg`;
+                        }
+                        
+                        // Verificación final: eliminar cualquier doble extensión que pueda quedar
+                        cleanFileName = cleanFileName.replace(/\.(jpg|jpeg|png|gif|webp)\.(jpg|jpeg|png|gif|webp)$/i, (match, ext1, ext2) => {
+                            return '.' + ext2.toLowerCase();
+                        });
                         
                         const imageRef = ref(storage, `chat_images/${cleanFileName}`);
                         
-                        await uploadBytes(imageRef, window.selectedImageFile);
+                        // Configurar metadata para la imagen
+                        const metadata = {
+                            contentType: window.selectedImageFile.type || 'image/jpeg',
+                            customMetadata: {
+                                uploadedBy: window.currentUser.uid,
+                                uploadedAt: new Date().toISOString(),
+                                chatId: finalChatId
+                            }
+                        };
+                        
+                        await uploadBytes(imageRef, window.selectedImageFile, metadata);
                         imageUrl = await getDownloadURL(imageRef);
                         
                         // Limpiar preview
