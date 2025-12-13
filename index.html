@@ -6369,33 +6369,40 @@
         .image-menu {
             position: absolute;
             bottom: 100%;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             margin-bottom: 10px;
             background: white;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             z-index: 10001;
-            min-width: 150px;
+            min-width: 160px;
             overflow: hidden;
         }
 
         .image-menu-item {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 18px;
             background: white;
             border: none;
-            text-align: left;
+            text-align: center;
             cursor: pointer;
-            font-size: 0.95em;
+            font-size: 1em;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
+            font-weight: 500;
         }
 
         .image-menu-item:hover {
             background: #f7fafc;
+        }
+
+        .image-menu-item:active {
+            background: #e2e8f0;
         }
 
         .image-menu-item:first-child {
@@ -6482,8 +6489,15 @@
             }
             
             .image-menu {
-                left: auto;
-                right: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                min-width: 140px;
+                margin-bottom: 8px;
+            }
+            
+            .image-menu-item {
+                padding: 16px 20px;
+                font-size: 1.05em;
             }
 
             .active-chat-header {
@@ -9388,6 +9402,22 @@
                             <button class="image-preview-remove" onclick="document.getElementById('chatImageInputGallery').value = ''; document.getElementById('chatImageInputCamera').value = ''; document.getElementById('imagePreviewContainer').innerHTML = ''; window.selectedImageFile = null;">✕</button>
                         </div>
                     `;
+                    
+                    // Asegurar que el botón de enviar sea visible
+                    const sendBtn = document.getElementById('activeChatSendBtn');
+                    if (sendBtn) {
+                        sendBtn.style.display = 'flex';
+                        sendBtn.style.visibility = 'visible';
+                        sendBtn.style.opacity = '1';
+                    }
+                    
+                    // Scroll al contenedor de entrada para ver el botón
+                    setTimeout(() => {
+                        const inputContainer = document.querySelector('.active-chat-input-container');
+                        if (inputContainer) {
+                            inputContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        }
+                    }, 100);
                 };
                 reader.readAsDataURL(file);
             }
@@ -13145,9 +13175,23 @@
                 // Subir imagen si existe
                 if (window.selectedImageFile) {
                     try {
-                        // Verificar que no estemos en file://
-                        if (window.location.protocol === 'file:') {
-                            alert('⚠️ Error: No se pueden subir imágenes cuando se abre el archivo directamente desde el sistema de archivos.\n\nPor favor, usa un servidor local o sube la aplicación a GitHub Pages.\n\nPara desarrollo local, puedes usar:\n- Python: python -m http.server 8000\n- Node.js: npx http-server\n- VS Code: Live Server extension');
+                        // Verificar que no estemos en file:// o localhost no configurado
+                        const isFileProtocol = window.location.protocol === 'file:';
+                        const isLocalhost = window.location.hostname === 'localhost' || 
+                                           window.location.hostname === '127.0.0.1' || 
+                                           window.location.hostname === '';
+                        
+                        if (isFileProtocol) {
+                            const errorMsg = '⚠️ ERROR: No se pueden subir imágenes desde file://\n\n' +
+                                           'SOLUCIÓN:\n' +
+                                           '1. Abre la app desde un servidor web\n' +
+                                           '2. Usa GitHub Pages: https://tu-usuario.github.io/Juego_Banderas/\n' +
+                                           '3. O servidor local:\n' +
+                                           '   • Python: python -m http.server 8000\n' +
+                                           '   • Node: npx http-server\n' +
+                                           '   • VS Code: Live Server extension\n\n' +
+                                           'Luego abre: http://localhost:8000';
+                            alert(errorMsg);
                             if (sendBtn) {
                                 sendBtn.disabled = false;
                                 sendBtn.textContent = 'Enviar';
@@ -13160,15 +13204,31 @@
                         
                         // Sanitizar el nombre del archivo: eliminar espacios y caracteres especiales
                         const originalName = window.selectedImageFile.name;
-                        const fileExtension = originalName.split('.').pop();
-                        const sanitizedName = originalName
+                        const lastDotIndex = originalName.lastIndexOf('.');
+                        const fileNameWithoutExt = lastDotIndex > 0 ? originalName.substring(0, lastDotIndex) : originalName;
+                        const fileExtension = lastDotIndex > 0 ? originalName.substring(lastDotIndex + 1) : '';
+                        
+                        // Sanitizar solo el nombre sin la extensión
+                        const sanitizedName = fileNameWithoutExt
                             .replace(/\s+/g, '_') // Reemplazar espacios con guiones bajos
                             .replace(/[^a-zA-Z0-9._-]/g, '') // Eliminar caracteres especiales
                             .replace(/_{2,}/g, '_') // Reemplazar múltiples guiones bajos con uno solo
+                            .replace(/^_+|_+$/g, '') // Eliminar guiones bajos al inicio y final
                             .toLowerCase(); // Convertir a minúsculas
                         
-                        const finalFileName = `${window.currentUser.uid}_${timestamp}_${sanitizedName}.${fileExtension}`;
-                        const imageRef = ref(storage, `chat_images/${finalFileName}`);
+                        // Construir el nombre final (asegurar que no tenga doble extensión)
+                        const finalFileName = fileExtension 
+                            ? `${window.currentUser.uid}_${timestamp}_${sanitizedName}.${fileExtension.toLowerCase()}`
+                            : `${window.currentUser.uid}_${timestamp}_${sanitizedName}`;
+                        
+                        // Verificar y corregir doble extensión si existe
+                        let cleanFileName = finalFileName;
+                        const doubleExtPattern = /\.(jpg|jpeg|png|gif|webp)\.(jpg|jpeg|png|gif|webp)$/i;
+                        if (doubleExtPattern.test(cleanFileName)) {
+                            cleanFileName = cleanFileName.replace(doubleExtPattern, (match, ext1, ext2) => `.${ext2.toLowerCase()}`);
+                        }
+                        
+                        const imageRef = ref(storage, `chat_images/${cleanFileName}`);
                         
                         await uploadBytes(imageRef, window.selectedImageFile);
                         imageUrl = await getDownloadURL(imageRef);
@@ -13186,16 +13246,38 @@
                         window.selectedImageFile = null;
                     } catch (error) {
                         console.error('Error al subir imagen:', error);
-                        let errorMessage = 'Error al subir la imagen.';
+                        let errorMessage = '❌ Error al subir la imagen.';
                         
-                        if (error.code === 'storage/unauthorized') {
-                            errorMessage = 'No tienes permisos para subir imágenes. Verifica la configuración de Firebase Storage.';
+                        // Detectar errores de CORS incluso si no están en error.code
+                        const errorString = JSON.stringify(error).toLowerCase();
+                        const isCorsError = errorString.includes('cors') || 
+                                          errorString.includes('cross-origin') ||
+                                          error.message?.includes('CORS') ||
+                                          error.message?.includes('cors') ||
+                                          (window.location.protocol === 'file:');
+                        
+                        if (isCorsError || window.location.protocol === 'file:') {
+                            errorMessage = '⚠️ ERROR DE CORS\n\n' +
+                                         'Estás abriendo el archivo desde file://\n\n' +
+                                         'SOLUCIÓN: Abre desde un servidor web:\n' +
+                                         '• http://localhost:8000 (servidor local)\n' +
+                                         '• GitHub Pages (producción)';
+                        } else if (error.code === 'storage/unauthorized') {
+                            errorMessage = 'No tienes permisos para subir imágenes. Verifica Firebase Storage.';
                         } else if (error.code === 'storage/canceled') {
-                            errorMessage = 'La subida de la imagen fue cancelada.';
+                            errorMessage = 'La subida fue cancelada.';
                         } else if (error.code === 'storage/unknown') {
-                            errorMessage = 'Error desconocido al subir la imagen. Verifica tu conexión a internet.';
-                        } else if (error.message && error.message.includes('CORS')) {
-                            errorMessage = 'Error de CORS. Asegúrate de abrir la aplicación desde un servidor web (no desde file://).';
+                            errorMessage = 'Error desconocido. Verifica tu conexión a internet.';
+                        } else if (error.code === 'storage/quota-exceeded') {
+                            errorMessage = 'Se ha excedido la cuota de almacenamiento.';
+                        } else if (error.code) {
+                            errorMessage = `Error: ${error.code}`;
+                        }
+                        
+                        // Si es error de CORS desde GitHub Pages, dar instrucciones específicas
+                        if (isCorsError && window.location.hostname.includes('github.io')) {
+                            errorMessage += '\n\n⚠️ IMPORTANTE: Firebase Storage necesita configurarse para permitir GitHub Pages.\n\n' +
+                                          'Ve a Firebase Console → Storage → Rules y asegúrate de tener permisos correctos.';
                         }
                         
                         alert(errorMessage);
@@ -14212,18 +14294,44 @@
                         });
                     `;
                     
-                    const blob = new Blob([swCode], { type: 'application/javascript' });
-                    const swUrl = URL.createObjectURL(blob);
+                    // Verificar si el protocolo soporta Service Workers
+                    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                        // No registrar Service Worker si no es HTTPS o localhost
+                        return;
+                    }
                     
-                    const registration = await navigator.serviceWorker.register(swUrl);
-                    // Service Worker registrado exitosamente (solo log en desarrollo)
-                    // console.log('Service Worker registrado:', registration);
-                    
-                    // Esperar a que el Service Worker esté listo
-                    await navigator.serviceWorker.ready;
+                    try {
+                        const blob = new Blob([swCode], { type: 'application/javascript' });
+                        const swUrl = URL.createObjectURL(blob);
+                        
+                        const registration = await navigator.serviceWorker.register(swUrl, {
+                            scope: './',
+                            type: 'classic'
+                        });
+                        
+                        // Esperar a que el Service Worker esté listo
+                        await navigator.serviceWorker.ready;
+                    } catch (swError) {
+                        // Intentar limpiar el blob URL si hay error
+                        if (typeof URL.revokeObjectURL === 'function') {
+                            try {
+                                URL.revokeObjectURL(swUrl);
+                            } catch (e) {
+                                // Ignorar errores al revocar
+                            }
+                        }
+                        
+                        // Solo mostrar error si no es por protocolo o blob URL (común en algunos navegadores)
+                        if (!swError.message.includes('file://') && 
+                            !swError.message.includes('null') && 
+                            !swError.message.includes('blob:') &&
+                            !swError.message.includes('unsupported')) {
+                            console.error('Error al registrar Service Worker:', swError);
+                        }
+                    }
                 } catch (error) {
                     // Solo mostrar error si no es por protocolo file:// (normal al abrir archivo local)
-                    if (!error.message.includes('file://') && !error.message.includes('null')) {
+                    if (!error.message?.includes('file://') && !error.message?.includes('null')) {
                         console.error('Error al registrar Service Worker:', error);
                     }
                 }
