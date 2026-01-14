@@ -12400,30 +12400,55 @@
         const callModalReject = document.getElementById('callModalReject');
         
         if (callModalAccept) {
-            callModalAccept.addEventListener('click', () => {
-                if (window.acceptCall) {
-                    window.acceptCall();
+            callModalAccept.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                try {
+                    if (window.acceptCall) {
+                        await window.acceptCall();
+                    } else {
+                        console.error('acceptCall no está definida');
+                    }
+                } catch (error) {
+                    console.error('Error en event listener de acceptCall:', error);
                 }
             });
         }
         
         if (callModalReject) {
-            callModalReject.addEventListener('click', () => {
-                if (window.rejectCall) {
-                    window.rejectCall();
+            callModalReject.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                try {
+                    if (window.rejectCall) {
+                        await window.rejectCall();
+                    } else {
+                        console.error('rejectCall no está definida');
+                    }
+                } catch (error) {
+                    console.error('Error en event listener de rejectCall:', error);
                 }
             });
         }
 
-        // Event listener para cancelar llamada saliente
-        const outgoingCallCancel = document.getElementById('outgoingCallCancel');
-        if (outgoingCallCancel) {
-            outgoingCallCancel.addEventListener('click', () => {
-                if (window.cancelOutgoingCall) {
-                    window.cancelOutgoingCall();
+        // Event listener para cancelar llamada saliente (usando event delegation)
+        document.addEventListener('click', async (e) => {
+            const cancelButton = e.target.closest('#outgoingCallCancel');
+            if (cancelButton) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Botón de cancelar llamada clickeado');
+                try {
+                    if (window.cancelOutgoingCall) {
+                        await window.cancelOutgoingCall();
+                    } else {
+                        console.error('cancelOutgoingCall no está definida');
+                    }
+                } catch (error) {
+                    console.error('Error en event listener de cancelOutgoingCall:', error);
                 }
-            });
-        }
+            }
+        });
 
         // Event listeners para modal de información del grupo
         const groupInfoModal = document.getElementById('groupInfoModal');
@@ -13526,9 +13551,14 @@
                 if (window.requestNotificationPermission) {
                     await window.requestNotificationPermission();
                 }
-                // Solicitar y guardar token FCM para notificaciones push
+                // Solicitar y guardar token FCM para notificaciones push (no bloquear si falla)
                 if (window.requestFCMToken) {
-                    await window.requestFCMToken();
+                    try {
+                        await window.requestFCMToken();
+                    } catch (error) {
+                        // Ignorar errores de FCM silenciosamente para no bloquear la aplicación
+                        console.log('FCM no disponible, continuando sin notificaciones push');
+                    }
                 }
                 if (window.setupNotificationListeners) {
                     await window.setupNotificationListeners();
@@ -17614,6 +17644,12 @@
         window.cancelOutgoingCall = async function() {
             if (!currentOutgoingCallDocId || !window.currentUser) {
                 window.hideOutgoingCallModal();
+                // Remover estado "calling" del botón
+                const activeChatCall = document.getElementById('activeChatCall');
+                if (activeChatCall) {
+                    activeChatCall.classList.remove('calling');
+                    activeChatCall.title = 'Llamar';
+                }
                 return;
             }
 
@@ -17635,8 +17671,8 @@
                 window.hideOutgoingCallModal();
             } catch (error) {
                 console.error('Error al cancelar llamada:', error);
+                // Ocultar modal y limpiar estado incluso si hay error
                 window.hideOutgoingCallModal();
-                // Remover estado "calling" del botón incluso si hay error
                 const activeChatCall = document.getElementById('activeChatCall');
                 if (activeChatCall) {
                     activeChatCall.classList.remove('calling');
@@ -17687,7 +17723,7 @@
                 alert('Llamada aceptada. La llamada comenzará pronto.');
             } catch (error) {
                 console.error('Error al aceptar llamada:', error);
-                alert('Error al aceptar la llamada');
+                alert('Error al aceptar la llamada: ' + (error.message || 'Error desconocido'));
                 window.hideCallModal();
             }
         };
@@ -19513,9 +19549,20 @@
                 }
                 
                 // Obtener el token FCM
-                const currentToken = await getToken(messaging, { 
-                    vapidKey: VAPID_KEY 
-                });
+                let currentToken;
+                try {
+                    currentToken = await getToken(messaging, { 
+                        vapidKey: VAPID_KEY 
+                    });
+                } catch (tokenError) {
+                    // Si hay un error al obtener el token (p.ej. service worker no disponible), ignorar silenciosamente
+                    if (tokenError.code === 'messaging/failed-service-worker-registration' || 
+                        tokenError.message?.includes('service worker') ||
+                        tokenError.message?.includes('ServiceWorker')) {
+                        return null;
+                    }
+                    throw tokenError; // Re-lanzar otros errores
+                }
                 
                 if (currentToken) {
                     // Token FCM obtenido exitosamente (solo log en desarrollo)
@@ -19546,9 +19593,13 @@
                     return null;
                 }
             } catch (error) {
-                // Solo mostrar errores importantes (no errores de permisos o protocolo)
-                if (!error.message.includes('messaging/unsupported-browser') && 
-                    !error.message.includes('messaging/permission-blocked')) {
+                // Solo mostrar errores importantes (no errores de permisos, protocolo o service worker)
+                if (!error.message?.includes('messaging/unsupported-browser') && 
+                    !error.message?.includes('messaging/permission-blocked') &&
+                    !error.message?.includes('service worker') &&
+                    !error.message?.includes('ServiceWorker') &&
+                    !error.message?.includes('failed-service-worker-registration') &&
+                    error.code !== 'messaging/failed-service-worker-registration') {
                     console.error('Error al obtener token FCM:', error);
                 }
                 return null;
