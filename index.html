@@ -17551,6 +17551,12 @@
                         activeChatCall.title = `Llamando a ${friendName}...`;
                     }
                     
+                    // Desuscribir listener anterior si existe
+                    if (outgoingCallUnsubscribe) {
+                        outgoingCallUnsubscribe();
+                        outgoingCallUnsubscribe = null;
+                    }
+                    
                     // Mostrar modal de llamada saliente
                     window.showOutgoingCallModal(friendName, callDocId);
                     
@@ -17561,8 +17567,7 @@
                         where("toUserId", "==", currentChatFriendId)
                     );
                     
-                    let unsubscribeOutgoingCall = null;
-                    unsubscribeOutgoingCall = onSnapshot(outgoingCallQuery, (snapshot) => {
+                    outgoingCallUnsubscribe = onSnapshot(outgoingCallQuery, (snapshot) => {
                         snapshot.forEach((docSnapshot) => {
                             const callData = docSnapshot.data();
                             // Si la llamada fue aceptada, rechazada, terminada o cancelada, ocultar modal y remover estado "calling"
@@ -17575,12 +17580,14 @@
                                 // Ocultar modal de llamada saliente
                                 window.hideOutgoingCallModal();
                                 // Desuscribirse después de procesar
-                                if (unsubscribeOutgoingCall) {
-                                    unsubscribeOutgoingCall();
-                                    unsubscribeOutgoingCall = null;
+                                if (outgoingCallUnsubscribe) {
+                                    outgoingCallUnsubscribe();
+                                    outgoingCallUnsubscribe = null;
                                 }
                             }
                         });
+                    }, (error) => {
+                        console.error('Error en listener de llamada saliente:', error);
                     });
                 }
             } catch (error) {
@@ -17609,6 +17616,7 @@
         let currentCallFromUserId = null;
         let currentOutgoingCallDocId = null;
         let incomingCallTimeout = null;
+        let outgoingCallUnsubscribe = null;
 
         // Mostrar modal de llamada saliente
         window.showOutgoingCallModal = function(recipientName, callDocId) {
@@ -17645,6 +17653,11 @@
             if (outgoingCallModal) {
                 outgoingCallModal.classList.remove('active');
                 currentOutgoingCallDocId = null;
+            }
+            // Desuscribir listener si existe
+            if (outgoingCallUnsubscribe) {
+                outgoingCallUnsubscribe();
+                outgoingCallUnsubscribe = null;
             }
         };
 
