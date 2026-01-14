@@ -3417,7 +3417,7 @@
             gap: 20px;
             justify-content: center;
             position: relative;
-            z-index: 1;
+            z-index: 10;
         }
 
         .call-modal-btn {
@@ -3432,6 +3432,10 @@
             justify-content: center;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .call-modal-btn-accept {
@@ -19882,12 +19886,33 @@
             let processedCallIds = new Set();
             
             onSnapshot(callsQuery, async (snapshot) => {
+                const currentTime = Date.now();
+                const maxCallAge = 30000; // 30 segundos en milisegundos
+                
                 snapshot.forEach(async (docSnapshot) => {
                     const callData = docSnapshot.data();
                     const callId = docSnapshot.id;
+                    const callTimestamp = callData.timestamp || 0;
+                    const callAge = currentTime - callTimestamp;
                     
-                    // Solo procesar llamadas nuevas
-                    if (!processedCallIds.has(callId)) {
+                    // Si la llamada es muy antigua (más de 30 segundos), rechazarla automáticamente
+                    if (callAge > maxCallAge) {
+                        try {
+                            const callDocRef = doc(db, "llamadas", callId);
+                            await updateDoc(callDocRef, {
+                                status: 'rejected',
+                                rejectedAt: Date.now(),
+                                autoRejected: true,
+                                reason: 'Llamada antigua expirada'
+                            });
+                        } catch (error) {
+                            console.error('Error al rechazar llamada antigua:', error);
+                        }
+                        return; // No procesar esta llamada
+                    }
+                    
+                    // Solo procesar llamadas nuevas y recientes
+                    if (!processedCallIds.has(callId) && callAge <= maxCallAge) {
                         processedCallIds.add(callId);
                         
                         const callerName = callData.fromUserName || 'Alguien';
