@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Colección de usuarios
+    match /users/{userId} {
+      // Solo el usuario autenticado puede leer y escribir su propio documento
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Otras colecciones (ejemplo: posts)
+    match /posts/{postId} {
+      // Solo usuarios autenticados pueden leer y escribir posts
+      allow read, write: if request.auth != null;
+    }
+
+    // Colección de llamadas
+    match /llamadas/{callId} {
+      // Permitir crear llamadas si el usuario está autenticado y es el emisor
+      allow create: if request.auth != null 
+                    && request.resource.data.fromUserId == request.auth.uid;
+      
+      // Permitir leer llamadas si el usuario es el emisor o el receptor
+      allow read: if request.auth != null 
+                  && (resource.data.fromUserId == request.auth.uid 
+                      || resource.data.toUserId == request.auth.uid);
+      
+      // Permitir actualizar llamadas si el usuario es el emisor o el receptor
+      allow update: if request.auth != null 
+                    && (resource.data.fromUserId == request.auth.uid 
+                        || resource.data.toUserId == request.auth.uid);
+      
+      // Permitir eliminar llamadas si el usuario es el emisor o el receptor
+      allow delete: if request.auth != null 
+                    && (resource.data.fromUserId == request.auth.uid 
+                        || resource.data.toUserId == request.auth.uid);
+    }
+
+    // Regla general para cualquier otra colección: solo usuarios autenticados
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

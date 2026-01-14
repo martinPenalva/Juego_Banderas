@@ -3316,6 +3316,260 @@
             gap: 25px;
         }
 
+        /* Modal de llamada entrante */
+        .call-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .call-modal.active {
+            display: flex;
+        }
+
+        .call-modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .call-modal-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .call-modal-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: ring 1.5s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes ring {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+            }
+            25% {
+                transform: scale(1.1) rotate(-5deg);
+            }
+            50% {
+                transform: scale(1.15) rotate(0deg);
+            }
+            75% {
+                transform: scale(1.1) rotate(5deg);
+            }
+        }
+
+        .call-modal-title {
+            color: white;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .call-modal-caller {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .call-modal-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .call-modal-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .call-modal-btn-accept {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .call-modal-btn-accept:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+        }
+
+        .call-modal-btn-accept:active {
+            transform: scale(0.95);
+        }
+
+        .call-modal-btn-reject {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+        }
+
+        .call-modal-btn-reject:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.5);
+        }
+
+        .call-modal-btn-reject:active {
+            transform: scale(0.95);
+        }
+
+        /* Modal de llamada saliente */
+        .outgoing-call-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .outgoing-call-modal.active {
+            display: flex;
+        }
+
+        .outgoing-call-modal-content {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .outgoing-call-modal-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .outgoing-call-modal-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: callingAnimation 1.5s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes callingAnimation {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .outgoing-call-modal-title {
+            color: white;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .outgoing-call-modal-recipient {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .outgoing-call-modal-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .outgoing-call-modal-btn-cancel {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+        }
+
+        .outgoing-call-modal-btn-cancel:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.5);
+        }
+
+        .outgoing-call-modal-btn-cancel:active {
+            transform: scale(0.95);
+        }
+
         .profile-picture-large-container {
             display: flex;
             flex-direction: column;
@@ -3376,12 +3630,50 @@
             width: 100%;
         }
 
-        .profile-style-selector-label {
-            display: block;
+        .profile-style-selector-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             margin-bottom: 10px;
+        }
+
+        .profile-style-selector-toggle:hover {
+            background: #edf2f7;
+            border-color: #667eea;
+        }
+
+        .profile-style-selector-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-weight: 600;
             color: #333;
             font-size: 0.95em;
+            margin: 0;
+        }
+
+        .profile-style-selector-arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .profile-style-selector-toggle.expanded .profile-style-selector-arrow {
+            transform: rotate(180deg);
+        }
+
+        .profile-style-selector-content {
+            display: none;
+        }
+
+        .profile-style-selector-toggle.expanded + .profile-style-selector-content {
+            display: block;
         }
 
         .profile-style-options {
@@ -4951,12 +5243,50 @@
             width: 100%;
         }
 
-        .profile-decoration-selector-label {
-            display: block;
+        .profile-decoration-selector-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             margin-bottom: 10px;
+        }
+
+        .profile-decoration-selector-toggle:hover {
+            background: #edf2f7;
+            border-color: #667eea;
+        }
+
+        .profile-decoration-selector-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-weight: 600;
             color: #333;
             font-size: 0.95em;
+            margin: 0;
+        }
+
+        .profile-decoration-selector-arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .profile-decoration-selector-toggle.expanded .profile-decoration-selector-arrow {
+            transform: rotate(180deg);
+        }
+
+        .profile-decoration-selector-content {
+            display: none;
+        }
+
+        .profile-decoration-selector-toggle.expanded + .profile-decoration-selector-content {
+            display: block;
         }
 
         .profile-decoration-options {
@@ -8203,6 +8533,85 @@
             font-size: 1.1em;
         }
 
+        .active-chat-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .active-chat-call {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            position: relative;
+            overflow: visible;
+        }
+
+        .active-chat-call:hover {
+            background: linear-gradient(135deg, #5cb85c 0%, #4CAF50 100%);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .active-chat-call:active {
+            transform: scale(0.95);
+        }
+
+        /* Estado de llamando */
+        .active-chat-call.calling {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            animation: callingPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+        }
+
+        .active-chat-call.calling:hover {
+            background: linear-gradient(135deg, #ff8787 0%, #ff6b6b 100%);
+        }
+
+        @keyframes callingPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+            }
+        }
+
+        /* Efecto de ondas cuando está llamando */
+        .active-chat-call.calling::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 107, 107, 0.3);
+            animation: callingRipple 1.5s ease-out infinite;
+        }
+
+        @keyframes callingRipple {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
         .active-chat-close {
             background: rgba(255, 255, 255, 0.2);
             color: white;
@@ -8845,7 +9254,11 @@
                     </label>
                     <input type="file" id="profilePictureInput" accept="image/*" style="display: none;">
                     <div class="profile-style-selector">
-                        <label class="profile-style-selector-label">🎨 Estilo de Foto:</label>
+                        <button class="profile-style-selector-toggle" id="profileStyleSelectorToggle">
+                            <span class="profile-style-selector-label">🎨 Estilo de Foto:</span>
+                            <span class="profile-style-selector-arrow">▼</span>
+                        </button>
+                        <div class="profile-style-selector-content">
                         <div class="profile-style-options" id="profileStyleOptions">
                             <div class="profile-style-option" data-style="classic" title="Clásico">
                                 <div style="width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"></div>
@@ -8977,9 +9390,14 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                     </div>
                     <div class="profile-decoration-selector">
-                        <label class="profile-decoration-selector-label">✨ Decoraciones:</label>
+                        <button class="profile-decoration-selector-toggle" id="profileDecorationSelectorToggle">
+                            <span class="profile-decoration-selector-label">✨ Decoraciones:</span>
+                            <span class="profile-decoration-selector-arrow">▼</span>
+                        </button>
+                        <div class="profile-decoration-selector-content">
                         <div class="profile-decoration-options" id="profileDecorationOptions">
                             <div class="profile-decoration-option" data-decoration="none" title="Sin decoración">🚫</div>
                             <div class="profile-decoration-option" data-decoration="cat-ears" title="Orejas de gato">🐱</div>
@@ -9011,6 +9429,7 @@
                             <div class="profile-decoration-option" data-decoration="moon" title="Luna">🌙</div>
                             <div class="profile-decoration-option" data-decoration="flower" title="Flor">🌸</div>
                             <div class="profile-decoration-option" data-decoration="butterfly" title="Mariposa">🦋</div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -9060,7 +9479,10 @@
                                 </div>
                                 <div class="active-chat-header-name" id="activeChatHeaderName">Amigo</div>
                             </div>
-                            <button class="active-chat-close" id="activeChatClose" title="Cerrar chat">✕</button>
+                            <div class="active-chat-header-actions">
+                                <button class="active-chat-call" id="activeChatCall" title="Llamar">📞</button>
+                                <button class="active-chat-close" id="activeChatClose" title="Cerrar chat">✕</button>
+                            </div>
                         </div>
                         <div class="active-chat-messages" id="activeChatMessages"></div>
                         <div id="typingIndicator" class="typing-indicator" style="display: none;"></div>
@@ -11744,6 +12166,22 @@
             });
         }
 
+        // Toggle para estilos de perfil
+        const profileStyleSelectorToggle = document.getElementById('profileStyleSelectorToggle');
+        if (profileStyleSelectorToggle) {
+            profileStyleSelectorToggle.addEventListener('click', () => {
+                profileStyleSelectorToggle.classList.toggle('expanded');
+            });
+        }
+
+        // Toggle para decoraciones de perfil
+        const profileDecorationSelectorToggle = document.getElementById('profileDecorationSelectorToggle');
+        if (profileDecorationSelectorToggle) {
+            profileDecorationSelectorToggle.addEventListener('click', () => {
+                profileDecorationSelectorToggle.classList.toggle('expanded');
+            });
+        }
+
         const friendProfileModalClose = document.getElementById('friendProfileModalClose');
         if (friendProfileModalClose) {
             friendProfileModalClose.addEventListener('click', () => {
@@ -11957,6 +12395,36 @@
             });
         }
 
+        // Event listeners para modal de llamada
+        const callModalAccept = document.getElementById('callModalAccept');
+        const callModalReject = document.getElementById('callModalReject');
+        
+        if (callModalAccept) {
+            callModalAccept.addEventListener('click', () => {
+                if (window.acceptCall) {
+                    window.acceptCall();
+                }
+            });
+        }
+        
+        if (callModalReject) {
+            callModalReject.addEventListener('click', () => {
+                if (window.rejectCall) {
+                    window.rejectCall();
+                }
+            });
+        }
+
+        // Event listener para cancelar llamada saliente
+        const outgoingCallCancel = document.getElementById('outgoingCallCancel');
+        if (outgoingCallCancel) {
+            outgoingCallCancel.addEventListener('click', () => {
+                if (window.cancelOutgoingCall) {
+                    window.cancelOutgoingCall();
+                }
+            });
+        }
+
         // Event listeners para modal de información del grupo
         const groupInfoModal = document.getElementById('groupInfoModal');
         const groupInfoModalClose = document.getElementById('groupInfoModalClose');
@@ -12004,6 +12472,7 @@
         const activeChatSendBtn = document.getElementById('activeChatSendBtn');
         const activeChatInput = document.getElementById('activeChatInput');
         const activeChatClose = document.getElementById('activeChatClose');
+        const activeChatCall = document.getElementById('activeChatCall');
         const emojiBtn = document.getElementById('emojiBtn');
         const emojiPicker = document.getElementById('emojiPicker');
         const emojiGrid = document.getElementById('emojiGrid');
@@ -12081,6 +12550,15 @@
                 e.stopPropagation();
                 if (window.closeChat) {
                     window.closeChat();
+                }
+            });
+        }
+
+        if (activeChatCall) {
+            activeChatCall.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (window.startCall) {
+                    window.startCall();
                 }
             });
         }
@@ -16990,13 +17468,250 @@
                 window.messageListenersSet.clear();
             }
             
+            // Remover estado "calling" del botón de llamada
+            const activeChatCall = document.getElementById('activeChatCall');
+            if (activeChatCall) {
+                activeChatCall.classList.remove('calling');
+                activeChatCall.title = 'Llamar';
+            }
+            
+            // Ocultar modal de llamada saliente si está abierto
+            if (window.hideOutgoingCallModal) {
+                window.hideOutgoingCallModal();
+            }
+            
             // Limpiar el chat activo actual
             currentChatFriendId = null;
+        };
+
+        // Función para iniciar llamada
+        window.startCall = async function() {
+            if (!window.currentUser) {
+                alert('Debes iniciar sesión para hacer llamadas');
+                return;
+            }
+            
+            if (!currentChatFriendId) {
+                alert('No hay un chat activo');
+                return;
+            }
+            
+            try {
+                // Obtener información del amigo
+                const friendDoc = await getDoc(doc(db, "usuarios", currentChatFriendId));
+                if (!friendDoc.exists()) {
+                    alert('Usuario no encontrado');
+                    return;
+                }
+                
+                const friendData = friendDoc.data();
+                const friendName = friendData.nombre || 'Amigo';
+                
+                // Mostrar mensaje de confirmación
+                if (confirm(`¿Llamar a ${friendName}?`)) {
+                    // Crear documento de llamada en Firestore para señalización
+                    const callsRef = collection(db, "llamadas");
+                    const callId = `${window.currentUser.uid}_${currentChatFriendId}_${Date.now()}`;
+                    
+                    const callDocRef = await addDoc(callsRef, {
+                        callId: callId,
+                        fromUserId: window.currentUser.uid,
+                        toUserId: currentChatFriendId,
+                        fromUserName: window.currentUserName || window.currentUser.email,
+                        status: 'calling',
+                        timestamp: Date.now()
+                    });
+                    
+                    const callDocId = callDocRef.id;
+                    
+                    // Agregar clase "calling" al botón
+                    const activeChatCall = document.getElementById('activeChatCall');
+                    if (activeChatCall) {
+                        activeChatCall.classList.add('calling');
+                        activeChatCall.title = `Llamando a ${friendName}...`;
+                    }
+                    
+                    // Mostrar modal de llamada saliente
+                    window.showOutgoingCallModal(friendName, callDocId);
+                    
+                    // Listener para detectar cuando la llamada cambia de estado
+                    const outgoingCallQuery = query(
+                        collection(db, "llamadas"),
+                        where("fromUserId", "==", window.currentUser.uid),
+                        where("toUserId", "==", currentChatFriendId)
+                    );
+                    
+                    let unsubscribeOutgoingCall = null;
+                    unsubscribeOutgoingCall = onSnapshot(outgoingCallQuery, (snapshot) => {
+                        snapshot.forEach((docSnapshot) => {
+                            const callData = docSnapshot.data();
+                            // Si la llamada fue aceptada, rechazada, terminada o cancelada, ocultar modal y remover estado "calling"
+                            if (callData.status === 'accepted' || callData.status === 'rejected' || callData.status === 'ended' || callData.status === 'cancelled') {
+                                const activeChatCallBtn = document.getElementById('activeChatCall');
+                                if (activeChatCallBtn) {
+                                    activeChatCallBtn.classList.remove('calling');
+                                    activeChatCallBtn.title = 'Llamar';
+                                }
+                                // Ocultar modal de llamada saliente
+                                window.hideOutgoingCallModal();
+                                // Desuscribirse después de procesar
+                                if (unsubscribeOutgoingCall) {
+                                    unsubscribeOutgoingCall();
+                                    unsubscribeOutgoingCall = null;
+                                }
+                            }
+                        });
+                    });
+                }
+            } catch (error) {
+                console.error('Error al iniciar llamada:', error);
+                alert('Error al iniciar la llamada');
+                // Remover clase "calling" y ocultar modal en caso de error
+                const activeChatCall = document.getElementById('activeChatCall');
+                if (activeChatCall) {
+                    activeChatCall.classList.remove('calling');
+                    activeChatCall.title = 'Llamar';
+                }
+                if (window.hideOutgoingCallModal) {
+                    window.hideOutgoingCallModal();
+                }
+            }
             
             // NO actualizar automáticamente la lista de chats al cerrar
             // Solo se actualiza cuando el usuario abre el desplegable manualmente
             if (window.loadFriendsList) {
                 await window.loadFriendsList();
+            }
+        };
+
+        // Variables globales para el modal de llamada
+        let currentCallDocId = null;
+        let currentCallFromUserId = null;
+        let currentOutgoingCallDocId = null;
+
+        // Mostrar modal de llamada saliente
+        window.showOutgoingCallModal = function(recipientName, callDocId) {
+            const outgoingCallModal = document.getElementById('outgoingCallModal');
+            const outgoingCallRecipient = document.getElementById('outgoingCallRecipient');
+            
+            if (outgoingCallModal && outgoingCallRecipient) {
+                currentOutgoingCallDocId = callDocId;
+                outgoingCallRecipient.textContent = recipientName;
+                outgoingCallModal.classList.add('active');
+            }
+        };
+
+        // Ocultar modal de llamada saliente
+        window.hideOutgoingCallModal = function() {
+            const outgoingCallModal = document.getElementById('outgoingCallModal');
+            if (outgoingCallModal) {
+                outgoingCallModal.classList.remove('active');
+                currentOutgoingCallDocId = null;
+            }
+        };
+
+        // Cancelar llamada saliente
+        window.cancelOutgoingCall = async function() {
+            if (!currentOutgoingCallDocId || !window.currentUser) {
+                window.hideOutgoingCallModal();
+                return;
+            }
+
+            try {
+                // Actualizar estado de la llamada a "cancelled"
+                const callDocRef = doc(db, "llamadas", currentOutgoingCallDocId);
+                await updateDoc(callDocRef, {
+                    status: 'cancelled',
+                    cancelledAt: Date.now()
+                });
+
+                // Remover estado "calling" del botón
+                const activeChatCall = document.getElementById('activeChatCall');
+                if (activeChatCall) {
+                    activeChatCall.classList.remove('calling');
+                    activeChatCall.title = 'Llamar';
+                }
+
+                window.hideOutgoingCallModal();
+            } catch (error) {
+                console.error('Error al cancelar llamada:', error);
+                window.hideOutgoingCallModal();
+                // Remover estado "calling" del botón incluso si hay error
+                const activeChatCall = document.getElementById('activeChatCall');
+                if (activeChatCall) {
+                    activeChatCall.classList.remove('calling');
+                    activeChatCall.title = 'Llamar';
+                }
+            }
+        };
+
+        // Mostrar modal de llamada entrante
+        window.showCallModal = function(callerName, callDocId, fromUserId) {
+            const callModal = document.getElementById('callModal');
+            const callModalCaller = document.getElementById('callModalCaller');
+            
+            if (callModal && callModalCaller) {
+                currentCallDocId = callDocId;
+                currentCallFromUserId = fromUserId;
+                callModalCaller.textContent = callerName;
+                callModal.classList.add('active');
+            }
+        };
+
+        // Ocultar modal de llamada
+        window.hideCallModal = function() {
+            const callModal = document.getElementById('callModal');
+            if (callModal) {
+                callModal.classList.remove('active');
+                currentCallDocId = null;
+                currentCallFromUserId = null;
+            }
+        };
+
+        // Aceptar llamada
+        window.acceptCall = async function() {
+            if (!currentCallDocId || !window.currentUser) {
+                window.hideCallModal();
+                return;
+            }
+
+            try {
+                // Actualizar estado de la llamada a "accepted"
+                const callDocRef = doc(db, "llamadas", currentCallDocId);
+                await updateDoc(callDocRef, {
+                    status: 'accepted',
+                    acceptedAt: Date.now()
+                });
+
+                window.hideCallModal();
+                alert('Llamada aceptada. La llamada comenzará pronto.');
+            } catch (error) {
+                console.error('Error al aceptar llamada:', error);
+                alert('Error al aceptar la llamada');
+                window.hideCallModal();
+            }
+        };
+
+        // Rechazar llamada
+        window.rejectCall = async function() {
+            if (!currentCallDocId || !window.currentUser) {
+                window.hideCallModal();
+                return;
+            }
+
+            try {
+                // Actualizar estado de la llamada a "rejected"
+                const callDocRef = doc(db, "llamadas", currentCallDocId);
+                await updateDoc(callDocRef, {
+                    status: 'rejected',
+                    rejectedAt: Date.now()
+                });
+
+                window.hideCallModal();
+            } catch (error) {
+                console.error('Error al rechazar llamada:', error);
+                // Ocultar modal incluso si hay error
+                window.hideCallModal();
             }
         };
 
@@ -19061,6 +19776,47 @@
                 lastNotificationCheck.chatMessages = snapshot.size;
             });
 
+            // Verificar llamadas entrantes
+            const callsRef = collection(db, "llamadas");
+            const callsQuery = query(
+                callsRef,
+                where("toUserId", "==", userId),
+                where("status", "==", "calling")
+            );
+            
+            let processedCallIds = new Set();
+            
+            onSnapshot(callsQuery, async (snapshot) => {
+                snapshot.forEach(async (docSnapshot) => {
+                    const callData = docSnapshot.data();
+                    const callId = docSnapshot.id;
+                    
+                    // Solo procesar llamadas nuevas
+                    if (!processedCallIds.has(callId)) {
+                        processedCallIds.add(callId);
+                        
+                        const callerName = callData.fromUserName || 'Alguien';
+                        
+                        // Mostrar modal de llamada entrante
+                        window.showCallModal(callerName, callId, callData.fromUserId);
+                        
+                        // También mostrar notificación
+                        await window.showNotification('📞 Llamada entrante', {
+                            body: `${callerName} te está llamando`,
+                            tag: `call-${callId}`,
+                            requireInteraction: true,
+                            vibrate: [200, 100, 200, 100, 200],
+                            silent: false
+                        });
+                    }
+                });
+                
+                // Si no hay llamadas activas, ocultar el modal
+                if (snapshot.empty) {
+                    window.hideCallModal();
+                }
+            });
+
             // Verificar likes y comentarios en fotos
             const fotosRef = collection(db, "fotos");
             const fotosQuery = query(fotosRef, where("userId", "==", userId));
@@ -19317,6 +20073,31 @@
             }
         }, 5000); // Verificar cada 5 segundos
     </script>
+
+    <!-- Modal de llamada entrante -->
+    <div class="call-modal" id="callModal">
+        <div class="call-modal-content">
+            <div class="call-modal-icon">📞</div>
+            <div class="call-modal-title">Llamada entrante</div>
+            <div class="call-modal-caller" id="callModalCaller">Alguien</div>
+            <div class="call-modal-actions">
+                <button class="call-modal-btn call-modal-btn-accept" id="callModalAccept" title="Aceptar">✓</button>
+                <button class="call-modal-btn call-modal-btn-reject" id="callModalReject" title="Rechazar">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para llamadas salientes -->
+    <div class="outgoing-call-modal" id="outgoingCallModal">
+        <div class="outgoing-call-modal-content">
+            <div class="outgoing-call-modal-icon">📞</div>
+            <div class="outgoing-call-modal-title">Llamando...</div>
+            <div class="outgoing-call-modal-recipient" id="outgoingCallRecipient">Alguien</div>
+            <div class="outgoing-call-modal-actions">
+                <button class="outgoing-call-modal-btn-cancel" id="outgoingCallCancel" title="Cancelar">✕</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 
