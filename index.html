@@ -3357,6 +3357,8 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
             animation: pulse 2s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
         }
 
         @keyframes pulse {
@@ -12431,24 +12433,7 @@
             });
         }
 
-        // Event listener para cancelar llamada saliente (usando event delegation)
-        document.addEventListener('click', async (e) => {
-            const cancelButton = e.target.closest('#outgoingCallCancel');
-            if (cancelButton) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Botón de cancelar llamada clickeado');
-                try {
-                    if (window.cancelOutgoingCall) {
-                        await window.cancelOutgoingCall();
-                    } else {
-                        console.error('cancelOutgoingCall no está definida');
-                    }
-                } catch (error) {
-                    console.error('Error en event listener de cancelOutgoingCall:', error);
-                }
-            }
-        });
+        // Event listener para cancelar llamada saliente (se asignará cuando se muestre el modal)
 
         // Event listeners para modal de información del grupo
         const groupInfoModal = document.getElementById('groupInfoModal');
@@ -17618,6 +17603,7 @@
         let currentCallDocId = null;
         let currentCallFromUserId = null;
         let currentOutgoingCallDocId = null;
+        let incomingCallTimeout = null;
 
         // Mostrar modal de llamada saliente
         window.showOutgoingCallModal = function(recipientName, callDocId) {
@@ -17628,6 +17614,23 @@
                 currentOutgoingCallDocId = callDocId;
                 outgoingCallRecipient.textContent = recipientName;
                 outgoingCallModal.classList.add('active');
+                
+                // Asignar event listener al botón de cancelar si no está asignado
+                const cancelButton = document.getElementById('outgoingCallCancel');
+                if (cancelButton && !cancelButton.hasAttribute('data-listener-assigned')) {
+                    cancelButton.setAttribute('data-listener-assigned', 'true');
+                    cancelButton.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        try {
+                            if (window.cancelOutgoingCall) {
+                                await window.cancelOutgoingCall();
+                            }
+                        } catch (error) {
+                            console.error('Error en event listener de cancelOutgoingCall:', error);
+                        }
+                    });
+                }
             }
         };
 
@@ -17687,10 +17690,34 @@
             const callModalCaller = document.getElementById('callModalCaller');
             
             if (callModal && callModalCaller) {
+                // Cancelar timeout anterior si existe
+                if (incomingCallTimeout) {
+                    clearTimeout(incomingCallTimeout);
+                    incomingCallTimeout = null;
+                }
+                
                 currentCallDocId = callDocId;
                 currentCallFromUserId = fromUserId;
-                callModalCaller.textContent = callerName;
+                callModalCaller.textContent = `Llamada entrante de ${callerName}`;
                 callModal.classList.add('active');
+                
+                // Timeout de 20 segundos para cancelar automáticamente la llamada
+                incomingCallTimeout = setTimeout(async () => {
+                    if (currentCallDocId === callDocId && window.currentUser) {
+                        try {
+                            const callDocRef = doc(db, "llamadas", callDocId);
+                            await updateDoc(callDocRef, {
+                                status: 'rejected',
+                                rejectedAt: Date.now(),
+                                autoRejected: true
+                            });
+                            window.hideCallModal();
+                        } catch (error) {
+                            console.error('Error al rechazar automáticamente la llamada:', error);
+                            window.hideCallModal();
+                        }
+                    }
+                }, 20000);
             }
         };
 
@@ -17702,6 +17729,11 @@
                 currentCallDocId = null;
                 currentCallFromUserId = null;
             }
+            // Cancelar timeout si existe
+            if (incomingCallTimeout) {
+                clearTimeout(incomingCallTimeout);
+                incomingCallTimeout = null;
+            }
         };
 
         // Aceptar llamada
@@ -17709,6 +17741,12 @@
             if (!currentCallDocId || !window.currentUser) {
                 window.hideCallModal();
                 return;
+            }
+
+            // Cancelar timeout si existe
+            if (incomingCallTimeout) {
+                clearTimeout(incomingCallTimeout);
+                incomingCallTimeout = null;
             }
 
             try {
@@ -17733,6 +17771,12 @@
             if (!currentCallDocId || !window.currentUser) {
                 window.hideCallModal();
                 return;
+            }
+
+            // Cancelar timeout si existe
+            if (incomingCallTimeout) {
+                clearTimeout(incomingCallTimeout);
+                incomingCallTimeout = null;
             }
 
             try {
