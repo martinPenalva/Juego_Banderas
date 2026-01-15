@@ -166,6 +166,23 @@
             overflow-x: hidden;
         }
 
+        body.animal-mode {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 30%, #b45309 60%, #92400e 100%);
+            background-size: 400% 400%;
+            animation: animalBackgroundMove 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes animalBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
         body.god-mode {
             background: linear-gradient(135deg, #0f0c29 0%, #1a0d3a 20%, #2d1b69 40%, #4c1d95 60%, #6366f1 80%, #8b5cf6 100%);
             background-size: 400% 400%;
@@ -1916,6 +1933,18 @@
 
         .difficulty-btn.god:hover {
             background: #8b5cf6;
+        }
+
+        .difficulty-btn.animal {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .difficulty-btn.animal:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
 
         .difficulty-btn small {
@@ -8708,6 +8737,16 @@
             transform: scale(1.1);
         }
 
+        .active-chat-action-btn label {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 0;
+        }
+
         .active-chat-send-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -8874,14 +8913,28 @@
         .active-chat-message-image {
             max-width: 300px;
             max-height: 300px;
+            width: 100%;
+            height: auto;
             border-radius: 10px;
             margin-top: 5px;
             cursor: pointer;
             transition: transform 0.3s ease;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .active-chat-message-image:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .active-chat-message.sent .active-chat-message-image {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .active-chat-message.received .active-chat-message-image {
+            border: 2px solid rgba(0, 0, 0, 0.1);
         }
 
         @media (max-width: 768px) {
@@ -8940,6 +8993,11 @@
 
             .active-chat-message {
                 max-width: 85%;
+            }
+
+            .active-chat-message-image {
+                max-width: 250px;
+                max-height: 250px;
             }
 
             .active-chat-input-container {
@@ -9289,6 +9347,10 @@
                             <div class="active-chat-input-wrapper">
                                 <div class="active-chat-actions">
                                     <button class="active-chat-action-btn" id="emojiBtn" title="Emojis">😀</button>
+                                    <label for="chatImageInput" class="active-chat-action-btn" title="Enviar foto" style="cursor: pointer;">
+                                        📷
+                                    </label>
+                                    <input type="file" id="chatImageInput" accept="image/*" style="display: none;">
                                 </div>
                                 <textarea id="activeChatInput" class="active-chat-input" placeholder="Escribe un mensaje..." maxlength="500" rows="1"></textarea>
                                 <button class="active-chat-send-btn" id="activeChatSendBtn">Enviar</button>
@@ -9643,6 +9705,7 @@
                 <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
                 <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
                 <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
+                <button class="difficulty-btn animal" id="animalBtn" style="display: none;">🦁 Animales<br><small>Adivina el animal</small></button>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -9716,11 +9779,13 @@
         let answered = false;
         let jokerAvailable = false;
         let jokerUsed = false;
-        let difficulty = null; // 'easy', 'hard', 'impossible' o 'god'
+        let difficulty = null; // 'easy', 'hard', 'impossible', 'god' o 'animal'
         let timerInterval = null;
         let timeLeft = 20;
         let usedCountries = []; // Para el modo Dios: países ya mostrados
         let availableCountries = []; // Para el modo Dios: países disponibles
+        let currentAnimal = null; // Para el modo animales
+        let animals = []; // Lista de animales cargados
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -10004,13 +10069,16 @@
                 }
             } else if (difficulty === 'god') {
                 // Dios: TODOS los países sin filtros (examen completo de todas las banderas)
+                // Usar TODOS los países de la API sin ningún filtro
                 countries = [...allCountries]; // Usar todos los países disponibles
                 
                 // Inicializar arrays para tracking de países usados
-                availableCountries = [...allCountries];
+                // Crear una copia profunda para evitar referencias
+                availableCountries = allCountries.map(country => ({ ...country }));
                 usedCountries = [];
                 
-                console.log(`Modo Dios: ${countries.length} países cargados (examen completo sin repeticiones)`);
+                console.log(`Modo Dios: ${availableCountries.length} países cargados (examen completo sin repeticiones)`);
+                console.log(`Total de países disponibles de la API: ${allCountries.length}`);
                 return; // Salir temprano, no aplicar más filtros
             } else if (difficulty === 'god_old') {
                 // Código anterior (tribus) - desactivado
@@ -10094,6 +10162,185 @@
             }
             
             console.log(`Nivel ${difficulty}: ${countries.length} países cargados`);
+        }
+
+        // Función para obtener emoji según el tipo de animal
+        function getAnimalEmoji(animalName, type) {
+            const emojiMap = {
+                'León': '🦁', 'Tigre': '🐅', 'Elefante': '🐘', 'Jirafa': '🦒', 'Oso': '🐻',
+                'Lobo': '🐺', 'Zebra': '🦓', 'Cebra': '🦓', 'Leopardo': '🐆', 'Guepardo': '🐆',
+                'Águila': '🦅', 'Pingüino': '🐧', 'Búho': '🦉', 'Pavo Real': '🦚', 'Flamenco': '🦩',
+                'Delfín': '🐬', 'Ballena': '🐋', 'Tiburón': '🦈', 'Pez': '🐟', 'Pulpo': '🐙',
+                'Serpiente': '🐍', 'Cocodrilo': '🐊', 'Tortuga': '🐢', 'Lagarto': '🦎',
+                'Rana': '🐸', 'Salamandra': '🦎',
+                'Mariposa': '🦋', 'Abeja': '🐝', 'Araña': '🕷️', 'Escorpión': '🦂',
+                'Cangrejo': '🦀', 'Langosta': '🦞', 'Camarón': '🦐',
+                'Conejo': '🐰', 'Ardilla': '🐿️', 'Ratón': '🐭', 'Hamster': '🐹',
+                'Gato': '🐱', 'Perro': '🐶', 'Caballo': '🐴', 'Vaca': '🐄', 'Cerdo': '🐷',
+                'Oveja': '🐑', 'Cabra': '🐐', 'Camello': '🐫', 'Llama': '🦙',
+                'Panda': '🐼', 'Koala': '🐨', 'Canguro': '🦘', 'Erizo': '🦔',
+                'Mono': '🐵', 'Gorila': '🦍', 'Orangután': '🦧'
+            };
+            
+            // Buscar por nombre exacto
+            if (emojiMap[animalName]) {
+                return emojiMap[animalName];
+            }
+            
+            // Buscar por nombre parcial
+            for (const [key, emoji] of Object.entries(emojiMap)) {
+                if (animalName.toLowerCase().includes(key.toLowerCase()) || 
+                    key.toLowerCase().includes(animalName.toLowerCase())) {
+                    return emoji;
+                }
+            }
+            
+            // Emoji por tipo si no se encuentra
+            const typeEmojis = {
+                'mammal': '🦁', 'bird': '🦅', 'fish': '🐟', 'reptile': '🐍',
+                'amphibian': '🐸', 'insect': '🦋', 'crustacean': '🦀', 'mollusk': '🐙'
+            };
+            
+            return typeEmojis[type] || '🦁';
+        }
+
+        // Función para cargar animales desde la API
+        async function loadAnimals() {
+            animals = [];
+            const animalTypes = ['mammal', 'bird', 'fish', 'reptile', 'amphibian', 'insect', 'crustacean', 'mollusk'];
+            
+            // Verificar si está usando file:// protocol
+            const isFileProtocol = window.location.protocol === 'file:';
+            if (isFileProtocol) {
+                console.warn('⚠️ Modo file:// detectado. La API de animales requiere un servidor web.');
+                console.warn('💡 Para ver las imágenes, usa un servidor web local:');
+                console.warn('   - Python: python -m http.server 8000');
+                console.warn('   - Node.js: npx serve');
+                // Usar directamente la lista de respaldo
+                animals = getFallbackAnimals();
+                console.log(`Modo Animales (sin API): ${animals.length} animales cargados desde lista de respaldo`);
+                return;
+            }
+            
+            try {
+                // Cargar más animales para tener mejor variedad
+                const promises = [];
+                const animalsToLoad = 30; // Aumentar a 30 para más variedad
+                for (let i = 0; i < animalsToLoad; i++) {
+                    const randomType = animalTypes[Math.floor(Math.random() * animalTypes.length)];
+                    promises.push(
+                        fetch(`https://animals.maxz.dev/api/${randomType}/random`)
+                            .then(res => {
+                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                                return res.json();
+                            })
+                            .then(data => {
+                                if (data && data.name) {
+                                    // La API devuelve el campo 'image' con la URL completa
+                                    const imageUrl = data.image || data.imageUrl || data.url || null;
+                                    console.log(`Animal cargado: ${data.name}, imagen: ${imageUrl}`);
+                                    return {
+                                        name: data.name,
+                                        image: imageUrl,
+                                        type: randomType,
+                                        emoji: getAnimalEmoji(data.name, randomType)
+                                    };
+                                }
+                                return null;
+                            })
+                            .catch(err => {
+                                console.error(`Error al cargar animal tipo ${randomType}:`, err);
+                                return null;
+                            })
+                    );
+                }
+                
+                const results = await Promise.all(promises);
+                animals = results.filter(animal => animal !== null && animal.name);
+                
+                // Log de animales cargados con imágenes
+                const animalsWithImages = animals.filter(a => a.image).length;
+                console.log(`Animales cargados de la API: ${animals.length}`);
+                console.log(`Animales con imágenes: ${animalsWithImages}`);
+                
+                // Si no se cargaron suficientes, usar lista de respaldo
+                if (animals.length < 10) {
+                    console.log('No se cargaron suficientes animales de la API, usando lista de respaldo');
+                    const fallbackAnimals = getFallbackAnimals();
+                    animals = [...animals, ...fallbackAnimals];
+                }
+                
+                // Asegurar que todos los animales tengan emoji
+                animals = animals.map(animal => ({
+                    ...animal,
+                    emoji: animal.emoji || getAnimalEmoji(animal.name, animal.type)
+                }));
+                
+                // Priorizar animales con imágenes
+                animals.sort((a, b) => {
+                    if (a.image && !b.image) return -1;
+                    if (!a.image && b.image) return 1;
+                    return 0;
+                });
+                
+                console.log(`Modo Animales: ${animals.length} animales cargados (${animalsWithImages} con imágenes)`);
+            } catch (error) {
+                console.error('Error al cargar animales:', error);
+                // Usar lista de respaldo
+                animals = getFallbackAnimals();
+                console.log(`Modo Animales (error API): ${animals.length} animales cargados desde lista de respaldo`);
+            }
+        }
+
+        // Función para obtener lista de animales de respaldo
+        function getFallbackAnimals() {
+            return [
+                { name: 'León', image: null, type: 'mammal', emoji: '🦁' },
+                { name: 'Tigre', image: null, type: 'mammal', emoji: '🐅' },
+                { name: 'Elefante', image: null, type: 'mammal', emoji: '🐘' },
+                { name: 'Jirafa', image: null, type: 'mammal', emoji: '🦒' },
+                { name: 'Oso', image: null, type: 'mammal', emoji: '🐻' },
+                { name: 'Lobo', image: null, type: 'mammal', emoji: '🐺' },
+                { name: 'Zebra', image: null, type: 'mammal', emoji: '🦓' },
+                { name: 'Leopardo', image: null, type: 'mammal', emoji: '🐆' },
+                { name: 'Guepardo', image: null, type: 'mammal', emoji: '🐆' },
+                { name: 'Panda', image: null, type: 'mammal', emoji: '🐼' },
+                { name: 'Koala', image: null, type: 'mammal', emoji: '🐨' },
+                { name: 'Canguro', image: null, type: 'mammal', emoji: '🦘' },
+                { name: 'Águila', image: null, type: 'bird', emoji: '🦅' },
+                { name: 'Pingüino', image: null, type: 'bird', emoji: '🐧' },
+                { name: 'Búho', image: null, type: 'bird', emoji: '🦉' },
+                { name: 'Pavo Real', image: null, type: 'bird', emoji: '🦚' },
+                { name: 'Flamenco', image: null, type: 'bird', emoji: '🦩' },
+                { name: 'Delfín', image: null, type: 'mammal', emoji: '🐬' },
+                { name: 'Ballena', image: null, type: 'mammal', emoji: '🐋' },
+                { name: 'Tiburón', image: null, type: 'fish', emoji: '🦈' },
+                { name: 'Pulpo', image: null, type: 'mollusk', emoji: '🐙' },
+                { name: 'Serpiente', image: null, type: 'reptile', emoji: '🐍' },
+                { name: 'Cocodrilo', image: null, type: 'reptile', emoji: '🐊' },
+                { name: 'Tortuga', image: null, type: 'reptile', emoji: '🐢' },
+                { name: 'Rana', image: null, type: 'amphibian', emoji: '🐸' },
+                { name: 'Mariposa', image: null, type: 'insect', emoji: '🦋' },
+                { name: 'Abeja', image: null, type: 'insect', emoji: '🐝' },
+                { name: 'Araña', image: null, type: 'insect', emoji: '🕷️' },
+                { name: 'Cangrejo', image: null, type: 'crustacean', emoji: '🦀' },
+                { name: 'Langosta', image: null, type: 'crustacean', emoji: '🦞' },
+                { name: 'Conejo', image: null, type: 'mammal', emoji: '🐰' },
+                { name: 'Ardilla', image: null, type: 'mammal', emoji: '🐿️' },
+                { name: 'Gato', image: null, type: 'mammal', emoji: '🐱' },
+                { name: 'Perro', image: null, type: 'mammal', emoji: '🐶' },
+                { name: 'Caballo', image: null, type: 'mammal', emoji: '🐴' },
+                { name: 'Vaca', image: null, type: 'mammal', emoji: '🐄' },
+                { name: 'Cerdo', image: null, type: 'mammal', emoji: '🐷' },
+                { name: 'Oveja', image: null, type: 'mammal', emoji: '🐑' },
+                { name: 'Cabra', image: null, type: 'mammal', emoji: '🐐' },
+                { name: 'Camello', image: null, type: 'mammal', emoji: '🐫' },
+                { name: 'Llama', image: null, type: 'mammal', emoji: '🦙' },
+                { name: 'Mono', image: null, type: 'mammal', emoji: '🐵' },
+                { name: 'Gorila', image: null, type: 'mammal', emoji: '🦍' },
+                { name: 'Orangután', image: null, type: 'mammal', emoji: '🦧' },
+                { name: 'Erizo', image: null, type: 'mammal', emoji: '🦔' }
+            ];
         }
 
         // Seleccionar nivel de dificultad
@@ -10275,13 +10522,43 @@
             // Reiniciar arrays para modo Dios
             if (level === 'god') {
                 usedCountries = [];
-                availableCountries = [];
+                // Reinicializar con todos los países de la API (copia profunda)
+                availableCountries = allCountries.length > 0 
+                    ? allCountries.map(country => ({ ...country }))
+                    : [];
+                console.log(`Modo Dios reiniciado: ${availableCountries.length} países disponibles`);
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode');
             
-            if (level === 'impossible') {
+            if (level === 'animal') {
+                document.body.classList.add('animal-mode');
+                // Verificar si está usando file:// y mostrar advertencia
+                if (window.location.protocol === 'file:') {
+                    console.warn('⚠️ Modo file:// detectado. Las imágenes de animales no estarán disponibles.');
+                    console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
+                }
+                // Cargar animales
+                loadAnimals().then(() => {
+                    if (animals.length === 0) {
+                        alert('No se pudieron cargar animales. Por favor, recarga la página o usa un servidor web local.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar animales:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (animals.length > 0) {
+                        // Si hay animales de respaldo, continuar
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar animales. Por favor, recarga la página.');
+                    }
+                });
+            } else if (level === 'impossible') {
                 document.body.classList.add('hell-mode');
                 createHellParticles();
                 createSparks();
@@ -10431,12 +10708,26 @@
                     allCountries = fallbackCountries;
                 } else {
                     // Filtrar países que tengan nombre y código ISO (para FlagsAPI)
+                    // En modo Dios, queremos TODOS los países posibles
                     allCountries = data.filter(country =>
                         country &&
                         country.name &&
                         country.name.common &&
                         country.cca2 // Código ISO de 2 letras para FlagsAPI
                     );
+                    
+                    // Eliminar duplicados por código ISO (por si acaso)
+                    const seenCodes = new Set();
+                    allCountries = allCountries.filter(country => {
+                        const code = country.cca2;
+                        if (seenCodes.has(code)) {
+                            return false;
+                        }
+                        seenCodes.add(code);
+                        return true;
+                    });
+                    
+                    console.log(`Países cargados de la API: ${allCountries.length}`);
                     
                     // Si después del filtro no hay países, usar respaldo
                     if (allCountries.length === 0) {
@@ -10546,14 +10837,17 @@
             updateHearts();
             
             const messageEl = document.getElementById('message');
-            messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCountry.name.common}`;
+            if (difficulty === 'animal') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentAnimal.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentAnimal.name}`);
+            } else {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCountry.name.common}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
+            }
             messageEl.className = 'message incorrect';
             
             // Actualizar puntuación
             document.getElementById('score').textContent = score;
-            
-            // Mostrar alerta de fallo
-            showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
             
             // Actualizar racha (marcar como incorrecta)
             updateStreak(false);
@@ -10573,24 +10867,162 @@
 
         // Cargar nueva pregunta
         function loadNewQuestion() {
-            if (difficulty === 'god') {
-                // Modo Dios: usar todos los países sin repetir
-                if (availableCountries.length === 0) {
-                    // Si se acabaron todos los países, reiniciar
-                    if (usedCountries.length > 0) {
-                        availableCountries = [...usedCountries];
-                        usedCountries = [];
-                    } else {
-                        // Si no hay países disponibles, usar todos los países cargados
-                        availableCountries = [...allCountries];
-                    }
+            if (difficulty === 'animal') {
+                // Modo Animales
+                if (animals.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay animales disponibles. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
                 }
                 
+                // Seleccionar animal aleatorio
+                const randomIndex = Math.floor(Math.random() * animals.length);
+                currentAnimal = animals[randomIndex];
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                // Mostrar imagen del animal o emoji
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                const animalEmoji = currentAnimal.emoji || getAnimalEmoji(currentAnimal.name, currentAnimal.type);
+                
+                // Intentar mostrar imagen si está disponible (funciona con servidor web)
+                if (currentAnimal.image) {
+                    const img = new Image();
+                    img.src = currentAnimal.image;
+                    img.alt = `Imagen de ${currentAnimal.name}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver imagen en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
+                        
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentAnimal.image;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
+                        
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
+                        
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar imagen de ${currentAnimal.name}:`, currentAnimal.image);
+                        // Si la imagen falla, mostrar emoji
+                        flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Imagen cargada exitosamente: ${currentAnimal.name}`);
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    // Si no hay imagen, mostrar emoji de animal
+                    flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
+                }
+                
+                // Generar opciones (1 correcta + 3 incorrectas)
+                const wrongAnimals = animals
+                    .filter(a => a.name !== currentAnimal.name)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const options = [
+                    currentAnimal.name,
+                    wrongAnimals[0]?.name || 'Animal',
+                    wrongAnimals[1]?.name || 'Animal',
+                    wrongAnimals[2]?.name || 'Animal'
+                ].sort(() => Math.random() - 0.5);
+                
+                // Asignar opciones a los botones
+                document.getElementById('option1').textContent = options[0];
+                document.getElementById('option2').textContent = options[1];
+                document.getElementById('option3').textContent = options[2];
+                document.getElementById('option4').textContent = options[3];
+                
+                // Resetear estado
+                answered = false;
+                jokerUsed = false;
+                document.getElementById('message').textContent = '';
+                document.getElementById('message').className = 'message';
+                document.getElementById('nextBtn').classList.remove('show');
+                
+                // Habilitar botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    btn.disabled = false;
+                    btn.className = 'option';
+                    btn.style.display = 'block';
+                });
+                
+                // Actualizar visibilidad del comodín
+                updateJokerButton();
+                
+                // Iniciar temporizador
+                startTimer();
+                return;
+            }
+            
+            if (difficulty === 'god') {
+                // Modo Dios: usar todos los países sin repetir
+                // Verificar si hay países disponibles
                 if (availableCountries.length === 0) {
-                    // Si aún no hay países, mostrar mensaje
+                    // Si se acabaron todos los países, mostrar mensaje de finalización
                     const messageEl = document.getElementById('message');
-                    messageEl.textContent = '✨ ¡Has completado el examen de todas las banderas del mundo! ¡Eres un verdadero Dios! ✨';
+                    const totalCountries = usedCountries.length;
+                    messageEl.textContent = `✨ ¡FELICIDADES! ✨\n\nHas completado el examen de TODAS las ${totalCountries} banderas del mundo disponibles en la API.\n\n¡Eres un verdadero Dios! 👑`;
                     messageEl.className = 'message correct';
+                    messageEl.style.whiteSpace = 'pre-line';
+                    messageEl.style.fontSize = '1.2em';
+                    messageEl.style.padding = '20px';
+                    
+                    // Deshabilitar botones
+                    [1, 2, 3, 4].forEach(i => {
+                        const btn = document.getElementById(`option${i}`);
+                        btn.disabled = true;
+                        btn.style.display = 'none';
+                    });
+                    
+                    // Ocultar temporizador
+                    document.getElementById('timerContainer').style.display = 'none';
+                    stopTimer();
+                    
+                    // Mostrar botón de reiniciar
+                    document.getElementById('restartBtn').style.display = 'block';
+                    
                     return;
                 }
                 
@@ -10598,9 +11030,25 @@
                 const randomIndex = Math.floor(Math.random() * availableCountries.length);
                 currentCountry = availableCountries[randomIndex];
                 
-                // Mover a usados y quitar de disponibles
-                usedCountries.push(currentCountry);
+                // Verificar que el país sea válido
+                if (!currentCountry || !currentCountry.name || !currentCountry.name.common) {
+                    console.error('País inválido en modo Dios:', currentCountry);
+                    // Remover el país inválido y continuar
+                    availableCountries.splice(randomIndex, 1);
+                    // Intentar de nuevo
+                    loadNewQuestion();
+                    return;
+                }
+                
+                // Mover a usados y quitar de disponibles (crear copia para evitar referencias)
+                usedCountries.push({ ...currentCountry });
                 availableCountries.splice(randomIndex, 1);
+                
+                // Mostrar progreso en consola (opcional, para debugging)
+                const remaining = availableCountries.length;
+                const total = usedCountries.length + remaining;
+                const progress = ((usedCountries.length / total) * 100).toFixed(1);
+                console.log(`Modo Dios: ${usedCountries.length}/${total} países completados (${progress}%)`);
             } else {
                 // Modos normales: selección aleatoria con repetición
                 if (countries.length === 0) {
@@ -11388,6 +11836,24 @@
         }
 
         // Reiniciar juego
+        // Función para mostrar/ocultar el botón de animales solo para Martin
+        function updateAnimalButtonVisibility() {
+            const animalBtn = document.getElementById('animalBtn');
+            if (animalBtn) {
+                // Verificar si el usuario es Martin (por email o nombre)
+                const isMartin = window.currentUser && (
+                    window.currentUser.email === 'mpenalvart1@educacion.navarra.es' ||
+                    window.currentUserName === 'Martin'
+                );
+                
+                if (isMartin) {
+                    animalBtn.style.display = 'block';
+                } else {
+                    animalBtn.style.display = 'none';
+                }
+            }
+        }
+
         function restartGame() {
             // Detener temporizador
             stopTimer();
@@ -11440,6 +11906,9 @@
             // Mostrar selector de dificultad
             document.getElementById('difficultySelector').style.display = 'block';
             document.body.classList.add('difficulty-selector-active');
+            
+            // Actualizar visibilidad del botón de animales según el usuario
+            updateAnimalButtonVisibility();
             
             // Crear partículas flotantes en el selector de dificultad
             createDifficultySelectorParticles();
@@ -11678,7 +12147,68 @@
         // Manejar selección de opción
         function selectOption(optionNumber) {
             if (answered) return;
-            
+
+            // Verificar si es modo animales
+            if (difficulty === 'animal') {
+                if (!currentAnimal || !currentAnimal.name) {
+                    console.error('Error: currentAnimal no está definido');
+                    alert('Error: No hay animal seleccionado. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentAnimal.name;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentAnimal.name) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es un ${currentAnimal.name}! 🎉`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentAnimal.name}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentAnimal.name}`);
+                    
+                    if (lives <= 0) {
+                        setTimeout(() => {
+                            showGameOver();
+                        }, 2000);
+                        return;
+                    }
+                }
+
+                document.getElementById('nextBtn').classList.add('show');
+                return;
+            }
+
             // Verificar que currentCountry esté definido
             if (!currentCountry || !currentCountry.name || !currentCountry.name.common) {
                 console.error('Error: currentCountry no está definido');
@@ -11782,6 +12312,7 @@
         document.getElementById('hardBtn').addEventListener('click', () => selectDifficulty('hard'));
         document.getElementById('impossibleBtn').addEventListener('click', () => selectDifficulty('impossible'));
         document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
+        document.getElementById('animalBtn').addEventListener('click', () => selectDifficulty('animal'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
         document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
@@ -12306,6 +12837,49 @@
             activeChatSendBtn.addEventListener('click', () => {
                 if (window.sendChatMessage) {
                     window.sendChatMessage();
+                }
+            });
+        }
+
+        // Event listener para el input de imagen del chat
+        const chatImageInput = document.getElementById('chatImageInput');
+        if (chatImageInput) {
+            chatImageInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // Verificar que no esté usando file:// protocol
+                    if (window.location.protocol === 'file:') {
+                        alert('⚠️ Error: Estás abriendo el archivo directamente desde el sistema de archivos.\n\n' +
+                              'Para que las imágenes funcionen correctamente, necesitas usar un servidor web local.\n\n' +
+                              'Opciones:\n' +
+                              '1. Usa Python: Abre una terminal en esta carpeta y ejecuta "python -m http.server 8000", luego abre http://localhost:8000\n' +
+                              '2. Usa Node.js: Ejecuta "npx serve" en esta carpeta\n' +
+                              '3. Despliega la app en GitHub Pages o Firebase Hosting');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    // Validar que sea una imagen
+                    if (!file.type.startsWith('image/')) {
+                        alert('Por favor selecciona una imagen válida');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    // Validar tamaño (máximo 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('La imagen es demasiado grande. Máximo 5MB');
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    // Enviar la imagen
+                    if (window.sendChatMessageWithImage) {
+                        await window.sendChatMessageWithImage(file);
+                    }
+                    
+                    // Limpiar input
+                    e.target.value = '';
                 }
             });
         }
@@ -13273,6 +13847,9 @@
                     window.updateUserDisplay();
                 }
                 
+                // Actualizar visibilidad del botón de animales según el usuario
+                updateAnimalButtonVisibility();
+                
                 // Cargar foto de perfil
                 loadProfilePicture();
                 
@@ -13300,6 +13877,11 @@
             } else {
                 window.currentUser = null;
                 window.currentUserName = null;
+                // Ocultar botón de animales cuando no hay usuario
+                const animalBtn = document.getElementById('animalBtn');
+                if (animalBtn) {
+                    animalBtn.style.display = 'none';
+                }
                 // Mostrar pantalla de autenticación y ocultar juego
                 document.getElementById('authContainer').style.display = 'flex';
                 document.getElementById('gameContainer').style.display = 'none';
@@ -16500,7 +17082,7 @@
                         
                         const content = document.createElement('div');
                         content.className = 'active-chat-message-content';
-                        
+
                         if (!isSent) {
                             const senderName = document.createElement('div');
                             senderName.style.fontSize = '0.8em';
@@ -16509,7 +17091,59 @@
                             senderName.textContent = remitenteNombre;
                             content.appendChild(senderName);
                         }
-                        
+
+                        // Mostrar imagen si existe
+                        if (messageData.imageUrl) {
+                            const imageContainer = document.createElement('div');
+                            imageContainer.style.marginBottom = messageData.texto ? '8px' : '0';
+                            
+                            const img = document.createElement('img');
+                            img.src = messageData.imageUrl;
+                            img.className = 'active-chat-message-image';
+                            img.alt = 'Imagen del mensaje';
+                            img.style.cursor = 'pointer';
+                            img.onerror = function() {
+                                this.style.display = 'none';
+                                const errorDiv = document.createElement('div');
+                                errorDiv.textContent = 'Error al cargar la imagen';
+                                errorDiv.style.color = '#e53e3e';
+                                errorDiv.style.fontSize = '0.9em';
+                                imageContainer.appendChild(errorDiv);
+                            };
+                            
+                            // Hacer clic para ver imagen en grande
+                            img.onclick = function() {
+                                const modal = document.createElement('div');
+                                modal.style.position = 'fixed';
+                                modal.style.top = '0';
+                                modal.style.left = '0';
+                                modal.style.width = '100%';
+                                modal.style.height = '100%';
+                                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                                modal.style.display = 'flex';
+                                modal.style.alignItems = 'center';
+                                modal.style.justifyContent = 'center';
+                                modal.style.zIndex = '10000';
+                                modal.style.cursor = 'pointer';
+                                
+                                const fullImg = document.createElement('img');
+                                fullImg.src = messageData.imageUrl;
+                                fullImg.style.maxWidth = '90%';
+                                fullImg.style.maxHeight = '90%';
+                                fullImg.style.objectFit = 'contain';
+                                
+                                modal.appendChild(fullImg);
+                                document.body.appendChild(modal);
+                                
+                                modal.onclick = function() {
+                                    document.body.removeChild(modal);
+                                };
+                            };
+                            
+                            imageContainer.appendChild(img);
+                            content.appendChild(imageContainer);
+                        }
+
                         const text = document.createElement('div');
                         text.textContent = message.texto || '';
                         content.appendChild(text);
@@ -16926,6 +17560,58 @@
             const content = document.createElement('div');
             content.className = 'active-chat-message-content';
             
+            // Mostrar imagen si existe
+            if (messageData.imageUrl) {
+                const imageContainer = document.createElement('div');
+                imageContainer.style.marginBottom = messageData.text ? '8px' : '0';
+                
+                const img = document.createElement('img');
+                img.src = messageData.imageUrl;
+                img.className = 'active-chat-message-image';
+                img.alt = 'Imagen del mensaje';
+                img.style.cursor = 'pointer';
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    const errorDiv = document.createElement('div');
+                    errorDiv.textContent = 'Error al cargar la imagen';
+                    errorDiv.style.color = '#e53e3e';
+                    errorDiv.style.fontSize = '0.9em';
+                    imageContainer.appendChild(errorDiv);
+                };
+                
+                // Hacer clic para ver imagen en grande
+                img.onclick = function() {
+                    const modal = document.createElement('div');
+                    modal.style.position = 'fixed';
+                    modal.style.top = '0';
+                    modal.style.left = '0';
+                    modal.style.width = '100%';
+                    modal.style.height = '100%';
+                    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                    modal.style.display = 'flex';
+                    modal.style.alignItems = 'center';
+                    modal.style.justifyContent = 'center';
+                    modal.style.zIndex = '10000';
+                    modal.style.cursor = 'pointer';
+                    
+                    const fullImg = document.createElement('img');
+                    fullImg.src = messageData.imageUrl;
+                    fullImg.style.maxWidth = '90%';
+                    fullImg.style.maxHeight = '90%';
+                    fullImg.style.objectFit = 'contain';
+                    
+                    modal.appendChild(fullImg);
+                    document.body.appendChild(modal);
+                    
+                    modal.onclick = function() {
+                        document.body.removeChild(modal);
+                    };
+                };
+                
+                imageContainer.appendChild(img);
+                content.appendChild(imageContainer);
+            }
+            
             // Mostrar texto
             if (messageData.text) {
                 const text = document.createElement('div');
@@ -16961,18 +17647,114 @@
             messagesEl.appendChild(messageDiv);
         }
 
+        // Función para subir imagen a Firebase Storage
+        window.uploadChatImage = async function(file) {
+            try {
+                // Verificar que no esté usando file:// protocol
+                if (window.location.protocol === 'file:') {
+                    throw new Error('FILE_PROTOCOL_ERROR');
+                }
+
+                const timestamp = Date.now();
+                // Limpiar el nombre del archivo para evitar caracteres especiales
+                const cleanFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const fileName = `chat_images/${window.currentUser.uid}/${timestamp}_${cleanFileName}`;
+                const storageRef = ref(storage, fileName);
+
+                // Mostrar progreso
+                const sendBtn = document.getElementById('activeChatSendBtn');
+                if (sendBtn) {
+                    sendBtn.textContent = 'Subiendo...';
+                }
+
+                // Subir archivo
+                await uploadBytes(storageRef, file);
+
+                // Obtener URL de descarga
+                const downloadURL = await getDownloadURL(storageRef);
+                
+                if (sendBtn) {
+                    sendBtn.textContent = 'Enviando...';
+                }
+                
+                return downloadURL;
+            } catch (error) {
+                console.error('Error al subir imagen:', error);
+                
+                // Manejar errores específicos
+                if (error.message === 'FILE_PROTOCOL_ERROR') {
+                    throw new Error('Por favor, abre la aplicación desde un servidor web (no desde file://). Usa un servidor local como "python -m http.server" o despliega la app en GitHub Pages.');
+                } else if (error.code === 'storage/unauthorized') {
+                    throw new Error('No tienes permisos para subir imágenes. Verifica las reglas de Firebase Storage.');
+                } else if (error.code === 'storage/canceled') {
+                    throw new Error('La subida fue cancelada.');
+                } else if (error.code === 'storage/unknown') {
+                    throw new Error('Error desconocido al subir la imagen. Verifica tu conexión a internet.');
+                }
+                
+                throw error;
+            }
+        };
+
+        // Enviar mensaje con imagen
+        window.sendChatMessageWithImage = async function(imageFile) {
+            if (!window.currentUser) {
+                alert('Debes iniciar sesión para enviar imágenes');
+                return;
+            }
+            
+            if (!currentChatFriendId && !currentChatGroupId) {
+                alert('No hay una conversación activa');
+                return;
+            }
+
+            const sendBtn = document.getElementById('activeChatSendBtn');
+            if (sendBtn) {
+                sendBtn.disabled = true;
+                sendBtn.textContent = 'Subiendo...';
+            }
+
+            try {
+                // Subir imagen
+                const imageUrl = await window.uploadChatImage(imageFile);
+
+                // Enviar mensaje con la URL de la imagen
+                await window.sendChatMessage(null, imageUrl);
+            } catch (error) {
+                console.error('Error al enviar imagen:', error);
+                
+                // Mostrar mensaje de error más descriptivo
+                let errorMessage = 'Error al enviar la imagen. Por favor intenta de nuevo.';
+                
+                if (error.message && error.message.includes('servidor web')) {
+                    errorMessage = error.message;
+                } else if (error.message && error.message.includes('permisos')) {
+                    errorMessage = error.message;
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                alert(errorMessage);
+                
+                if (sendBtn) {
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Enviar';
+                }
+            }
+        };
+
         // Enviar mensaje
-        window.sendChatMessage = async function() {
+        window.sendChatMessage = async function(textOverride = null, imageUrl = null) {
             if (!window.currentUser) return;
             if (!currentChatFriendId && !currentChatGroupId) return;
             
             const chatInput = document.getElementById('activeChatInput');
             if (!chatInput) return;
             
-            const text = chatInput.value.trim();
+            const text = textOverride !== null ? textOverride : chatInput.value.trim();
             
-            // Si no hay texto, no enviar
-            if (!text) return;
+            // Si no hay texto ni imagen, no enviar
+            if (!text && !imageUrl) return;
             
             // Deshabilitar botón de enviar mientras se procesa
             const sendBtn = document.getElementById('activeChatSendBtn');
@@ -16984,13 +17766,22 @@
             try {
                 if (currentChatGroupId) {
                     // Enviar mensaje a grupo
-                    await addDoc(collection(db, "mensajesGrupo"), {
+                    const messageData = {
                         grupoId: currentChatGroupId,
                         remitenteId: window.currentUser.uid,
-                        texto: text,
                         timestamp: Date.now(),
                         leidoPor: [window.currentUser.uid]
-                    });
+                    };
+                    
+                    if (text) {
+                        messageData.texto = text;
+                    }
+                    
+                    if (imageUrl) {
+                        messageData.imageUrl = imageUrl;
+                    }
+                    
+                    await addDoc(collection(db, "mensajesGrupo"), messageData);
                     
                     // Enviar notificaciones push a todos los miembros excepto al remitente
                     try {
@@ -16999,7 +17790,7 @@
                             const miembros = grupoDoc.data().miembros || [];
                             const senderName = window.currentUserName || 'Alguien';
                             const grupoNombre = grupoDoc.data().nombre || 'Grupo';
-                            let messagePreview = text;
+                            let messagePreview = text || (imageUrl ? '📷 Imagen' : 'Mensaje');
                             if (messagePreview.length > 50) {
                                 messagePreview = messagePreview.substring(0, 50) + '...';
                             }
@@ -17029,19 +17820,28 @@
                     const chatId2 = `${currentChatFriendId}_${window.currentUser.uid}`;
                     const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
                     
-                    await addDoc(collection(db, "mensajes"), {
+                    const messageData = {
                         chatId: finalChatId,
                         fromUserId: window.currentUser.uid,
                         toUserId: currentChatFriendId,
-                        text: text,
                         timestamp: Date.now(),
                         read: false
-                    });
+                    };
+                    
+                    if (text) {
+                        messageData.text = text;
+                    }
+                    
+                    if (imageUrl) {
+                        messageData.imageUrl = imageUrl;
+                    }
+                    
+                    await addDoc(collection(db, "mensajes"), messageData);
                     
                     // Enviar notificación push al destinatario (si tiene token FCM)
                     try {
                         const senderName = window.currentUserName || 'Alguien';
-                        let messagePreview = text;
+                        let messagePreview = text || (imageUrl ? '📷 Imagen' : 'Mensaje');
                         if (messagePreview.length > 50) {
                             messagePreview = messagePreview.substring(0, 50) + '...';
                         }
