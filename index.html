@@ -10349,19 +10349,34 @@
                 if (Array.isArray(data)) {
                     animals = data
                         .filter(animal => animal && animal.name && animal.image_link)
-                        .map(animal => ({
-                            name: animal.name,
-                            image: animal.image_link, // Campo image_link de la API
-                            type: animal.animal_type || 'Unknown',
-                            diet: animal.diet || 'Unknown',
-                            habitat: animal.habitat || 'Unknown',
-                            emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
-                        }));
+                        .map(animal => {
+                            // Usar proxy de imágenes para evitar problemas de CORS
+                            const originalImageUrl = animal.image_link;
+                            const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                            
+                            console.log(`🦁 Animal cargado: ${animal.name}, URL original: ${originalImageUrl}, Proxy: ${proxyUrl}`);
+                            
+                            return {
+                                name: animal.name,
+                                image: proxyUrl, // Usar proxy para evitar CORS
+                                imageOriginal: originalImageUrl, // Guardar URL original
+                                type: animal.animal_type || 'Unknown',
+                                diet: animal.diet || 'Unknown',
+                                habitat: animal.habitat || 'Unknown',
+                                emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
+                            };
+                        });
                 } else if (data && data.name) {
                     // Si solo devuelve un objeto en lugar de array
+                    const originalImageUrl = data.image_link;
+                    const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                    
+                    console.log(`🦁 Animal cargado (objeto único): ${data.name}, URL original: ${originalImageUrl}, Proxy: ${proxyUrl}`);
+                    
                     animals = [{
                         name: data.name,
-                        image: data.image_link,
+                        image: proxyUrl, // Usar proxy para evitar CORS
+                        imageOriginal: originalImageUrl, // Guardar URL original
                         type: data.animal_type || 'Unknown',
                         diet: data.diet || 'Unknown',
                         habitat: data.habitat || 'Unknown',
@@ -10385,14 +10400,22 @@
                             if (Array.isArray(additionalData)) {
                                 const additionalAnimals = additionalData
                                     .filter(animal => animal && animal.name && animal.image_link)
-                                    .map(animal => ({
-                                        name: animal.name,
-                                        image: animal.image_link,
-                                        type: animal.animal_type || 'Unknown',
-                                        diet: animal.diet || 'Unknown',
-                                        habitat: animal.habitat || 'Unknown',
-                                        emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
-                                    }));
+                                    .map(animal => {
+                                        const originalImageUrl = animal.image_link;
+                                        const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                                        
+                                        console.log(`🦁 Animal adicional cargado: ${animal.name}, URL original: ${originalImageUrl}, Proxy: ${proxyUrl}`);
+                                        
+                                        return {
+                                            name: animal.name,
+                                            image: proxyUrl, // Usar proxy para evitar CORS
+                                            imageOriginal: originalImageUrl, // Guardar URL original
+                                            type: animal.animal_type || 'Unknown',
+                                            diet: animal.diet || 'Unknown',
+                                            habitat: animal.habitat || 'Unknown',
+                                            emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
+                                        };
+                                    });
                                 animals = [...animals, ...additionalAnimals];
                             }
                         }
@@ -10498,15 +10521,50 @@
                                     if (model.model_name && model.model_image) {
                                         // Ajustar tamaño de imagen según especificaciones: /medium, /small o /tiny
                                         let imageUrl = model.model_image;
-                                        // Si la URL no tiene tamaño especificado, usar medium por defecto
-                                        if (imageUrl && !imageUrl.includes('/medium') && !imageUrl.includes('/small') && !imageUrl.includes('/tiny')) {
-                                            // Intentar agregar /medium al final de la URL
-                                            imageUrl = imageUrl.replace(/\/$/, '') + '/medium';
+                                        
+                                        // Validar y limpiar la URL
+                                        if (imageUrl) {
+                                            // Asegurar que la URL sea completa
+                                            if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+                                                // Si es una ruta relativa, construir URL completa
+                                                if (imageUrl.startsWith('/')) {
+                                                    imageUrl = 'https://www.thevehicledb.com' + imageUrl;
+                                                } else {
+                                                    imageUrl = 'https://www.thevehicledb.com/' + imageUrl;
+                                                }
+                                            }
+                                            
+                                            // Si la URL no tiene tamaño especificado, intentar agregar /medium
+                                            // Pero solo si la URL no termina con una extensión de archivo
+                                            if (!imageUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) && 
+                                                !imageUrl.includes('/medium') && 
+                                                !imageUrl.includes('/small') && 
+                                                !imageUrl.includes('/tiny')) {
+                                                // Agregar /medium al final de la URL (antes de cualquier query string)
+                                                const urlParts = imageUrl.split('?');
+                                                const baseUrl = urlParts[0].replace(/\/$/, '');
+                                                const queryString = urlParts[1] ? '?' + urlParts[1] : '';
+                                                imageUrl = baseUrl + '/medium' + queryString;
+                                            }
+                                            
+                                            // Usar proxy de imágenes para evitar CORS
+                                            // images.weserv.nl es un proxy gratuito que permite cargar imágenes de cualquier origen
+                                            const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl)}&output=webp`;
+                                            
+                                            console.log(`🚗 Coche cargado: ${model.model_name}, URL original: ${imageUrl}, Proxy: ${proxyUrl}`);
+                                            
+                                            return {
+                                                name: model.model_name,
+                                                image: proxyUrl, // Usar proxy para evitar CORS
+                                                imageOriginal: imageUrl, // Guardar URL original por si acaso
+                                                make: model.make_name || 'Unknown',
+                                                year: model.model_year || 'Unknown'
+                                            };
                                         }
                                         
                                         return {
                                             name: model.model_name,
-                                            image: imageUrl,
+                                            image: null,
                                             make: model.make_name || 'Unknown',
                                             year: model.model_year || 'Unknown'
                                         };
@@ -11491,6 +11549,7 @@
                 // Intentar mostrar imagen si está disponible
                 if (currentCar.image) {
                     const img = new Image();
+                    img.crossOrigin = 'anonymous'; // Permitir CORS
                     img.src = currentCar.image;
                     img.alt = `Imagen de ${currentCar.name}`;
                     img.style.width = 'auto';
@@ -11523,7 +11582,8 @@
                         modal.style.cursor = 'pointer';
                         
                         const fullImg = document.createElement('img');
-                        fullImg.src = currentCar.image;
+                        fullImg.crossOrigin = 'anonymous';
+                        fullImg.src = currentCar.imageOriginal || currentCar.image;
                         fullImg.style.maxWidth = '90%';
                         fullImg.style.maxHeight = '90%';
                         fullImg.style.objectFit = 'contain';
@@ -11538,8 +11598,17 @@
                     };
                     
                     img.onerror = function() {
-                        console.warn(`Error al cargar imagen de ${currentCar.name}:`, currentCar.image);
-                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #dc2626;">🚗</div><div style="text-align: center; margin-top: 10px; color: #fee2e2;">${currentCar.name}</div>`;
+                        console.warn(`Error al cargar imagen proxy de ${currentCar.name}, intentando URL original...`);
+                        // Si el proxy falla, intentar con la URL original
+                        if (currentCar.imageOriginal && currentCar.imageOriginal !== currentCar.image) {
+                            img.src = currentCar.imageOriginal;
+                            img.onerror = function() {
+                                console.warn(`Error al cargar imagen original de ${currentCar.name}:`, currentCar.imageOriginal);
+                                flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #dc2626;">🚗</div><div style="text-align: center; margin-top: 10px; color: #fee2e2;">${currentCar.name}</div>`;
+                            };
+                        } else {
+                            flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #dc2626;">🚗</div><div style="text-align: center; margin-top: 10px; color: #fee2e2;">${currentCar.name}</div>`;
+                        }
                     };
                     
                     img.onload = function() {
@@ -11864,6 +11933,7 @@
                 // Intentar mostrar imagen si está disponible (funciona con servidor web)
                 if (currentAnimal.image) {
                     const img = new Image();
+                    img.crossOrigin = 'anonymous'; // Permitir CORS
                     img.src = currentAnimal.image;
                     img.alt = `Imagen de ${currentAnimal.name}`;
                     img.style.width = 'auto';
@@ -11896,7 +11966,8 @@
                         modal.style.cursor = 'pointer';
                         
                         const fullImg = document.createElement('img');
-                        fullImg.src = currentAnimal.image;
+                        fullImg.crossOrigin = 'anonymous';
+                        fullImg.src = currentAnimal.imageOriginal || currentAnimal.image;
                         fullImg.style.maxWidth = '90%';
                         fullImg.style.maxHeight = '90%';
                         fullImg.style.objectFit = 'contain';
@@ -11911,9 +11982,19 @@
                     };
                     
                     img.onerror = function() {
-                        console.warn(`Error al cargar imagen de ${currentAnimal.name}:`, currentAnimal.image);
-                        // Si la imagen falla, mostrar emoji
-                        flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
+                        console.warn(`Error al cargar imagen proxy de ${currentAnimal.name}, intentando URL original...`);
+                        // Si el proxy falla, intentar con la URL original
+                        if (currentAnimal.imageOriginal && currentAnimal.imageOriginal !== currentAnimal.image) {
+                            img.src = currentAnimal.imageOriginal;
+                            img.onerror = function() {
+                                console.warn(`Error al cargar imagen original de ${currentAnimal.name}:`, currentAnimal.imageOriginal);
+                                // Si la imagen falla, mostrar emoji
+                                flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
+                            };
+                        } else {
+                            // Si no hay URL original o también falla, mostrar emoji
+                            flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
+                        }
                     };
                     
                     img.onload = function() {
