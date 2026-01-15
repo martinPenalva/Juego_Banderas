@@ -183,6 +183,29 @@
             }
         }
 
+        body.starwars-mode {
+            background: linear-gradient(135deg, #000000 0%, #1a0033 20%, #330066 40%, #4d0099 60%, #6600cc 80%, #8000ff 100%);
+            background-size: 400% 400%;
+            animation: starwarsBackgroundMove 20s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes starwarsBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 50%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            75% {
+                background-position: 0% 100%;
+            }
+        }
+
         body.god-mode {
             background: linear-gradient(135deg, #0f0c29 0%, #1a0d3a 20%, #2d1b69 40%, #4c1d95 60%, #6366f1 80%, #8b5cf6 100%);
             background-size: 400% 400%;
@@ -1945,6 +1968,19 @@
             background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .difficulty-btn.starwars {
+            border-color: #8000ff;
+            background: linear-gradient(135deg, #4d0099 0%, #6600cc 50%, #8000ff 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(128, 0, 255, 0.3);
+        }
+
+        .difficulty-btn.starwars:hover {
+            background: linear-gradient(135deg, #6600cc 0%, #8000ff 50%, #9933ff 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(128, 0, 255, 0.5);
         }
 
         .difficulty-btn small {
@@ -9706,6 +9742,7 @@
                 <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
                 <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
                 <button class="difficulty-btn animal" id="animalBtn" style="display: none;">🦁 Animales<br><small>Adivina el animal</small></button>
+                <button class="difficulty-btn starwars" id="starwarsBtn" style="display: none;">⭐ Star Wars<br><small>Adivina el personaje</small></button>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -9786,6 +9823,8 @@
         let availableCountries = []; // Para el modo Dios: países disponibles
         let currentAnimal = null; // Para el modo animales
         let animals = []; // Lista de animales cargados
+        let currentStarWarsCharacter = null; // Para el modo Star Wars
+        let starWarsCharacters = []; // Lista de personajes de Star Wars cargados
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -10207,7 +10246,14 @@
         // Función para cargar animales desde la API
         async function loadAnimals() {
             animals = [];
-            const animalTypes = ['mammal', 'bird', 'fish', 'reptile', 'amphibian', 'insect', 'crustacean', 'mollusk'];
+            // Tipos específicos soportados por la API animals.maxz.dev
+            const animalTypes = [
+                'cat', 'dog', 'rabbit', 'capybara', 'hamster', 'monkey', 'elephant', 
+                'fish', 'turtle', 'bird', 'bunny', 'lizard', 'tortoise', 'chicken', 
+                'deer', 'donkey', 'penguin', 'shark', 'squirrel', 'axolotl', 'camel', 
+                'duck', 'goat', 'guineapig', 'horse', 'jellyfish', 'ostrich', 'rat', 
+                'rhinoceros', 'sealion', 'sheep', 'swan', 'tarantula', 'zebra'
+            ];
             
             // Verificar si está usando file:// protocol
             const isFileProtocol = window.location.protocol === 'file:';
@@ -10225,7 +10271,7 @@
             try {
                 // Cargar más animales para tener mejor variedad
                 const promises = [];
-                const animalsToLoad = 30; // Aumentar a 30 para más variedad
+                const animalsToLoad = 40; // Aumentar para más variedad
                 for (let i = 0; i < animalsToLoad; i++) {
                     const randomType = animalTypes[Math.floor(Math.random() * animalTypes.length)];
                     promises.push(
@@ -10236,14 +10282,15 @@
                             })
                             .then(data => {
                                 if (data && data.name) {
-                                    // La API devuelve el campo 'image' con la URL completa
-                                    const imageUrl = data.image || data.imageUrl || data.url || null;
-                                    console.log(`Animal cargado: ${data.name}, imagen: ${imageUrl}`);
+                                    // La API devuelve el campo 'image' directamente con la URL de la imagen
+                                    // Formato: https://r2.animals.maxz.dev/{type}/{id}
+                                    const imageUrl = data.image || null;
+                                    console.log(`Animal cargado: ${data.name} (${data.type}), imagen: ${imageUrl ? '✅' : '❌'}`);
                                     return {
                                         name: data.name,
-                                        image: imageUrl,
-                                        type: randomType,
-                                        emoji: getAnimalEmoji(data.name, randomType)
+                                        image: imageUrl, // Usar directamente el campo 'image' de la API
+                                        type: data.type || randomType,
+                                        emoji: getAnimalEmoji(data.name, data.type || randomType)
                                     };
                                 }
                                 return null;
@@ -10260,12 +10307,12 @@
                 
                 // Log de animales cargados con imágenes
                 const animalsWithImages = animals.filter(a => a.image).length;
-                console.log(`Animales cargados de la API: ${animals.length}`);
-                console.log(`Animales con imágenes: ${animalsWithImages}`);
+                console.log(`✅ Animales cargados de la API: ${animals.length}`);
+                console.log(`📷 Animales con imágenes: ${animalsWithImages}`);
                 
                 // Si no se cargaron suficientes, usar lista de respaldo
                 if (animals.length < 10) {
-                    console.log('No se cargaron suficientes animales de la API, usando lista de respaldo');
+                    console.log('⚠️ No se cargaron suficientes animales de la API, usando lista de respaldo');
                     const fallbackAnimals = getFallbackAnimals();
                     animals = [...animals, ...fallbackAnimals];
                 }
@@ -10276,20 +10323,99 @@
                     emoji: animal.emoji || getAnimalEmoji(animal.name, animal.type)
                 }));
                 
-                // Priorizar animales con imágenes
+                // Priorizar animales con imágenes (la API siempre debería devolver imágenes)
                 animals.sort((a, b) => {
                     if (a.image && !b.image) return -1;
                     if (!a.image && b.image) return 1;
                     return 0;
                 });
                 
-                console.log(`Modo Animales: ${animals.length} animales cargados (${animalsWithImages} con imágenes)`);
+                console.log(`🎮 Modo Animales: ${animals.length} animales listos (${animalsWithImages} con imágenes de la API)`);
             } catch (error) {
                 console.error('Error al cargar animales:', error);
                 // Usar lista de respaldo
                 animals = getFallbackAnimals();
                 console.log(`Modo Animales (error API): ${animals.length} animales cargados desde lista de respaldo`);
             }
+        }
+
+        // Función para cargar personajes de Star Wars desde la API
+        async function loadStarWarsCharacters() {
+            starWarsCharacters = [];
+            
+            // Verificar si está usando file:// protocol
+            const isFileProtocol = window.location.protocol === 'file:';
+            if (isFileProtocol) {
+                console.warn('⚠️ Modo file:// detectado. La API de Star Wars requiere un servidor web.');
+                console.warn('💡 Para ver las imágenes, usa un servidor web local:');
+                console.warn('   - Python: python -m http.server 8000');
+                console.warn('   - Node.js: npx serve');
+                // Usar directamente la lista de respaldo
+                starWarsCharacters = getFallbackStarWarsCharacters();
+                console.log(`Modo Star Wars (sin API): ${starWarsCharacters.length} personajes cargados desde lista de respaldo`);
+                return;
+            }
+            
+            try {
+                // Cargar todos los personajes desde la API de Akabab
+                const response = await fetch('https://akabab.github.io/starwars-api/api/all.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const allCharacters = await response.json();
+                
+                // Filtrar personajes que tengan nombre e imagen
+                starWarsCharacters = allCharacters
+                    .filter(char => char.name && char.image)
+                    .map(char => ({
+                        id: char.id,
+                        name: char.name,
+                        image: char.image,
+                        species: char.species || 'Unknown',
+                        gender: char.gender || 'Unknown',
+                        homeworld: char.homeworld || 'Unknown'
+                    }));
+                
+                console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes cargados de la API`);
+                
+                // Si no se cargaron suficientes, usar lista de respaldo
+                if (starWarsCharacters.length < 10) {
+                    console.log('No se cargaron suficientes personajes de la API, usando lista de respaldo');
+                    const fallbackCharacters = getFallbackStarWarsCharacters();
+                    starWarsCharacters = [...starWarsCharacters, ...fallbackCharacters];
+                }
+                
+                // Priorizar personajes con imágenes
+                starWarsCharacters.sort((a, b) => {
+                    if (a.image && !b.image) return -1;
+                    if (!a.image && b.image) return 1;
+                    return 0;
+                });
+                
+                console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes listos (todos con imágenes)`);
+            } catch (error) {
+                console.error('Error al cargar personajes de Star Wars:', error);
+                // Usar lista de respaldo
+                starWarsCharacters = getFallbackStarWarsCharacters();
+                console.log(`Modo Star Wars (error API): ${starWarsCharacters.length} personajes cargados desde lista de respaldo`);
+            }
+        }
+
+        // Función para obtener lista de personajes de Star Wars de respaldo
+        function getFallbackStarWarsCharacters() {
+            return [
+                { id: 1, name: 'Luke Skywalker', image: null, species: 'Human', gender: 'Male', homeworld: 'Tatooine' },
+                { id: 2, name: 'Darth Vader', image: null, species: 'Human', gender: 'Male', homeworld: 'Tatooine' },
+                { id: 3, name: 'Princess Leia', image: null, species: 'Human', gender: 'Female', homeworld: 'Alderaan' },
+                { id: 4, name: 'Han Solo', image: null, species: 'Human', gender: 'Male', homeworld: 'Corellia' },
+                { id: 5, name: 'Yoda', image: null, species: 'Yoda\'s species', gender: 'Male', homeworld: 'Unknown' },
+                { id: 6, name: 'Obi-Wan Kenobi', image: null, species: 'Human', gender: 'Male', homeworld: 'Stewjon' },
+                { id: 7, name: 'Chewbacca', image: null, species: 'Wookiee', gender: 'Male', homeworld: 'Kashyyyk' },
+                { id: 8, name: 'R2-D2', image: null, species: 'Droid', gender: 'n/a', homeworld: 'Naboo' },
+                { id: 9, name: 'C-3PO', image: null, species: 'Droid', gender: 'n/a', homeworld: 'Tatooine' },
+                { id: 10, name: 'Anakin Skywalker', image: null, species: 'Human', gender: 'Male', homeworld: 'Tatooine' }
+            ];
         }
 
         // Función para obtener lista de animales de respaldo
@@ -10530,9 +10656,35 @@
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode');
             
-            if (level === 'animal') {
+            if (level === 'starwars') {
+                document.body.classList.add('starwars-mode');
+                // Verificar si está usando file:// y mostrar advertencia
+                if (window.location.protocol === 'file:') {
+                    console.warn('⚠️ Modo file:// detectado. Las imágenes de Star Wars no estarán disponibles.');
+                    console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
+                }
+                // Cargar personajes de Star Wars
+                loadStarWarsCharacters().then(() => {
+                    if (starWarsCharacters.length === 0) {
+                        alert('No se pudieron cargar personajes de Star Wars. Por favor, recarga la página o usa un servidor web local.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar personajes de Star Wars:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (starWarsCharacters.length > 0) {
+                        // Si hay personajes de respaldo, continuar
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar personajes de Star Wars. Por favor, recarga la página.');
+                    }
+                });
+            } else if (level === 'animal') {
                 document.body.classList.add('animal-mode');
                 // Verificar si está usando file:// y mostrar advertencia
                 if (window.location.protocol === 'file:') {
@@ -10826,7 +10978,16 @@
                 if (btn.style.display !== 'none') {
                     btn.disabled = true;
                     
-                    if (btn.textContent === currentCountry.name.common) {
+                    let correctAnswer;
+                    if (difficulty === 'starwars') {
+                        correctAnswer = currentStarWarsCharacter?.name;
+                    } else if (difficulty === 'animal') {
+                        correctAnswer = currentAnimal?.name;
+                    } else {
+                        correctAnswer = currentCountry?.name?.common;
+                    }
+                    
+                    if (btn.textContent === correctAnswer) {
                         btn.classList.add('correct');
                     }
                 }
@@ -10837,7 +10998,10 @@
             updateHearts();
             
             const messageEl = document.getElementById('message');
-            if (difficulty === 'animal') {
+            if (difficulty === 'starwars') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
+            } else if (difficulty === 'animal') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentAnimal.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentAnimal.name}`);
             } else {
@@ -10867,7 +11031,132 @@
 
         // Cargar nueva pregunta
         function loadNewQuestion() {
-            if (difficulty === 'animal') {
+            if (difficulty === 'starwars') {
+                // Modo Star Wars
+                if (starWarsCharacters.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay personajes disponibles. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
+                }
+                
+                // Seleccionar personaje aleatorio
+                const randomIndex = Math.floor(Math.random() * starWarsCharacters.length);
+                currentStarWarsCharacter = starWarsCharacters[randomIndex];
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                // Mostrar imagen del personaje
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                // Intentar mostrar imagen si está disponible
+                if (currentStarWarsCharacter.image) {
+                    const img = new Image();
+                    img.src = currentStarWarsCharacter.image;
+                    img.alt = `Imagen de ${currentStarWarsCharacter.name}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver imagen en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
+                        
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentStarWarsCharacter.image;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
+                        
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
+                        
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar imagen de ${currentStarWarsCharacter.name}:`, currentStarWarsCharacter.image);
+                        // Si la imagen falla, mostrar placeholder
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8000ff;">⭐</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentStarWarsCharacter.name}</div>`;
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Imagen cargada exitosamente: ${currentStarWarsCharacter.name}`);
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    // Si no hay imagen, mostrar placeholder
+                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8000ff;">⭐</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentStarWarsCharacter.name}</div>`;
+                }
+                
+                // Generar opciones (1 correcta + 3 incorrectas)
+                const wrongCharacters = starWarsCharacters
+                    .filter(c => c.name !== currentStarWarsCharacter.name)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const options = [
+                    currentStarWarsCharacter.name,
+                    wrongCharacters[0]?.name || 'Personaje',
+                    wrongCharacters[1]?.name || 'Personaje',
+                    wrongCharacters[2]?.name || 'Personaje'
+                ].sort(() => Math.random() - 0.5);
+                
+                // Asignar opciones a los botones
+                document.getElementById('option1').textContent = options[0];
+                document.getElementById('option2').textContent = options[1];
+                document.getElementById('option3').textContent = options[2];
+                document.getElementById('option4').textContent = options[3];
+                
+                // Resetear estado
+                answered = false;
+                jokerUsed = false;
+                document.getElementById('message').textContent = '';
+                document.getElementById('message').className = 'message';
+                
+                // Mostrar opciones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    btn.style.display = 'block';
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+                
+                // Iniciar temporizador
+                startTimer();
+                
+                // Actualizar comodín
+                updateJokerButton();
+                
+                return;
+            } else if (difficulty === 'animal') {
                 // Modo Animales
                 if (animals.length === 0) {
                     const messageEl = document.getElementById('message');
@@ -11836,20 +12125,30 @@
         }
 
         // Reiniciar juego
-        // Función para mostrar/ocultar el botón de animales solo para Martin
+        // Función para mostrar/ocultar los botones exclusivos solo para Martin
         function updateAnimalButtonVisibility() {
             const animalBtn = document.getElementById('animalBtn');
+            const starwarsBtn = document.getElementById('starwarsBtn');
+            
+            // Verificar si el usuario es Martin (por email o nombre)
+            const isMartin = window.currentUser && (
+                window.currentUser.email === 'mpenalvart1@educacion.navarra.es' ||
+                window.currentUserName === 'Martin'
+            );
+            
             if (animalBtn) {
-                // Verificar si el usuario es Martin (por email o nombre)
-                const isMartin = window.currentUser && (
-                    window.currentUser.email === 'mpenalvart1@educacion.navarra.es' ||
-                    window.currentUserName === 'Martin'
-                );
-                
                 if (isMartin) {
                     animalBtn.style.display = 'block';
                 } else {
                     animalBtn.style.display = 'none';
+                }
+            }
+            
+            if (starwarsBtn) {
+                if (isMartin) {
+                    starwarsBtn.style.display = 'block';
+                } else {
+                    starwarsBtn.style.display = 'none';
                 }
             }
         }
@@ -11871,7 +12170,7 @@
             timeLeft = 20;
             
             // Remover las clases de modo para que la pantalla de elegir nivel no tenga estilos del nivel anterior
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode');
             
             // Ocultar game over
             document.getElementById('gameOver').style.display = 'none';
@@ -12106,8 +12405,15 @@
             jokerAvailable = false;
             document.getElementById('jokerBtn').style.display = 'none';
 
-            // Encontrar la respuesta correcta
-            const correctAnswer = currentCountry.name.common;
+            // Encontrar la respuesta correcta según el modo
+            let correctAnswer;
+            if (difficulty === 'starwars') {
+                correctAnswer = currentStarWarsCharacter.name;
+            } else if (difficulty === 'animal') {
+                correctAnswer = currentAnimal.name;
+            } else {
+                correctAnswer = currentCountry.name.common;
+            }
             
             // Obtener todos los botones incorrectos
             const incorrectButtons = [];
@@ -12148,8 +12454,69 @@
         function selectOption(optionNumber) {
             if (answered) return;
 
-            // Verificar si es modo animales
-            if (difficulty === 'animal') {
+            // Verificar si es modo Star Wars
+            if (difficulty === 'starwars') {
+                if (!currentStarWarsCharacter || !currentStarWarsCharacter.name) {
+                    console.error('Error: currentStarWarsCharacter no está definido');
+                    alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentStarWarsCharacter.name;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentStarWarsCharacter.name) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es ${currentStarWarsCharacter.name}! ⭐`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
+                }
+
+                // Si se acabaron las vidas, mostrar game over
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 2000);
+                } else {
+                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
+                }
+                return;
+            } else if (difficulty === 'animal') {
                 if (!currentAnimal || !currentAnimal.name) {
                     console.error('Error: currentAnimal no está definido');
                     alert('Error: No hay animal seleccionado. Por favor, recarga la página.');
@@ -12313,6 +12680,7 @@
         document.getElementById('impossibleBtn').addEventListener('click', () => selectDifficulty('impossible'));
         document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
         document.getElementById('animalBtn').addEventListener('click', () => selectDifficulty('animal'));
+        document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
         document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
