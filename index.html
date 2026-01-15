@@ -206,6 +206,43 @@
             }
         }
 
+        body.cars-mode {
+            background: linear-gradient(135deg, #1a0000 0%, #4a0000 20%, #7f0000 40%, #b30000 60%, #dc2626 80%, #ef4444 100%);
+            background-size: 400% 400%;
+            animation: carsBackgroundMove 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes carsBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        body.pokemon-mode {
+            background: linear-gradient(135deg, #1a1400 0%, #4a3d00 20%, #7f6600 40%, #b38f00 60%, #fbbf24 80%, #fcd34d 100%);
+            background-size: 400% 400%;
+            animation: pokemonBackgroundMove 18s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes pokemonBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            33% {
+                background-position: 100% 50%;
+            }
+            66% {
+                background-position: 50% 100%;
+            }
+        }
+
         body.god-mode {
             background: linear-gradient(135deg, #0f0c29 0%, #1a0d3a 20%, #2d1b69 40%, #4c1d95 60%, #6366f1 80%, #8b5cf6 100%);
             background-size: 400% 400%;
@@ -1981,6 +2018,32 @@
             background: linear-gradient(135deg, #6600cc 0%, #8000ff 50%, #9933ff 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(128, 0, 255, 0.5);
+        }
+
+        .difficulty-btn.cars {
+            border-color: #dc2626;
+            background: linear-gradient(135deg, #991b1b 0%, #dc2626 50%, #ef4444 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .difficulty-btn.cars:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+        }
+
+        .difficulty-btn.pokemon {
+            border-color: #fbbf24;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        .difficulty-btn.pokemon:hover {
+            background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 50%, #fde68a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
         }
 
         .difficulty-btn small {
@@ -9743,6 +9806,8 @@
                 <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
                 <button class="difficulty-btn animal" id="animalBtn" style="display: none;">🦁 Animales<br><small>Adivina el animal</small></button>
                 <button class="difficulty-btn starwars" id="starwarsBtn" style="display: none;">⭐ Star Wars<br><small>Adivina el personaje</small></button>
+                <button class="difficulty-btn cars" id="carsBtn" style="display: none;">🚗 Coches<br><small>Adivina el coche</small></button>
+                <button class="difficulty-btn pokemon" id="pokemonBtn" style="display: none;">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -9825,6 +9890,10 @@
         let animals = []; // Lista de animales cargados
         let currentStarWarsCharacter = null; // Para el modo Star Wars
         let starWarsCharacters = []; // Lista de personajes de Star Wars cargados
+        let currentCar = null; // Para el modo coches
+        let cars = []; // Lista de coches cargados
+        let currentPokemon = null; // Para el modo Pokémon
+        let pokemonList = []; // Lista de Pokémon cargados
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -10234,26 +10303,21 @@
                 }
             }
             
-            // Emoji por tipo si no se encuentra
+            // Emoji por tipo si no se encuentra (normalizar a minúsculas para comparar)
             const typeEmojis = {
                 'mammal': '🦁', 'bird': '🦅', 'fish': '🐟', 'reptile': '🐍',
-                'amphibian': '🐸', 'insect': '🦋', 'crustacean': '🦀', 'mollusk': '🐙'
+                'amphibian': '🐸', 'insect': '🦋', 'crustacean': '🦀', 'mollusk': '🐙',
+                'mammals': '🦁', 'birds': '🦅', 'fishes': '🐟', 'reptiles': '🐍',
+                'amphibians': '🐸', 'insects': '🦋', 'crustaceans': '🦀', 'mollusks': '🐙'
             };
             
-            return typeEmojis[type] || '🦁';
+            const normalizedType = (type || '').toLowerCase();
+            return typeEmojis[normalizedType] || '🦁';
         }
 
-        // Función para cargar animales desde la API
+        // Función para cargar animales desde la API Zoo Animals
         async function loadAnimals() {
             animals = [];
-            // Tipos específicos soportados por la API animals.maxz.dev
-            const animalTypes = [
-                'cat', 'dog', 'rabbit', 'capybara', 'hamster', 'monkey', 'elephant', 
-                'fish', 'turtle', 'bird', 'bunny', 'lizard', 'tortoise', 'chicken', 
-                'deer', 'donkey', 'penguin', 'shark', 'squirrel', 'axolotl', 'camel', 
-                'duck', 'goat', 'guineapig', 'horse', 'jellyfish', 'ostrich', 'rat', 
-                'rhinoceros', 'sealion', 'sheep', 'swan', 'tarantula', 'zebra'
-            ];
             
             // Verificar si está usando file:// protocol
             const isFileProtocol = window.location.protocol === 'file:';
@@ -10269,52 +10333,79 @@
             }
             
             try {
-                // Cargar más animales para tener mejor variedad
-                const promises = [];
-                const animalsToLoad = 40; // Aumentar para más variedad
-                for (let i = 0; i < animalsToLoad; i++) {
-                    const randomType = animalTypes[Math.floor(Math.random() * animalTypes.length)];
-                    promises.push(
-                        fetch(`https://animals.maxz.dev/api/${randomType}/random`)
-                            .then(res => {
-                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                                return res.json();
-                            })
-                            .then(data => {
-                                if (data && data.name) {
-                                    // La API devuelve el campo 'image' directamente con la URL de la imagen
-                                    // Formato: https://r2.animals.maxz.dev/{type}/{id}
-                                    const imageUrl = data.image || null;
-                                    console.log(`Animal cargado: ${data.name} (${data.type}), imagen: ${imageUrl ? '✅' : '❌'}`);
-                                    return {
-                                        name: data.name,
-                                        image: imageUrl, // Usar directamente el campo 'image' de la API
-                                        type: data.type || randomType,
-                                        emoji: getAnimalEmoji(data.name, data.type || randomType)
-                                    };
-                                }
-                                return null;
-                            })
-                            .catch(err => {
-                                console.error(`Error al cargar animal tipo ${randomType}:`, err);
-                                return null;
-                            })
-                    );
+                // Cargar múltiples animales de una vez usando la API Zoo Animals
+                // La API permite obtener varios animales aleatorios en una sola petición
+                const animalsToLoad = 50; // Cargar 50 animales para tener buena variedad
+                const response = await fetch(`https://zoo-animal-api.herokuapp.com/animals/rand/${animalsToLoad}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
                 }
                 
-                const results = await Promise.all(promises);
-                animals = results.filter(animal => animal !== null && animal.name);
+                const data = await response.json();
+                
+                // La API devuelve un array de animales con la estructura:
+                // { name, animal_type, diet, habitat, image_link }
+                if (Array.isArray(data)) {
+                    animals = data
+                        .filter(animal => animal && animal.name && animal.image_link)
+                        .map(animal => ({
+                            name: animal.name,
+                            image: animal.image_link, // Campo image_link de la API
+                            type: animal.animal_type || 'Unknown',
+                            diet: animal.diet || 'Unknown',
+                            habitat: animal.habitat || 'Unknown',
+                            emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
+                        }));
+                } else if (data && data.name) {
+                    // Si solo devuelve un objeto en lugar de array
+                    animals = [{
+                        name: data.name,
+                        image: data.image_link,
+                        type: data.animal_type || 'Unknown',
+                        diet: data.diet || 'Unknown',
+                        habitat: data.habitat || 'Unknown',
+                        emoji: getAnimalEmoji(data.name, data.animal_type || 'Unknown')
+                    }];
+                }
                 
                 // Log de animales cargados con imágenes
                 const animalsWithImages = animals.filter(a => a.image).length;
-                console.log(`✅ Animales cargados de la API: ${animals.length}`);
+                console.log(`✅ Animales cargados de la API Zoo Animals: ${animals.length}`);
                 console.log(`📷 Animales con imágenes: ${animalsWithImages}`);
                 
-                // Si no se cargaron suficientes, usar lista de respaldo
+                // Si no se cargaron suficientes, intentar cargar más o usar lista de respaldo
                 if (animals.length < 10) {
-                    console.log('⚠️ No se cargaron suficientes animales de la API, usando lista de respaldo');
-                    const fallbackAnimals = getFallbackAnimals();
-                    animals = [...animals, ...fallbackAnimals];
+                    console.log('⚠️ No se cargaron suficientes animales, intentando cargar más...');
+                    try {
+                        // Intentar cargar más animales adicionales
+                        const additionalResponse = await fetch(`https://zoo-animal-api.herokuapp.com/animals/rand/30`);
+                        if (additionalResponse.ok) {
+                            const additionalData = await additionalResponse.json();
+                            if (Array.isArray(additionalData)) {
+                                const additionalAnimals = additionalData
+                                    .filter(animal => animal && animal.name && animal.image_link)
+                                    .map(animal => ({
+                                        name: animal.name,
+                                        image: animal.image_link,
+                                        type: animal.animal_type || 'Unknown',
+                                        diet: animal.diet || 'Unknown',
+                                        habitat: animal.habitat || 'Unknown',
+                                        emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
+                                    }));
+                                animals = [...animals, ...additionalAnimals];
+                            }
+                        }
+                    } catch (additionalError) {
+                        console.error('Error al cargar animales adicionales:', additionalError);
+                    }
+                    
+                    // Si aún no hay suficientes, usar lista de respaldo
+                    if (animals.length < 10) {
+                        console.log('⚠️ Usando lista de respaldo');
+                        const fallbackAnimals = getFallbackAnimals();
+                        animals = [...animals, ...fallbackAnimals];
+                    }
                 }
                 
                 // Asegurar que todos los animales tengan emoji
@@ -10330,13 +10421,299 @@
                     return 0;
                 });
                 
-                console.log(`🎮 Modo Animales: ${animals.length} animales listos (${animalsWithImages} con imágenes de la API)`);
+                // Eliminar duplicados por nombre
+                const uniqueAnimals = [];
+                const seenNames = new Set();
+                for (const animal of animals) {
+                    if (!seenNames.has(animal.name.toLowerCase())) {
+                        seenNames.add(animal.name.toLowerCase());
+                        uniqueAnimals.push(animal);
+                    }
+                }
+                animals = uniqueAnimals;
+                
+                console.log(`🎮 Modo Animales: ${animals.length} animales únicos listos (${animalsWithImages} con imágenes de la API)`);
             } catch (error) {
-                console.error('Error al cargar animales:', error);
+                console.error('Error al cargar animales desde Zoo Animals API:', error);
                 // Usar lista de respaldo
                 animals = getFallbackAnimals();
                 console.log(`Modo Animales (error API): ${animals.length} animales cargados desde lista de respaldo`);
             }
+        }
+
+        // Función para cargar coches desde TheVehicleDB API
+        async function loadCars() {
+            cars = [];
+            
+            // Verificar si está usando file:// protocol
+            const isFileProtocol = window.location.protocol === 'file:';
+            if (isFileProtocol) {
+                console.warn('⚠️ Modo file:// detectado. La API de coches requiere un servidor web.');
+                console.warn('💡 Para ver las imágenes, usa un servidor web local:');
+                console.warn('   - Python: python -m http.server 8000');
+                console.warn('   - Node.js: npx serve');
+                cars = getFallbackCars();
+                console.log(`Modo Coches (sin API): ${cars.length} coches cargados desde lista de respaldo`);
+                return;
+            }
+            
+            try {
+                // Modelos populares de coches para buscar usando TheVehicleDB API
+                // API: https://www.thevehicledb.com/api/v1/json/123/searchmodels.php?t=<modelo>
+                const carModels = [
+                    'Mustang', 'Cobra', 'Camaro', 'Corvette', 'Charger', 'Challenger',
+                    '911', 'Cayenne', 'Boxster', 'Panamera', 'Carrera',
+                    'M3', 'M5', 'X5', 'Z4', 'i8',
+                    'A4', 'A6', 'Q5', 'R8', 'TT',
+                    'Civic', 'Accord', 'CR-V', 'Pilot', 'Type R',
+                    'F-150', 'Explorer', 'Ranger', 'Bronco',
+                    'Golf', 'Jetta', 'Passat', 'Tiguan', 'Atlas',
+                    'Wrangler', 'Grand Cherokee', 'Cherokee', 'Renegade',
+                    'Model S', 'Model 3', 'Model X', 'Model Y',
+                    'GTR', '370Z', 'Altima', 'Sentra', 'Rogue',
+                    'Ferrari', 'Lamborghini', 'Bugatti', 'McLaren', 'Aston Martin'
+                ];
+                
+                const promises = [];
+                const carsToLoad = 40;
+                const usedModels = new Set();
+                
+                for (let i = 0; i < carsToLoad; i++) {
+                    let randomModel;
+                    do {
+                        randomModel = carModels[Math.floor(Math.random() * carModels.length)];
+                    } while (usedModels.has(randomModel) && usedModels.size < carModels.length);
+                    usedModels.add(randomModel);
+                    
+                    promises.push(
+                        fetch(`https://www.thevehicledb.com/api/v1/json/123/searchmodels.php?t=${encodeURIComponent(randomModel)}`)
+                            .then(res => {
+                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                                return res.json();
+                            })
+                            .then(data => {
+                                if (data && data.models && Array.isArray(data.models) && data.models.length > 0) {
+                                    // Tomar el primer resultado válido
+                                    const model = data.models[0];
+                                    if (model.model_name && model.model_image) {
+                                        // Ajustar tamaño de imagen según especificaciones: /medium, /small o /tiny
+                                        let imageUrl = model.model_image;
+                                        // Si la URL no tiene tamaño especificado, usar medium por defecto
+                                        if (imageUrl && !imageUrl.includes('/medium') && !imageUrl.includes('/small') && !imageUrl.includes('/tiny')) {
+                                            // Intentar agregar /medium al final de la URL
+                                            imageUrl = imageUrl.replace(/\/$/, '') + '/medium';
+                                        }
+                                        
+                                        return {
+                                            name: model.model_name,
+                                            image: imageUrl,
+                                            make: model.make_name || 'Unknown',
+                                            year: model.model_year || 'Unknown'
+                                        };
+                                    }
+                                }
+                                return null;
+                            })
+                            .catch(err => {
+                                console.error(`Error al cargar coche modelo ${randomModel}:`, err);
+                                return null;
+                            })
+                    );
+                }
+                
+                const results = await Promise.all(promises);
+                cars = results.filter(car => car !== null && car.name && car.image);
+                
+                console.log(`✅ Coches cargados de TheVehicleDB: ${cars.length}`);
+                
+                // Si no se cargaron suficientes, usar lista de respaldo
+                if (cars.length < 10) {
+                    console.log('⚠️ No se cargaron suficientes coches, usando lista de respaldo');
+                    const fallbackCars = getFallbackCars();
+                    cars = [...cars, ...fallbackCars];
+                }
+                
+                // Eliminar duplicados por nombre
+                const uniqueCars = [];
+                const seenNames = new Set();
+                for (const car of cars) {
+                    if (!seenNames.has(car.name.toLowerCase())) {
+                        seenNames.add(car.name.toLowerCase());
+                        uniqueCars.push(car);
+                    }
+                }
+                cars = uniqueCars;
+                
+                console.log(`🚗 Modo Coches: ${cars.length} coches únicos listos`);
+            } catch (error) {
+                console.error('Error al cargar coches desde TheVehicleDB:', error);
+                cars = getFallbackCars();
+                console.log(`Modo Coches (error API): ${cars.length} coches cargados desde lista de respaldo`);
+            }
+        }
+
+        // Función para obtener lista de coches de respaldo
+        function getFallbackCars() {
+            return [
+                { name: 'Ford Mustang', image: null, make: 'Ford', year: '2020' },
+                { name: 'Chevrolet Camaro', image: null, make: 'Chevrolet', year: '2020' },
+                { name: 'Porsche 911', image: null, make: 'Porsche', year: '2020' },
+                { name: 'BMW M3', image: null, make: 'BMW', year: '2020' },
+                { name: 'Audi R8', image: null, make: 'Audi', year: '2020' },
+                { name: 'Nissan GTR', image: null, make: 'Nissan', year: '2020' },
+                { name: 'Lamborghini Huracán', image: null, make: 'Lamborghini', year: '2020' },
+                { name: 'Ferrari 488', image: null, make: 'Ferrari', year: '2020' },
+                { name: 'Tesla Model S', image: null, make: 'Tesla', year: '2020' },
+                { name: 'Mercedes-Benz AMG GT', image: null, make: 'Mercedes-Benz', year: '2020' }
+            ];
+        }
+
+        // Función para cargar Pokémon desde PokeAPI
+        // API: https://pokeapi.co/api/v2/pokemon/<id o nombre>
+        // Imagen oficial: data.sprites.other["official-artwork"].front_default
+        async function loadPokemon() {
+            pokemonList = [];
+            
+            // Verificar si está usando file:// protocol
+            const isFileProtocol = window.location.protocol === 'file:';
+            if (isFileProtocol) {
+                console.warn('⚠️ Modo file:// detectado. La API de Pokémon requiere un servidor web.');
+                console.warn('💡 Para ver las imágenes, usa un servidor web local:');
+                console.warn('   - Python: python -m http.server 8000');
+                console.warn('   - Node.js: npx serve');
+                pokemonList = getFallbackPokemon();
+                console.log(`Modo Pokémon (sin API): ${pokemonList.length} Pokémon cargados desde lista de respaldo`);
+                return;
+            }
+            
+            try {
+                // Cargar múltiples Pokémon aleatorios (IDs del 1 al 1010 según especificaciones)
+                const pokemonToLoad = 60;
+                const promises = [];
+                const usedIds = new Set();
+                
+                for (let i = 0; i < pokemonToLoad; i++) {
+                    let randomId;
+                    do {
+                        randomId = Math.floor(Math.random() * 1010) + 1; // 1 a 1010
+                    } while (usedIds.has(randomId) && usedIds.size < 1000);
+                    usedIds.add(randomId);
+                    
+                    promises.push(
+                        fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`)
+                            .then(res => {
+                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                                return res.json();
+                            })
+                            .then(data => {
+                                if (data && data.name) {
+                                    // Obtener imagen oficial del Pokémon según especificaciones
+                                    // data.sprites.other["official-artwork"].front_default
+                                    const imageUrl = data.sprites?.other?.["official-artwork"]?.front_default || 
+                                                   data.sprites?.front_default || 
+                                                   null;
+                                    
+                                    return {
+                                        id: data.id,
+                                        name: data.name.charAt(0).toUpperCase() + data.name.slice(1), // Capitalizar nombre
+                                        image: imageUrl,
+                                        types: data.types?.map(t => t.type.name) || [],
+                                        abilities: data.abilities?.map(a => a.ability.name) || []
+                                    };
+                                }
+                                return null;
+                            })
+                            .catch(err => {
+                                console.error(`Error al cargar Pokémon ID ${randomId}:`, err);
+                                return null;
+                            })
+                    );
+                }
+                
+                const results = await Promise.all(promises);
+                pokemonList = results.filter(pokemon => pokemon !== null && pokemon.name && pokemon.image);
+                
+                console.log(`✅ Pokémon cargados de PokeAPI: ${pokemonList.length}`);
+                
+                // Si no se cargaron suficientes, intentar cargar más
+                if (pokemonList.length < 15) {
+                    console.log('⚠️ No se cargaron suficientes Pokémon, intentando cargar más...');
+                    const additionalPromises = [];
+                    for (let i = 0; i < 40; i++) {
+                        let randomId;
+                        do {
+                            randomId = Math.floor(Math.random() * 1010) + 1;
+                        } while (usedIds.has(randomId) && usedIds.size < 1000);
+                        usedIds.add(randomId);
+                        
+                        additionalPromises.push(
+                            fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`)
+                                .then(res => res.ok ? res.json() : null)
+                                .then(data => {
+                                    if (data && data.name) {
+                                        // Usar imagen oficial artwork según especificaciones
+                                        const imageUrl = data.sprites?.other?.["official-artwork"]?.front_default || 
+                                                       data.sprites?.front_default || 
+                                                       null;
+                                        return {
+                                            id: data.id,
+                                            name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
+                                            image: imageUrl,
+                                            types: data.types?.map(t => t.type.name) || [],
+                                            abilities: data.abilities?.map(a => a.ability.name) || []
+                                        };
+                                    }
+                                    return null;
+                                })
+                                .catch(() => null)
+                        );
+                    }
+                    
+                    const additionalResults = await Promise.all(additionalPromises);
+                    const additionalPokemon = additionalResults.filter(p => p !== null && p.name && p.image);
+                    pokemonList = [...pokemonList, ...additionalPokemon];
+                }
+                
+                // Si aún no hay suficientes, usar lista de respaldo
+                if (pokemonList.length < 10) {
+                    console.log('⚠️ Usando lista de respaldo');
+                    const fallbackPokemon = getFallbackPokemon();
+                    pokemonList = [...pokemonList, ...fallbackPokemon];
+                }
+                
+                // Eliminar duplicados por nombre
+                const uniquePokemon = [];
+                const seenNames = new Set();
+                for (const pokemon of pokemonList) {
+                    if (!seenNames.has(pokemon.name.toLowerCase())) {
+                        seenNames.add(pokemon.name.toLowerCase());
+                        uniquePokemon.push(pokemon);
+                    }
+                }
+                pokemonList = uniquePokemon;
+                
+                console.log(`⚡ Modo Pokémon: ${pokemonList.length} Pokémon únicos listos`);
+            } catch (error) {
+                console.error('Error al cargar Pokémon desde PokeAPI:', error);
+                pokemonList = getFallbackPokemon();
+                console.log(`Modo Pokémon (error API): ${pokemonList.length} Pokémon cargados desde lista de respaldo`);
+            }
+        }
+
+        // Función para obtener lista de Pokémon de respaldo
+        function getFallbackPokemon() {
+            return [
+                { id: 1, name: 'Bulbasaur', image: null, types: ['grass', 'poison'], abilities: [] },
+                { id: 4, name: 'Charmander', image: null, types: ['fire'], abilities: [] },
+                { id: 7, name: 'Squirtle', image: null, types: ['water'], abilities: [] },
+                { id: 25, name: 'Pikachu', image: null, types: ['electric'], abilities: [] },
+                { id: 39, name: 'Jigglypuff', image: null, types: ['normal', 'fairy'], abilities: [] },
+                { id: 150, name: 'Mewtwo', image: null, types: ['psychic'], abilities: [] },
+                { id: 151, name: 'Mew', image: null, types: ['psychic'], abilities: [] },
+                { id: 94, name: 'Gengar', image: null, types: ['ghost', 'poison'], abilities: [] },
+                { id: 143, name: 'Snorlax', image: null, types: ['normal'], abilities: [] },
+                { id: 149, name: 'Dragonite', image: null, types: ['dragon', 'flying'], abilities: [] }
+            ];
         }
 
         // Función para cargar personajes de Star Wars desde la API
@@ -10656,9 +11033,59 @@
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode', 'cars-mode', 'pokemon-mode');
             
-            if (level === 'starwars') {
+            if (level === 'cars') {
+                document.body.classList.add('cars-mode');
+                // Verificar si está usando file:// y mostrar advertencia
+                if (window.location.protocol === 'file:') {
+                    console.warn('⚠️ Modo file:// detectado. Las imágenes de coches no estarán disponibles.');
+                    console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
+                }
+                // Cargar coches
+                loadCars().then(() => {
+                    if (cars.length === 0) {
+                        alert('No se pudieron cargar coches. Por favor, recarga la página o usa un servidor web local.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar coches:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (cars.length > 0) {
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar coches. Por favor, recarga la página.');
+                    }
+                });
+            } else if (level === 'pokemon') {
+                document.body.classList.add('pokemon-mode');
+                // Verificar si está usando file:// y mostrar advertencia
+                if (window.location.protocol === 'file:') {
+                    console.warn('⚠️ Modo file:// detectado. Las imágenes de Pokémon no estarán disponibles.');
+                    console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
+                }
+                // Cargar Pokémon
+                loadPokemon().then(() => {
+                    if (pokemonList.length === 0) {
+                        alert('No se pudieron cargar Pokémon. Por favor, recarga la página o usa un servidor web local.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar Pokémon:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (pokemonList.length > 0) {
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar Pokémon. Por favor, recarga la página.');
+                    }
+                });
+            } else if (level === 'starwars') {
                 document.body.classList.add('starwars-mode');
                 // Verificar si está usando file:// y mostrar advertencia
                 if (window.location.protocol === 'file:') {
@@ -10979,7 +11406,11 @@
                     btn.disabled = true;
                     
                     let correctAnswer;
-                    if (difficulty === 'starwars') {
+                    if (difficulty === 'cars') {
+                        correctAnswer = currentCar?.name;
+                    } else if (difficulty === 'pokemon') {
+                        correctAnswer = currentPokemon?.name;
+                    } else if (difficulty === 'starwars') {
                         correctAnswer = currentStarWarsCharacter?.name;
                     } else if (difficulty === 'animal') {
                         correctAnswer = currentAnimal?.name;
@@ -10998,7 +11429,13 @@
             updateHearts();
             
             const messageEl = document.getElementById('message');
-            if (difficulty === 'starwars') {
+            if (difficulty === 'cars') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCar.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentCar.name}`);
+            } else if (difficulty === 'pokemon') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentPokemon.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentPokemon.name}`);
+            } else if (difficulty === 'starwars') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
             } else if (difficulty === 'animal') {
@@ -11031,7 +11468,253 @@
 
         // Cargar nueva pregunta
         function loadNewQuestion() {
-            if (difficulty === 'starwars') {
+            if (difficulty === 'cars') {
+                // Modo Coches
+                if (cars.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay coches disponibles. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
+                }
+                
+                // Seleccionar coche aleatorio
+                const randomIndex = Math.floor(Math.random() * cars.length);
+                currentCar = cars[randomIndex];
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                // Mostrar imagen del coche
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                // Intentar mostrar imagen si está disponible
+                if (currentCar.image) {
+                    const img = new Image();
+                    img.src = currentCar.image;
+                    img.alt = `Imagen de ${currentCar.name}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #1a0000 0%, #4a0000 50%, #7f0000 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver imagen en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
+                        
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentCar.image;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
+                        
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
+                        
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar imagen de ${currentCar.name}:`, currentCar.image);
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #dc2626;">🚗</div><div style="text-align: center; margin-top: 10px; color: #fee2e2;">${currentCar.name}</div>`;
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Imagen cargada exitosamente: ${currentCar.name}`);
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #dc2626;">🚗</div><div style="text-align: center; margin-top: 10px; color: #fee2e2;">${currentCar.name}</div>`;
+                }
+                
+                // Generar opciones (1 correcta + 3 incorrectas)
+                const wrongCars = cars
+                    .filter(c => c.name !== currentCar.name)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const options = [
+                    currentCar.name,
+                    wrongCars[0]?.name || 'Coche',
+                    wrongCars[1]?.name || 'Coche',
+                    wrongCars[2]?.name || 'Coche'
+                ].sort(() => Math.random() - 0.5);
+                
+                // Asignar opciones a los botones
+                document.getElementById('option1').textContent = options[0];
+                document.getElementById('option2').textContent = options[1];
+                document.getElementById('option3').textContent = options[2];
+                document.getElementById('option4').textContent = options[3];
+                
+                // Resetear estado
+                answered = false;
+                jokerUsed = false;
+                document.getElementById('message').textContent = '';
+                document.getElementById('message').className = 'message';
+                
+                // Mostrar opciones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    btn.style.display = 'block';
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+                
+                // Iniciar temporizador
+                startTimer();
+                
+                // Actualizar comodín
+                updateJokerButton();
+                
+                return;
+            } else if (difficulty === 'pokemon') {
+                // Modo Pokémon
+                if (pokemonList.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay Pokémon disponibles. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
+                }
+                
+                // Seleccionar Pokémon aleatorio
+                const randomIndex = Math.floor(Math.random() * pokemonList.length);
+                currentPokemon = pokemonList[randomIndex];
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                // Mostrar imagen del Pokémon
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                // Intentar mostrar imagen si está disponible
+                if (currentPokemon.image) {
+                    const img = new Image();
+                    img.src = currentPokemon.image;
+                    img.alt = `Imagen de ${currentPokemon.name}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #1a1400 0%, #4a3d00 50%, #7f6600 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver imagen en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
+                        
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentPokemon.image;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
+                        
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
+                        
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar imagen de ${currentPokemon.name}:`, currentPokemon.image);
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #fbbf24;">⚡</div><div style="text-align: center; margin-top: 10px; color: #fef3c7;">${currentPokemon.name}</div>`;
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Imagen cargada exitosamente: ${currentPokemon.name}`);
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #fbbf24;">⚡</div><div style="text-align: center; margin-top: 10px; color: #fef3c7;">${currentPokemon.name}</div>`;
+                }
+                
+                // Generar opciones (1 correcta + 3 incorrectas)
+                const wrongPokemon = pokemonList
+                    .filter(p => p.name !== currentPokemon.name)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const options = [
+                    currentPokemon.name,
+                    wrongPokemon[0]?.name || 'Pokémon',
+                    wrongPokemon[1]?.name || 'Pokémon',
+                    wrongPokemon[2]?.name || 'Pokémon'
+                ].sort(() => Math.random() - 0.5);
+                
+                // Asignar opciones a los botones
+                document.getElementById('option1').textContent = options[0];
+                document.getElementById('option2').textContent = options[1];
+                document.getElementById('option3').textContent = options[2];
+                document.getElementById('option4').textContent = options[3];
+                
+                // Resetear estado
+                answered = false;
+                jokerUsed = false;
+                document.getElementById('message').textContent = '';
+                document.getElementById('message').className = 'message';
+                
+                // Mostrar opciones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    btn.style.display = 'block';
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+                
+                // Iniciar temporizador
+                startTimer();
+                
+                // Actualizar comodín
+                updateJokerButton();
+                
+                return;
+            } else if (difficulty === 'starwars') {
                 // Modo Star Wars
                 if (starWarsCharacters.length === 0) {
                     const messageEl = document.getElementById('message');
@@ -12129,6 +12812,8 @@
         function updateAnimalButtonVisibility() {
             const animalBtn = document.getElementById('animalBtn');
             const starwarsBtn = document.getElementById('starwarsBtn');
+            const carsBtn = document.getElementById('carsBtn');
+            const pokemonBtn = document.getElementById('pokemonBtn');
             
             // Verificar si el usuario es Martin (por email o nombre)
             const isMartin = window.currentUser && (
@@ -12151,6 +12836,22 @@
                     starwarsBtn.style.display = 'none';
                 }
             }
+            
+            if (carsBtn) {
+                if (isMartin) {
+                    carsBtn.style.display = 'block';
+                } else {
+                    carsBtn.style.display = 'none';
+                }
+            }
+            
+            if (pokemonBtn) {
+                if (isMartin) {
+                    pokemonBtn.style.display = 'block';
+                } else {
+                    pokemonBtn.style.display = 'none';
+                }
+            }
         }
 
         function restartGame() {
@@ -12170,7 +12871,7 @@
             timeLeft = 20;
             
             // Remover las clases de modo para que la pantalla de elegir nivel no tenga estilos del nivel anterior
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode', 'cars-mode', 'pokemon-mode');
             
             // Ocultar game over
             document.getElementById('gameOver').style.display = 'none';
@@ -12407,7 +13108,11 @@
 
             // Encontrar la respuesta correcta según el modo
             let correctAnswer;
-            if (difficulty === 'starwars') {
+            if (difficulty === 'cars') {
+                correctAnswer = currentCar.name;
+            } else if (difficulty === 'pokemon') {
+                correctAnswer = currentPokemon.name;
+            } else if (difficulty === 'starwars') {
                 correctAnswer = currentStarWarsCharacter.name;
             } else if (difficulty === 'animal') {
                 correctAnswer = currentAnimal.name;
@@ -12454,8 +13159,130 @@
         function selectOption(optionNumber) {
             if (answered) return;
 
-            // Verificar si es modo Star Wars
-            if (difficulty === 'starwars') {
+            // Verificar si es modo Coches
+            if (difficulty === 'cars') {
+                if (!currentCar || !currentCar.name) {
+                    console.error('Error: currentCar no está definido');
+                    alert('Error: No hay coche seleccionado. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentCar.name;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentCar.name) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es el ${currentCar.name}! 🚗`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentCar.name}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentCar.name}`);
+                }
+
+                // Si se acabaron las vidas, mostrar game over
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 2000);
+                } else {
+                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
+                }
+                return;
+            } else if (difficulty === 'pokemon') {
+                if (!currentPokemon || !currentPokemon.name) {
+                    console.error('Error: currentPokemon no está definido');
+                    alert('Error: No hay Pokémon seleccionado. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentPokemon.name;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentPokemon.name) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es ${currentPokemon.name}! ⚡`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentPokemon.name}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentPokemon.name}`);
+                }
+
+                // Si se acabaron las vidas, mostrar game over
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 2000);
+                } else {
+                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
+                }
+                return;
+            } else if (difficulty === 'starwars') {
                 if (!currentStarWarsCharacter || !currentStarWarsCharacter.name) {
                     console.error('Error: currentStarWarsCharacter no está definido');
                     alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
@@ -12681,6 +13508,8 @@
         document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
         document.getElementById('animalBtn').addEventListener('click', () => selectDifficulty('animal'));
         document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
+        document.getElementById('carsBtn').addEventListener('click', () => selectDifficulty('cars'));
+        document.getElementById('pokemonBtn').addEventListener('click', () => selectDifficulty('pokemon'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
         document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
