@@ -206,15 +206,15 @@
             }
         }
 
-        body.cars-mode {
-            background: linear-gradient(135deg, #1a0000 0%, #4a0000 20%, #7f0000 40%, #b30000 60%, #dc2626 80%, #ef4444 100%);
+        body.lovecraft-mode {
+            background: linear-gradient(135deg, #0a0014 0%, #1a0033 20%, #2d0066 40%, #4d0099 60%, #6b00cc 80%, #8b5cf6 100%);
             background-size: 400% 400%;
-            animation: carsBackgroundMove 15s ease infinite;
+            animation: lovecraftBackgroundMove 20s ease infinite;
             position: relative;
             overflow-x: hidden;
         }
 
-        @keyframes carsBackgroundMove {
+        @keyframes lovecraftBackgroundMove {
             0%, 100% {
                 background-position: 0% 50%;
             }
@@ -2020,17 +2020,17 @@
             box-shadow: 0 6px 20px rgba(128, 0, 255, 0.5);
         }
 
-        .difficulty-btn.cars {
-            border-color: #dc2626;
-            background: linear-gradient(135deg, #991b1b 0%, #dc2626 50%, #ef4444 100%);
+        .difficulty-btn.lovecraft {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #4d0099 0%, #6b00cc 50%, #8b5cf6 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
 
-        .difficulty-btn.cars:hover {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+        .difficulty-btn.lovecraft:hover {
+            background: linear-gradient(135deg, #6b00cc 0%, #8b5cf6 50%, #a78bfa 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
         }
 
         .difficulty-btn.pokemon {
@@ -9806,7 +9806,7 @@
                 <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
                 <button class="difficulty-btn animal" id="animalBtn" style="display: none;">🦁 Animales<br><small>Adivina el animal</small></button>
                 <button class="difficulty-btn starwars" id="starwarsBtn" style="display: none;">⭐ Star Wars<br><small>Adivina el personaje</small></button>
-                <button class="difficulty-btn cars" id="carsBtn" style="display: none;">🚗 Coches<br><small>Adivina el coche</small></button>
+                <button class="difficulty-btn lovecraft" id="lovecraftBtn" style="display: none;">🧙‍♂️ Lovecraft<br><small>Adivina la criatura</small></button>
                 <button class="difficulty-btn pokemon" id="pokemonBtn" style="display: none;">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
             </div>
             <div class="ranking-buttons-container">
@@ -9890,8 +9890,8 @@
         let animals = []; // Lista de animales cargados
         let currentStarWarsCharacter = null; // Para el modo Star Wars
         let starWarsCharacters = []; // Lista de personajes de Star Wars cargados
-        let currentCar = null; // Para el modo coches
-        let cars = []; // Lista de coches cargados
+        let currentLovecraftCreature = null; // Para el modo Lovecraft
+        let lovecraftCreatures = []; // Lista de criaturas de Lovecraft cargadas
         let currentPokemon = null; // Para el modo Pokémon
         let pokemonList = []; // Lista de Pokémon cargados
 
@@ -10350,38 +10350,110 @@
                     animals = data
                         .filter(animal => animal && animal.name && animal.image_link)
                         .map(animal => {
-                            // Usar proxy de imágenes para evitar problemas de CORS
-                            const originalImageUrl = animal.image_link;
-                            const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                            // Obtener URL de imagen original
+                            let originalImageUrl = animal.image_link;
                             
-                            console.log(`🦁 Animal cargado: ${animal.name}, URL original: ${originalImageUrl}, Proxy: ${proxyUrl}`);
-                            
-                            return {
-                                name: animal.name,
-                                image: proxyUrl, // Usar proxy para evitar CORS
-                                imageOriginal: originalImageUrl, // Guardar URL original
-                                type: animal.animal_type || 'Unknown',
-                                diet: animal.diet || 'Unknown',
-                                habitat: animal.habitat || 'Unknown',
-                                emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
-                            };
+                            // Validar y limpiar la URL
+                            if (originalImageUrl) {
+                                // Asegurar que la URL sea completa
+                                if (!originalImageUrl.startsWith('http://') && !originalImageUrl.startsWith('https://')) {
+                                    originalImageUrl = 'https://' + originalImageUrl;
+                                }
+                                
+                                // Generar múltiples proxies para evitar problemas de CORS
+                                // Proxy 1: images.weserv.nl (el más confiable para imágenes)
+                                const proxyUrl1 = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                                // Proxy 2: corsproxy.io (alternativo)
+                                const proxyUrl2 = `https://corsproxy.io/?${encodeURIComponent(originalImageUrl)}`;
+                                // Proxy 3: api.allorigins.win (tercera opción)
+                                const proxyUrl3 = `https://api.allorigins.win/raw?url=${encodeURIComponent(originalImageUrl)}`;
+                                // Proxy 4: api.codetabs.com (cuarta opción)
+                                const proxyUrl4 = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(originalImageUrl)}`;
+                                
+                                console.log(`🦁 Animal cargado: ${animal.name}`);
+                                console.log(`   URL original: ${originalImageUrl}`);
+                                console.log(`   Proxy 1 (weserv): ${proxyUrl1}`);
+                                console.log(`   Proxy 2 (corsproxy): ${proxyUrl2}`);
+                                console.log(`   Proxy 3 (allorigins): ${proxyUrl3}`);
+                                console.log(`   Proxy 4 (codetabs): ${proxyUrl4}`);
+                                
+                                return {
+                                    name: animal.name,
+                                    image: proxyUrl1, // Usar proxy 1 como principal (mejor para imágenes)
+                                    imageProxy1: proxyUrl1, // Proxy 1 (weserv.nl) - mejor para imágenes
+                                    imageProxy2: proxyUrl2, // Proxy 2 (corsproxy.io)
+                                    imageProxy3: proxyUrl3, // Proxy 3 (allorigins)
+                                    imageProxy4: proxyUrl4, // Proxy 4 (codetabs)
+                                    imageOriginal: originalImageUrl, // Guardar URL original como última opción
+                                    type: animal.animal_type || 'Unknown',
+                                    diet: animal.diet || 'Unknown',
+                                    habitat: animal.habitat || 'Unknown',
+                                    emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
+                                };
+                            } else {
+                                // Si no hay URL de imagen
+                                console.warn(`⚠️ Animal ${animal.name} no tiene URL de imagen`);
+                                return {
+                                    name: animal.name,
+                                    image: null,
+                                    imageProxy1: null,
+                                    imageProxy2: null,
+                                    imageOriginal: null,
+                                    type: animal.animal_type || 'Unknown',
+                                    diet: animal.diet || 'Unknown',
+                                    habitat: animal.habitat || 'Unknown',
+                                    emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
+                                };
+                            }
                         });
                 } else if (data && data.name) {
                     // Si solo devuelve un objeto en lugar de array
-                    const originalImageUrl = data.image_link;
-                    const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                    let originalImageUrl = data.image_link;
                     
-                    console.log(`🦁 Animal cargado (objeto único): ${data.name}, URL original: ${originalImageUrl}, Proxy: ${proxyUrl}`);
-                    
-                    animals = [{
-                        name: data.name,
-                        image: proxyUrl, // Usar proxy para evitar CORS
-                        imageOriginal: originalImageUrl, // Guardar URL original
-                        type: data.animal_type || 'Unknown',
-                        diet: data.diet || 'Unknown',
-                        habitat: data.habitat || 'Unknown',
-                        emoji: getAnimalEmoji(data.name, data.animal_type || 'Unknown')
-                    }];
+                    if (originalImageUrl) {
+                        if (!originalImageUrl.startsWith('http://') && !originalImageUrl.startsWith('https://')) {
+                            originalImageUrl = 'https://' + originalImageUrl;
+                        }
+                        
+                        // Generar múltiples proxies
+                        const proxyUrl1 = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                        const proxyUrl2 = `https://corsproxy.io/?${encodeURIComponent(originalImageUrl)}`;
+                        const proxyUrl3 = `https://api.allorigins.win/raw?url=${encodeURIComponent(originalImageUrl)}`;
+                        const proxyUrl4 = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(originalImageUrl)}`;
+                        
+                        console.log(`🦁 Animal cargado (objeto único): ${data.name}`);
+                        console.log(`   URL original: ${originalImageUrl}`);
+                        console.log(`   Proxy 1 (weserv): ${proxyUrl1}`);
+                        console.log(`   Proxy 2 (corsproxy): ${proxyUrl2}`);
+                        console.log(`   Proxy 3 (allorigins): ${proxyUrl3}`);
+                        console.log(`   Proxy 4 (codetabs): ${proxyUrl4}`);
+                        
+                        animals = [{
+                            name: data.name,
+                            image: proxyUrl1, // Usar proxy 1 como principal
+                            imageProxy1: proxyUrl1,
+                            imageProxy2: proxyUrl2,
+                            imageProxy3: proxyUrl3,
+                            imageProxy4: proxyUrl4,
+                            imageOriginal: originalImageUrl,
+                            type: data.animal_type || 'Unknown',
+                            diet: data.diet || 'Unknown',
+                            habitat: data.habitat || 'Unknown',
+                            emoji: getAnimalEmoji(data.name, data.animal_type || 'Unknown')
+                        }];
+                    } else {
+                        animals = [{
+                            name: data.name,
+                            image: null,
+                            imageProxy1: null,
+                            imageProxy2: null,
+                            imageOriginal: null,
+                            type: data.animal_type || 'Unknown',
+                            diet: data.diet || 'Unknown',
+                            habitat: data.habitat || 'Unknown',
+                            emoji: getAnimalEmoji(data.name, data.animal_type || 'Unknown')
+                        }];
+                    }
                 }
                 
                 // Log de animales cargados con imágenes
@@ -10401,20 +10473,50 @@
                                 const additionalAnimals = additionalData
                                     .filter(animal => animal && animal.name && animal.image_link)
                                     .map(animal => {
-                                        const originalImageUrl = animal.image_link;
-                                        const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                                        let originalImageUrl = animal.image_link;
                                         
-                                        console.log(`🦁 Animal adicional cargado: ${animal.name}, URL original: ${originalImageUrl}, Proxy: ${proxyUrl}`);
-                                        
-                                        return {
-                                            name: animal.name,
-                                            image: proxyUrl, // Usar proxy para evitar CORS
-                                            imageOriginal: originalImageUrl, // Guardar URL original
-                                            type: animal.animal_type || 'Unknown',
-                                            diet: animal.diet || 'Unknown',
-                                            habitat: animal.habitat || 'Unknown',
-                                            emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
-                                        };
+                                        if (originalImageUrl) {
+                                            if (!originalImageUrl.startsWith('http://') && !originalImageUrl.startsWith('https://')) {
+                                                originalImageUrl = 'https://' + originalImageUrl;
+                                            }
+                                            
+                                            // Generar múltiples proxies igual que antes
+                                            const proxyUrl1 = `https://images.weserv.nl/?url=${encodeURIComponent(originalImageUrl)}&output=webp`;
+                                            const proxyUrl2 = `https://corsproxy.io/?${encodeURIComponent(originalImageUrl)}`;
+                                            const proxyUrl3 = `https://api.allorigins.win/raw?url=${encodeURIComponent(originalImageUrl)}`;
+                                            const proxyUrl4 = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(originalImageUrl)}`;
+                                            
+                                            console.log(`🦁 Animal adicional cargado: ${animal.name}`);
+                                            console.log(`   URL original: ${originalImageUrl}`);
+                                            console.log(`   Proxy 1 (weserv): ${proxyUrl1}`);
+                                            console.log(`   Proxy 2 (corsproxy): ${proxyUrl2}`);
+                                            
+                                            return {
+                                                name: animal.name,
+                                                image: proxyUrl1, // Usar proxy 1 como principal
+                                                imageProxy1: proxyUrl1,
+                                                imageProxy2: proxyUrl2,
+                                                imageProxy3: proxyUrl3,
+                                                imageProxy4: proxyUrl4,
+                                                imageOriginal: originalImageUrl,
+                                                type: animal.animal_type || 'Unknown',
+                                                diet: animal.diet || 'Unknown',
+                                                habitat: animal.habitat || 'Unknown',
+                                                emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
+                                            };
+                                        } else {
+                                            return {
+                                                name: animal.name,
+                                                image: null,
+                                                imageProxy1: null,
+                                                imageProxy2: null,
+                                                imageOriginal: null,
+                                                type: animal.animal_type || 'Unknown',
+                                                diet: animal.diet || 'Unknown',
+                                                habitat: animal.habitat || 'Unknown',
+                                                emoji: getAnimalEmoji(animal.name, animal.animal_type || 'Unknown')
+                                            };
+                                        }
                                     });
                                 animals = [...animals, ...additionalAnimals];
                             }
@@ -10464,165 +10566,101 @@
             }
         }
 
-        // Función para cargar coches desde TheVehicleDB API
-        async function loadCars() {
-            cars = [];
+        // Función para cargar criaturas de Lovecraft desde The Lovecraftian API
+        // API: https://lovecraftapirest.fly.dev/api/creatures
+        // Imágenes: https://lovecraftapirest.fly.dev/api/images/<nombre>.jpg
+        async function loadLovecraftCreatures() {
+            lovecraftCreatures = [];
             
             // Verificar si está usando file:// protocol
             const isFileProtocol = window.location.protocol === 'file:';
             if (isFileProtocol) {
-                console.warn('⚠️ Modo file:// detectado. La API de coches requiere un servidor web.');
+                console.warn('⚠️ Modo file:// detectado. La API de Lovecraft requiere un servidor web.');
                 console.warn('💡 Para ver las imágenes, usa un servidor web local:');
                 console.warn('   - Python: python -m http.server 8000');
                 console.warn('   - Node.js: npx serve');
-                cars = getFallbackCars();
-                console.log(`Modo Coches (sin API): ${cars.length} coches cargados desde lista de respaldo`);
+                lovecraftCreatures = getFallbackLovecraftCreatures();
+                console.log(`Modo Lovecraft (sin API): ${lovecraftCreatures.length} criaturas cargadas desde lista de respaldo`);
                 return;
             }
             
             try {
-                // Modelos populares de coches para buscar usando TheVehicleDB API
-                // API: https://www.thevehicledb.com/api/v1/json/123/searchmodels.php?t=<modelo>
-                const carModels = [
-                    'Mustang', 'Cobra', 'Camaro', 'Corvette', 'Charger', 'Challenger',
-                    '911', 'Cayenne', 'Boxster', 'Panamera', 'Carrera',
-                    'M3', 'M5', 'X5', 'Z4', 'i8',
-                    'A4', 'A6', 'Q5', 'R8', 'TT',
-                    'Civic', 'Accord', 'CR-V', 'Pilot', 'Type R',
-                    'F-150', 'Explorer', 'Ranger', 'Bronco',
-                    'Golf', 'Jetta', 'Passat', 'Tiguan', 'Atlas',
-                    'Wrangler', 'Grand Cherokee', 'Cherokee', 'Renegade',
-                    'Model S', 'Model 3', 'Model X', 'Model Y',
-                    'GTR', '370Z', 'Altima', 'Sentra', 'Rogue',
-                    'Ferrari', 'Lamborghini', 'Bugatti', 'McLaren', 'Aston Martin'
-                ];
+                // Obtener listado de criaturas desde la API
+                const response = await fetch('https://lovecraftapirest.fly.dev/api/creatures');
                 
-                const promises = [];
-                const carsToLoad = 40;
-                const usedModels = new Set();
-                
-                for (let i = 0; i < carsToLoad; i++) {
-                    let randomModel;
-                    do {
-                        randomModel = carModels[Math.floor(Math.random() * carModels.length)];
-                    } while (usedModels.has(randomModel) && usedModels.size < carModels.length);
-                    usedModels.add(randomModel);
-                    
-                    promises.push(
-                        fetch(`https://www.thevehicledb.com/api/v1/json/123/searchmodels.php?t=${encodeURIComponent(randomModel)}`)
-                            .then(res => {
-                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                                return res.json();
-                            })
-                            .then(data => {
-                                if (data && data.models && Array.isArray(data.models) && data.models.length > 0) {
-                                    // Tomar el primer resultado válido
-                                    const model = data.models[0];
-                                    if (model.model_name && model.model_image) {
-                                        // Ajustar tamaño de imagen según especificaciones: /medium, /small o /tiny
-                                        let imageUrl = model.model_image;
-                                        
-                                        // Validar y limpiar la URL
-                                        if (imageUrl) {
-                                            // Asegurar que la URL sea completa
-                                            if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
-                                                // Si es una ruta relativa, construir URL completa
-                                                if (imageUrl.startsWith('/')) {
-                                                    imageUrl = 'https://www.thevehicledb.com' + imageUrl;
-                                                } else {
-                                                    imageUrl = 'https://www.thevehicledb.com/' + imageUrl;
-                                                }
-                                            }
-                                            
-                                            // Si la URL no tiene tamaño especificado, intentar agregar /medium
-                                            // Pero solo si la URL no termina con una extensión de archivo
-                                            if (!imageUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i) && 
-                                                !imageUrl.includes('/medium') && 
-                                                !imageUrl.includes('/small') && 
-                                                !imageUrl.includes('/tiny')) {
-                                                // Agregar /medium al final de la URL (antes de cualquier query string)
-                                                const urlParts = imageUrl.split('?');
-                                                const baseUrl = urlParts[0].replace(/\/$/, '');
-                                                const queryString = urlParts[1] ? '?' + urlParts[1] : '';
-                                                imageUrl = baseUrl + '/medium' + queryString;
-                                            }
-                                            
-                                            // Usar proxy de imágenes para evitar CORS
-                                            // images.weserv.nl es un proxy gratuito que permite cargar imágenes de cualquier origen
-                                            const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl)}&output=webp`;
-                                            
-                                            console.log(`🚗 Coche cargado: ${model.model_name}, URL original: ${imageUrl}, Proxy: ${proxyUrl}`);
-                                            
-                                            return {
-                                                name: model.model_name,
-                                                image: proxyUrl, // Usar proxy para evitar CORS
-                                                imageOriginal: imageUrl, // Guardar URL original por si acaso
-                                                make: model.make_name || 'Unknown',
-                                                year: model.model_year || 'Unknown'
-                                            };
-                                        }
-                                        
-                                        return {
-                                            name: model.model_name,
-                                            image: null,
-                                            make: model.make_name || 'Unknown',
-                                            year: model.model_year || 'Unknown'
-                                        };
-                                    }
-                                }
-                                return null;
-                            })
-                            .catch(err => {
-                                console.error(`Error al cargar coche modelo ${randomModel}:`, err);
-                                return null;
-                            })
-                    );
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
                 }
                 
-                const results = await Promise.all(promises);
-                cars = results.filter(car => car !== null && car.name && car.image);
+                const data = await response.json();
                 
-                console.log(`✅ Coches cargados de TheVehicleDB: ${cars.length}`);
-                
-                // Si no se cargaron suficientes, usar lista de respaldo
-                if (cars.length < 10) {
-                    console.log('⚠️ No se cargaron suficientes coches, usando lista de respaldo');
-                    const fallbackCars = getFallbackCars();
-                    cars = [...cars, ...fallbackCars];
+                // La API devuelve un array de criaturas
+                if (Array.isArray(data) && data.length > 0) {
+                    lovecraftCreatures = data
+                        .filter(creature => creature && creature.name)
+                        .map(creature => {
+                            // Construir URL de imagen: https://lovecraftapirest.fly.dev/api/images/<nombre>.jpg
+                            const imageName = creature.name.toLowerCase().replace(/\s+/g, '') + '.jpg';
+                            const imageUrl = `https://lovecraftapirest.fly.dev/api/images/${imageName}`;
+                            
+                            // Usar proxy de imágenes para evitar CORS
+                            const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl)}&output=webp`;
+                            
+                            console.log(`🧙‍♂️ Criatura cargada: ${creature.name}, URL imagen: ${imageUrl}, Proxy: ${proxyUrl}`);
+                            
+                            return {
+                                name: creature.name,
+                                image: proxyUrl, // Usar proxy para evitar CORS
+                                imageOriginal: imageUrl, // Guardar URL original
+                                description: creature.description || '',
+                                category: creature.category || 'Unknown'
+                            };
+                        });
+                    
+                    console.log(`✅ Criaturas de Lovecraft cargadas: ${lovecraftCreatures.length}`);
+                    
+                    // Si no se cargaron suficientes, usar lista de respaldo
+                    if (lovecraftCreatures.length < 10) {
+                        console.log('⚠️ No se cargaron suficientes criaturas, usando lista de respaldo');
+                        const fallbackCreatures = getFallbackLovecraftCreatures();
+                        lovecraftCreatures = [...lovecraftCreatures, ...fallbackCreatures];
+                    }
+                } else {
+                    throw new Error('La API no devolvió un array válido');
                 }
                 
                 // Eliminar duplicados por nombre
-                const uniqueCars = [];
+                const uniqueCreatures = [];
                 const seenNames = new Set();
-                for (const car of cars) {
-                    if (!seenNames.has(car.name.toLowerCase())) {
-                        seenNames.add(car.name.toLowerCase());
-                        uniqueCars.push(car);
+                for (const creature of lovecraftCreatures) {
+                    if (!seenNames.has(creature.name.toLowerCase())) {
+                        seenNames.add(creature.name.toLowerCase());
+                        uniqueCreatures.push(creature);
                     }
                 }
-                cars = uniqueCars;
+                lovecraftCreatures = uniqueCreatures;
                 
-                console.log(`🚗 Modo Coches: ${cars.length} coches únicos listos`);
+                console.log(`🧙‍♂️ Modo Lovecraft: ${lovecraftCreatures.length} criaturas únicas listas`);
             } catch (error) {
-                console.error('Error al cargar coches desde TheVehicleDB:', error);
-                cars = getFallbackCars();
-                console.log(`Modo Coches (error API): ${cars.length} coches cargados desde lista de respaldo`);
+                console.error('Error al cargar criaturas desde The Lovecraftian API:', error);
+                lovecraftCreatures = getFallbackLovecraftCreatures();
+                console.log(`Modo Lovecraft (error API): ${lovecraftCreatures.length} criaturas cargadas desde lista de respaldo`);
             }
         }
 
-        // Función para obtener lista de coches de respaldo
-        function getFallbackCars() {
+        // Función para obtener lista de criaturas de Lovecraft de respaldo
+        function getFallbackLovecraftCreatures() {
             return [
-                { name: 'Ford Mustang', image: null, make: 'Ford', year: '2020' },
-                { name: 'Chevrolet Camaro', image: null, make: 'Chevrolet', year: '2020' },
-                { name: 'Porsche 911', image: null, make: 'Porsche', year: '2020' },
-                { name: 'BMW M3', image: null, make: 'BMW', year: '2020' },
-                { name: 'Audi R8', image: null, make: 'Audi', year: '2020' },
-                { name: 'Nissan GTR', image: null, make: 'Nissan', year: '2020' },
-                { name: 'Lamborghini Huracán', image: null, make: 'Lamborghini', year: '2020' },
-                { name: 'Ferrari 488', image: null, make: 'Ferrari', year: '2020' },
-                { name: 'Tesla Model S', image: null, make: 'Tesla', year: '2020' },
-                { name: 'Mercedes-Benz AMG GT', image: null, make: 'Mercedes-Benz', year: '2020' }
+                { name: 'Cthulhu', image: null, description: 'El Gran Cthulhu', category: 'Great Old One' },
+                { name: 'Azathoth', image: null, description: 'El Sultán Ciego', category: 'Outer God' },
+                { name: 'Nyarlathotep', image: null, description: 'El Caos Reptante', category: 'Outer God' },
+                { name: 'Yog-Sothoth', image: null, description: 'La Llave y la Puerta', category: 'Outer God' },
+                { name: 'Shub-Niggurath', image: null, description: 'La Cabra Negra de los Bosques', category: 'Outer God' },
+                { name: 'Dagon', image: null, description: 'El Dios del Mar', category: 'Great Old One' },
+                { name: 'Hastur', image: null, description: 'El Rey Amarillo', category: 'Great Old One' },
+                { name: 'Tsathoggua', image: null, description: 'El Ser Adormecido', category: 'Great Old One' },
+                { name: 'Yig', image: null, description: 'El Padre de las Serpientes', category: 'Great Old One' },
+                { name: 'Ghatanothoa', image: null, description: 'El Dios de la Petrificación', category: 'Great Old One' }
             ];
         }
 
@@ -11091,31 +11129,31 @@
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode', 'cars-mode', 'pokemon-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode', 'lovecraft-mode', 'pokemon-mode');
             
-            if (level === 'cars') {
-                document.body.classList.add('cars-mode');
+            if (level === 'lovecraft') {
+                document.body.classList.add('lovecraft-mode');
                 // Verificar si está usando file:// y mostrar advertencia
                 if (window.location.protocol === 'file:') {
-                    console.warn('⚠️ Modo file:// detectado. Las imágenes de coches no estarán disponibles.');
+                    console.warn('⚠️ Modo file:// detectado. Las imágenes de criaturas de Lovecraft no estarán disponibles.');
                     console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
                 }
-                // Cargar coches
-                loadCars().then(() => {
-                    if (cars.length === 0) {
-                        alert('No se pudieron cargar coches. Por favor, recarga la página o usa un servidor web local.');
+                // Cargar criaturas de Lovecraft
+                loadLovecraftCreatures().then(() => {
+                    if (lovecraftCreatures.length === 0) {
+                        alert('No se pudieron cargar criaturas de Lovecraft. Por favor, recarga la página o usa un servidor web local.');
                         document.getElementById('loading').style.display = 'none';
                         return;
                     }
                     document.getElementById('loading').style.display = 'none';
                     loadNewQuestion();
                 }).catch(error => {
-                    console.error('Error al cargar coches:', error);
+                    console.error('Error al cargar criaturas de Lovecraft:', error);
                     document.getElementById('loading').style.display = 'none';
-                    if (cars.length > 0) {
+                    if (lovecraftCreatures.length > 0) {
                         loadNewQuestion();
                     } else {
-                        alert('Error al cargar coches. Por favor, recarga la página.');
+                        alert('Error al cargar criaturas de Lovecraft. Por favor, recarga la página.');
                     }
                 });
             } else if (level === 'pokemon') {
@@ -11464,8 +11502,8 @@
                     btn.disabled = true;
                     
                     let correctAnswer;
-                    if (difficulty === 'cars') {
-                        correctAnswer = currentCar?.name;
+                    if (difficulty === 'lovecraft') {
+                        correctAnswer = currentLovecraftCreature?.name;
                     } else if (difficulty === 'pokemon') {
                         correctAnswer = currentPokemon?.name;
                     } else if (difficulty === 'starwars') {
@@ -11487,9 +11525,9 @@
             updateHearts();
             
             const messageEl = document.getElementById('message');
-            if (difficulty === 'cars') {
-                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCar.name}`;
-                showAlert('error', '', `La respuesta correcta era: ${currentCar.name}`);
+            if (difficulty === 'lovecraft') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentLovecraftCreature.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentLovecraftCreature.name}`);
             } else if (difficulty === 'pokemon') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentPokemon.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentPokemon.name}`);
@@ -11526,32 +11564,32 @@
 
         // Cargar nueva pregunta
         function loadNewQuestion() {
-            if (difficulty === 'cars') {
-                // Modo Coches
-                if (cars.length === 0) {
+            if (difficulty === 'lovecraft') {
+                // Modo Lovecraft
+                if (lovecraftCreatures.length === 0) {
                     const messageEl = document.getElementById('message');
-                    messageEl.textContent = '⚠️ No hay coches disponibles. Por favor, recarga la página.';
+                    messageEl.textContent = '⚠️ No hay criaturas disponibles. Por favor, recarga la página.';
                     messageEl.className = 'message incorrect';
                     return;
                 }
                 
-                // Seleccionar coche aleatorio
-                const randomIndex = Math.floor(Math.random() * cars.length);
-                currentCar = cars[randomIndex];
+                // Seleccionar criatura aleatoria
+                const randomIndex = Math.floor(Math.random() * lovecraftCreatures.length);
+                currentLovecraftCreature = lovecraftCreatures[randomIndex];
                 
                 // Detener temporizador anterior
                 stopTimer();
                 
-                // Mostrar imagen del coche
+                // Mostrar imagen de la criatura
                 const flagEl = document.getElementById('flag');
                 flagEl.innerHTML = '';
                 
                 // Intentar mostrar imagen si está disponible
-                if (currentCar.image) {
+                if (currentLovecraftCreature.image) {
                     const img = new Image();
                     img.crossOrigin = 'anonymous'; // Permitir CORS
-                    img.src = currentCar.image;
-                    img.alt = `Imagen de ${currentCar.name}`;
+                    img.src = currentLovecraftCreature.image;
+                    img.alt = `Imagen de ${currentLovecraftCreature.name}`;
                     img.style.width = 'auto';
                     img.style.height = 'auto';
                     img.style.maxWidth = '100%';
@@ -11560,7 +11598,7 @@
                     img.style.objectFit = 'contain';
                     img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
                     img.style.borderRadius = '12px';
-                    img.style.background = 'linear-gradient(135deg, #1a0000 0%, #4a0000 50%, #7f0000 100%)';
+                    img.style.background = 'linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%)';
                     img.style.padding = '10px';
                     img.style.display = 'block';
                     img.style.margin = '0 auto';
@@ -11583,7 +11621,7 @@
                         
                         const fullImg = document.createElement('img');
                         fullImg.crossOrigin = 'anonymous';
-                        fullImg.src = currentCar.imageOriginal || currentCar.image;
+                        fullImg.src = currentLovecraftCreature.imageOriginal || currentLovecraftCreature.image;
                         fullImg.style.maxWidth = '90%';
                         fullImg.style.maxHeight = '90%';
                         fullImg.style.objectFit = 'contain';
@@ -11598,39 +11636,39 @@
                     };
                     
                     img.onerror = function() {
-                        console.warn(`Error al cargar imagen proxy de ${currentCar.name}, intentando URL original...`);
+                        console.warn(`Error al cargar imagen proxy de ${currentLovecraftCreature.name}, intentando URL original...`);
                         // Si el proxy falla, intentar con la URL original
-                        if (currentCar.imageOriginal && currentCar.imageOriginal !== currentCar.image) {
-                            img.src = currentCar.imageOriginal;
+                        if (currentLovecraftCreature.imageOriginal && currentLovecraftCreature.imageOriginal !== currentLovecraftCreature.image) {
+                            img.src = currentLovecraftCreature.imageOriginal;
                             img.onerror = function() {
-                                console.warn(`Error al cargar imagen original de ${currentCar.name}:`, currentCar.imageOriginal);
-                                flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #dc2626;">🚗</div><div style="text-align: center; margin-top: 10px; color: #fee2e2;">${currentCar.name}</div>`;
+                                console.warn(`Error al cargar imagen original de ${currentLovecraftCreature.name}:`, currentLovecraftCreature.imageOriginal);
+                                flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8b5cf6;">🧙‍♂️</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentLovecraftCreature.name}</div>`;
                             };
                         } else {
-                            flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #dc2626;">🚗</div><div style="text-align: center; margin-top: 10px; color: #fee2e2;">${currentCar.name}</div>`;
+                            flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8b5cf6;">🧙‍♂️</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentLovecraftCreature.name}</div>`;
                         }
                     };
                     
                     img.onload = function() {
-                        console.log(`Imagen cargada exitosamente: ${currentCar.name}`);
+                        console.log(`Imagen cargada exitosamente: ${currentLovecraftCreature.name}`);
                     };
                     
                     flagEl.appendChild(img);
                 } else {
-                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #dc2626;">🚗</div><div style="text-align: center; margin-top: 10px; color: #fee2e2;">${currentCar.name}</div>`;
+                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8b5cf6;">🧙‍♂️</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentLovecraftCreature.name}</div>`;
                 }
                 
                 // Generar opciones (1 correcta + 3 incorrectas)
-                const wrongCars = cars
-                    .filter(c => c.name !== currentCar.name)
+                const wrongCreatures = lovecraftCreatures
+                    .filter(c => c.name !== currentLovecraftCreature.name)
                     .sort(() => Math.random() - 0.5)
                     .slice(0, 3);
                 
                 const options = [
-                    currentCar.name,
-                    wrongCars[0]?.name || 'Coche',
-                    wrongCars[1]?.name || 'Coche',
-                    wrongCars[2]?.name || 'Coche'
+                    currentLovecraftCreature.name,
+                    wrongCreatures[0]?.name || 'Criatura',
+                    wrongCreatures[1]?.name || 'Criatura',
+                    wrongCreatures[2]?.name || 'Criatura'
                 ].sort(() => Math.random() - 0.5);
                 
                 // Asignar opciones a los botones
@@ -11931,10 +11969,34 @@
                 const animalEmoji = currentAnimal.emoji || getAnimalEmoji(currentAnimal.name, currentAnimal.type);
                 
                 // Intentar mostrar imagen si está disponible (funciona con servidor web)
-                if (currentAnimal.image) {
+                if (currentAnimal.image || currentAnimal.imageProxy1 || currentAnimal.imageProxy2 || currentAnimal.imageProxy3 || currentAnimal.imageProxy4 || currentAnimal.imageOriginal) {
                     const img = new Image();
                     img.crossOrigin = 'anonymous'; // Permitir CORS
-                    img.src = currentAnimal.image;
+                    
+                    // Función para intentar cargar imagen con diferentes URLs
+                    // Orden: proxies primero (evitan CORS), URL original al final
+                    let attemptCount = 0;
+                    const imageUrls = [
+                        currentAnimal.imageProxy1, // Proxy 1 (weserv.nl) - mejor para imágenes
+                        currentAnimal.imageProxy2, // Proxy 2 (corsproxy)
+                        currentAnimal.imageProxy3, // Proxy 3 (allorigins)
+                        currentAnimal.imageProxy4, // Proxy 4 (codetabs)
+                        currentAnimal.image, // Proxy principal (también puede ser weserv)
+                        currentAnimal.imageOriginal // URL original como última opción
+                    ].filter(url => url); // Filtrar URLs nulas
+                    
+                    function tryLoadImage() {
+                        if (attemptCount >= imageUrls.length) {
+                            console.error(`❌ No se pudo cargar imagen de ${currentAnimal.name} después de ${attemptCount} intentos`);
+                            flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
+                            return;
+                        }
+                        
+                        const currentUrl = imageUrls[attemptCount];
+                        console.log(`🔄 Intento ${attemptCount + 1}/${imageUrls.length} de cargar imagen de ${currentAnimal.name}: ${currentUrl}`);
+                        img.src = currentUrl;
+                    }
+                    
                     img.alt = `Imagen de ${currentAnimal.name}`;
                     img.style.width = 'auto';
                     img.style.height = 'auto';
@@ -11967,7 +12029,7 @@
                         
                         const fullImg = document.createElement('img');
                         fullImg.crossOrigin = 'anonymous';
-                        fullImg.src = currentAnimal.imageOriginal || currentAnimal.image;
+                        fullImg.src = currentAnimal.imageOriginal || currentAnimal.image || img.src;
                         fullImg.style.maxWidth = '90%';
                         fullImg.style.maxHeight = '90%';
                         fullImg.style.objectFit = 'contain';
@@ -11982,28 +12044,22 @@
                     };
                     
                     img.onerror = function() {
-                        console.warn(`Error al cargar imagen proxy de ${currentAnimal.name}, intentando URL original...`);
-                        // Si el proxy falla, intentar con la URL original
-                        if (currentAnimal.imageOriginal && currentAnimal.imageOriginal !== currentAnimal.image) {
-                            img.src = currentAnimal.imageOriginal;
-                            img.onerror = function() {
-                                console.warn(`Error al cargar imagen original de ${currentAnimal.name}:`, currentAnimal.imageOriginal);
-                                // Si la imagen falla, mostrar emoji
-                                flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
-                            };
-                        } else {
-                            // Si no hay URL original o también falla, mostrar emoji
-                            flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
-                        }
+                        attemptCount++;
+                        console.warn(`❌ Error al cargar imagen (intento ${attemptCount}/${imageUrls.length}) de ${currentAnimal.name}`);
+                        tryLoadImage(); // Intentar siguiente URL
                     };
                     
                     img.onload = function() {
-                        console.log(`Imagen cargada exitosamente: ${currentAnimal.name}`);
+                        console.log(`✅ Imagen cargada exitosamente: ${currentAnimal.name} desde ${img.src}`);
                     };
+                    
+                    // Intentar cargar la primera imagen
+                    tryLoadImage();
                     
                     flagEl.appendChild(img);
                 } else {
                     // Si no hay imagen, mostrar emoji de animal
+                    console.warn(`⚠️ No hay URLs de imagen disponibles para ${currentAnimal.name}`);
                     flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
                 }
                 
@@ -12893,7 +12949,7 @@
         function updateAnimalButtonVisibility() {
             const animalBtn = document.getElementById('animalBtn');
             const starwarsBtn = document.getElementById('starwarsBtn');
-            const carsBtn = document.getElementById('carsBtn');
+            const lovecraftBtn = document.getElementById('lovecraftBtn');
             const pokemonBtn = document.getElementById('pokemonBtn');
             
             // Verificar si el usuario es Martin (por email o nombre)
@@ -12918,11 +12974,11 @@
                 }
             }
             
-            if (carsBtn) {
+            if (lovecraftBtn) {
                 if (isMartin) {
-                    carsBtn.style.display = 'block';
+                    lovecraftBtn.style.display = 'block';
                 } else {
-                    carsBtn.style.display = 'none';
+                    lovecraftBtn.style.display = 'none';
                 }
             }
             
@@ -12952,7 +13008,7 @@
             timeLeft = 20;
             
             // Remover las clases de modo para que la pantalla de elegir nivel no tenga estilos del nivel anterior
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode', 'cars-mode', 'pokemon-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode', 'lovecraft-mode', 'pokemon-mode');
             
             // Ocultar game over
             document.getElementById('gameOver').style.display = 'none';
@@ -13189,8 +13245,8 @@
 
             // Encontrar la respuesta correcta según el modo
             let correctAnswer;
-            if (difficulty === 'cars') {
-                correctAnswer = currentCar.name;
+            if (difficulty === 'lovecraft') {
+                correctAnswer = currentLovecraftCreature.name;
             } else if (difficulty === 'pokemon') {
                 correctAnswer = currentPokemon.name;
             } else if (difficulty === 'starwars') {
@@ -13240,11 +13296,11 @@
         function selectOption(optionNumber) {
             if (answered) return;
 
-            // Verificar si es modo Coches
-            if (difficulty === 'cars') {
-                if (!currentCar || !currentCar.name) {
-                    console.error('Error: currentCar no está definido');
-                    alert('Error: No hay coche seleccionado. Por favor, recarga la página.');
+            // Verificar si es modo Lovecraft
+            if (difficulty === 'lovecraft') {
+                if (!currentLovecraftCreature || !currentLovecraftCreature.name) {
+                    console.error('Error: currentLovecraftCreature no está definido');
+                    alert('Error: No hay criatura seleccionada. Por favor, recarga la página.');
                     return;
                 }
 
@@ -13253,7 +13309,7 @@
 
                 const selectedBtn = document.getElementById(`option${optionNumber}`);
                 const selectedText = selectedBtn.textContent;
-                const isCorrect = selectedText === currentCar.name;
+                const isCorrect = selectedText === currentLovecraftCreature.name;
 
                 answered = true;
 
@@ -13263,7 +13319,7 @@
                     if (btn.style.display !== 'none') {
                         btn.disabled = true;
 
-                        if (btn.textContent === currentCar.name) {
+                        if (btn.textContent === currentLovecraftCreature.name) {
                             btn.classList.add('correct');
                         } else if (btn === selectedBtn && !isCorrect) {
                             btn.classList.add('incorrect');
@@ -13279,15 +13335,15 @@
                     document.getElementById('score').textContent = score;
                     document.getElementById('message').textContent = '✅ ¡Correcto!';
                     document.getElementById('message').className = 'message correct';
-                    showAlert('success', '¡Correcto!', `Es el ${currentCar.name}! 🚗`);
+                    showAlert('success', '¡Correcto!', `Es ${currentLovecraftCreature.name}! 🧙‍♂️`);
                 } else {
                     streak = 0;
                     updateStreak(false);
                     lives--;
                     updateHearts();
-                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentCar.name}`;
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentLovecraftCreature.name}`;
                     document.getElementById('message').className = 'message incorrect';
-                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentCar.name}`);
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentLovecraftCreature.name}`);
                 }
 
                 // Si se acabaron las vidas, mostrar game over
@@ -13589,7 +13645,7 @@
         document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
         document.getElementById('animalBtn').addEventListener('click', () => selectDifficulty('animal'));
         document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
-        document.getElementById('carsBtn').addEventListener('click', () => selectDifficulty('cars'));
+        document.getElementById('lovecraftBtn').addEventListener('click', () => selectDifficulty('lovecraft'));
         document.getElementById('pokemonBtn').addEventListener('click', () => selectDifficulty('pokemon'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
