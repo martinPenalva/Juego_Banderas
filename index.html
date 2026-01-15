@@ -10813,9 +10813,9 @@
                 
                 const allCharacters = await response.json();
                 
-                // Filtrar personajes que tengan nombre e imagen
+                // Filtrar personajes que tengan nombre e imagen válida (no null, undefined, o vacía)
                 starWarsCharacters = allCharacters
-                    .filter(char => char.name && char.image)
+                    .filter(char => char.name && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined)
                     .map(char => ({
                         id: char.id,
                         name: char.name,
@@ -10827,26 +10827,31 @@
                 
                 console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes cargados de la API`);
                 
-                // Si no se cargaron suficientes, usar lista de respaldo
+                // Si no se cargaron suficientes, usar lista de respaldo (solo los que tienen imagen válida)
                 if (starWarsCharacters.length < 10) {
                     console.log('No se cargaron suficientes personajes de la API, usando lista de respaldo');
                     const fallbackCharacters = getFallbackStarWarsCharacters();
-                    starWarsCharacters = [...starWarsCharacters, ...fallbackCharacters];
+                    // Filtrar solo personajes de respaldo con imagen válida
+                    const validFallbackCharacters = fallbackCharacters.filter(char => 
+                        char && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined
+                    );
+                    starWarsCharacters = [...starWarsCharacters, ...validFallbackCharacters];
                 }
                 
-                // Priorizar personajes con imágenes
-                starWarsCharacters.sort((a, b) => {
-                    if (a.image && !b.image) return -1;
-                    if (!a.image && b.image) return 1;
-                    return 0;
-                });
+                // Filtrar nuevamente para asegurarse de que todos tengan imagen válida
+                starWarsCharacters = starWarsCharacters.filter(char => 
+                    char && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined
+                );
                 
-                console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes listos (todos con imágenes)`);
+                console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes listos (todos con imágenes válidas)`);
             } catch (error) {
                 console.error('Error al cargar personajes de Star Wars:', error);
-                // Usar lista de respaldo
-                starWarsCharacters = getFallbackStarWarsCharacters();
-                console.log(`Modo Star Wars (error API): ${starWarsCharacters.length} personajes cargados desde lista de respaldo`);
+                // Usar lista de respaldo (solo los que tienen imagen válida)
+                const fallbackCharacters = getFallbackStarWarsCharacters();
+                starWarsCharacters = fallbackCharacters.filter(char => 
+                    char && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined
+                );
+                console.log(`Modo Star Wars (error API): ${starWarsCharacters.length} personajes con imagen válida cargados desde lista de respaldo`);
             }
         }
 
@@ -11605,16 +11610,21 @@
                 return;
             } else if (difficulty === 'starwars') {
                 // Modo Star Wars
-                if (starWarsCharacters.length === 0) {
+                // Filtrar solo personajes con imagen válida
+                const charactersWithImage = starWarsCharacters.filter(char => 
+                    char && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined
+                );
+                
+                if (charactersWithImage.length === 0) {
                     const messageEl = document.getElementById('message');
-                    messageEl.textContent = '⚠️ No hay personajes disponibles. Por favor, recarga la página.';
+                    messageEl.textContent = '⚠️ No hay personajes disponibles con imagen. Por favor, recarga la página.';
                     messageEl.className = 'message incorrect';
                     return;
                 }
                 
-                // Seleccionar personaje aleatorio
-                const randomIndex = Math.floor(Math.random() * starWarsCharacters.length);
-                currentStarWarsCharacter = starWarsCharacters[randomIndex];
+                // Seleccionar personaje aleatorio solo de los que tienen imagen
+                const randomIndex = Math.floor(Math.random() * charactersWithImage.length);
+                currentStarWarsCharacter = charactersWithImage[randomIndex];
                 
                 // Detener temporizador anterior
                 stopTimer();
@@ -11688,8 +11698,8 @@
                     flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8000ff;">⭐</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentStarWarsCharacter.name}</div>`;
                 }
                 
-                // Generar opciones (1 correcta + 3 incorrectas)
-                const wrongCharacters = starWarsCharacters
+                // Generar opciones (1 correcta + 3 incorrectas) - solo de personajes con imagen válida
+                const wrongCharacters = charactersWithImage
                     .filter(c => c.name !== currentStarWarsCharacter.name)
                     .sort(() => Math.random() - 0.5)
                     .slice(0, 3);
@@ -16505,7 +16515,9 @@
                     { key: 'easy', name: '🟢 Fácil' },
                     { key: 'hard', name: '🔴 Difícil' },
                     { key: 'impossible', name: '⚫ Imposible' },
-                    { key: 'god', name: '✨ Dios' }
+                    { key: 'god', name: '✨ Dios' },
+                    { key: 'starwars', name: '⭐ Star Wars' },
+                    { key: 'pokemon', name: '⚡ Pokémon' }
                 ];
                 
                 niveles.forEach(nivel => {
@@ -16679,7 +16691,9 @@
                     { key: 'easy', name: '🟢 Fácil' },
                     { key: 'hard', name: '🔴 Difícil' },
                     { key: 'impossible', name: '⚫ Imposible' },
-                    { key: 'god', name: '✨ Dios' }
+                    { key: 'god', name: '✨ Dios' },
+                    { key: 'starwars', name: '⭐ Star Wars' },
+                    { key: 'pokemon', name: '⚡ Pokémon' }
                 ];
                 
                 niveles.forEach(nivel => {
