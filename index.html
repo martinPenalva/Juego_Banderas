@@ -33,7 +33,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
             position: relative;
             overflow-x: hidden;
         }
@@ -8021,26 +8021,84 @@
         }
 
         @media (max-width: 600px) {
+            body {
+                padding: 5px;
+                align-items: flex-start;
+                padding-top: 10px;
+            }
+
             .container {
-                padding: 20px;
+                padding: 15px;
+                border-radius: 15px;
+                margin: 0 auto;
+                max-width: 100%;
             }
 
             .title-container {
                 flex-wrap: wrap;
-                gap: 10px;
+                gap: 8px;
+                margin-bottom: 12px;
             }
 
             h1 {
-                font-size: 1.8em;
+                font-size: 1.6em;
                 flex: 1 1 100%;
                 text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .score {
+                font-size: 1.3em;
+                padding: 10px 20px;
+                margin-bottom: 12px;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .streak-container {
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .streak-fire {
+                font-size: 2em;
+            }
+
+            .streak-fire.hot {
+                font-size: 2.5em;
+            }
+
+            .streak-text {
+                font-size: 1.1em;
+                padding: 10px 18px;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .lives-container {
+                padding: 12px 20px;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .lives-text {
+                font-size: 1.1em;
+            }
+
+            .hearts {
+                font-size: 1.8em;
+                letter-spacing: 5px;
             }
 
             /* En móvil, el círculo de perfil va a la esquina superior derecha */
             .profile-picture-container {
                 position: fixed !important;
-                top: 15px !important;
-                right: 15px !important;
+                top: 10px !important;
+                right: 10px !important;
                 left: auto !important;
                 z-index: 1000 !important;
                 margin: 0 !important;
@@ -8057,11 +8115,12 @@
             }
 
             .flag {
-                font-size: 6em;
+                font-size: 5.5em;
+                margin: 15px 0;
             }
 
             .auth-box {
-                padding: 30px 20px;
+                padding: 25px 15px;
             }
 
             /* Estilos responsive para modal de búsqueda de amigos */
@@ -8188,6 +8247,78 @@
 
             .friend-profile-picture-large-placeholder {
                 font-size: 4em;
+            }
+
+            /* Botones más touch-friendly en móvil */
+            button, .auth-btn, .joker-btn-inline, .end-attempt-btn, .next-btn, 
+            .difficulty-btn, .save-score-btn, .view-ranking-btn, .ranking-btn,
+            .close-ranking-btn, .auth-tab {
+                min-height: 44px;
+                min-width: 44px;
+                touch-action: manipulation;
+            }
+
+            .joker-btn-inline {
+                padding: 12px 20px;
+                font-size: 0.95em;
+            }
+
+            .end-attempt-btn {
+                padding: 14px 25px;
+                font-size: 1em;
+                margin: 15px auto;
+            }
+
+            .next-btn {
+                padding: 14px 30px;
+                font-size: 1em;
+                margin-top: 15px;
+            }
+
+            .difficulty-btn {
+                padding: 18px 25px;
+                font-size: 1.1em;
+                min-width: 150px;
+                width: 100%;
+            }
+
+            .save-score-btn {
+                padding: 14px 25px;
+                font-size: 1em;
+            }
+
+            .view-ranking-btn {
+                padding: 14px 25px;
+                font-size: 1em;
+            }
+
+            .options {
+                gap: 12px;
+                margin: 20px 0;
+            }
+
+            .option {
+                min-height: 50px;
+                padding: 12px 15px;
+                font-size: 1em;
+                margin: 0;
+            }
+
+            .auth-input {
+                min-height: 48px;
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+
+            .auth-btn {
+                padding: 14px 25px;
+                font-size: 1em;
+                min-height: 48px;
+            }
+
+            .auth-tab {
+                padding: 12px 20px;
+                font-size: 1em;
             }
         }
 
