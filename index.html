@@ -166,22 +166,6 @@
             overflow-x: hidden;
         }
 
-        body.animal-mode {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 30%, #b45309 60%, #92400e 100%);
-            background-size: 400% 400%;
-            animation: animalBackgroundMove 15s ease infinite;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        @keyframes animalBackgroundMove {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
 
         body.starwars-mode {
             background: linear-gradient(135deg, #000000 0%, #1a0033 20%, #330066 40%, #4d0099 60%, #6600cc 80%, #8000ff 100%);
@@ -206,22 +190,6 @@
             }
         }
 
-        body.lovecraft-mode {
-            background: linear-gradient(135deg, #0a0014 0%, #1a0033 20%, #2d0066 40%, #4d0099 60%, #6b00cc 80%, #8b5cf6 100%);
-            background-size: 400% 400%;
-            animation: lovecraftBackgroundMove 20s ease infinite;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        @keyframes lovecraftBackgroundMove {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
 
         body.pokemon-mode {
             background: linear-gradient(135deg, #1a1400 0%, #4a3d00 20%, #7f6600 40%, #b38f00 60%, #fbbf24 80%, #fcd34d 100%);
@@ -1995,18 +1963,6 @@
             background: #8b5cf6;
         }
 
-        .difficulty-btn.animal {
-            border-color: #f59e0b;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-        }
-
-        .difficulty-btn.animal:hover {
-            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-
         .difficulty-btn.starwars {
             border-color: #8000ff;
             background: linear-gradient(135deg, #4d0099 0%, #6600cc 50%, #8000ff 100%);
@@ -2018,19 +1974,6 @@
             background: linear-gradient(135deg, #6600cc 0%, #8000ff 50%, #9933ff 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(128, 0, 255, 0.5);
-        }
-
-        .difficulty-btn.lovecraft {
-            border-color: #8b5cf6;
-            background: linear-gradient(135deg, #4d0099 0%, #6b00cc 50%, #8b5cf6 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .difficulty-btn.lovecraft:hover {
-            background: linear-gradient(135deg, #6b00cc 0%, #8b5cf6 50%, #a78bfa 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
         }
 
         .difficulty-btn.pokemon {
@@ -2130,6 +2073,26 @@
             background: linear-gradient(135deg, #312e81 0%, #4c1d95 50%, #6366f1 100%);
             color: white;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.5);
+        }
+
+        .ranking-btn-starwars {
+            border-color: #8000ff;
+        }
+
+        .ranking-btn-starwars:hover {
+            background: linear-gradient(135deg, #6600cc 0%, #8000ff 50%, #9933ff 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(128, 0, 255, 0.5);
+        }
+
+        .ranking-btn-pokemon {
+            border-color: #fbbf24;
+        }
+
+        .ranking-btn-pokemon:hover {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.5);
         }
 
         .game-over {
@@ -9804,10 +9767,8 @@
                 <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
                 <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
                 <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
-                <button class="difficulty-btn animal" id="animalBtn" style="display: none;">🦁 Animales<br><small>Adivina el animal</small></button>
-                <button class="difficulty-btn starwars" id="starwarsBtn" style="display: none;">⭐ Star Wars<br><small>Adivina el personaje</small></button>
-                <button class="difficulty-btn lovecraft" id="lovecraftBtn" style="display: none;">🧙‍♂️ Lovecraft<br><small>Adivina la criatura</small></button>
-                <button class="difficulty-btn pokemon" id="pokemonBtn" style="display: none;">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
+                <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars<br><small>Adivina el personaje</small></button>
+                <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -9816,6 +9777,8 @@
                     <button class="ranking-btn ranking-btn-hard" id="viewRankingHardBtn">🏆 Clasificación Difícil</button>
                     <button class="ranking-btn ranking-btn-impossible" id="viewRankingImpossibleBtn">🏆 Clasificación Imposible</button>
                     <button class="ranking-btn ranking-btn-god" id="viewRankingGodBtn">🏆 Clasificación Dios</button>
+                    <button class="ranking-btn ranking-btn-starwars" id="viewRankingStarWarsBtn">⭐ Clasificación Star Wars</button>
+                    <button class="ranking-btn ranking-btn-pokemon" id="viewRankingPokemonBtn">⚡ Clasificación Pokémon</button>
                 </div>
             </div>
             <div class="ranking-buttons-container">
@@ -9886,12 +9849,8 @@
         let timeLeft = 20;
         let usedCountries = []; // Para el modo Dios: países ya mostrados
         let availableCountries = []; // Para el modo Dios: países disponibles
-        let currentAnimal = null; // Para el modo animales
-        let animals = []; // Lista de animales cargados
         let currentStarWarsCharacter = null; // Para el modo Star Wars
         let starWarsCharacters = []; // Lista de personajes de Star Wars cargados
-        let currentLovecraftCreature = null; // Para el modo Lovecraft
-        let lovecraftCreatures = []; // Lista de criaturas de Lovecraft cargadas
         let currentPokemon = null; // Para el modo Pokémon
         let pokemonList = []; // Lista de Pokémon cargados
 
@@ -10273,6 +10232,8 @@
         }
 
         // Función para obtener emoji según el tipo de animal
+        // Función eliminada - nivel de animales deshabilitado
+        /*
         function getAnimalEmoji(animalName, type) {
             const emojiMap = {
                 'León': '🦁', 'Tigre': '🐅', 'Elefante': '🐘', 'Jirafa': '🦒', 'Oso': '🐻',
@@ -10314,8 +10275,10 @@
             const normalizedType = (type || '').toLowerCase();
             return typeEmojis[normalizedType] || '🦁';
         }
+        */
 
-        // Función para cargar animales desde la API Zoo Animals
+        // Función eliminada - nivel de animales deshabilitado
+        /*
         async function loadAnimals() {
             animals = [];
             
@@ -10565,10 +10528,11 @@
                 console.log(`Modo Animales (error API): ${animals.length} animales cargados desde lista de respaldo`);
             }
         }
+        */
 
+        // Función eliminada - nivel de Lovecraft deshabilitado
+        /*
         // Función para cargar criaturas de Lovecraft desde The Lovecraftian API
-        // API: https://lovecraftapirest.fly.dev/api/creatures
-        // Imágenes: https://lovecraftapirest.fly.dev/api/images/<nombre>.jpg
         async function loadLovecraftCreatures() {
             lovecraftCreatures = [];
             
@@ -10648,7 +10612,6 @@
             }
         }
 
-        // Función para obtener lista de criaturas de Lovecraft de respaldo
         function getFallbackLovecraftCreatures() {
             return [
                 { name: 'Cthulhu', image: null, description: 'El Gran Cthulhu', category: 'Great Old One' },
@@ -10663,6 +10626,7 @@
                 { name: 'Ghatanothoa', image: null, description: 'El Dios de la Petrificación', category: 'Great Old One' }
             ];
         }
+        */
 
         // Función para cargar Pokémon desde PokeAPI
         // API: https://pokeapi.co/api/v2/pokemon/<id o nombre>
@@ -10891,7 +10855,8 @@
             ];
         }
 
-        // Función para obtener lista de animales de respaldo
+        // Función eliminada - nivel de animales deshabilitado
+        /*
         function getFallbackAnimals() {
             return [
                 { name: 'León', image: null, type: 'mammal', emoji: '🦁' },
@@ -10941,6 +10906,7 @@
                 { name: 'Erizo', image: null, type: 'mammal', emoji: '🦔' }
             ];
         }
+        */
 
         // Seleccionar nivel de dificultad
         // Crear partículas de fuego (muy optimizado para mejor rendimiento)
@@ -11129,34 +11095,9 @@
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode', 'lovecraft-mode', 'pokemon-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode');
             
-            if (level === 'lovecraft') {
-                document.body.classList.add('lovecraft-mode');
-                // Verificar si está usando file:// y mostrar advertencia
-                if (window.location.protocol === 'file:') {
-                    console.warn('⚠️ Modo file:// detectado. Las imágenes de criaturas de Lovecraft no estarán disponibles.');
-                    console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
-                }
-                // Cargar criaturas de Lovecraft
-                loadLovecraftCreatures().then(() => {
-                    if (lovecraftCreatures.length === 0) {
-                        alert('No se pudieron cargar criaturas de Lovecraft. Por favor, recarga la página o usa un servidor web local.');
-                        document.getElementById('loading').style.display = 'none';
-                        return;
-                    }
-                    document.getElementById('loading').style.display = 'none';
-                    loadNewQuestion();
-                }).catch(error => {
-                    console.error('Error al cargar criaturas de Lovecraft:', error);
-                    document.getElementById('loading').style.display = 'none';
-                    if (lovecraftCreatures.length > 0) {
-                        loadNewQuestion();
-                    } else {
-                        alert('Error al cargar criaturas de Lovecraft. Por favor, recarga la página.');
-                    }
-                });
-            } else if (level === 'pokemon') {
+            if (level === 'pokemon') {
                 document.body.classList.add('pokemon-mode');
                 // Verificar si está usando file:// y mostrar advertencia
                 if (window.location.protocol === 'file:') {
@@ -11205,32 +11146,6 @@
                         loadNewQuestion();
                     } else {
                         alert('Error al cargar personajes de Star Wars. Por favor, recarga la página.');
-                    }
-                });
-            } else if (level === 'animal') {
-                document.body.classList.add('animal-mode');
-                // Verificar si está usando file:// y mostrar advertencia
-                if (window.location.protocol === 'file:') {
-                    console.warn('⚠️ Modo file:// detectado. Las imágenes de animales no estarán disponibles.');
-                    console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
-                }
-                // Cargar animales
-                loadAnimals().then(() => {
-                    if (animals.length === 0) {
-                        alert('No se pudieron cargar animales. Por favor, recarga la página o usa un servidor web local.');
-                        document.getElementById('loading').style.display = 'none';
-                        return;
-                    }
-                    document.getElementById('loading').style.display = 'none';
-                    loadNewQuestion();
-                }).catch(error => {
-                    console.error('Error al cargar animales:', error);
-                    document.getElementById('loading').style.display = 'none';
-                    if (animals.length > 0) {
-                        // Si hay animales de respaldo, continuar
-                        loadNewQuestion();
-                    } else {
-                        alert('Error al cargar animales. Por favor, recarga la página.');
                     }
                 });
             } else if (level === 'impossible') {
@@ -11502,14 +11417,10 @@
                     btn.disabled = true;
                     
                     let correctAnswer;
-                    if (difficulty === 'lovecraft') {
-                        correctAnswer = currentLovecraftCreature?.name;
                     } else if (difficulty === 'pokemon') {
                         correctAnswer = currentPokemon?.name;
                     } else if (difficulty === 'starwars') {
                         correctAnswer = currentStarWarsCharacter?.name;
-                    } else if (difficulty === 'animal') {
-                        correctAnswer = currentAnimal?.name;
                     } else {
                         correctAnswer = currentCountry?.name?.common;
                     }
@@ -11525,18 +11436,12 @@
             updateHearts();
             
             const messageEl = document.getElementById('message');
-            if (difficulty === 'lovecraft') {
-                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentLovecraftCreature.name}`;
-                showAlert('error', '', `La respuesta correcta era: ${currentLovecraftCreature.name}`);
             } else if (difficulty === 'pokemon') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentPokemon.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentPokemon.name}`);
             } else if (difficulty === 'starwars') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
-            } else if (difficulty === 'animal') {
-                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentAnimal.name}`;
-                showAlert('error', '', `La respuesta correcta era: ${currentAnimal.name}`);
             } else {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCountry.name.common}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
@@ -11564,141 +11469,7 @@
 
         // Cargar nueva pregunta
         function loadNewQuestion() {
-            if (difficulty === 'lovecraft') {
-                // Modo Lovecraft
-                if (lovecraftCreatures.length === 0) {
-                    const messageEl = document.getElementById('message');
-                    messageEl.textContent = '⚠️ No hay criaturas disponibles. Por favor, recarga la página.';
-                    messageEl.className = 'message incorrect';
-                    return;
-                }
-                
-                // Seleccionar criatura aleatoria
-                const randomIndex = Math.floor(Math.random() * lovecraftCreatures.length);
-                currentLovecraftCreature = lovecraftCreatures[randomIndex];
-                
-                // Detener temporizador anterior
-                stopTimer();
-                
-                // Mostrar imagen de la criatura
-                const flagEl = document.getElementById('flag');
-                flagEl.innerHTML = '';
-                
-                // Intentar mostrar imagen si está disponible
-                if (currentLovecraftCreature.image) {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous'; // Permitir CORS
-                    img.src = currentLovecraftCreature.image;
-                    img.alt = `Imagen de ${currentLovecraftCreature.name}`;
-                    img.style.width = 'auto';
-                    img.style.height = 'auto';
-                    img.style.maxWidth = '100%';
-                    img.style.maxHeight = '400px';
-                    img.style.minHeight = '250px';
-                    img.style.objectFit = 'contain';
-                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-                    img.style.borderRadius = '12px';
-                    img.style.background = 'linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%)';
-                    img.style.padding = '10px';
-                    img.style.display = 'block';
-                    img.style.margin = '0 auto';
-                    img.style.cursor = 'pointer';
-                    
-                    // Hacer clic para ver imagen en grande
-                    img.onclick = function() {
-                        const modal = document.createElement('div');
-                        modal.style.position = 'fixed';
-                        modal.style.top = '0';
-                        modal.style.left = '0';
-                        modal.style.width = '100%';
-                        modal.style.height = '100%';
-                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-                        modal.style.display = 'flex';
-                        modal.style.alignItems = 'center';
-                        modal.style.justifyContent = 'center';
-                        modal.style.zIndex = '10000';
-                        modal.style.cursor = 'pointer';
-                        
-                        const fullImg = document.createElement('img');
-                        fullImg.crossOrigin = 'anonymous';
-                        fullImg.src = currentLovecraftCreature.imageOriginal || currentLovecraftCreature.image;
-                        fullImg.style.maxWidth = '90%';
-                        fullImg.style.maxHeight = '90%';
-                        fullImg.style.objectFit = 'contain';
-                        fullImg.style.borderRadius = '8px';
-                        
-                        modal.appendChild(fullImg);
-                        document.body.appendChild(modal);
-                        
-                        modal.onclick = function() {
-                            document.body.removeChild(modal);
-                        };
-                    };
-                    
-                    img.onerror = function() {
-                        console.warn(`Error al cargar imagen proxy de ${currentLovecraftCreature.name}, intentando URL original...`);
-                        // Si el proxy falla, intentar con la URL original
-                        if (currentLovecraftCreature.imageOriginal && currentLovecraftCreature.imageOriginal !== currentLovecraftCreature.image) {
-                            img.src = currentLovecraftCreature.imageOriginal;
-                            img.onerror = function() {
-                                console.warn(`Error al cargar imagen original de ${currentLovecraftCreature.name}:`, currentLovecraftCreature.imageOriginal);
-                                flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8b5cf6;">🧙‍♂️</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentLovecraftCreature.name}</div>`;
-                            };
-                        } else {
-                            flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8b5cf6;">🧙‍♂️</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentLovecraftCreature.name}</div>`;
-                        }
-                    };
-                    
-                    img.onload = function() {
-                        console.log(`Imagen cargada exitosamente: ${currentLovecraftCreature.name}`);
-                    };
-                    
-                    flagEl.appendChild(img);
-                } else {
-                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8b5cf6;">🧙‍♂️</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentLovecraftCreature.name}</div>`;
-                }
-                
-                // Generar opciones (1 correcta + 3 incorrectas)
-                const wrongCreatures = lovecraftCreatures
-                    .filter(c => c.name !== currentLovecraftCreature.name)
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, 3);
-                
-                const options = [
-                    currentLovecraftCreature.name,
-                    wrongCreatures[0]?.name || 'Criatura',
-                    wrongCreatures[1]?.name || 'Criatura',
-                    wrongCreatures[2]?.name || 'Criatura'
-                ].sort(() => Math.random() - 0.5);
-                
-                // Asignar opciones a los botones
-                document.getElementById('option1').textContent = options[0];
-                document.getElementById('option2').textContent = options[1];
-                document.getElementById('option3').textContent = options[2];
-                document.getElementById('option4').textContent = options[3];
-                
-                // Resetear estado
-                answered = false;
-                jokerUsed = false;
-                document.getElementById('message').textContent = '';
-                document.getElementById('message').className = 'message';
-                
-                // Mostrar opciones
-                [1, 2, 3, 4].forEach(i => {
-                    const btn = document.getElementById(`option${i}`);
-                    btn.style.display = 'block';
-                    btn.disabled = false;
-                    btn.classList.remove('correct', 'incorrect');
-                });
-                
-                // Iniciar temporizador
-                startTimer();
-                
-                // Actualizar comodín
-                updateJokerButton();
-                
-                return;
-            } else if (difficulty === 'pokemon') {
+            if (difficulty === 'pokemon') {
                 // Modo Pokémon
                 if (pokemonList.length === 0) {
                     const messageEl = document.getElementById('message');
@@ -11945,163 +11716,6 @@
                 // Actualizar comodín
                 updateJokerButton();
                 
-                return;
-            } else if (difficulty === 'animal') {
-                // Modo Animales
-                if (animals.length === 0) {
-                    const messageEl = document.getElementById('message');
-                    messageEl.textContent = '⚠️ No hay animales disponibles. Por favor, recarga la página.';
-                    messageEl.className = 'message incorrect';
-                    return;
-                }
-                
-                // Seleccionar animal aleatorio
-                const randomIndex = Math.floor(Math.random() * animals.length);
-                currentAnimal = animals[randomIndex];
-                
-                // Detener temporizador anterior
-                stopTimer();
-                
-                // Mostrar imagen del animal o emoji
-                const flagEl = document.getElementById('flag');
-                flagEl.innerHTML = '';
-                
-                const animalEmoji = currentAnimal.emoji || getAnimalEmoji(currentAnimal.name, currentAnimal.type);
-                
-                // Intentar mostrar imagen si está disponible (funciona con servidor web)
-                if (currentAnimal.image || currentAnimal.imageProxy1 || currentAnimal.imageProxy2 || currentAnimal.imageProxy3 || currentAnimal.imageProxy4 || currentAnimal.imageOriginal) {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous'; // Permitir CORS
-                    
-                    // Función para intentar cargar imagen con diferentes URLs
-                    // Orden: proxies primero (evitan CORS), URL original al final
-                    let attemptCount = 0;
-                    const imageUrls = [
-                        currentAnimal.imageProxy1, // Proxy 1 (weserv.nl) - mejor para imágenes
-                        currentAnimal.imageProxy2, // Proxy 2 (corsproxy)
-                        currentAnimal.imageProxy3, // Proxy 3 (allorigins)
-                        currentAnimal.imageProxy4, // Proxy 4 (codetabs)
-                        currentAnimal.image, // Proxy principal (también puede ser weserv)
-                        currentAnimal.imageOriginal // URL original como última opción
-                    ].filter(url => url); // Filtrar URLs nulas
-                    
-                    function tryLoadImage() {
-                        if (attemptCount >= imageUrls.length) {
-                            console.error(`❌ No se pudo cargar imagen de ${currentAnimal.name} después de ${attemptCount} intentos`);
-                            flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
-                            return;
-                        }
-                        
-                        const currentUrl = imageUrls[attemptCount];
-                        console.log(`🔄 Intento ${attemptCount + 1}/${imageUrls.length} de cargar imagen de ${currentAnimal.name}: ${currentUrl}`);
-                        img.src = currentUrl;
-                    }
-                    
-                    img.alt = `Imagen de ${currentAnimal.name}`;
-                    img.style.width = 'auto';
-                    img.style.height = 'auto';
-                    img.style.maxWidth = '100%';
-                    img.style.maxHeight = '400px';
-                    img.style.minHeight = '250px';
-                    img.style.objectFit = 'contain';
-                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-                    img.style.borderRadius = '12px';
-                    img.style.background = 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
-                    img.style.padding = '10px';
-                    img.style.display = 'block';
-                    img.style.margin = '0 auto';
-                    img.style.cursor = 'pointer';
-                    
-                    // Hacer clic para ver imagen en grande
-                    img.onclick = function() {
-                        const modal = document.createElement('div');
-                        modal.style.position = 'fixed';
-                        modal.style.top = '0';
-                        modal.style.left = '0';
-                        modal.style.width = '100%';
-                        modal.style.height = '100%';
-                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-                        modal.style.display = 'flex';
-                        modal.style.alignItems = 'center';
-                        modal.style.justifyContent = 'center';
-                        modal.style.zIndex = '10000';
-                        modal.style.cursor = 'pointer';
-                        
-                        const fullImg = document.createElement('img');
-                        fullImg.crossOrigin = 'anonymous';
-                        fullImg.src = currentAnimal.imageOriginal || currentAnimal.image || img.src;
-                        fullImg.style.maxWidth = '90%';
-                        fullImg.style.maxHeight = '90%';
-                        fullImg.style.objectFit = 'contain';
-                        fullImg.style.borderRadius = '8px';
-                        
-                        modal.appendChild(fullImg);
-                        document.body.appendChild(modal);
-                        
-                        modal.onclick = function() {
-                            document.body.removeChild(modal);
-                        };
-                    };
-                    
-                    img.onerror = function() {
-                        attemptCount++;
-                        console.warn(`❌ Error al cargar imagen (intento ${attemptCount}/${imageUrls.length}) de ${currentAnimal.name}`);
-                        tryLoadImage(); // Intentar siguiente URL
-                    };
-                    
-                    img.onload = function() {
-                        console.log(`✅ Imagen cargada exitosamente: ${currentAnimal.name} desde ${img.src}`);
-                    };
-                    
-                    // Intentar cargar la primera imagen
-                    tryLoadImage();
-                    
-                    flagEl.appendChild(img);
-                } else {
-                    // Si no hay imagen, mostrar emoji de animal
-                    console.warn(`⚠️ No hay URLs de imagen disponibles para ${currentAnimal.name}`);
-                    flagEl.innerHTML = `<div style="font-size: 10em; line-height: 1; user-select: none; text-align: center;">${animalEmoji}</div>`;
-                }
-                
-                // Generar opciones (1 correcta + 3 incorrectas)
-                const wrongAnimals = animals
-                    .filter(a => a.name !== currentAnimal.name)
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, 3);
-                
-                const options = [
-                    currentAnimal.name,
-                    wrongAnimals[0]?.name || 'Animal',
-                    wrongAnimals[1]?.name || 'Animal',
-                    wrongAnimals[2]?.name || 'Animal'
-                ].sort(() => Math.random() - 0.5);
-                
-                // Asignar opciones a los botones
-                document.getElementById('option1').textContent = options[0];
-                document.getElementById('option2').textContent = options[1];
-                document.getElementById('option3').textContent = options[2];
-                document.getElementById('option4').textContent = options[3];
-                
-                // Resetear estado
-                answered = false;
-                jokerUsed = false;
-                document.getElementById('message').textContent = '';
-                document.getElementById('message').className = 'message';
-                document.getElementById('nextBtn').classList.remove('show');
-                
-                // Habilitar botones
-                [1, 2, 3, 4].forEach(i => {
-                    const btn = document.getElementById(`option${i}`);
-                    btn.disabled = false;
-                    btn.className = 'option';
-                    btn.style.display = 'block';
-                });
-                
-                // Actualizar visibilidad del comodín
-                updateJokerButton();
-                
-                // Iniciar temporizador
-                startTimer();
                 return;
             }
             
@@ -12565,7 +12179,13 @@
                 const ranking = await window.obtenerRanking(difficulty);
                 
                 if (ranking.length === 0) {
-                    const nivelTexto = difficulty === 'easy' ? 'Fácil' : (difficulty === 'hard' ? 'Difícil' : (difficulty === 'impossible' ? 'Imposible' : (difficulty === 'god' ? 'Dios' : '')));
+                    let nivelTexto = '';
+                    if (difficulty === 'easy') nivelTexto = 'Fácil';
+                    else if (difficulty === 'hard') nivelTexto = 'Difícil';
+                    else if (difficulty === 'impossible') nivelTexto = 'Imposible';
+                    else if (difficulty === 'god') nivelTexto = 'Dios';
+                    else if (difficulty === 'starwars') nivelTexto = 'Star Wars';
+                    else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
                     rankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}</div>`;
                     return;
                 }
@@ -12666,6 +12286,10 @@
                 difficultyRankingTitle.textContent = '🏆 Top 10 Ranking - Imposible';
             } else if (level === 'god') {
                 difficultyRankingTitle.textContent = '✨ Top 10 Ranking - Dios';
+            } else if (level === 'starwars') {
+                difficultyRankingTitle.textContent = '⭐ Top 10 Ranking - Star Wars';
+            } else if (level === 'pokemon') {
+                difficultyRankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
             } else {
                 difficultyRankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -12698,7 +12322,13 @@
                 const ranking = await window.obtenerRanking(level);
                 
                 if (ranking.length === 0) {
-                    const nivelTexto = level === 'easy' ? 'Fácil' : (level === 'hard' ? 'Difícil' : (level === 'impossible' ? 'Imposible' : (level === 'god' ? 'Dios' : '')));
+                    let nivelTexto = '';
+                    if (level === 'easy') nivelTexto = 'Fácil';
+                    else if (level === 'hard') nivelTexto = 'Difícil';
+                    else if (level === 'impossible') nivelTexto = 'Imposible';
+                    else if (level === 'god') nivelTexto = 'Dios';
+                    else if (level === 'starwars') nivelTexto = 'Star Wars';
+                    else if (level === 'pokemon') nivelTexto = 'Pokémon';
                     difficultyRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -12783,7 +12413,13 @@
                 const ranking = await window.obtenerRanking(level);
                 
                 if (ranking.length === 0) {
-                    const nivelTexto = level === 'easy' ? 'Fácil' : (level === 'hard' ? 'Difícil' : (level === 'impossible' ? 'Imposible' : (level === 'god' ? 'Dios' : '')));
+                    let nivelTexto = '';
+                    if (level === 'easy') nivelTexto = 'Fácil';
+                    else if (level === 'hard') nivelTexto = 'Difícil';
+                    else if (level === 'impossible') nivelTexto = 'Imposible';
+                    else if (level === 'god') nivelTexto = 'Dios';
+                    else if (level === 'starwars') nivelTexto = 'Star Wars';
+                    else if (level === 'pokemon') nivelTexto = 'Pokémon';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -12947,47 +12583,17 @@
         // Reiniciar juego
         // Función para mostrar/ocultar los botones exclusivos solo para Martin
         function updateAnimalButtonVisibility() {
-            const animalBtn = document.getElementById('animalBtn');
+            // Star Wars y Pokémon ahora son visibles para todos los usuarios
             const starwarsBtn = document.getElementById('starwarsBtn');
-            const lovecraftBtn = document.getElementById('lovecraftBtn');
             const pokemonBtn = document.getElementById('pokemonBtn');
             
-            // Verificar si el usuario es Martin (por email o nombre)
-            const isMartin = window.currentUser && (
-                window.currentUser.email === 'mpenalvart1@educacion.navarra.es' ||
-                window.currentUserName === 'Martin'
-            );
-            
-            if (animalBtn) {
-                if (isMartin) {
-                    animalBtn.style.display = 'block';
-                } else {
-                    animalBtn.style.display = 'none';
-                }
-            }
-            
+            // Hacer visibles para todos
             if (starwarsBtn) {
-                if (isMartin) {
-                    starwarsBtn.style.display = 'block';
-                } else {
-                    starwarsBtn.style.display = 'none';
-                }
-            }
-            
-            if (lovecraftBtn) {
-                if (isMartin) {
-                    lovecraftBtn.style.display = 'block';
-                } else {
-                    lovecraftBtn.style.display = 'none';
-                }
+                starwarsBtn.style.display = 'block';
             }
             
             if (pokemonBtn) {
-                if (isMartin) {
-                    pokemonBtn.style.display = 'block';
-                } else {
-                    pokemonBtn.style.display = 'none';
-                }
+                pokemonBtn.style.display = 'block';
             }
         }
 
@@ -13008,7 +12614,7 @@
             timeLeft = 20;
             
             // Remover las clases de modo para que la pantalla de elegir nivel no tenga estilos del nivel anterior
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'animal-mode', 'starwars-mode', 'lovecraft-mode', 'pokemon-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode');
             
             // Ocultar game over
             document.getElementById('gameOver').style.display = 'none';
@@ -13245,14 +12851,10 @@
 
             // Encontrar la respuesta correcta según el modo
             let correctAnswer;
-            if (difficulty === 'lovecraft') {
-                correctAnswer = currentLovecraftCreature.name;
-            } else if (difficulty === 'pokemon') {
+            if (difficulty === 'pokemon') {
                 correctAnswer = currentPokemon.name;
             } else if (difficulty === 'starwars') {
                 correctAnswer = currentStarWarsCharacter.name;
-            } else if (difficulty === 'animal') {
-                correctAnswer = currentAnimal.name;
             } else {
                 correctAnswer = currentCountry.name.common;
             }
@@ -13296,69 +12898,7 @@
         function selectOption(optionNumber) {
             if (answered) return;
 
-            // Verificar si es modo Lovecraft
-            if (difficulty === 'lovecraft') {
-                if (!currentLovecraftCreature || !currentLovecraftCreature.name) {
-                    console.error('Error: currentLovecraftCreature no está definido');
-                    alert('Error: No hay criatura seleccionada. Por favor, recarga la página.');
-                    return;
-                }
-
-                // Detener temporizador
-                stopTimer();
-
-                const selectedBtn = document.getElementById(`option${optionNumber}`);
-                const selectedText = selectedBtn.textContent;
-                const isCorrect = selectedText === currentLovecraftCreature.name;
-
-                answered = true;
-
-                // Deshabilitar todos los botones
-                [1, 2, 3, 4].forEach(i => {
-                    const btn = document.getElementById(`option${i}`);
-                    if (btn.style.display !== 'none') {
-                        btn.disabled = true;
-
-                        if (btn.textContent === currentLovecraftCreature.name) {
-                            btn.classList.add('correct');
-                        } else if (btn === selectedBtn && !isCorrect) {
-                            btn.classList.add('incorrect');
-                        }
-                    }
-                });
-
-                if (isCorrect) {
-                    score++;
-                    streak++;
-                    if (streak > maxStreak) maxStreak = streak;
-                    updateStreak(true);
-                    document.getElementById('score').textContent = score;
-                    document.getElementById('message').textContent = '✅ ¡Correcto!';
-                    document.getElementById('message').className = 'message correct';
-                    showAlert('success', '¡Correcto!', `Es ${currentLovecraftCreature.name}! 🧙‍♂️`);
-                } else {
-                    streak = 0;
-                    updateStreak(false);
-                    lives--;
-                    updateHearts();
-                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentLovecraftCreature.name}`;
-                    document.getElementById('message').className = 'message incorrect';
-                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentLovecraftCreature.name}`);
-                }
-
-                // Si se acabaron las vidas, mostrar game over
-                if (lives <= 0) {
-                    setTimeout(() => {
-                        showGameOver();
-                    }, 2000);
-                } else {
-                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
-                    setTimeout(() => {
-                        loadNewQuestion();
-                    }, 2000);
-                }
-                return;
-            } else if (difficulty === 'pokemon') {
+            if (difficulty === 'pokemon') {
                 if (!currentPokemon || !currentPokemon.name) {
                     console.error('Error: currentPokemon no está definido');
                     alert('Error: No hay Pokémon seleccionado. Por favor, recarga la página.');
@@ -13480,64 +13020,6 @@
                     }, 2000);
                 }
                 return;
-            } else if (difficulty === 'animal') {
-                if (!currentAnimal || !currentAnimal.name) {
-                    console.error('Error: currentAnimal no está definido');
-                    alert('Error: No hay animal seleccionado. Por favor, recarga la página.');
-                    return;
-                }
-
-                // Detener temporizador
-                stopTimer();
-
-                const selectedBtn = document.getElementById(`option${optionNumber}`);
-                const selectedText = selectedBtn.textContent;
-                const isCorrect = selectedText === currentAnimal.name;
-
-                answered = true;
-
-                // Deshabilitar todos los botones
-                [1, 2, 3, 4].forEach(i => {
-                    const btn = document.getElementById(`option${i}`);
-                    if (btn.style.display !== 'none') {
-                        btn.disabled = true;
-
-                        if (btn.textContent === currentAnimal.name) {
-                            btn.classList.add('correct');
-                        } else if (btn === selectedBtn && !isCorrect) {
-                            btn.classList.add('incorrect');
-                        }
-                    }
-                });
-
-                if (isCorrect) {
-                    score++;
-                    streak++;
-                    if (streak > maxStreak) maxStreak = streak;
-                    updateStreak(true);
-                    document.getElementById('score').textContent = score;
-                    document.getElementById('message').textContent = '✅ ¡Correcto!';
-                    document.getElementById('message').className = 'message correct';
-                    showAlert('success', '¡Correcto!', `Es un ${currentAnimal.name}! 🎉`);
-                } else {
-                    streak = 0;
-                    updateStreak(false);
-                    lives--;
-                    updateHearts();
-                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentAnimal.name}`;
-                    document.getElementById('message').className = 'message incorrect';
-                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentAnimal.name}`);
-                    
-                    if (lives <= 0) {
-                        setTimeout(() => {
-                            showGameOver();
-                        }, 2000);
-                        return;
-                    }
-                }
-
-                document.getElementById('nextBtn').classList.add('show');
-                return;
             }
 
             // Verificar que currentCountry esté definido
@@ -13643,9 +13125,7 @@
         document.getElementById('hardBtn').addEventListener('click', () => selectDifficulty('hard'));
         document.getElementById('impossibleBtn').addEventListener('click', () => selectDifficulty('impossible'));
         document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
-        document.getElementById('animalBtn').addEventListener('click', () => selectDifficulty('animal'));
         document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
-        document.getElementById('lovecraftBtn').addEventListener('click', () => selectDifficulty('lovecraft'));
         document.getElementById('pokemonBtn').addEventListener('click', () => selectDifficulty('pokemon'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
@@ -14625,6 +14105,18 @@
                 viewRankingGodBtn.removeEventListener('click', handleGodRankingClick);
                 viewRankingGodBtn.addEventListener('click', handleGodRankingClick);
             }
+            
+            const viewRankingStarWarsBtn = document.getElementById('viewRankingStarWarsBtn');
+            if (viewRankingStarWarsBtn) {
+                viewRankingStarWarsBtn.removeEventListener('click', handleStarWarsRankingClick);
+                viewRankingStarWarsBtn.addEventListener('click', handleStarWarsRankingClick);
+            }
+            
+            const viewRankingPokemonBtn = document.getElementById('viewRankingPokemonBtn');
+            if (viewRankingPokemonBtn) {
+                viewRankingPokemonBtn.removeEventListener('click', handlePokemonRankingClick);
+                viewRankingPokemonBtn.addEventListener('click', handlePokemonRankingClick);
+            }
         }
         
         // Handler para delegación de eventos
@@ -14647,6 +14139,12 @@
             } else if (button.id === 'viewRankingGodBtn') {
                 level = 'god';
                 console.log('Botón Clasificación Dios clickeado');
+            } else if (button.id === 'viewRankingStarWarsBtn') {
+                level = 'starwars';
+                console.log('Botón Clasificación Star Wars clickeado');
+            } else if (button.id === 'viewRankingPokemonBtn') {
+                level = 'pokemon';
+                console.log('Botón Clasificación Pokémon clickeado');
             }
             
             if (level) {
@@ -14700,6 +14198,28 @@
             console.log('Botón Clasificación Dios clickeado (directo)');
             if (window.showRankingByLevel) {
                 window.showRankingByLevel('god');
+            } else {
+                console.error('showRankingByLevel no está disponible');
+            }
+        }
+        
+        function handleStarWarsRankingClick(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Botón Clasificación Star Wars clickeado (directo)');
+            if (window.showRankingByLevel) {
+                window.showRankingByLevel('starwars');
+            } else {
+                console.error('showRankingByLevel no está disponible');
+            }
+        }
+        
+        function handlePokemonRankingClick(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Botón Clasificación Pokémon clickeado (directo)');
+            if (window.showRankingByLevel) {
+                window.showRankingByLevel('pokemon');
             } else {
                 console.error('showRankingByLevel no está disponible');
             }
@@ -15211,11 +14731,6 @@
             } else {
                 window.currentUser = null;
                 window.currentUserName = null;
-                // Ocultar botón de animales cuando no hay usuario
-                const animalBtn = document.getElementById('animalBtn');
-                if (animalBtn) {
-                    animalBtn.style.display = 'none';
-                }
                 // Mostrar pantalla de autenticación y ocultar juego
                 document.getElementById('authContainer').style.display = 'flex';
                 document.getElementById('gameContainer').style.display = 'none';
