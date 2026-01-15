@@ -9758,6 +9758,17 @@
             <div class="main-ranking-list" id="mainRankingList">
                 <div style="text-align: center; padding: 20px; color: #718096;">Cargando ranking...</div>
             </div>
+            <div class="ranking-buttons-container" style="margin-top: 20px; padding: 0 20px 20px 20px;">
+                <h3 style="margin: 20px 0 15px 0; color: #667eea; font-size: 1.2em; text-align: center;">📊 Ver Otras Clasificaciones</h3>
+                <div class="ranking-buttons">
+                    <button class="ranking-btn ranking-btn-easy" id="mainViewRankingEasyBtn">🏆 Fácil</button>
+                    <button class="ranking-btn ranking-btn-hard" id="mainViewRankingHardBtn">🏆 Difícil</button>
+                    <button class="ranking-btn ranking-btn-impossible" id="mainViewRankingImpossibleBtn">🏆 Imposible</button>
+                    <button class="ranking-btn ranking-btn-god" id="mainViewRankingGodBtn">✨ Dios</button>
+                    <button class="ranking-btn ranking-btn-starwars" id="mainViewRankingStarWarsBtn">⭐ Star Wars</button>
+                    <button class="ranking-btn ranking-btn-pokemon" id="mainViewRankingPokemonBtn">⚡ Pokémon</button>
+                </div>
+            </div>
         </div>
 
         <div class="difficulty-selector" id="difficultySelector">
@@ -11417,7 +11428,7 @@
                     btn.disabled = true;
                     
                     let correctAnswer;
-                    } else if (difficulty === 'pokemon') {
+                    if (difficulty === 'pokemon') {
                         correctAnswer = currentPokemon?.name;
                     } else if (difficulty === 'starwars') {
                         correctAnswer = currentStarWarsCharacter?.name;
@@ -11436,7 +11447,7 @@
             updateHearts();
             
             const messageEl = document.getElementById('message');
-            } else if (difficulty === 'pokemon') {
+            if (difficulty === 'pokemon') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentPokemon.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentPokemon.name}`);
             } else if (difficulty === 'starwars') {
@@ -12239,25 +12250,36 @@
         }
 
         // Mostrar ranking principal
-        async function showMainRanking() {
+        async function showMainRanking(levelOverride = null) {
             const mainRankingContainer = document.getElementById('mainRankingContainer');
             const rankingTitle = document.getElementById('rankingTitle');
             
+            // Usar levelOverride si se proporciona, sino usar difficulty actual
+            const levelToShow = levelOverride || difficulty;
+            
             // Actualizar título según el nivel
-            if (difficulty === 'easy') {
+            if (levelToShow === 'easy') {
                 rankingTitle.textContent = '🏆 Top 10 Ranking - Fácil';
-            } else if (difficulty === 'hard') {
+            } else if (levelToShow === 'hard') {
                 rankingTitle.textContent = '🏆 Top 10 Ranking - Difícil';
-            } else if (difficulty === 'impossible') {
+            } else if (levelToShow === 'impossible') {
                 rankingTitle.textContent = '🏆 Top 10 Ranking - Imposible';
-            } else if (difficulty === 'god') {
+            } else if (levelToShow === 'god') {
                 rankingTitle.textContent = '✨ Top 10 Ranking - Dios';
+            } else if (levelToShow === 'starwars') {
+                rankingTitle.textContent = '⭐ Top 10 Ranking - Star Wars';
+            } else if (levelToShow === 'pokemon') {
+                rankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
             } else {
                 rankingTitle.textContent = '🏆 Top 10 Ranking';
             }
             
             mainRankingContainer.style.display = 'block';
-            await loadMainRanking();
+            if (levelOverride) {
+                await loadMainRankingByLevel(levelOverride);
+            } else {
+                await loadMainRanking();
+            }
         }
 
         // Ocultar ranking principal
@@ -12400,10 +12422,30 @@
         // Cargar ranking por nivel específico (para el modal durante el juego)
         async function loadMainRankingByLevel(level) {
             const mainRankingList = document.getElementById('mainRankingList');
+            const rankingTitle = document.getElementById('rankingTitle');
             
             if (!mainRankingList) {
                 console.error('mainRankingList no encontrado');
                 return;
+            }
+            
+            // Actualizar título según el nivel
+            if (rankingTitle) {
+                if (level === 'easy') {
+                    rankingTitle.textContent = '🏆 Top 10 Ranking - Fácil';
+                } else if (level === 'hard') {
+                    rankingTitle.textContent = '🏆 Top 10 Ranking - Difícil';
+                } else if (level === 'impossible') {
+                    rankingTitle.textContent = '🏆 Top 10 Ranking - Imposible';
+                } else if (level === 'god') {
+                    rankingTitle.textContent = '✨ Top 10 Ranking - Dios';
+                } else if (level === 'starwars') {
+                    rankingTitle.textContent = '⭐ Top 10 Ranking - Star Wars';
+                } else if (level === 'pokemon') {
+                    rankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
+                } else {
+                    rankingTitle.textContent = '🏆 Top 10 Ranking';
+                }
             }
             
             mainRankingList.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">Cargando ranking...</div>';
@@ -12504,7 +12546,13 @@
                 const ranking = await window.obtenerRanking(difficulty);
                 
                 if (ranking.length === 0) {
-                    const nivelTexto = difficulty === 'easy' ? 'Fácil' : (difficulty === 'hard' ? 'Difícil' : (difficulty === 'impossible' ? 'Imposible' : (difficulty === 'god' ? 'Dios' : '')));
+                    let nivelTexto = '';
+                    if (difficulty === 'easy') nivelTexto = 'Fácil';
+                    else if (difficulty === 'hard') nivelTexto = 'Difícil';
+                    else if (difficulty === 'impossible') nivelTexto = 'Imposible';
+                    else if (difficulty === 'god') nivelTexto = 'Dios';
+                    else if (difficulty === 'starwars') nivelTexto = 'Star Wars';
+                    else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -12581,22 +12629,6 @@
         }
 
         // Reiniciar juego
-        // Función para mostrar/ocultar los botones exclusivos solo para Martin
-        function updateAnimalButtonVisibility() {
-            // Star Wars y Pokémon ahora son visibles para todos los usuarios
-            const starwarsBtn = document.getElementById('starwarsBtn');
-            const pokemonBtn = document.getElementById('pokemonBtn');
-            
-            // Hacer visibles para todos
-            if (starwarsBtn) {
-                starwarsBtn.style.display = 'block';
-            }
-            
-            if (pokemonBtn) {
-                pokemonBtn.style.display = 'block';
-            }
-        }
-
         function restartGame() {
             // Detener temporizador
             stopTimer();
@@ -14071,6 +14103,47 @@
             closeRankingBtn.addEventListener('click', hideMainRanking);
         }
         
+        // Event listeners para botones de clasificación en el modal principal de ranking
+        function initMainRankingButtons() {
+            const mainViewRankingEasyBtn = document.getElementById('mainViewRankingEasyBtn');
+            if (mainViewRankingEasyBtn) {
+                mainViewRankingEasyBtn.onclick = async () => await showMainRanking('easy');
+            }
+            
+            const mainViewRankingHardBtn = document.getElementById('mainViewRankingHardBtn');
+            if (mainViewRankingHardBtn) {
+                mainViewRankingHardBtn.onclick = async () => await showMainRanking('hard');
+            }
+            
+            const mainViewRankingImpossibleBtn = document.getElementById('mainViewRankingImpossibleBtn');
+            if (mainViewRankingImpossibleBtn) {
+                mainViewRankingImpossibleBtn.onclick = async () => await showMainRanking('impossible');
+            }
+            
+            const mainViewRankingGodBtn = document.getElementById('mainViewRankingGodBtn');
+            if (mainViewRankingGodBtn) {
+                mainViewRankingGodBtn.onclick = async () => await showMainRanking('god');
+            }
+            
+            const mainViewRankingStarWarsBtn = document.getElementById('mainViewRankingStarWarsBtn');
+            if (mainViewRankingStarWarsBtn) {
+                mainViewRankingStarWarsBtn.onclick = async () => await showMainRanking('starwars');
+            }
+            
+            const mainViewRankingPokemonBtn = document.getElementById('mainViewRankingPokemonBtn');
+            if (mainViewRankingPokemonBtn) {
+                mainViewRankingPokemonBtn.onclick = async () => await showMainRanking('pokemon');
+            }
+        }
+        
+        // Inicializar botones cuando estén disponibles
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMainRankingButtons);
+        } else {
+            // Si el DOM ya está cargado, inicializar inmediatamente
+            setTimeout(initMainRankingButtons, 100);
+        }
+        
         // Función para inicializar los event listeners de los botones de clasificación
         function initRankingButtons() {
             // Event listeners para botones de clasificación por nivel usando delegación de eventos
@@ -14677,6 +14750,22 @@
             }
         };
 
+        // Función para mostrar/ocultar los botones exclusivos solo para Martin
+        function updateAnimalButtonVisibility() {
+            // Star Wars y Pokémon ahora son visibles para todos los usuarios
+            const starwarsBtn = document.getElementById('starwarsBtn');
+            const pokemonBtn = document.getElementById('pokemonBtn');
+            
+            // Hacer visibles para todos
+            if (starwarsBtn) {
+                starwarsBtn.style.display = 'block';
+            }
+            
+            if (pokemonBtn) {
+                pokemonBtn.style.display = 'block';
+            }
+        }
+        
         // Observar cambios en el estado de autenticación
         onAuthStateChanged(auth, async (user) => {
             if (user) {
