@@ -206,6 +206,7 @@
             33% {
                 background-position: 100% 50%;
             }
+        }
 
         body.cars-mode {
             background: linear-gradient(135deg, #1a0000 0%, #4d0000 20%, #800000 40%, #cc0000 60%, #ff3333 80%, #ff6666 100%);
@@ -222,8 +223,25 @@
             50% {
                 background-position: 100% 50%;
             }
+        }
+
+        body.space-mode {
+            background: linear-gradient(135deg, #000000 0%, #1a0033 20%, #0a0a2e 40%, #16213e 60%, #0f3460 80%, #533483 100%);
+            background-size: 400% 400%;
+            animation: spaceBackgroundMove 20s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes spaceBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            33% {
+                background-position: 100% 50%;
+            }
             66% {
-                background-position: 50% 100%;
+                background-position: 100% 100%;
             }
         }
 
@@ -2016,6 +2034,19 @@
             background: linear-gradient(135deg, #ef4444 0%, #f87171 50%, #fca5a5 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+        }
+
+        .difficulty-btn.space {
+            border-color: #6366f1;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .difficulty-btn.space:hover {
+            background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #6366f1 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
         }
 
         .difficulty-btn small {
@@ -9797,6 +9828,7 @@
                     <button class="ranking-btn ranking-btn-starwars" id="mainViewRankingStarWarsBtn">⭐ Star Wars</button>
                     <button class="ranking-btn ranking-btn-pokemon" id="mainViewRankingPokemonBtn">⚡ Pokémon</button>
                     <button class="ranking-btn ranking-btn-cars" id="mainViewRankingCarsBtn" style="display: none;">🚗 Coches</button>
+                    <button class="ranking-btn ranking-btn-space" id="mainViewRankingSpaceBtn" style="display: none;">🪐 Espacio</button>
                 </div>
             </div>
         </div>
@@ -9811,6 +9843,7 @@
                 <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars<br><small>Adivina el personaje</small></button>
                 <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
                 <button class="difficulty-btn cars" id="carsBtn" style="display: none;">🚗 Coches<br><small>Adivina el modelo</small></button>
+                <button class="difficulty-btn space" id="spaceBtn" style="display: none;">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -9822,6 +9855,7 @@
                     <button class="ranking-btn ranking-btn-starwars" id="viewRankingStarWarsBtn">⭐ Clasificación Star Wars</button>
                     <button class="ranking-btn ranking-btn-pokemon" id="viewRankingPokemonBtn">⚡ Clasificación Pokémon</button>
                     <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn" style="display: none;">🚗 Clasificación Coches</button>
+                    <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn" style="display: none;">🪐 Clasificación Espacio</button>
                 </div>
             </div>
             <div class="ranking-buttons-container">
@@ -9898,6 +9932,8 @@
         let pokemonList = []; // Lista de Pokémon cargados
         let currentCar = null; // Para el modo Coches
         let carsList = []; // Lista de modelos de coches
+        let currentSpaceImage = null; // Para el modo Espacio/Planetas
+        let spaceImagesList = []; // Lista de imágenes del espacio de NASA
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -10833,9 +10869,64 @@
             return isValidUrl && hasMinLength;
         }
 
+        // Función para obtener mapeo de imágenes personalizadas para personajes específicos
+        function getCustomImageMapping() {
+            return {
+                'Dormé': 'https://tse4.mm.bing.net/th/id/OIP.uJnLdpF3TCNjjG1qi9wKtwHaNE?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Mace Windu': 'https://vignette.wikia.nocookie.net/star-wars-legends/images/4/41/Mace_Windu_SWI38.png/revision/latest?cb=20190427061157',
+                'Gasgano': 'https://lumiere-a.akamaihd.net/v1/images/gasgano_6f648f83.jpeg?region=0%2C55%2C2252%2C1126',
+                'Finn': 'https://vignette.wikia.nocookie.net/p__/images/1/1c/Finn_TLJ.png/revision/latest?cb=20180623152957&path-prefix=protagonist',
+                'Sly Moore': 'https://lumiere-a.akamaihd.net/v1/images/sly-moore_6af90e66.jpeg?region=95%2C133%2C1116%2C628&width=768',
+                'Tion Medon': 'https://tse2.mm.bing.net/th/id/OIP.oQmiwZ2iOIRGndhEvOlU7wHaJZ?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Wedge Antilles': 'https://tse1.mm.bing.net/th/id/OIP.p8PCNbh4cAAxe4nU8aTF6AHaJG?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Lobot': 'https://th.bing.com/th/id/R.fddd24ea9af9b35baa6c14343f53874?rik=uBNgpzvk5LwUw&riu=http%3a%2f%2fimg.lum.dolimg.com%2fv1%2fimages%2fdatabank_lobot_01_169_8a50d7ae.jpeg%3fregion%3d0%252C0%252C1560%252C780&ehk=Z8Kea5DwiybmaeSFgJIV6hBLCx7%2bYBdJj5NN58z1YZE%3d&risl=&pid=ImgRaw&r=0',
+                'Ratts Tyerell': 'https://lumiere-a.akamaihd.net/v1/images/databank_rattstyerell_01_169_031aea6d.jpeg?region=0%2C0%2C1560%2C780',
+                'Adi Gallia': 'https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/06/adi-gallia.jpeg',
+                'Ady Gallya': 'https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/06/adi-gallia.jpeg', // Variación del nombre
+                'General Grievous': 'https://vignette.wikia.nocookie.net/general-grievous/images/3/3e/2005_Grievous_remastered.jpg/revision/latest?cb=20170110141554',
+                'General Griveus': 'https://vignette.wikia.nocookie.net/general-grievous/images/3/3e/2005_Grievous_remastered.jpg/revision/latest?cb=20170110141554', // Variación del nombre
+                'Yarael Poof': 'https://th.bing.com/th/id/R.544cfd937ac06b403688acd3bd4e162e?rik=P87erP2iMinlIw&riu=http%3a%2f%2frpggamer.org%2fshippics%2fyaraelpoof.jpg&ehk=611IcmSY9ruF1iCeHM%2feLP1qkEYsu7T7p5vsD65%2fBg4%3d&risl=&pid=ImgRaw&r=0',
+                'Yarael poof': 'https://th.bing.com/th/id/R.544cfd937ac06b403688acd3bd4e162e?rik=P87erP2iMinlIw&riu=http%3a%2f%2frpggamer.org%2fshippics%2fyaraelpoof.jpg&ehk=611IcmSY9ruF1iCeHM%2feLP1qkEYsu7T7p5vsD65%2fBg4%3d&risl=&pid=ImgRaw&r=0', // Variación del nombre
+                'Captain Rex': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2024/02/captain-rex-ahsoka-star-wars-poster.jpg',
+                'Capitan Rex': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2024/02/captain-rex-ahsoka-star-wars-poster.jpg', // Variación del nombre
+                'Cody': 'https://i.pinimg.com/736x/5a/d8/9d/5ad89dd5d33ca433d5771201750f236c.jpg',
+                'CC-2224': 'https://i.pinimg.com/736x/5a/d8/9d/5ad89dd5d33ca433d5771201750f236c.jpg', // Código de Cody
+                'Kylo Ren': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2025/05/kylo-ren-in-the-force-awakens.jpg'
+            };
+        }
+        
+        // Función para obtener imagen personalizada para un personaje (con búsqueda flexible de nombre)
+        function getCustomImage(characterName, customMapping) {
+            if (!characterName || !customMapping) return null;
+            
+            const nameLower = characterName.toLowerCase().trim();
+            
+            // Buscar coincidencia exacta primero
+            for (const [mappedName, imageUrl] of Object.entries(customMapping)) {
+                const mappedNameLower = mappedName.toLowerCase().trim();
+                if (nameLower === mappedNameLower) {
+                    return imageUrl;
+                }
+            }
+            
+            // Buscar coincidencias parciales (por si el nombre en la API es ligeramente diferente)
+            for (const [mappedName, imageUrl] of Object.entries(customMapping)) {
+                const mappedNameLower = mappedName.toLowerCase().trim();
+                // Si el nombre contiene el mapeo o viceversa (para casos como "General Grievous" vs "Grievous")
+                if (nameLower.includes(mappedNameLower) || mappedNameLower.includes(nameLower)) {
+                    return imageUrl;
+                }
+            }
+            
+            return null;
+        }
+        
         // Función para cargar personajes de Star Wars desde la API
         async function loadStarWarsCharacters() {
             starWarsCharacters = [];
+            
+            // Obtener mapeo de imágenes personalizadas
+            const customImageMapping = getCustomImageMapping();
             
             // Verificar si está usando file:// protocol
             const isFileProtocol = window.location.protocol === 'file:';
@@ -10844,9 +10935,36 @@
                 console.warn('💡 Para ver las imágenes, usa un servidor web local:');
                 console.warn('   - Python: python -m http.server 8000');
                 console.warn('   - Node.js: npx serve');
-                // Usar directamente la lista de respaldo (solo los que tienen imagen válida)
+                // Usar directamente la lista de respaldo (aplicando imágenes personalizadas)
                 const fallbackCharacters = getFallbackStarWarsCharacters();
-                starWarsCharacters = fallbackCharacters.filter(char => hasValidImage(char));
+                starWarsCharacters = fallbackCharacters
+                    .map(char => {
+                        const customImage = getCustomImage(char.name, customImageMapping);
+                        const imageToUse = customImage || char.image;
+                        const hasValidImageToUse = customImage ? true : hasValidImage(char);
+                        
+                        if (!hasValidImageToUse) return null;
+                        
+                        return {
+                            ...char,
+                            image: imageToUse
+                        };
+                    })
+                    .filter(char => char !== null);
+                
+                // Agregar personajes personalizados adicionales (Captain Rex y Cody) siempre
+                const customCharacters = getCustomStarWarsCharacters();
+                customCharacters.forEach(customChar => {
+                    // Verificar que no esté ya en la lista
+                    const alreadyExists = starWarsCharacters.some(c => 
+                        c.name === customChar.name || c.id === customChar.id
+                    );
+                    if (!alreadyExists && customChar.image) {
+                        starWarsCharacters.push(customChar);
+                        console.log(`✅ Personaje personalizado agregado: ${customChar.name}`);
+                    }
+                });
+                
                 console.log(`Modo Star Wars (sin API): ${starWarsCharacters.length} personajes con imagen válida cargados desde lista de respaldo`);
                 return;
             }
@@ -10860,39 +10978,113 @@
                 
                 const allCharacters = await response.json();
                 
-                // Filtrar personajes que tengan nombre e imagen válida
-                // La imagen debe ser una URL válida (http:// o https://) y no estar vacía
+                // Filtrar personajes que tengan nombre y procesar imágenes
                 starWarsCharacters = allCharacters
-                    .filter(char => char.name && hasValidImage(char))
-                    .map(char => ({
-                        id: char.id,
-                        name: char.name,
-                        image: char.image,
-                        species: char.species || 'Unknown',
-                        gender: char.gender || 'Unknown',
-                        homeworld: char.homeworld || 'Unknown'
-                    }));
+                    .filter(char => char.name) // Solo filtrar por nombre, aceptaremos todos si tienen imagen personalizada
+                    .map(char => {
+                        // Verificar si tiene imagen personalizada
+                        const customImage = getCustomImage(char.name, customImageMapping);
+                        const imageToUse = customImage || char.image;
+                        
+                        // Si tiene imagen personalizada, usarla aunque la de la API sea inválida
+                        // Si no tiene imagen personalizada, verificar que la de la API sea válida
+                        const hasValidImageToUse = customImage ? true : hasValidImage(char);
+                        
+                        if (!hasValidImageToUse) return null;
+                        
+                        return {
+                            id: char.id,
+                            name: char.name,
+                            image: imageToUse, // Usar imagen personalizada si existe, sino la de la API
+                            species: char.species || 'Unknown',
+                            gender: char.gender || 'Unknown',
+                            homeworld: char.homeworld || 'Unknown'
+                        };
+                    })
+                    .filter(char => char !== null); // Eliminar los que no tienen imagen válida
                 
                 console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes cargados de la API`);
                 
-                // Si no se cargaron suficientes, usar lista de respaldo (solo los que tienen imagen válida)
+                // Si no se cargaron suficientes, usar lista de respaldo (aplicando imágenes personalizadas)
                 if (starWarsCharacters.length < 10) {
                     console.log('No se cargaron suficientes personajes de la API, usando lista de respaldo');
                     const fallbackCharacters = getFallbackStarWarsCharacters();
-                    // Filtrar solo personajes de respaldo con imagen válida
-                    const validFallbackCharacters = fallbackCharacters.filter(char => hasValidImage(char));
+                    const validFallbackCharacters = fallbackCharacters
+                        .map(char => {
+                            const customImage = getCustomImage(char.name, customImageMapping);
+                            const imageToUse = customImage || char.image;
+                            const hasValidImageToUse = customImage ? true : hasValidImage(char);
+                            
+                            if (!hasValidImageToUse) return null;
+                            
+                            // Verificar que no esté ya en la lista
+                            const alreadyExists = starWarsCharacters.some(c => c.name === char.name);
+                            if (alreadyExists) return null;
+                            
+                            return {
+                                ...char,
+                                image: imageToUse
+                            };
+                        })
+                        .filter(char => char !== null);
                     starWarsCharacters = [...starWarsCharacters, ...validFallbackCharacters];
                 }
                 
-                // Filtrar nuevamente para asegurarse de que todos tengan imagen válida
-                starWarsCharacters = starWarsCharacters.filter(char => hasValidImage(char));
+                // Asegurar que todos tengan imagen válida (puede ser personalizada o de API)
+                starWarsCharacters = starWarsCharacters.filter(char => {
+                    if (!char || !char.image) return false;
+                    const imageUrl = String(char.image).trim();
+                    return imageUrl !== '' && imageUrl !== 'null' && imageUrl !== 'undefined' && 
+                           (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) &&
+                           imageUrl.length > 10;
+                });
+                
+                // Agregar personajes personalizados adicionales (Captain Rex y Cody) siempre
+                const customCharacters = getCustomStarWarsCharacters();
+                customCharacters.forEach(customChar => {
+                    // Verificar que no esté ya en la lista
+                    const alreadyExists = starWarsCharacters.some(c => 
+                        c.name === customChar.name || c.id === customChar.id
+                    );
+                    if (!alreadyExists && customChar.image) {
+                        starWarsCharacters.push(customChar);
+                        console.log(`✅ Personaje personalizado agregado: ${customChar.name}`);
+                    }
+                });
                 
                 console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes listos (todos con imágenes válidas)`);
             } catch (error) {
                 console.error('Error al cargar personajes de Star Wars:', error);
-                // Usar lista de respaldo (solo los que tienen imagen válida)
+                // Usar lista de respaldo (aplicando imágenes personalizadas)
                 const fallbackCharacters = getFallbackStarWarsCharacters();
-                starWarsCharacters = fallbackCharacters.filter(char => hasValidImage(char));
+                starWarsCharacters = fallbackCharacters
+                    .map(char => {
+                        const customImage = getCustomImage(char.name, customImageMapping);
+                        const imageToUse = customImage || char.image;
+                        const hasValidImageToUse = customImage ? true : hasValidImage(char);
+                        
+                        if (!hasValidImageToUse) return null;
+                        
+                        return {
+                            ...char,
+                            image: imageToUse
+                        };
+                    })
+                    .filter(char => char !== null);
+                
+                // Agregar personajes personalizados adicionales (Captain Rex y Cody) siempre
+                const customCharacters = getCustomStarWarsCharacters();
+                customCharacters.forEach(customChar => {
+                    // Verificar que no esté ya en la lista
+                    const alreadyExists = starWarsCharacters.some(c => 
+                        c.name === customChar.name || c.id === customChar.id
+                    );
+                    if (!alreadyExists && customChar.image) {
+                        starWarsCharacters.push(customChar);
+                        console.log(`✅ Personaje personalizado agregado: ${customChar.name}`);
+                    }
+                });
+                
                 console.log(`Modo Star Wars (error API): ${starWarsCharacters.length} personajes con imagen válida cargados desde lista de respaldo`);
             }
         }
@@ -10996,7 +11188,165 @@
             }
         }
 
+        // Función para traducir título al castellano usando API de traducción
+        async function translateToSpanish(text) {
+            if (!text) return text;
+            
+            try {
+                // Usar API gratuita de MyMemory Translation
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|es`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.responseData && data.responseData.translatedText) {
+                        return data.responseData.translatedText;
+                    }
+                }
+            } catch (error) {
+                console.warn('Error al traducir:', error);
+            }
+            
+            // Si falla la traducción, devolver el texto original
+            return text;
+        }
+        
+        // Función para cargar imágenes del espacio desde la API de NASA
+        async function loadSpaceImages() {
+            spaceImagesList = [];
+            const nasaApiKey = 'a1MpMaPEObS2wRrasTBv2C7YFZ2LFH626Jy0yPIM';
+            
+            console.log(`🪐 Iniciando carga de imágenes del espacio desde NASA...`);
+            
+            try {
+                // Cargar 20 imágenes aleatorias de la API de NASA
+                const url = `https://api.nasa.gov/planetary/apod?count=20&api_key=${nasaApiKey}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Filtrar solo las imágenes (no videos) y que tengan título e imagen válida
+                const filteredData = data.filter(item => {
+                    // Solo imágenes, no videos
+                    if (item.media_type !== 'image') return false;
+                    // Debe tener título e imagen válida
+                    if (!item.title || !item.url) return false;
+                    // Verificar que la URL sea válida
+                    const imageUrl = String(item.url).trim();
+                    if (imageUrl === '' || imageUrl === 'null' || imageUrl === 'undefined') return false;
+                    const isValidUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://');
+                    const hasMinLength = imageUrl.length > 10;
+                    return isValidUrl && hasMinLength;
+                });
+                
+                // Traducir títulos al castellano
+                console.log('🪐 Traduciendo títulos al castellano...');
+                const translatedItems = await Promise.all(
+                    filteredData.map(async (item) => {
+                        const translatedTitle = await translateToSpanish(item.title);
+                        // Pequeño delay para no sobrecargar la API de traducción
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        return {
+                            id: item.date || Date.now() + Math.random(),
+                            title: translatedTitle,
+                            image: item.url,
+                            explanation: item.explanation || '',
+                            date: item.date || ''
+                        };
+                    })
+                );
+                
+                spaceImagesList = translatedItems;
+                
+                console.log(`🪐 Modo Espacio: ${spaceImagesList.length} imágenes cargadas de la NASA`);
+                
+                // Si no se cargaron suficientes, intentar cargar más
+                if (spaceImagesList.length < 10) {
+                    console.log('No se cargaron suficientes imágenes, intentando cargar más...');
+                    try {
+                        const secondUrl = `https://api.nasa.gov/planetary/apod?count=30&api_key=${nasaApiKey}`;
+                        const secondResponse = await fetch(secondUrl);
+                        if (secondResponse.ok) {
+                            const secondData = await secondResponse.json();
+                            const additionalImages = secondData
+                                .filter(item => {
+                                    if (item.media_type !== 'image') return false;
+                                    if (!item.title || !item.url) return false;
+                                    const imageUrl = String(item.url).trim();
+                                    if (imageUrl === '' || imageUrl === 'null') return false;
+                                    const isValidUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://');
+                                    const hasMinLength = imageUrl.length > 10;
+                                    // Evitar duplicados por fecha (más confiable que por título traducido)
+                                    const alreadyExists = spaceImagesList.some(img => img.date === item.date);
+                                    return isValidUrl && hasMinLength && !alreadyExists;
+                                });
+                            
+                            // Traducir títulos adicionales al castellano
+                            const translatedAdditional = await Promise.all(
+                                additionalImages.map(async (item) => {
+                                    const translatedTitle = await translateToSpanish(item.title);
+                                    await new Promise(resolve => setTimeout(resolve, 100));
+                                    return {
+                                        id: item.date || Date.now() + Math.random(),
+                                        title: translatedTitle,
+                                        image: item.url,
+                                        explanation: item.explanation || '',
+                                        date: item.date || ''
+                                    };
+                                })
+                            );
+                            
+                            spaceImagesList = [...spaceImagesList, ...translatedAdditional];
+                            console.log(`🪐 Modo Espacio: ${spaceImagesList.length} imágenes totales cargadas`);
+                        }
+                    } catch (e) {
+                        console.warn('Error al cargar imágenes adicionales:', e);
+                    }
+                }
+                
+                if (spaceImagesList.length === 0) {
+                    console.warn('No se pudieron cargar imágenes del espacio desde NASA');
+                }
+            } catch (error) {
+                console.error('Error al cargar imágenes del espacio:', error);
+                spaceImagesList = [];
+            }
+        }
+
         // Función para obtener lista de personajes de Star Wars de respaldo
+        // Función para obtener personajes adicionales personalizados (siempre incluidos)
+        function getCustomStarWarsCharacters() {
+            const customImageMapping = getCustomImageMapping();
+            return [
+                {
+                    id: 1001,
+                    name: 'Captain Rex',
+                    image: customImageMapping['Captain Rex'] || customImageMapping['Capitan Rex'],
+                    species: 'Clone',
+                    gender: 'Male',
+                    homeworld: 'Kamino'
+                },
+                {
+                    id: 1002,
+                    name: 'Cody',
+                    image: customImageMapping['Cody'] || customImageMapping['CC-2224'],
+                    species: 'Clone',
+                    gender: 'Male',
+                    homeworld: 'Kamino'
+                },
+                {
+                    id: 1003,
+                    name: 'Kylo Ren',
+                    image: customImageMapping['Kylo Ren'],
+                    species: 'Human',
+                    gender: 'Male',
+                    homeworld: 'Unknown'
+                }
+            ];
+        }
+
         function getFallbackStarWarsCharacters() {
             return [
                 { id: 1, name: 'Luke Skywalker', image: null, species: 'Human', gender: 'Male', homeworld: 'Tatooine' },
@@ -11252,7 +11602,7 @@
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode', 'space-mode');
             
             if (level === 'pokemon') {
                 document.body.classList.add('pokemon-mode');
@@ -11323,6 +11673,26 @@
                         loadNewQuestion();
                     } else {
                         alert('Error al cargar coches. Por favor, recarga la página.');
+                    }
+                });
+            } else if (level === 'space') {
+                document.body.classList.add('space-mode');
+                // Cargar imágenes del espacio desde NASA
+                loadSpaceImages().then(() => {
+                    if (spaceImagesList.length === 0) {
+                        alert('No se pudieron cargar imágenes del espacio. Por favor, recarga la página.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar imágenes del espacio:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (spaceImagesList.length > 0) {
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar imágenes del espacio. Por favor, recarga la página.');
                     }
                 });
             } else if (level === 'impossible') {
@@ -11600,6 +11970,8 @@
                         correctAnswer = currentStarWarsCharacter?.name;
                     } else if (difficulty === 'cars') {
                         correctAnswer = currentCar?.name;
+                    } else if (difficulty === 'space') {
+                        correctAnswer = currentSpaceImage?.title;
                     } else {
                         correctAnswer = currentCountry?.name?.common;
                     }
@@ -11624,6 +11996,9 @@
             } else if (difficulty === 'cars') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCar.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentCar.name}`);
+            } else if (difficulty === 'space') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentSpaceImage.title}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentSpaceImage.title}`);
             } else {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCountry.name.common}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
@@ -11781,8 +12156,17 @@
                     window.starWarsRetryCount = 0;
                 }
                 
-                // Filtrar solo personajes con imagen válida (URL válida que empiece con http:// o https://)
-                const charactersWithImage = starWarsCharacters.filter(char => hasValidImage(char));
+                // Obtener mapeo de imágenes personalizadas
+                const customImageMapping = getCustomImageMapping();
+                
+                // Filtrar solo personajes con imagen válida (puede ser personalizada o de API)
+                const charactersWithImage = starWarsCharacters.filter(char => {
+                    if (!char || !char.image) return false;
+                    const imageUrl = String(char.image).trim();
+                    return imageUrl !== '' && imageUrl !== 'null' && imageUrl !== 'undefined' && 
+                           (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) &&
+                           imageUrl.length > 10;
+                });
                 
                 if (charactersWithImage.length === 0) {
                     window.starWarsRetryCount = 0; // Resetear contador
@@ -11883,8 +12267,14 @@
                     
                     // Función auxiliar para generar las opciones y continuar el juego
                     const generateOptionsAndContinue = function() {
-                        // Filtrar personajes disponibles actualizados
-                        const availableCharacters = starWarsCharacters.filter(char => hasValidImage(char));
+                        // Filtrar personajes disponibles actualizados (con imagen válida)
+                        const availableCharacters = starWarsCharacters.filter(char => {
+                            if (!char || !char.image) return false;
+                            const imageUrl = String(char.image).trim();
+                            return imageUrl !== '' && imageUrl !== 'null' && imageUrl !== 'undefined' && 
+                                   (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) &&
+                                   imageUrl.length > 10;
+                        });
                         
                         // Generar opciones (1 correcta + 3 incorrectas) - solo de personajes con imagen válida
                         const wrongCharacters = availableCharacters
@@ -12091,6 +12481,156 @@
                     wrongCars[0]?.name || 'Coche',
                     wrongCars[1]?.name || 'Coche',
                     wrongCars[2]?.name || 'Coche'
+                ].sort(() => Math.random() - 0.5);
+                
+                // Asignar opciones a los botones
+                document.getElementById('option1').textContent = options[0];
+                document.getElementById('option2').textContent = options[1];
+                document.getElementById('option3').textContent = options[2];
+                document.getElementById('option4').textContent = options[3];
+                
+                // Resetear estado
+                answered = false;
+                jokerUsed = false;
+                document.getElementById('message').textContent = '';
+                document.getElementById('message').className = 'message';
+                
+                // Mostrar opciones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    btn.style.display = 'block';
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+                
+                // Iniciar temporizador
+                startTimer();
+                
+                // Actualizar comodín
+                updateJokerButton();
+                
+                return;
+            } else if (difficulty === 'space') {
+                // Modo Espacio/Planetas
+                // Filtrar solo imágenes con URL válida
+                const imagesWithValidUrl = spaceImagesList.filter(img => 
+                    img && img.image && img.image.trim() !== '' && img.image !== null && img.image !== undefined &&
+                    (img.image.startsWith('http://') || img.image.startsWith('https://'))
+                );
+                
+                if (imagesWithValidUrl.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay imágenes del espacio disponibles. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
+                }
+                
+                // Seleccionar imagen aleatoria solo de las que tienen URL válida
+                const randomIndex = Math.floor(Math.random() * imagesWithValidUrl.length);
+                currentSpaceImage = imagesWithValidUrl[randomIndex];
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                // Mostrar imagen del espacio
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                // Intentar mostrar imagen si está disponible
+                if (currentSpaceImage.image) {
+                    const img = new Image();
+                    img.src = currentSpaceImage.image;
+                    img.alt = `Imagen del espacio: ${currentSpaceImage.title}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #000000 0%, #1a0033 50%, #0a0a2e 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver imagen en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
+                        
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentSpaceImage.image;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
+                        
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
+                        
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar imagen: ${currentSpaceImage.title}:`, currentSpaceImage.image);
+                        // Remover esta imagen de la lista
+                        const index = spaceImagesList.findIndex(i => i.id === currentSpaceImage.id);
+                        if (index !== -1) {
+                            spaceImagesList.splice(index, 1);
+                        }
+                        // Intentar con otra imagen
+                        if (spaceImagesList.length > 0) {
+                            setTimeout(() => {
+                                loadNewQuestion();
+                            }, 100);
+                            return;
+                        }
+                        // Si no hay más imágenes, mostrar placeholder
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #6366f1;">🪐</div><div style="text-align: center; margin-top: 10px; color: #c7d2fe;">${currentSpaceImage.title}</div>`;
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Imagen del espacio cargada exitosamente: ${currentSpaceImage.title}`);
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    // Si no hay imagen, intentar con otra
+                    if (spaceImagesList.length > 0) {
+                        setTimeout(() => {
+                            loadNewQuestion();
+                        }, 100);
+                        return;
+                    }
+                    // Si no hay imagen, mostrar placeholder
+                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #6366f1;">🪐</div><div style="text-align: center; margin-top: 10px; color: #c7d2fe;">${currentSpaceImage.title}</div>`;
+                }
+                
+                // Generar opciones (1 correcta + 3 incorrectas) - solo de imágenes con título válido
+                const wrongImages = imagesWithValidUrl
+                    .filter(i => i.title !== currentSpaceImage.title)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const options = [
+                    currentSpaceImage.title,
+                    wrongImages[0]?.title || 'Objeto Espacial',
+                    wrongImages[1]?.title || 'Objeto Espacial',
+                    wrongImages[2]?.title || 'Objeto Espacial'
                 ].sort(() => Math.random() - 0.5);
                 
                 // Asignar opciones a los botones
@@ -12590,6 +13130,7 @@
                     else if (difficulty === 'starwars') nivelTexto = 'Star Wars';
                     else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
                     else if (difficulty === 'cars') nivelTexto = 'Coches';
+                    else if (difficulty === 'space') nivelTexto = 'Espacio';
                     rankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}</div>`;
                     return;
                 }
@@ -12665,6 +13206,8 @@
                 rankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
             } else if (levelToShow === 'cars') {
                 rankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
+            } else if (levelToShow === 'space') {
+                rankingTitle.textContent = '🪐 Top 10 Ranking - Espacio';
             } else {
                 rankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -12709,6 +13252,8 @@
                 difficultyRankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
             } else if (level === 'cars') {
                 difficultyRankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
+            } else if (level === 'space') {
+                difficultyRankingTitle.textContent = '🪐 Top 10 Ranking - Espacio';
             } else {
                 difficultyRankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -12749,6 +13294,7 @@
                     else if (level === 'starwars') nivelTexto = 'Star Wars';
                     else if (level === 'pokemon') nivelTexto = 'Pokémon';
                     else if (level === 'cars') nivelTexto = 'Coches';
+                    else if (level === 'space') nivelTexto = 'Espacio';
                     difficultyRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -12843,6 +13389,8 @@
                     rankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
                 } else if (level === 'cars') {
                     rankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
+                } else if (level === 'space') {
+                    rankingTitle.textContent = '🪐 Top 10 Ranking - Espacio';
                 } else {
                     rankingTitle.textContent = '🏆 Top 10 Ranking';
                 }
@@ -12863,6 +13411,7 @@
                     else if (level === 'starwars') nivelTexto = 'Star Wars';
                     else if (level === 'pokemon') nivelTexto = 'Pokémon';
                     else if (level === 'cars') nivelTexto = 'Coches';
+                    else if (level === 'space') nivelTexto = 'Espacio';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -12955,6 +13504,7 @@
                     else if (difficulty === 'starwars') nivelTexto = 'Star Wars';
                     else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
                     else if (difficulty === 'cars') nivelTexto = 'Coches';
+                    else if (difficulty === 'space') nivelTexto = 'Espacio';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -13048,7 +13598,7 @@
             timeLeft = 20;
             
             // Remover las clases de modo para que la pantalla de elegir nivel no tenga estilos del nivel anterior
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode', 'space-mode');
             
             // Ocultar game over
             document.getElementById('gameOver').style.display = 'none';
@@ -13291,6 +13841,8 @@
                 correctAnswer = currentStarWarsCharacter.name;
             } else if (difficulty === 'cars') {
                 correctAnswer = currentCar.name;
+            } else if (difficulty === 'space') {
+                correctAnswer = currentSpaceImage.title;
             } else {
                 correctAnswer = currentCountry.name.common;
             }
@@ -13442,6 +13994,67 @@
                     document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentCar.name}`;
                     document.getElementById('message').className = 'message incorrect';
                     showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentCar.name}`);
+                }
+
+                // Si se acabaron las vidas, mostrar game over
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 2000);
+                } else {
+                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
+                }
+                return;
+            } else if (difficulty === 'space') {
+                if (!currentSpaceImage || !currentSpaceImage.title) {
+                    console.error('Error: currentSpaceImage no está definido');
+                    alert('Error: No hay imagen espacial seleccionada. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentSpaceImage.title;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentSpaceImage.title) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es ${currentSpaceImage.title}! 🪐`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentSpaceImage.title}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentSpaceImage.title}`);
                 }
 
                 // Si se acabaron las vidas, mostrar game over
@@ -13625,6 +14238,7 @@
         document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
         document.getElementById('pokemonBtn').addEventListener('click', () => selectDifficulty('pokemon'));
         document.getElementById('carsBtn').addEventListener('click', () => selectDifficulty('cars'));
+        document.getElementById('spaceBtn').addEventListener('click', () => selectDifficulty('space'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
         document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
@@ -14605,6 +15219,11 @@
             if (mainViewRankingCarsBtn) {
                 mainViewRankingCarsBtn.onclick = async () => await showMainRanking('cars');
             }
+            
+            const mainViewRankingSpaceBtn = document.getElementById('mainViewRankingSpaceBtn');
+            if (mainViewRankingSpaceBtn) {
+                mainViewRankingSpaceBtn.onclick = async () => await showMainRanking('space');
+            }
         }
         
         // Inicializar botones cuando estén disponibles
@@ -14667,11 +15286,22 @@
                 viewRankingCarsBtn.removeEventListener('click', handleCarsRankingClick);
                 viewRankingCarsBtn.addEventListener('click', handleCarsRankingClick);
             }
+            
+            const viewRankingSpaceBtn = document.getElementById('viewRankingSpaceBtn');
+            if (viewRankingSpaceBtn) {
+                viewRankingSpaceBtn.removeEventListener('click', handleSpaceRankingClick);
+                viewRankingSpaceBtn.addEventListener('click', handleSpaceRankingClick);
+            }
         }
         
         // Handler para ranking de coches
         function handleCarsRankingClick() {
             window.showRankingByLevel('cars');
+        }
+        
+        // Handler para ranking de espacio
+        function handleSpaceRankingClick() {
+            window.showRankingByLevel('space');
         }
         
         // Handler para delegación de eventos
@@ -14703,6 +15333,9 @@
             } else if (button.id === 'viewRankingCarsBtn') {
                 level = 'cars';
                 console.log('Botón Clasificación Coches clickeado');
+            } else if (button.id === 'viewRankingSpaceBtn') {
+                level = 'space';
+                console.log('Botón Clasificación Espacio clickeado');
             }
             
             if (level) {
@@ -15241,8 +15874,11 @@
             const starwarsBtn = document.getElementById('starwarsBtn');
             const pokemonBtn = document.getElementById('pokemonBtn');
             const carsBtn = document.getElementById('carsBtn');
+            const spaceBtn = document.getElementById('spaceBtn');
             const mainViewRankingCarsBtn = document.getElementById('mainViewRankingCarsBtn');
             const viewRankingCarsBtn = document.getElementById('viewRankingCarsBtn');
+            const mainViewRankingSpaceBtn = document.getElementById('mainViewRankingSpaceBtn');
+            const viewRankingSpaceBtn = document.getElementById('viewRankingSpaceBtn');
             
             // Hacer visibles para todos
             if (starwarsBtn) {
@@ -15253,23 +15889,31 @@
                 pokemonBtn.style.display = 'block';
             }
             
-            // Coches solo visible para Martin (mpenalvart1@educacion.navarra.es)
-            if (carsBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+            // Coches visible para todos los usuarios
+            if (carsBtn) {
                 carsBtn.style.display = 'block';
-            } else if (carsBtn) {
-                carsBtn.style.display = 'none';
             }
             
-            if (mainViewRankingCarsBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+            // Espacio visible para todos los usuarios
+            if (spaceBtn) {
+                spaceBtn.style.display = 'block';
+            }
+            
+            // Botones de clasificación de Coches y Espacio visibles para todos los usuarios
+            if (mainViewRankingCarsBtn) {
                 mainViewRankingCarsBtn.style.display = 'block';
-            } else if (mainViewRankingCarsBtn) {
-                mainViewRankingCarsBtn.style.display = 'none';
             }
-            
-            if (viewRankingCarsBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+
+            if (viewRankingCarsBtn) {
                 viewRankingCarsBtn.style.display = 'block';
-            } else if (viewRankingCarsBtn) {
-                viewRankingCarsBtn.style.display = 'none';
+            }
+
+            if (mainViewRankingSpaceBtn) {
+                mainViewRankingSpaceBtn.style.display = 'block';
+            }
+
+            if (viewRankingSpaceBtn) {
+                viewRankingSpaceBtn.style.display = 'block';
             }
         }
         
@@ -17015,7 +17659,8 @@
                     { key: 'god', name: '✨ Dios' },
                     { key: 'starwars', name: '⭐ Star Wars' },
                     { key: 'pokemon', name: '⚡ Pokémon' },
-                    { key: 'cars', name: '🚗 Coches' }
+                    { key: 'cars', name: '🚗 Coches' },
+                    { key: 'space', name: '🪐 Espacio' }
                 ];
                 
                 niveles.forEach(nivel => {
@@ -17192,7 +17837,8 @@
                     { key: 'god', name: '✨ Dios' },
                     { key: 'starwars', name: '⭐ Star Wars' },
                     { key: 'pokemon', name: '⚡ Pokémon' },
-                    { key: 'cars', name: '🚗 Coches' }
+                    { key: 'cars', name: '🚗 Coches' },
+                    { key: 'space', name: '🪐 Espacio' }
                 ];
                 
                 niveles.forEach(nivel => {
