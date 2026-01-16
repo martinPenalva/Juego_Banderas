@@ -2057,6 +2057,12 @@
             opacity: 0.8;
         }
 
+        /* Estilos para los botones de tipo de juego */
+        .game-type-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
         /* Estilos para la sección Juegos Mart */
         .juegos-mart-section {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
@@ -9847,22 +9853,46 @@
         </div>
 
         <div class="difficulty-selector" id="difficultySelector">
-            <h2>Selecciona el nivel de dificultad</h2>
-            <div class="difficulty-buttons">
-                <button class="difficulty-btn easy" id="easyBtn">🟢 Fácil<br><small>Países de Europa</small></button>
-                <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
-                <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
-                <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
+            <!-- Pantalla inicial: Selección de tipo de juego -->
+            <div class="game-type-selector" id="gameTypeSelector">
+                <h2 style="margin-bottom: 40px; color: #667eea; font-size: 2em;">🏳️ Elige tu juego</h2>
+                <div class="game-type-buttons" style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+                    <button class="game-type-btn" id="banderasTypeBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 40px 60px; border-radius: 20px; font-size: 1.5em; cursor: pointer; box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s ease; min-width: 250px;">
+                        🏳️ Niveles de Banderas
+                    </button>
+                    <button class="game-type-btn" id="martTypeBtn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; padding: 40px 60px; border-radius: 20px; font-size: 1.5em; cursor: pointer; box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4); transition: all 0.3s ease; min-width: 250px;">
+                        🎮 Juegos MART
+                    </button>
+                </div>
             </div>
             
-            <!-- Sección Juegos Mart -->
-            <div class="juegos-mart-section" style="margin-top: 50px; padding-top: 30px; border-top: 3px solid #667eea;">
-                <h2 style="color: #667eea; font-size: 1.8em; margin-bottom: 10px; text-align: center;">
-                    🎮 Juegos Mart
-                </h2>
-                <p style="text-align: center; color: #718096; font-size: 0.9em; margin-bottom: 25px; font-style: italic;">
-                    Otros niveles creados por Martin
-                </p>
+            <!-- Sección de niveles de banderas (oculta por defecto) -->
+            <div class="banderas-levels-section" id="banderasLevelsSection" style="display: none;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;">
+                    <h2 style="margin: 0;">Selecciona el nivel de dificultad</h2>
+                    <button id="backToMainBtn" style="background: #718096; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">← Volver</button>
+                </div>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn easy" id="easyBtn">🟢 Fácil<br><small>Países de Europa</small></button>
+                    <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
+                    <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
+                    <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
+                </div>
+            </div>
+            
+            <!-- Sección Juegos Mart (oculta por defecto) -->
+            <div class="juegos-mart-section" id="juegosMartSection" style="display: none;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;">
+                    <div>
+                        <h2 style="color: #667eea; font-size: 1.8em; margin-bottom: 10px; text-align: left;">
+                            🎮 Juegos Mart
+                        </h2>
+                        <p style="color: #718096; font-size: 0.9em; font-style: italic; margin: 0;">
+                            Otros niveles creados por Martin
+                        </p>
+                    </div>
+                    <button id="backToMainBtn2" style="background: #718096; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">← Volver</button>
+                </div>
                 <div class="difficulty-buttons">
                     <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars<br><small>Adivina el personaje</small></button>
                     <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
@@ -9870,7 +9900,8 @@
                     <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
                 </div>
             </div>
-            <div class="ranking-buttons-container">
+            <!-- Clasificaciones de Banderas (solo visible en sección de banderas) -->
+            <div class="ranking-buttons-container" id="banderasRankingContainer" style="display: none;">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
                 <div class="ranking-buttons">
                     <button class="ranking-btn ranking-btn-easy" id="viewRankingEasyBtn">🏆 Clasificación Fácil</button>
@@ -9878,16 +9909,16 @@
                     <button class="ranking-btn ranking-btn-impossible" id="viewRankingImpossibleBtn">🏆 Clasificación Imposible</button>
                     <button class="ranking-btn ranking-btn-god" id="viewRankingGodBtn">🏆 Clasificación Dios</button>
                 </div>
-                
-                <!-- Clasificaciones Juegos Mart -->
-                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e2e8f0;">
-                    <h3 style="margin: 20px 0 15px 0; color: #667eea; font-size: 1.2em; text-align: center;">🎮 Clasificaciones Juegos Mart</h3>
-                    <div class="ranking-buttons">
-                        <button class="ranking-btn ranking-btn-starwars" id="viewRankingStarWarsBtn">⭐ Clasificación Star Wars</button>
-                        <button class="ranking-btn ranking-btn-pokemon" id="viewRankingPokemonBtn">⚡ Clasificación Pokémon</button>
-                        <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn">🚗 Clasificación Coches</button>
-                        <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn">🪐 Clasificación Espacio</button>
-                    </div>
+            </div>
+            
+            <!-- Clasificaciones Juegos Mart (solo visible en sección de Juegos Mart) -->
+            <div class="ranking-buttons-container" id="martRankingContainer" style="display: none;">
+                <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
+                <div class="ranking-buttons">
+                    <button class="ranking-btn ranking-btn-starwars" id="viewRankingStarWarsBtn">⭐ Clasificación Star Wars</button>
+                    <button class="ranking-btn ranking-btn-pokemon" id="viewRankingPokemonBtn">⚡ Clasificación Pokémon</button>
+                    <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn">🚗 Clasificación Coches</button>
+                    <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn">🪐 Clasificación Espacio</button>
                 </div>
             </div>
             <div class="ranking-buttons-container">
@@ -10926,7 +10957,36 @@
                 'Kylo Ren': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2025/05/kylo-ren-in-the-force-awakens.jpg',
                 'Corde': 'https://2.bp.blogspot.com/-KNApT7ZFmuc/T3WPFX04y_I/AAAAAAAAFi8/D_UiLW06eXQ/s1600/Corde.jpg',
                 'Wolffe': 'https://vignette.wikia.nocookie.net/theclonewiki/images/9/99/Wolffe.png/revision/latest?cb=20111007003901',
-                'Wolf': 'https://vignette.wikia.nocookie.net/theclonewiki/images/9/99/Wolffe.png/revision/latest?cb=20111007003901' // Variación del nombre
+                'Wolf': 'https://vignette.wikia.nocookie.net/theclonewiki/images/9/99/Wolffe.png/revision/latest?cb=20111007003901', // Variación del nombre
+                'Fourth Sister': 'https://tse2.mm.bing.net/th/id/OIP.eibISl4bSyxjTkh0K7Iw4AHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Cuarta Hermana': 'https://tse2.mm.bing.net/th/id/OIP.eibISl4bSyxjTkh0K7Iw4AHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Second Sister': 'https://fbi.cults3d.com/uploaders/20992866/illustration-file/b9b6de7e-c6c5-41c0-a3b3-ee15ef3f9f0c/325390-Second-Sister-Star-Wars-Jedi-Fallen-Order-Inquisitorius-4K-iphone-wallpaper.jpg',
+                'Segunda Hermana': 'https://fbi.cults3d.com/uploaders/20992866/illustration-file/b9b6de7e-c6c5-41c0-a3b3-ee15ef3f9f0c/325390-Second-Sister-Star-Wars-Jedi-Fallen-Order-Inquisitorius-4K-iphone-wallpaper.jpg',
+                'Fifth Brother': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2022/05/The-Fifth-Brother-in-Obi-Wan-Kenobi-show.jpg',
+                'Quinto Hermano': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2022/05/The-Fifth-Brother-in-Obi-Wan-Kenobi-show.jpg',
+                'Asajj Ventress': 'https://i.pinimg.com/originals/cb/51/e3/cb51e38a1199d67b9f747aa79a41fa6a.jpg',
+                'Savage Opress': 'https://static1.cbrimages.com/wordpress/wp-content/uploads/2018/05/5239810-0918671357-48711.jpg',
+                'Ahsoka Tano': 'https://tse4.mm.bing.net/th/id/OIP.UK2UYxMcqfOiFtV2qBCqYwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Pao': 'https://vignette.wikia.nocookie.net/es.starwars/images/9/93/Pao-SW_Authentics.png/revision/latest?cb=20161224165445',
+                'The Mandalorian': 'https://tse4.mm.bing.net/th/id/OIP.lViQ7gZxk5NHC8LV_2SqYQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'El Mandaloriano': 'https://tse4.mm.bing.net/th/id/OIP.lViQ7gZxk5NHC8LV_2SqYQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Mandalorian': 'https://tse4.mm.bing.net/th/id/OIP.lViQ7gZxk5NHC8LV_2SqYQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Captain Thorne': 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2a225713-c66c-4bc4-a661-cb42f30fe0f7/dcw7bgz-7fc81698-c9e1-4b6a-9e1e-de5634a44fbd.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzJhMjI1NzEzLWM2NmMtNGJjNC1hNjYxLWNiNDJmMzBmZTBmN1wvZGN3N2Jnei03ZmM4MTY5OC1jOWUxLTRiNmEtOWUxZS1kZTU2MzRhNDRmYmQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.ZlFqiQ2pBMpTBRVIryE8yfuhQedxextTk45f9d6dG8w',
+                'Capitán Thorne': 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2a225713-c66c-4bc4-a661-cb42f30fe0f7/dcw7bgz-7fc81698-c9e1-4b6a-9e1e-de5634a44fbd.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzJhMjI1NzEzLWM2NmMtNGJjNC1hNjYxLWNiNDJmMzBmZTBmN1wvZGN3N2Jnei03ZmM4MTY5OC1jOWUxLTRiNmEtOWUxZS1kZTU2MzRhNDRmYmQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.ZlFqiQ2pBMpTBRVIryE8yfuhQedxextTk45f9d6dG8w',
+                'Captain Fox': 'https://th.bing.com/th/id/R.6225d4040b4cef781e378d843c31f083?rik=CX4rBGWPTI3cww&riu=http%3a%2f%2fimg2.wikia.nocookie.net%2f__cb20140325013249%2fstarwarsanimated%2fimages%2fc%2fc1%2fCommander_Fox.PNG&ehk=MrkOU9OoCCRkzypH%2f6tkHkHxbDmYikNH2YLlw4EVPks%3d&risl=&pid=ImgRaw&r=0',
+                'Capitán Fox': 'https://th.bing.com/th/id/R.6225d4040b4cef781e378d843c31f083?rik=CX4rBGWPTI3cww&riu=http%3a%2f%2fimg2.wikia.nocookie.net%2f__cb20140325013249%2fstarwarsanimated%2fimages%2fc%2fc1%2fCommander_Fox.PNG&ehk=MrkOU9OoCCRkzypH%2f6tkHkHxbDmYikNH2YLlw4EVPks%3d&risl=&pid=ImgRaw&r=0',
+                'Tusken Raider': 'https://th.bing.com/th/id/R.f7fff431a45aaa145cfcb0aed695114f?rik=5QN19lmh22du5A&riu=http%3a%2f%2fimages1.wikia.nocookie.net%2f__cb20100107022328%2fstarwars%2fimages%2f4%2f4c%2fTusken_SWGTCG.jpg&ehk=JLfGQDrb%2frpBSeyrW1VAuKwae97llAO7uaEd0L%2fZNkc%3d&risl=&pid=ImgRaw&r=0',
+                'Atacante de las arenas': 'https://th.bing.com/th/id/R.f7fff431a45aaa145cfcb0aed695114f?rik=5QN19lmh22du5A&riu=http%3a%2f%2fimages1.wikia.nocookie.net%2f__cb20100107022328%2fstarwars%2fimages%2f4%2f4c%2fTusken_SWGTCG.jpg&ehk=JLfGQDrb%2frpBSeyrW1VAuKwae97llAO7uaEd0L%2fZNkc%3d&risl=&pid=ImgRaw&r=0',
+                'Jyn Erso': 'https://i.pinimg.com/originals/d4/7b/e2/d47be2924a8706fd72a2bd2b0af087ca.jpg',
+                'jynx erso': 'https://i.pinimg.com/originals/d4/7b/e2/d47be2924a8706fd72a2bd2b0af087ca.jpg',
+                'Cassian Andor': 'https://th.bing.com/th/id/R.682b6c911996e1aab948ee411cf8ef53?rik=r7o9YuyYUtEUPQ&pid=ImgRaw&r=0',
+                'Admiral Ackbar': 'https://tse4.mm.bing.net/th/id/OIP.zU7hZc0IL6WIomWD7mw-sgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Almirante Ackbar': 'https://tse4.mm.bing.net/th/id/OIP.zU7hZc0IL6WIomWD7mw-sgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Temple Guard': 'https://tse2.mm.bing.net/th/id/OIP.g0qPtg-xDLWgkSJcMhoW3QHaMW?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Guardia del Templo': 'https://tse2.mm.bing.net/th/id/OIP.g0qPtg-xDLWgkSJcMhoW3QHaMW?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Embo': 'https://images.saymedia-content.com/.image/t_share/MTc1MTE0MTUyOTIxNTM5Njc5/star-wars-best-bounty-hunters.png',
+                'Cad Bane': 'https://tse3.mm.bing.net/th/id/OIP.qAjc_6gzJNQF2P5agAj9JAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Gregor': 'https://tse1.mm.bing.net/th/id/OIP.t5HJ1Lm6i7ejpQhhvVIKGgHaKG?rs=1&pid=ImgDetMain&o=7&rm=3'
             };
         }
         
@@ -11616,6 +11676,9 @@
             lives = 3;
             updateHearts();
             document.getElementById('difficultySelector').style.display = 'none';
+            document.getElementById('gameTypeSelector').style.display = 'none';
+            document.getElementById('banderasLevelsSection').style.display = 'none';
+            document.getElementById('juegosMartSection').style.display = 'none';
             document.body.classList.remove('difficulty-selector-active');
             document.getElementById('loading').style.display = 'block';
             // Mostrar botón de ranking cuando se selecciona dificultad
@@ -13660,8 +13723,13 @@
                 difficultyRankingContainer.style.display = 'none';
             }
             
-            // Mostrar selector de dificultad
+            // Mostrar selector de tipo de juego (pantalla inicial)
             document.getElementById('difficultySelector').style.display = 'block';
+            document.getElementById('gameTypeSelector').style.display = 'block';
+            document.getElementById('banderasLevelsSection').style.display = 'none';
+            document.getElementById('juegosMartSection').style.display = 'none';
+            document.getElementById('banderasRankingContainer').style.display = 'none';
+            document.getElementById('martRankingContainer').style.display = 'none';
             document.body.classList.add('difficulty-selector-active');
             
             // Actualizar visibilidad del botón de animales según el usuario
@@ -14261,6 +14329,41 @@
         }
 
         // Event listeners para selección de dificultad
+        // Event listeners para selección de tipo de juego
+        document.getElementById('banderasTypeBtn').addEventListener('click', () => {
+            document.getElementById('gameTypeSelector').style.display = 'none';
+            document.getElementById('banderasLevelsSection').style.display = 'block';
+            document.getElementById('juegosMartSection').style.display = 'none';
+            document.getElementById('banderasRankingContainer').style.display = 'block';
+            document.getElementById('martRankingContainer').style.display = 'none';
+        });
+        
+        document.getElementById('martTypeBtn').addEventListener('click', () => {
+            document.getElementById('gameTypeSelector').style.display = 'none';
+            document.getElementById('banderasLevelsSection').style.display = 'none';
+            document.getElementById('juegosMartSection').style.display = 'block';
+            document.getElementById('banderasRankingContainer').style.display = 'none';
+            document.getElementById('martRankingContainer').style.display = 'block';
+        });
+        
+        // Event listeners para botones de volver
+        document.getElementById('backToMainBtn').addEventListener('click', () => {
+            document.getElementById('gameTypeSelector').style.display = 'block';
+            document.getElementById('banderasLevelsSection').style.display = 'none';
+            document.getElementById('juegosMartSection').style.display = 'none';
+            document.getElementById('banderasRankingContainer').style.display = 'none';
+            document.getElementById('martRankingContainer').style.display = 'none';
+        });
+        
+        document.getElementById('backToMainBtn2').addEventListener('click', () => {
+            document.getElementById('gameTypeSelector').style.display = 'block';
+            document.getElementById('banderasLevelsSection').style.display = 'none';
+            document.getElementById('juegosMartSection').style.display = 'none';
+            document.getElementById('banderasRankingContainer').style.display = 'none';
+            document.getElementById('martRankingContainer').style.display = 'none';
+        });
+        
+        // Event listeners para los niveles
         document.getElementById('easyBtn').addEventListener('click', () => selectDifficulty('easy'));
         document.getElementById('hardBtn').addEventListener('click', () => selectDifficulty('hard'));
         document.getElementById('impossibleBtn').addEventListener('click', () => selectDifficulty('impossible'));
