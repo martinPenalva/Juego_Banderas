@@ -9488,10 +9488,6 @@
                             <div class="active-chat-input-wrapper">
                                 <div class="active-chat-actions">
                                     <button class="active-chat-action-btn" id="emojiBtn" title="Emojis">😀</button>
-                                    <label for="chatImageInput" class="active-chat-action-btn" title="Enviar foto" style="cursor: pointer;">
-                                        📷
-                                    </label>
-                                    <input type="file" id="chatImageInput" accept="image/*" style="display: none;">
                                 </div>
                                 <textarea id="activeChatInput" class="active-chat-input" placeholder="Escribe un mensaje..." maxlength="500" rows="1"></textarea>
                                 <button class="active-chat-send-btn" id="activeChatSendBtn">Enviar</button>
@@ -14917,48 +14913,6 @@
             });
         }
 
-        // Event listener para el input de imagen del chat
-        const chatImageInput = document.getElementById('chatImageInput');
-        if (chatImageInput) {
-            chatImageInput.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    // Verificar que no esté usando file:// protocol
-                    if (window.location.protocol === 'file:') {
-                        alert('⚠️ Error: Estás abriendo el archivo directamente desde el sistema de archivos.\n\n' +
-                              'Para que las imágenes funcionen correctamente, necesitas usar un servidor web local.\n\n' +
-                              'Opciones:\n' +
-                              '1. Usa Python: Abre una terminal en esta carpeta y ejecuta "python -m http.server 8000", luego abre http://localhost:8000\n' +
-                              '2. Usa Node.js: Ejecuta "npx serve" en esta carpeta\n' +
-                              '3. Despliega la app en GitHub Pages o Firebase Hosting');
-                        e.target.value = '';
-                        return;
-                    }
-                    
-                    // Validar que sea una imagen
-                    if (!file.type.startsWith('image/')) {
-                        alert('Por favor selecciona una imagen válida');
-                        e.target.value = '';
-                        return;
-                    }
-                    
-                    // Validar tamaño (máximo 5MB)
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert('La imagen es demasiado grande. Máximo 5MB');
-                        e.target.value = '';
-                        return;
-                    }
-                    
-                    // Enviar la imagen
-                    if (window.sendChatMessageWithImage) {
-                        await window.sendChatMessageWithImage(file);
-                    }
-                    
-                    // Limpiar input
-                    e.target.value = '';
-                }
-            });
-        }
         
         if (activeChatClose) {
             activeChatClose.addEventListener('click', (e) => {
@@ -19309,135 +19263,83 @@
                         
                         // Cargar nombres de usuarios para cada mensaje
                         for (const message of messages) {
-                        const remitenteDoc = await getDoc(doc(db, "usuarios", message.remitenteId));
-                        const remitenteNombre = remitenteDoc.exists() ? remitenteDoc.data().nombre : 'Usuario';
-                        const isSent = message.remitenteId === window.currentUser.uid;
-                        
-                        const messageEl = document.createElement('div');
-                        messageEl.className = `active-chat-message ${isSent ? 'sent' : 'received'}`;
-                        
-                        if (!isSent) {
-                            const picture = document.createElement('div');
-                            picture.className = 'active-chat-message-picture';
-                            if (remitenteDoc.exists() && remitenteDoc.data().fotoPerfil) {
-                                picture.innerHTML = `<img src="${remitenteDoc.data().fotoPerfil}" alt="${remitenteNombre}">`;
-                            } else {
-                                picture.innerHTML = '<div style="font-size: 1.2em;">👤</div>';
-                            }
-                            messageEl.appendChild(picture);
-                        }
-                        
-                        const content = document.createElement('div');
-                        content.className = 'active-chat-message-content';
-
-                        if (!isSent) {
-                            const senderName = document.createElement('div');
-                            senderName.style.fontSize = '0.8em';
-                            senderName.style.color = '#666';
-                            senderName.style.marginBottom = '4px';
-                            senderName.textContent = remitenteNombre;
-                            content.appendChild(senderName);
-                        }
-
-                        // Mostrar imagen si existe
-                        if (messageData.imageUrl) {
-                            const imageContainer = document.createElement('div');
-                            imageContainer.style.marginBottom = messageData.texto ? '8px' : '0';
-                            
-                            const img = document.createElement('img');
-                            img.src = messageData.imageUrl;
-                            img.className = 'active-chat-message-image';
-                            img.alt = 'Imagen del mensaje';
-                            img.style.cursor = 'pointer';
-                            img.onerror = function() {
-                                this.style.display = 'none';
-                                const errorDiv = document.createElement('div');
-                                errorDiv.textContent = 'Error al cargar la imagen';
-                                errorDiv.style.color = '#e53e3e';
-                                errorDiv.style.fontSize = '0.9em';
-                                imageContainer.appendChild(errorDiv);
-                            };
-                            
-                            // Hacer clic para ver imagen en grande
-                            img.onclick = function() {
-                                const modal = document.createElement('div');
-                                modal.style.position = 'fixed';
-                                modal.style.top = '0';
-                                modal.style.left = '0';
-                                modal.style.width = '100%';
-                                modal.style.height = '100%';
-                                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-                                modal.style.display = 'flex';
-                                modal.style.alignItems = 'center';
-                                modal.style.justifyContent = 'center';
-                                modal.style.zIndex = '10000';
-                                modal.style.cursor = 'pointer';
+                                const remitenteDoc = await getDoc(doc(db, "usuarios", message.remitenteId));
+                                const remitenteNombre = remitenteDoc.exists() ? remitenteDoc.data().nombre : 'Usuario';
+                                const isSent = message.remitenteId === window.currentUser.uid;
                                 
-                                const fullImg = document.createElement('img');
-                                fullImg.src = messageData.imageUrl;
-                                fullImg.style.maxWidth = '90%';
-                                fullImg.style.maxHeight = '90%';
-                                fullImg.style.objectFit = 'contain';
+                                const messageEl = document.createElement('div');
+                                messageEl.className = `active-chat-message ${isSent ? 'sent' : 'received'}`;
                                 
-                                modal.appendChild(fullImg);
-                                document.body.appendChild(modal);
-                                
-                                modal.onclick = function() {
-                                    document.body.removeChild(modal);
-                                };
-                            };
-                            
-                            imageContainer.appendChild(img);
-                            content.appendChild(imageContainer);
-                        }
-
-                        const text = document.createElement('div');
-                        text.textContent = message.texto || '';
-                        content.appendChild(text);
-                        
-                        const time = document.createElement('div');
-                        time.className = 'active-chat-message-time';
-                        if (message.timestamp) {
-                            const fecha = new Date(message.timestamp);
-                            time.textContent = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-                        }
-                        
-                        // Agregar indicador de leído para mensajes enviados
-                        if (isSent) {
-                            const leidoPor = message.leidoPor || [];
-                            const readIndicator = document.createElement('span');
-                            readIndicator.className = 'message-read-indicator';
-                            readIndicator.setAttribute('data-message-id', message.id || '');
-                            if (leidoPor.length > 1) {
-                                readIndicator.textContent = '✓✓';
-                                readIndicator.classList.add('read');
-                                readIndicator.title = `Leído por ${leidoPor.length} personas`;
-                            } else {
-                                readIndicator.textContent = '✓';
-                                readIndicator.title = 'Enviado';
-                            }
-                            time.appendChild(readIndicator);
-                        }
-                        
-                        content.appendChild(time);
-                        
-                            // Agregar doble click para marcar como leído (solo para mensajes recibidos)
-                            if (!isSent) {
-                                messageEl.addEventListener('dblclick', async () => {
-                                    const leidoPor = message.leidoPor || [];
-                                    if (!leidoPor.includes(window.currentUser.uid)) {
-                                        const messageRef = doc(db, "mensajesGrupo", message.id);
-                                        leidoPor.push(window.currentUser.uid);
-                                        await updateDoc(messageRef, { leidoPor: leidoPor });
+                                if (!isSent) {
+                                    const picture = document.createElement('div');
+                                    picture.className = 'active-chat-message-picture';
+                                    if (remitenteDoc.exists() && remitenteDoc.data().fotoPerfil) {
+                                        picture.innerHTML = `<img src="${remitenteDoc.data().fotoPerfil}" alt="${remitenteNombre}">`;
+                                    } else {
+                                        picture.innerHTML = '<div style="font-size: 1.2em;">👤</div>';
                                     }
-                                });
-                                messageEl.style.cursor = 'pointer';
-                                messageEl.title = 'Doble click para marcar como leído';
-                            }
-                            
-                            messageEl.setAttribute('data-message-id', message.id || '');
-                            messageEl.appendChild(content);
-                            activeMessagesEl.appendChild(messageEl);
+                                    messageEl.appendChild(picture);
+                                }
+                                
+                                const content = document.createElement('div');
+                                content.className = 'active-chat-message-content';
+
+                                if (!isSent) {
+                                    const senderName = document.createElement('div');
+                                    senderName.style.fontSize = '0.8em';
+                                    senderName.style.color = '#666';
+                                    senderName.style.marginBottom = '4px';
+                                    senderName.textContent = remitenteNombre;
+                                    content.appendChild(senderName);
+                                }
+
+                                const text = document.createElement('div');
+                                text.textContent = message.texto || '';
+                                content.appendChild(text);
+                                
+                                const time = document.createElement('div');
+                                time.className = 'active-chat-message-time';
+                                if (message.timestamp) {
+                                    const fecha = new Date(message.timestamp);
+                                    time.textContent = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                                }
+                                
+                                // Agregar indicador de leído para mensajes enviados
+                                if (isSent) {
+                                    const leidoPor = message.leidoPor || [];
+                                    const readIndicator = document.createElement('span');
+                                    readIndicator.className = 'message-read-indicator';
+                                    readIndicator.setAttribute('data-message-id', message.id || '');
+                                    if (leidoPor.length > 1) {
+                                        readIndicator.textContent = '✓✓';
+                                        readIndicator.classList.add('read');
+                                        readIndicator.title = `Leído por ${leidoPor.length} personas`;
+                                    } else {
+                                        readIndicator.textContent = '✓';
+                                        readIndicator.title = 'Enviado';
+                                    }
+                                    time.appendChild(readIndicator);
+                                }
+                                
+                                content.appendChild(time);
+                                
+                                // Agregar doble click para marcar como leído (solo para mensajes recibidos)
+                                if (!isSent) {
+                                    messageEl.addEventListener('dblclick', async () => {
+                                        const leidoPor = message.leidoPor || [];
+                                        if (!leidoPor.includes(window.currentUser.uid)) {
+                                            const messageRef = doc(db, "mensajesGrupo", message.id);
+                                            leidoPor.push(window.currentUser.uid);
+                                            await updateDoc(messageRef, { leidoPor: leidoPor });
+                                        }
+                                    });
+                                    messageEl.style.cursor = 'pointer';
+                                    messageEl.title = 'Doble click para marcar como leído';
+                                }
+                                
+                                messageEl.setAttribute('data-message-id', message.id || '');
+                                messageEl.appendChild(content);
+                                activeMessagesEl.appendChild(messageEl);
                         }
                         
                         // Scroll al final
@@ -19807,58 +19709,6 @@
             const content = document.createElement('div');
             content.className = 'active-chat-message-content';
             
-            // Mostrar imagen si existe
-            if (messageData.imageUrl) {
-                const imageContainer = document.createElement('div');
-                imageContainer.style.marginBottom = messageData.text ? '8px' : '0';
-                
-                const img = document.createElement('img');
-                img.src = messageData.imageUrl;
-                img.className = 'active-chat-message-image';
-                img.alt = 'Imagen del mensaje';
-                img.style.cursor = 'pointer';
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    const errorDiv = document.createElement('div');
-                    errorDiv.textContent = 'Error al cargar la imagen';
-                    errorDiv.style.color = '#e53e3e';
-                    errorDiv.style.fontSize = '0.9em';
-                    imageContainer.appendChild(errorDiv);
-                };
-                
-                // Hacer clic para ver imagen en grande
-                img.onclick = function() {
-                    const modal = document.createElement('div');
-                    modal.style.position = 'fixed';
-                    modal.style.top = '0';
-                    modal.style.left = '0';
-                    modal.style.width = '100%';
-                    modal.style.height = '100%';
-                    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-                    modal.style.display = 'flex';
-                    modal.style.alignItems = 'center';
-                    modal.style.justifyContent = 'center';
-                    modal.style.zIndex = '10000';
-                    modal.style.cursor = 'pointer';
-                    
-                    const fullImg = document.createElement('img');
-                    fullImg.src = messageData.imageUrl;
-                    fullImg.style.maxWidth = '90%';
-                    fullImg.style.maxHeight = '90%';
-                    fullImg.style.objectFit = 'contain';
-                    
-                    modal.appendChild(fullImg);
-                    document.body.appendChild(modal);
-                    
-                    modal.onclick = function() {
-                        document.body.removeChild(modal);
-                    };
-                };
-                
-                imageContainer.appendChild(img);
-                content.appendChild(imageContainer);
-            }
-            
             // Mostrar texto
             if (messageData.text) {
                 const text = document.createElement('div');
@@ -19895,103 +19745,8 @@
         }
 
         // Función para subir imagen a Firebase Storage
-        window.uploadChatImage = async function(file) {
-            try {
-                // Verificar que no esté usando file:// protocol
-                if (window.location.protocol === 'file:') {
-                    throw new Error('FILE_PROTOCOL_ERROR');
-                }
-
-                const timestamp = Date.now();
-                // Limpiar el nombre del archivo para evitar caracteres especiales
-                const cleanFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-                const fileName = `chat_images/${window.currentUser.uid}/${timestamp}_${cleanFileName}`;
-                const storageRef = ref(storage, fileName);
-
-                // Mostrar progreso
-                const sendBtn = document.getElementById('activeChatSendBtn');
-                if (sendBtn) {
-                    sendBtn.textContent = 'Subiendo...';
-                }
-
-                // Subir archivo
-                await uploadBytes(storageRef, file);
-
-                // Obtener URL de descarga
-                const downloadURL = await getDownloadURL(storageRef);
-                
-                if (sendBtn) {
-                    sendBtn.textContent = 'Enviando...';
-                }
-                
-                return downloadURL;
-            } catch (error) {
-                console.error('Error al subir imagen:', error);
-                
-                // Manejar errores específicos
-                if (error.message === 'FILE_PROTOCOL_ERROR') {
-                    throw new Error('Por favor, abre la aplicación desde un servidor web (no desde file://). Usa un servidor local como "python -m http.server" o despliega la app en GitHub Pages.');
-                } else if (error.code === 'storage/unauthorized') {
-                    throw new Error('No tienes permisos para subir imágenes. Verifica las reglas de Firebase Storage.');
-                } else if (error.code === 'storage/canceled') {
-                    throw new Error('La subida fue cancelada.');
-                } else if (error.code === 'storage/unknown') {
-                    throw new Error('Error desconocido al subir la imagen. Verifica tu conexión a internet.');
-                }
-                
-                throw error;
-            }
-        };
-
-        // Enviar mensaje con imagen
-        window.sendChatMessageWithImage = async function(imageFile) {
-            if (!window.currentUser) {
-                alert('Debes iniciar sesión para enviar imágenes');
-                return;
-            }
-            
-            if (!currentChatFriendId && !currentChatGroupId) {
-                alert('No hay una conversación activa');
-                return;
-            }
-
-            const sendBtn = document.getElementById('activeChatSendBtn');
-            if (sendBtn) {
-                sendBtn.disabled = true;
-                sendBtn.textContent = 'Subiendo...';
-            }
-
-            try {
-                // Subir imagen
-                const imageUrl = await window.uploadChatImage(imageFile);
-
-                // Enviar mensaje con la URL de la imagen
-                await window.sendChatMessage(null, imageUrl);
-            } catch (error) {
-                console.error('Error al enviar imagen:', error);
-                
-                // Mostrar mensaje de error más descriptivo
-                let errorMessage = 'Error al enviar la imagen. Por favor intenta de nuevo.';
-                
-                if (error.message && error.message.includes('servidor web')) {
-                    errorMessage = error.message;
-                } else if (error.message && error.message.includes('permisos')) {
-                    errorMessage = error.message;
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-                
-                alert(errorMessage);
-                
-                if (sendBtn) {
-                    sendBtn.disabled = false;
-                    sendBtn.textContent = 'Enviar';
-                }
-            }
-        };
-
         // Enviar mensaje
-        window.sendChatMessage = async function(textOverride = null, imageUrl = null) {
+        window.sendChatMessage = async function(textOverride = null) {
             if (!window.currentUser) return;
             if (!currentChatFriendId && !currentChatGroupId) return;
             
@@ -20000,8 +19755,8 @@
             
             const text = textOverride !== null ? textOverride : chatInput.value.trim();
             
-            // Si no hay texto ni imagen, no enviar
-            if (!text && !imageUrl) return;
+            // Si no hay texto, no enviar
+            if (!text) return;
             
             // Deshabilitar botón de enviar mientras se procesa
             const sendBtn = document.getElementById('activeChatSendBtn');
@@ -20012,6 +19767,27 @@
             
             try {
                 if (currentChatGroupId) {
+                    // Verificar que el usuario sea miembro del grupo antes de enviar
+                    const grupoDoc = await getDoc(doc(db, "gruposChat", currentChatGroupId));
+                    if (!grupoDoc.exists()) {
+                        alert('El grupo no existe');
+                        if (sendBtn) {
+                            sendBtn.disabled = false;
+                            sendBtn.textContent = 'Enviar';
+                        }
+                        return;
+                    }
+                    
+                    const miembros = grupoDoc.data().miembros || [];
+                    if (!miembros.includes(window.currentUser.uid)) {
+                        alert('No eres miembro de este grupo');
+                        if (sendBtn) {
+                            sendBtn.disabled = false;
+                            sendBtn.textContent = 'Enviar';
+                        }
+                        return;
+                    }
+                    
                     // Enviar mensaje a grupo
                     const messageData = {
                         grupoId: currentChatGroupId,
@@ -20024,38 +19800,30 @@
                         messageData.texto = text;
                     }
                     
-                    if (imageUrl) {
-                        messageData.imageUrl = imageUrl;
-                    }
-                    
                     await addDoc(collection(db, "mensajesGrupo"), messageData);
                     
                     // Enviar notificaciones push a todos los miembros excepto al remitente
                     try {
-                        const grupoDoc = await getDoc(doc(db, "gruposChat", currentChatGroupId));
-                        if (grupoDoc.exists()) {
-                            const miembros = grupoDoc.data().miembros || [];
-                            const senderName = window.currentUserName || 'Alguien';
-                            const grupoNombre = grupoDoc.data().nombre || 'Grupo';
-                            let messagePreview = text || (imageUrl ? '📷 Imagen' : 'Mensaje');
-                            if (messagePreview.length > 50) {
-                                messagePreview = messagePreview.substring(0, 50) + '...';
-                            }
-                            
-                            for (const miembroId of miembros) {
-                                if (miembroId !== window.currentUser.uid && window.sendPushNotification) {
-                                    await window.sendPushNotification(
-                                        miembroId,
-                                        `👥 ${grupoNombre}: ${senderName}`,
-                                        messagePreview,
-                                        {
-                                            type: 'group',
-                                            grupoId: currentChatGroupId,
-                                            remitenteId: window.currentUser.uid,
-                                            tag: `group-${currentChatGroupId}`
-                                        }
-                                    );
-                                }
+                        const senderName = window.currentUserName || 'Alguien';
+                        const grupoNombre = grupoDoc.data().nombre || 'Grupo';
+                        let messagePreview = text || 'Mensaje';
+                        if (messagePreview.length > 50) {
+                            messagePreview = messagePreview.substring(0, 50) + '...';
+                        }
+                        
+                        for (const miembroId of miembros) {
+                            if (miembroId !== window.currentUser.uid && window.sendPushNotification) {
+                                await window.sendPushNotification(
+                                    miembroId,
+                                    `👥 ${grupoNombre}: ${senderName}`,
+                                    messagePreview,
+                                    {
+                                        type: 'group',
+                                        grupoId: currentChatGroupId,
+                                        remitenteId: window.currentUser.uid,
+                                        tag: `group-${currentChatGroupId}`
+                                    }
+                                );
                             }
                         }
                     } catch (error) {
@@ -20079,16 +19847,12 @@
                         messageData.text = text;
                     }
                     
-                    if (imageUrl) {
-                        messageData.imageUrl = imageUrl;
-                    }
-                    
                     await addDoc(collection(db, "mensajes"), messageData);
                     
                     // Enviar notificación push al destinatario (si tiene token FCM)
                     try {
                         const senderName = window.currentUserName || 'Alguien';
-                        let messagePreview = text || (imageUrl ? '📷 Imagen' : 'Mensaje');
+                        let messagePreview = text || 'Mensaje';
                         if (messagePreview.length > 50) {
                             messagePreview = messagePreview.substring(0, 50) + '...';
                         }
@@ -20149,7 +19913,15 @@
                     sendBtn.disabled = false;
                     sendBtn.textContent = 'Enviar';
                 }
-                alert('Error al enviar el mensaje');
+                
+                // Mostrar mensaje de error más específico
+                let errorMessage = 'Error al enviar el mensaje';
+                if (error.code === 'permission-denied') {
+                    errorMessage = 'No tienes permisos para enviar mensajes a este grupo';
+                } else if (error.message) {
+                    errorMessage = `Error: ${error.message}`;
+                }
+                alert(errorMessage);
             }
         };
 
