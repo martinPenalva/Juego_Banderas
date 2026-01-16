@@ -10787,6 +10787,18 @@
             ];
         }
 
+        // Función auxiliar para validar si un personaje tiene imagen válida
+        function hasValidImage(character) {
+            if (!character || !character.image) return false;
+            const imageUrl = String(character.image).trim();
+            if (imageUrl === '' || imageUrl === 'null' || imageUrl === 'undefined') return false;
+            // Verificar que sea una URL válida (debe empezar con http:// o https://)
+            const isValidUrl = imageUrl.startsWith('http://') || imageUrl.startsWith('https://');
+            // Verificar que tenga una longitud razonable (no sea solo un carácter o muy corta)
+            const hasMinLength = imageUrl.length > 10;
+            return isValidUrl && hasMinLength;
+        }
+
         // Función para cargar personajes de Star Wars desde la API
         async function loadStarWarsCharacters() {
             starWarsCharacters = [];
@@ -10798,9 +10810,10 @@
                 console.warn('💡 Para ver las imágenes, usa un servidor web local:');
                 console.warn('   - Python: python -m http.server 8000');
                 console.warn('   - Node.js: npx serve');
-                // Usar directamente la lista de respaldo
-                starWarsCharacters = getFallbackStarWarsCharacters();
-                console.log(`Modo Star Wars (sin API): ${starWarsCharacters.length} personajes cargados desde lista de respaldo`);
+                // Usar directamente la lista de respaldo (solo los que tienen imagen válida)
+                const fallbackCharacters = getFallbackStarWarsCharacters();
+                starWarsCharacters = fallbackCharacters.filter(char => hasValidImage(char));
+                console.log(`Modo Star Wars (sin API): ${starWarsCharacters.length} personajes con imagen válida cargados desde lista de respaldo`);
                 return;
             }
             
@@ -10813,9 +10826,10 @@
                 
                 const allCharacters = await response.json();
                 
-                // Filtrar personajes que tengan nombre e imagen válida (no null, undefined, o vacía)
+                // Filtrar personajes que tengan nombre e imagen válida
+                // La imagen debe ser una URL válida (http:// o https://) y no estar vacía
                 starWarsCharacters = allCharacters
-                    .filter(char => char.name && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined)
+                    .filter(char => char.name && hasValidImage(char))
                     .map(char => ({
                         id: char.id,
                         name: char.name,
@@ -10832,25 +10846,19 @@
                     console.log('No se cargaron suficientes personajes de la API, usando lista de respaldo');
                     const fallbackCharacters = getFallbackStarWarsCharacters();
                     // Filtrar solo personajes de respaldo con imagen válida
-                    const validFallbackCharacters = fallbackCharacters.filter(char => 
-                        char && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined
-                    );
+                    const validFallbackCharacters = fallbackCharacters.filter(char => hasValidImage(char));
                     starWarsCharacters = [...starWarsCharacters, ...validFallbackCharacters];
                 }
                 
                 // Filtrar nuevamente para asegurarse de que todos tengan imagen válida
-                starWarsCharacters = starWarsCharacters.filter(char => 
-                    char && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined
-                );
+                starWarsCharacters = starWarsCharacters.filter(char => hasValidImage(char));
                 
                 console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes listos (todos con imágenes válidas)`);
             } catch (error) {
                 console.error('Error al cargar personajes de Star Wars:', error);
                 // Usar lista de respaldo (solo los que tienen imagen válida)
                 const fallbackCharacters = getFallbackStarWarsCharacters();
-                starWarsCharacters = fallbackCharacters.filter(char => 
-                    char && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined
-                );
+                starWarsCharacters = fallbackCharacters.filter(char => hasValidImage(char));
                 console.log(`Modo Star Wars (error API): ${starWarsCharacters.length} personajes con imagen válida cargados desde lista de respaldo`);
             }
         }
@@ -11610,10 +11618,8 @@
                 return;
             } else if (difficulty === 'starwars') {
                 // Modo Star Wars
-                // Filtrar solo personajes con imagen válida
-                const charactersWithImage = starWarsCharacters.filter(char => 
-                    char && char.image && char.image.trim() !== '' && char.image !== null && char.image !== undefined
-                );
+                // Filtrar solo personajes con imagen válida (URL válida que empiece con http:// o https://)
+                const charactersWithImage = starWarsCharacters.filter(char => hasValidImage(char));
                 
                 if (charactersWithImage.length === 0) {
                     const messageEl = document.getElementById('message');
