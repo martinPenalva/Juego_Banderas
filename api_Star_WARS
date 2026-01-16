@@ -2280,5 +2280,25 @@
     "image": "https://static1.srcdn.com/wordpress/wp-content/uploads/2025/05/kylo-ren-in-the-force-awakens.jpg",
     "affiliations": ["First Order", "Knights of Ren"],
     "formerAffiliations": ["Jedi Order", "Resistance"]
+  },
+  {
+    "id": 104,
+    "name": "Corde",
+    "gender": "male",
+    "species": "clone",
+    "homeworld": "kamino",
+    "image": "https://2.bp.blogspot.com/-KNApT7ZFmuc/T3WPFX04y_I/AAAAAAAAFi8/D_UiLW06eXQ/s1600/Corde.jpg",
+    "affiliations": ["Galactic Republic"],
+    "formerAffiliations": []
+  },
+  {
+    "id": 105,
+    "name": "Wolffe",
+    "gender": "male",
+    "species": "clone",
+    "homeworld": "kamino",
+    "image": "https://vignette.wikia.nocookie.net/theclonewiki/images/9/99/Wolffe.png/revision/latest?cb=20111007003901",
+    "affiliations": ["104th Battalion", "Galactic Republic"],
+    "formerAffiliations": []
   }
 ]

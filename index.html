@@ -2057,6 +2057,19 @@
             opacity: 0.8;
         }
 
+        /* Estilos para la sección Juegos Mart */
+        .juegos-mart-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin: 30px 0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .juegos-mart-section h2 {
+            text-shadow: 2px 2px 4px rgba(102, 126, 234, 0.3);
+        }
+
         /* Botones de clasificación */
         .ranking-buttons-container {
             margin-top: 40px;
@@ -9827,8 +9840,8 @@
                     <button class="ranking-btn ranking-btn-god" id="mainViewRankingGodBtn">✨ Dios</button>
                     <button class="ranking-btn ranking-btn-starwars" id="mainViewRankingStarWarsBtn">⭐ Star Wars</button>
                     <button class="ranking-btn ranking-btn-pokemon" id="mainViewRankingPokemonBtn">⚡ Pokémon</button>
-                    <button class="ranking-btn ranking-btn-cars" id="mainViewRankingCarsBtn" style="display: none;">🚗 Coches</button>
-                    <button class="ranking-btn ranking-btn-space" id="mainViewRankingSpaceBtn" style="display: none;">🪐 Espacio</button>
+                    <button class="ranking-btn ranking-btn-cars" id="mainViewRankingCarsBtn">🚗 Coches</button>
+                    <button class="ranking-btn ranking-btn-space" id="mainViewRankingSpaceBtn">🪐 Espacio</button>
                 </div>
             </div>
         </div>
@@ -9840,10 +9853,22 @@
                 <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
                 <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
                 <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
-                <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars<br><small>Adivina el personaje</small></button>
-                <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
-                <button class="difficulty-btn cars" id="carsBtn" style="display: none;">🚗 Coches<br><small>Adivina el modelo</small></button>
-                <button class="difficulty-btn space" id="spaceBtn" style="display: none;">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
+            </div>
+            
+            <!-- Sección Juegos Mart -->
+            <div class="juegos-mart-section" style="margin-top: 50px; padding-top: 30px; border-top: 3px solid #667eea;">
+                <h2 style="color: #667eea; font-size: 1.8em; margin-bottom: 10px; text-align: center;">
+                    🎮 Juegos Mart
+                </h2>
+                <p style="text-align: center; color: #718096; font-size: 0.9em; margin-bottom: 25px; font-style: italic;">
+                    Otros niveles creados por Martin
+                </p>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars<br><small>Adivina el personaje</small></button>
+                    <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
+                    <button class="difficulty-btn cars" id="carsBtn">🚗 Coches<br><small>Adivina el modelo</small></button>
+                    <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
+                </div>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -9852,10 +9877,17 @@
                     <button class="ranking-btn ranking-btn-hard" id="viewRankingHardBtn">🏆 Clasificación Difícil</button>
                     <button class="ranking-btn ranking-btn-impossible" id="viewRankingImpossibleBtn">🏆 Clasificación Imposible</button>
                     <button class="ranking-btn ranking-btn-god" id="viewRankingGodBtn">🏆 Clasificación Dios</button>
-                    <button class="ranking-btn ranking-btn-starwars" id="viewRankingStarWarsBtn">⭐ Clasificación Star Wars</button>
-                    <button class="ranking-btn ranking-btn-pokemon" id="viewRankingPokemonBtn">⚡ Clasificación Pokémon</button>
-                    <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn" style="display: none;">🚗 Clasificación Coches</button>
-                    <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn" style="display: none;">🪐 Clasificación Espacio</button>
+                </div>
+                
+                <!-- Clasificaciones Juegos Mart -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e2e8f0;">
+                    <h3 style="margin: 20px 0 15px 0; color: #667eea; font-size: 1.2em; text-align: center;">🎮 Clasificaciones Juegos Mart</h3>
+                    <div class="ranking-buttons">
+                        <button class="ranking-btn ranking-btn-starwars" id="viewRankingStarWarsBtn">⭐ Clasificación Star Wars</button>
+                        <button class="ranking-btn ranking-btn-pokemon" id="viewRankingPokemonBtn">⚡ Clasificación Pokémon</button>
+                        <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn">🚗 Clasificación Coches</button>
+                        <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn">🪐 Clasificación Espacio</button>
+                    </div>
                 </div>
             </div>
             <div class="ranking-buttons-container">
@@ -10891,7 +10923,10 @@
                 'Capitan Rex': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2024/02/captain-rex-ahsoka-star-wars-poster.jpg', // Variación del nombre
                 'Cody': 'https://i.pinimg.com/736x/5a/d8/9d/5ad89dd5d33ca433d5771201750f236c.jpg',
                 'CC-2224': 'https://i.pinimg.com/736x/5a/d8/9d/5ad89dd5d33ca433d5771201750f236c.jpg', // Código de Cody
-                'Kylo Ren': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2025/05/kylo-ren-in-the-force-awakens.jpg'
+                'Kylo Ren': 'https://static1.srcdn.com/wordpress/wp-content/uploads/2025/05/kylo-ren-in-the-force-awakens.jpg',
+                'Corde': 'https://2.bp.blogspot.com/-KNApT7ZFmuc/T3WPFX04y_I/AAAAAAAAFi8/D_UiLW06eXQ/s1600/Corde.jpg',
+                'Wolffe': 'https://vignette.wikia.nocookie.net/theclonewiki/images/9/99/Wolffe.png/revision/latest?cb=20111007003901',
+                'Wolf': 'https://vignette.wikia.nocookie.net/theclonewiki/images/9/99/Wolffe.png/revision/latest?cb=20111007003901' // Variación del nombre
             };
         }
         
@@ -15884,12 +15919,12 @@
                 pokemonBtn.style.display = 'block';
             }
             
-            // Coches visible para todos los usuarios
+            // Coches visible para todos los usuarios (ahora en Juegos Mart)
             if (carsBtn) {
                 carsBtn.style.display = 'block';
             }
             
-            // Espacio visible para todos los usuarios
+            // Espacio visible para todos los usuarios (ahora en Juegos Mart)
             if (spaceBtn) {
                 spaceBtn.style.display = 'block';
             }
