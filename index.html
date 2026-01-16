@@ -10952,56 +10952,62 @@
                     })
                     .filter(char => char !== null);
                 
-                // Agregar personajes personalizados adicionales (Captain Rex y Cody) siempre
-                const customCharacters = getCustomStarWarsCharacters();
-                customCharacters.forEach(customChar => {
-                    // Verificar que no esté ya en la lista
-                    const alreadyExists = starWarsCharacters.some(c => 
-                        c.name === customChar.name || c.id === customChar.id
-                    );
-                    if (!alreadyExists && customChar.image) {
-                        starWarsCharacters.push(customChar);
-                        console.log(`✅ Personaje personalizado agregado: ${customChar.name}`);
-                    }
-                });
-                
                 console.log(`Modo Star Wars (sin API): ${starWarsCharacters.length} personajes con imagen válida cargados desde lista de respaldo`);
                 return;
             }
             
             try {
-                // Cargar todos los personajes desde la API de Akabab
-                const response = await fetch('https://akabab.github.io/starwars-api/api/all.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                // Cargar todos los personajes desde el archivo JSON local
+                let allCharacters = [];
+                
+                try {
+                    // Intentar cargar desde el archivo local api_Star_WARS
+                    const response = await fetch('./api_Star_WARS');
+                    if (response.ok) {
+                        allCharacters = await response.json();
+                        console.log(`✅ Cargado JSON local con ${allCharacters.length} personajes`);
+                    } else {
+                        throw new Error(`No se pudo cargar el archivo local`);
+                    }
+                } catch (localError) {
+                    console.warn('⚠️ No se pudo cargar el archivo local api_Star_WARS, usando API online como respaldo');
+                    // Respaldo: usar API online si el archivo local no está disponible
+                    const response = await fetch('https://akabab.github.io/starwars-api/api/all.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    allCharacters = await response.json();
+                    console.log(`✅ Cargado desde API online con ${allCharacters.length} personajes`);
                 }
                 
-                const allCharacters = await response.json();
-                
-                // Filtrar personajes que tengan nombre y procesar imágenes
+                // Procesar TODOS los personajes del JSON (aplicar imágenes personalizadas si existen)
                 starWarsCharacters = allCharacters
-                    .filter(char => char.name) // Solo filtrar por nombre, aceptaremos todos si tienen imagen personalizada
+                    .filter(char => char && char.name) // Solo filtrar que tengan nombre
                     .map(char => {
                         // Verificar si tiene imagen personalizada
                         const customImage = getCustomImage(char.name, customImageMapping);
                         const imageToUse = customImage || char.image;
                         
-                        // Si tiene imagen personalizada, usarla aunque la de la API sea inválida
-                        // Si no tiene imagen personalizada, verificar que la de la API sea válida
-                        const hasValidImageToUse = customImage ? true : hasValidImage(char);
-                        
-                        if (!hasValidImageToUse) return null;
+                        // Usar imagen personalizada si existe, sino la del JSON
+                        // Si no tiene ninguna imagen, intentar usar la del JSON (aunque sea null, se filtrará después)
                         
                         return {
                             id: char.id,
                             name: char.name,
-                            image: imageToUse, // Usar imagen personalizada si existe, sino la de la API
+                            image: imageToUse, // Usar imagen personalizada si existe, sino la del JSON
                             species: char.species || 'Unknown',
                             gender: char.gender || 'Unknown',
                             homeworld: char.homeworld || 'Unknown'
                         };
                     })
-                    .filter(char => char !== null); // Eliminar los que no tienen imagen válida
+                    .filter(char => {
+                        // Filtrar solo los que tienen imagen válida
+                        if (!char || !char.image) return false;
+                        const imageUrl = String(char.image).trim();
+                        return imageUrl !== '' && imageUrl !== 'null' && imageUrl !== 'undefined' && 
+                               (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) &&
+                               imageUrl.length > 10;
+                    });
                 
                 console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes cargados de la API`);
                 
@@ -11030,27 +11036,8 @@
                     starWarsCharacters = [...starWarsCharacters, ...validFallbackCharacters];
                 }
                 
-                // Asegurar que todos tengan imagen válida (puede ser personalizada o de API)
-                starWarsCharacters = starWarsCharacters.filter(char => {
-                    if (!char || !char.image) return false;
-                    const imageUrl = String(char.image).trim();
-                    return imageUrl !== '' && imageUrl !== 'null' && imageUrl !== 'undefined' && 
-                           (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) &&
-                           imageUrl.length > 10;
-                });
-                
-                // Agregar personajes personalizados adicionales (Captain Rex y Cody) siempre
-                const customCharacters = getCustomStarWarsCharacters();
-                customCharacters.forEach(customChar => {
-                    // Verificar que no esté ya en la lista
-                    const alreadyExists = starWarsCharacters.some(c => 
-                        c.name === customChar.name || c.id === customChar.id
-                    );
-                    if (!alreadyExists && customChar.image) {
-                        starWarsCharacters.push(customChar);
-                        console.log(`✅ Personaje personalizado agregado: ${customChar.name}`);
-                    }
-                });
+                // Los personajes del txt ya están en el JSON, así que no necesitamos agregarlos por separado
+                // Solo asegurarnos de que las imágenes personalizadas se aplicaron correctamente
                 
                 console.log(`Modo Star Wars: ${starWarsCharacters.length} personajes listos (todos con imágenes válidas)`);
             } catch (error) {
@@ -11071,19 +11058,6 @@
                         };
                     })
                     .filter(char => char !== null);
-                
-                // Agregar personajes personalizados adicionales (Captain Rex y Cody) siempre
-                const customCharacters = getCustomStarWarsCharacters();
-                customCharacters.forEach(customChar => {
-                    // Verificar que no esté ya en la lista
-                    const alreadyExists = starWarsCharacters.some(c => 
-                        c.name === customChar.name || c.id === customChar.id
-                    );
-                    if (!alreadyExists && customChar.image) {
-                        starWarsCharacters.push(customChar);
-                        console.log(`✅ Personaje personalizado agregado: ${customChar.name}`);
-                    }
-                });
                 
                 console.log(`Modo Star Wars (error API): ${starWarsCharacters.length} personajes con imagen válida cargados desde lista de respaldo`);
             }
@@ -11317,6 +11291,7 @@
 
         // Función para obtener lista de personajes de Star Wars de respaldo
         // Función para obtener personajes adicionales personalizados (siempre incluidos)
+        // Estos personajes se añaden del archivo txtpersonajes.txt
         function getCustomStarWarsCharacters() {
             const customImageMapping = getCustomImageMapping();
             return [
@@ -11345,6 +11320,26 @@
                     homeworld: 'Unknown'
                 }
             ];
+        }
+        
+        // Función para obtener todos los personajes del archivo txtpersonajes.txt
+        // Estos se añaden además de los del JSON principal
+        function getTxtCharactersList() {
+            const customImageMapping = getCustomImageMapping();
+            return [
+                { name: 'Dormé', image: customImageMapping['Dormé'] },
+                { name: 'Mace Windu', image: customImageMapping['Mace Windu'] },
+                { name: 'Gasgano', image: customImageMapping['Gasgano'] },
+                { name: 'Finn', image: customImageMapping['Finn'] },
+                { name: 'Sly Moore', image: customImageMapping['Sly Moore'] },
+                { name: 'Tion Medon', image: customImageMapping['Tion Medon'] },
+                { name: 'Wedge Antilles', image: customImageMapping['Wedge Antilles'] },
+                { name: 'Lobot', image: customImageMapping['Lobot'] },
+                { name: 'Ratts Tyerell', image: customImageMapping['Ratts Tyerell'] },
+                { name: 'Adi Gallia', image: customImageMapping['Adi Gallia'] || customImageMapping['Ady Gallya'] },
+                { name: 'General Grievous', image: customImageMapping['General Grievous'] || customImageMapping['General Griveus'] },
+                { name: 'Yarael Poof', image: customImageMapping['Yarael Poof'] || customImageMapping['Yarael poof'] }
+            ].filter(char => char.image); // Solo incluir los que tienen imagen
         }
 
         function getFallbackStarWarsCharacters() {
