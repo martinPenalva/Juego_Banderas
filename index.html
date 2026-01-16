@@ -206,6 +206,22 @@
             33% {
                 background-position: 100% 50%;
             }
+
+        body.cars-mode {
+            background: linear-gradient(135deg, #1a0000 0%, #4d0000 20%, #800000 40%, #cc0000 60%, #ff3333 80%, #ff6666 100%);
+            background-size: 400% 400%;
+            animation: carsBackgroundMove 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes carsBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
             66% {
                 background-position: 50% 100%;
             }
@@ -1987,6 +2003,19 @@
             background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 50%, #fde68a 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+        }
+
+        .difficulty-btn.cars {
+            border-color: #dc2626;
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .difficulty-btn.cars:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 50%, #fca5a5 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
         }
 
         .difficulty-btn small {
@@ -9767,6 +9796,7 @@
                     <button class="ranking-btn ranking-btn-god" id="mainViewRankingGodBtn">✨ Dios</button>
                     <button class="ranking-btn ranking-btn-starwars" id="mainViewRankingStarWarsBtn">⭐ Star Wars</button>
                     <button class="ranking-btn ranking-btn-pokemon" id="mainViewRankingPokemonBtn">⚡ Pokémon</button>
+                    <button class="ranking-btn ranking-btn-cars" id="mainViewRankingCarsBtn" style="display: none;">🚗 Coches</button>
                 </div>
             </div>
         </div>
@@ -9780,6 +9810,7 @@
                 <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
                 <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars<br><small>Adivina el personaje</small></button>
                 <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
+                <button class="difficulty-btn cars" id="carsBtn" style="display: none;">🚗 Coches<br><small>Adivina el modelo</small></button>
             </div>
             <div class="ranking-buttons-container">
                 <h3 style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.3em;">📊 Ver Clasificaciones</h3>
@@ -9790,6 +9821,7 @@
                     <button class="ranking-btn ranking-btn-god" id="viewRankingGodBtn">🏆 Clasificación Dios</button>
                     <button class="ranking-btn ranking-btn-starwars" id="viewRankingStarWarsBtn">⭐ Clasificación Star Wars</button>
                     <button class="ranking-btn ranking-btn-pokemon" id="viewRankingPokemonBtn">⚡ Clasificación Pokémon</button>
+                    <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn" style="display: none;">🚗 Clasificación Coches</button>
                 </div>
             </div>
             <div class="ranking-buttons-container">
@@ -9864,6 +9896,8 @@
         let starWarsCharacters = []; // Lista de personajes de Star Wars cargados
         let currentPokemon = null; // Para el modo Pokémon
         let pokemonList = []; // Lista de Pokémon cargados
+        let currentCar = null; // Para el modo Coches
+        let carsList = []; // Lista de modelos de coches
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -10863,6 +10897,105 @@
             }
         }
 
+        // Función para cargar lista de modelos de coches
+        function getCarsList() {
+            return [
+                "BMW M3",
+                "Audi R8",
+                "Ferrari F40",
+                "Porsche 911",
+                "Lamborghini Aventador",
+                "Mercedes-Benz AMG GT",
+                "McLaren 720S",
+                "Aston Martin DB11",
+                "Jaguar F-Type",
+                "Maserati GranTurismo",
+                "Tesla Model S",
+                "Nissan GT-R",
+                "Toyota Supra",
+                "Ford Mustang",
+                "Chevrolet Corvette",
+                "Dodge Challenger",
+                "BMW i8",
+                "Audi TT",
+                "Porsche Cayman",
+                "Lamborghini Huracán",
+                "Ferrari 488",
+                "McLaren P1",
+                "Bugatti Chiron",
+                "Rolls-Royce Phantom",
+                "Bentley Continental",
+                "Aston Martin Vantage",
+                "Mercedes-Benz SLS AMG",
+                "Audi RS6",
+                "BMW M5",
+                "Porsche Panamera",
+                "Maserati Quattroporte",
+                "Jaguar XJ",
+                "Lexus LC",
+                "Infiniti Q60",
+                "Acura NSX",
+                "Genesis G90",
+                "Cadillac CTS-V",
+                "Ford GT",
+                "Chevrolet Camaro",
+                "Dodge Viper"
+            ];
+        }
+
+        // Función para cargar coches (obtener imágenes de Unsplash)
+        async function loadCars() {
+            carsList = [];
+            const unsplashAccessKey = 'LH479v03YnKxLLez_7RJHtTvLT91krEuFXf8SG0UYB4';
+            const carModels = getCarsList();
+            
+            console.log(`🚗 Iniciando carga de ${carModels.length} coches desde Unsplash...`);
+            
+            try {
+                // Cargar imágenes para cada modelo de coche
+                for (const model of carModels) {
+                    try {
+                        const query = encodeURIComponent(model + " car");
+                        const url = `https://api.unsplash.com/search/photos?query=${query}&per_page=1&client_id=${unsplashAccessKey}`;
+                        
+                        const response = await fetch(url);
+                        if (!response.ok) {
+                            console.warn(`No se pudo cargar imagen para ${model}`);
+                            continue;
+                        }
+                        
+                        const data = await response.json();
+                        
+                        if (data.results && data.results.length > 0 && data.results[0].urls) {
+                            carsList.push({
+                                name: model,
+                                image: data.results[0].urls.regular || data.results[0].urls.small
+                            });
+                            console.log(`✅ ${model} cargado`);
+                        }
+                        
+                        // Pequeño delay para no sobrecargar la API
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    } catch (error) {
+                        console.warn(`Error al cargar ${model}:`, error);
+                        continue;
+                    }
+                }
+                
+                console.log(`🚗 Modo Coches: ${carsList.length} coches cargados con éxito`);
+                
+                if (carsList.length === 0) {
+                    console.warn('No se cargaron coches, usando lista sin imágenes');
+                    // Al menos guardar los nombres aunque no tengan imagen
+                    carsList = carModels.map(model => ({ name: model, image: null }));
+                }
+            } catch (error) {
+                console.error('Error general al cargar coches:', error);
+                // Al menos guardar los nombres aunque no tengan imagen
+                carsList = carModels.map(model => ({ name: model, image: null }));
+            }
+        }
+
         // Función para obtener lista de personajes de Star Wars de respaldo
         function getFallbackStarWarsCharacters() {
             return [
@@ -11119,7 +11252,7 @@
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode');
             
             if (level === 'pokemon') {
                 document.body.classList.add('pokemon-mode');
@@ -11170,6 +11303,26 @@
                         loadNewQuestion();
                     } else {
                         alert('Error al cargar personajes de Star Wars. Por favor, recarga la página.');
+                    }
+                });
+            } else if (level === 'cars') {
+                document.body.classList.add('cars-mode');
+                // Cargar coches
+                loadCars().then(() => {
+                    if (carsList.length === 0) {
+                        alert('No se pudieron cargar coches. Por favor, recarga la página.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar coches:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (carsList.length > 0) {
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar coches. Por favor, recarga la página.');
                     }
                 });
             } else if (level === 'impossible') {
@@ -11445,6 +11598,8 @@
                         correctAnswer = currentPokemon?.name;
                     } else if (difficulty === 'starwars') {
                         correctAnswer = currentStarWarsCharacter?.name;
+                    } else if (difficulty === 'cars') {
+                        correctAnswer = currentCar?.name;
                     } else {
                         correctAnswer = currentCountry?.name?.common;
                     }
@@ -11466,6 +11621,9 @@
             } else if (difficulty === 'starwars') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
+            } else if (difficulty === 'cars') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCar.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentCar.name}`);
             } else {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCountry.name.common}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
@@ -11618,10 +11776,16 @@
                 return;
             } else if (difficulty === 'starwars') {
                 // Modo Star Wars
+                // Inicializar contador de reintentos si no existe
+                if (window.starWarsRetryCount === undefined) {
+                    window.starWarsRetryCount = 0;
+                }
+                
                 // Filtrar solo personajes con imagen válida (URL válida que empiece con http:// o https://)
                 const charactersWithImage = starWarsCharacters.filter(char => hasValidImage(char));
                 
                 if (charactersWithImage.length === 0) {
+                    window.starWarsRetryCount = 0; // Resetear contador
                     const messageEl = document.getElementById('message');
                     messageEl.textContent = '⚠️ No hay personajes disponibles con imagen. Por favor, recarga la página.';
                     messageEl.className = 'message incorrect';
@@ -11690,31 +11854,243 @@
                     
                     img.onerror = function() {
                         console.warn(`Error al cargar imagen de ${currentStarWarsCharacter.name}:`, currentStarWarsCharacter.image);
-                        // Si la imagen falla, mostrar placeholder
-                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8000ff;">⭐</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentStarWarsCharacter.name}</div>`;
+                        
+                        // Remover este personaje de la lista de disponibles (tiene imagen inválida)
+                        const index = starWarsCharacters.findIndex(c => c.id === currentStarWarsCharacter.id);
+                        if (index !== -1) {
+                            starWarsCharacters.splice(index, 1);
+                            console.log(`Personaje ${currentStarWarsCharacter.name} removido de la lista (imagen inválida)`);
+                        }
+                        
+                        // Intentar automáticamente con otro personaje (hasta 3 intentos)
+                        const maxRetries = 3;
+                        window.starWarsRetryCount = (window.starWarsRetryCount || 0) + 1;
+                        
+                        if (window.starWarsRetryCount < maxRetries && starWarsCharacters.length > 0) {
+                            console.log(`Reintentando con otro personaje (intento ${window.starWarsRetryCount}/${maxRetries})...`);
+                            // Intentar con otro personaje
+                            setTimeout(() => {
+                                loadNewQuestion();
+                            }, 100);
+                        } else {
+                            // Resetear contador
+                            window.starWarsRetryCount = 0;
+                            // Si después de varios intentos no hay imágenes válidas, mostrar placeholder
+                            console.warn('No se pudo cargar una imagen válida después de varios intentos');
+                            flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8000ff;">⭐</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentStarWarsCharacter.name}</div>`;
+                        }
+                    };
+                    
+                    // Función auxiliar para generar las opciones y continuar el juego
+                    const generateOptionsAndContinue = function() {
+                        // Filtrar personajes disponibles actualizados
+                        const availableCharacters = starWarsCharacters.filter(char => hasValidImage(char));
+                        
+                        // Generar opciones (1 correcta + 3 incorrectas) - solo de personajes con imagen válida
+                        const wrongCharacters = availableCharacters
+                            .filter(c => c.name !== currentStarWarsCharacter.name)
+                            .sort(() => Math.random() - 0.5)
+                            .slice(0, 3);
+                        
+                        const options = [
+                            currentStarWarsCharacter.name,
+                            wrongCharacters[0]?.name || 'Personaje',
+                            wrongCharacters[1]?.name || 'Personaje',
+                            wrongCharacters[2]?.name || 'Personaje'
+                        ].sort(() => Math.random() - 0.5);
+                        
+                        // Asignar opciones a los botones
+                        document.getElementById('option1').textContent = options[0];
+                        document.getElementById('option2').textContent = options[1];
+                        document.getElementById('option3').textContent = options[2];
+                        document.getElementById('option4').textContent = options[3];
+                        
+                        // Resetear estado
+                        answered = false;
+                        jokerUsed = false;
+                        document.getElementById('message').textContent = '';
+                        document.getElementById('message').className = 'message';
+                        
+                        // Mostrar opciones
+                        [1, 2, 3, 4].forEach(i => {
+                            const btn = document.getElementById(`option${i}`);
+                            btn.style.display = 'block';
+                            btn.disabled = false;
+                            btn.classList.remove('correct', 'incorrect');
+                        });
+                        
+                        // Iniciar temporizador
+                        startTimer();
+                        
+                        // Actualizar comodín
+                        updateJokerButton();
                     };
                     
                     img.onload = function() {
                         console.log(`Imagen cargada exitosamente: ${currentStarWarsCharacter.name}`);
+                        // Resetear contador de reintentos si la imagen carga correctamente
+                        window.starWarsRetryCount = 0;
+                        // Generar opciones solo cuando la imagen se haya cargado correctamente
+                        generateOptionsAndContinue();
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar imagen de ${currentStarWarsCharacter.name}:`, currentStarWarsCharacter.image);
+                        
+                        // Remover este personaje de la lista de disponibles (tiene imagen inválida)
+                        const index = starWarsCharacters.findIndex(c => c.id === currentStarWarsCharacter.id);
+                        if (index !== -1) {
+                            starWarsCharacters.splice(index, 1);
+                            console.log(`Personaje ${currentStarWarsCharacter.name} removido de la lista (imagen inválida)`);
+                        }
+                        
+                        // Intentar automáticamente con otro personaje (hasta 3 intentos)
+                        const maxRetries = 3;
+                        window.starWarsRetryCount = (window.starWarsRetryCount || 0) + 1;
+                        
+                        if (window.starWarsRetryCount < maxRetries && starWarsCharacters.length > 0) {
+                            console.log(`Reintentando con otro personaje (intento ${window.starWarsRetryCount}/${maxRetries})...`);
+                            // Intentar con otro personaje
+                            setTimeout(() => {
+                                loadNewQuestion();
+                            }, 100);
+                            // NO generar opciones, porque vamos a intentar con otro personaje
+                            return;
+                        } else {
+                            // Resetear contador
+                            window.starWarsRetryCount = 0;
+                            // Si después de varios intentos no hay imágenes válidas, mostrar placeholder
+                            console.warn('No se pudo cargar una imagen válida después de varios intentos');
+                            flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8000ff;">⭐</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentStarWarsCharacter.name}</div>`;
+                            // Aún así generar opciones para que el juego pueda continuar
+                            generateOptionsAndContinue();
+                        }
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    // Si no hay imagen, intentar con otro personaje o mostrar placeholder
+                    const maxRetries = 3;
+                    window.starWarsRetryCount = (window.starWarsRetryCount || 0) + 1;
+                    
+                    if (window.starWarsRetryCount < maxRetries && starWarsCharacters.length > 0) {
+                        console.log(`Personaje sin imagen, reintentando (intento ${window.starWarsRetryCount}/${maxRetries})...`);
+                        setTimeout(() => {
+                            loadNewQuestion();
+                        }, 100);
+                        return;
+                    } else {
+                        window.starWarsRetryCount = 0;
+                        // Si no hay imagen, mostrar placeholder
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8000ff;">⭐</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentStarWarsCharacter.name}</div>`;
+                    }
+                }
+                
+                // Las opciones se generan dentro de onload/onerror ahora
+                // Si llegamos aquí sin imagen, ya se maneja arriba
+                return;
+            } else if (difficulty === 'cars') {
+                // Modo Coches
+                // Filtrar solo coches con imagen válida
+                const carsWithImage = carsList.filter(car => 
+                    car && car.image && car.image.trim() !== '' && car.image !== null && car.image !== undefined &&
+                    (car.image.startsWith('http://') || car.image.startsWith('https://'))
+                );
+                
+                if (carsWithImage.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay coches disponibles con imagen. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
+                }
+                
+                // Seleccionar coche aleatorio solo de los que tienen imagen
+                const randomIndex = Math.floor(Math.random() * carsWithImage.length);
+                currentCar = carsWithImage[randomIndex];
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                // Mostrar imagen del coche
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                // Intentar mostrar imagen si está disponible
+                if (currentCar.image) {
+                    const img = new Image();
+                    img.src = currentCar.image;
+                    img.alt = `Imagen de ${currentCar.name}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #1a0000 0%, #4d0000 50%, #800000 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver imagen en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
+                        
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentCar.image;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
+                        
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
+                        
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar imagen de ${currentCar.name}:`, currentCar.image);
+                        // Si la imagen falla, mostrar placeholder
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #cc0000;">🚗</div><div style="text-align: center; margin-top: 10px; color: #ffe6e6;">${currentCar.name}</div>`;
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Imagen cargada exitosamente: ${currentCar.name}`);
                     };
                     
                     flagEl.appendChild(img);
                 } else {
                     // Si no hay imagen, mostrar placeholder
-                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #8000ff;">⭐</div><div style="text-align: center; margin-top: 10px; color: #e9d5ff;">${currentStarWarsCharacter.name}</div>`;
+                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #cc0000;">🚗</div><div style="text-align: center; margin-top: 10px; color: #ffe6e6;">${currentCar.name}</div>`;
                 }
                 
-                // Generar opciones (1 correcta + 3 incorrectas) - solo de personajes con imagen válida
-                const wrongCharacters = charactersWithImage
-                    .filter(c => c.name !== currentStarWarsCharacter.name)
+                // Generar opciones (1 correcta + 3 incorrectas) - solo de coches con imagen válida
+                const wrongCars = carsWithImage
+                    .filter(c => c.name !== currentCar.name)
                     .sort(() => Math.random() - 0.5)
                     .slice(0, 3);
                 
                 const options = [
-                    currentStarWarsCharacter.name,
-                    wrongCharacters[0]?.name || 'Personaje',
-                    wrongCharacters[1]?.name || 'Personaje',
-                    wrongCharacters[2]?.name || 'Personaje'
+                    currentCar.name,
+                    wrongCars[0]?.name || 'Coche',
+                    wrongCars[1]?.name || 'Coche',
+                    wrongCars[2]?.name || 'Coche'
                 ].sort(() => Math.random() - 0.5);
                 
                 // Asignar opciones a los botones
@@ -12213,6 +12589,7 @@
                     else if (difficulty === 'god') nivelTexto = 'Dios';
                     else if (difficulty === 'starwars') nivelTexto = 'Star Wars';
                     else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
+                    else if (difficulty === 'cars') nivelTexto = 'Coches';
                     rankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}</div>`;
                     return;
                 }
@@ -12286,6 +12663,8 @@
                 rankingTitle.textContent = '⭐ Top 10 Ranking - Star Wars';
             } else if (levelToShow === 'pokemon') {
                 rankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
+            } else if (levelToShow === 'cars') {
+                rankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
             } else {
                 rankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -12328,6 +12707,8 @@
                 difficultyRankingTitle.textContent = '⭐ Top 10 Ranking - Star Wars';
             } else if (level === 'pokemon') {
                 difficultyRankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
+            } else if (level === 'cars') {
+                difficultyRankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
             } else {
                 difficultyRankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -12367,6 +12748,7 @@
                     else if (level === 'god') nivelTexto = 'Dios';
                     else if (level === 'starwars') nivelTexto = 'Star Wars';
                     else if (level === 'pokemon') nivelTexto = 'Pokémon';
+                    else if (level === 'cars') nivelTexto = 'Coches';
                     difficultyRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -12459,6 +12841,8 @@
                     rankingTitle.textContent = '⭐ Top 10 Ranking - Star Wars';
                 } else if (level === 'pokemon') {
                     rankingTitle.textContent = '⚡ Top 10 Ranking - Pokémon';
+                } else if (level === 'cars') {
+                    rankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
                 } else {
                     rankingTitle.textContent = '🏆 Top 10 Ranking';
                 }
@@ -12478,6 +12862,7 @@
                     else if (level === 'god') nivelTexto = 'Dios';
                     else if (level === 'starwars') nivelTexto = 'Star Wars';
                     else if (level === 'pokemon') nivelTexto = 'Pokémon';
+                    else if (level === 'cars') nivelTexto = 'Coches';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -12569,6 +12954,7 @@
                     else if (difficulty === 'god') nivelTexto = 'Dios';
                     else if (difficulty === 'starwars') nivelTexto = 'Star Wars';
                     else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
+                    else if (difficulty === 'cars') nivelTexto = 'Coches';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -12662,7 +13048,7 @@
             timeLeft = 20;
             
             // Remover las clases de modo para que la pantalla de elegir nivel no tenga estilos del nivel anterior
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode');
             
             // Ocultar game over
             document.getElementById('gameOver').style.display = 'none';
@@ -12903,6 +13289,8 @@
                 correctAnswer = currentPokemon.name;
             } else if (difficulty === 'starwars') {
                 correctAnswer = currentStarWarsCharacter.name;
+            } else if (difficulty === 'cars') {
+                correctAnswer = currentCar.name;
             } else {
                 correctAnswer = currentCountry.name.common;
             }
@@ -12993,6 +13381,67 @@
                     document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentPokemon.name}`;
                     document.getElementById('message').className = 'message incorrect';
                     showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentPokemon.name}`);
+                }
+
+                // Si se acabaron las vidas, mostrar game over
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 2000);
+                } else {
+                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
+                }
+                return;
+            } else if (difficulty === 'cars') {
+                if (!currentCar || !currentCar.name) {
+                    console.error('Error: currentCar no está definido');
+                    alert('Error: No hay coche seleccionado. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentCar.name;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentCar.name) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es ${currentCar.name}! 🚗`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentCar.name}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentCar.name}`);
                 }
 
                 // Si se acabaron las vidas, mostrar game over
@@ -13175,6 +13624,7 @@
         document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
         document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
         document.getElementById('pokemonBtn').addEventListener('click', () => selectDifficulty('pokemon'));
+        document.getElementById('carsBtn').addEventListener('click', () => selectDifficulty('cars'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
         document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
@@ -14150,6 +14600,11 @@
             if (mainViewRankingPokemonBtn) {
                 mainViewRankingPokemonBtn.onclick = async () => await showMainRanking('pokemon');
             }
+            
+            const mainViewRankingCarsBtn = document.getElementById('mainViewRankingCarsBtn');
+            if (mainViewRankingCarsBtn) {
+                mainViewRankingCarsBtn.onclick = async () => await showMainRanking('cars');
+            }
         }
         
         // Inicializar botones cuando estén disponibles
@@ -14206,6 +14661,17 @@
                 viewRankingPokemonBtn.removeEventListener('click', handlePokemonRankingClick);
                 viewRankingPokemonBtn.addEventListener('click', handlePokemonRankingClick);
             }
+            
+            const viewRankingCarsBtn = document.getElementById('viewRankingCarsBtn');
+            if (viewRankingCarsBtn) {
+                viewRankingCarsBtn.removeEventListener('click', handleCarsRankingClick);
+                viewRankingCarsBtn.addEventListener('click', handleCarsRankingClick);
+            }
+        }
+        
+        // Handler para ranking de coches
+        function handleCarsRankingClick() {
+            window.showRankingByLevel('cars');
         }
         
         // Handler para delegación de eventos
@@ -14234,6 +14700,9 @@
             } else if (button.id === 'viewRankingPokemonBtn') {
                 level = 'pokemon';
                 console.log('Botón Clasificación Pokémon clickeado');
+            } else if (button.id === 'viewRankingCarsBtn') {
+                level = 'cars';
+                console.log('Botón Clasificación Coches clickeado');
             }
             
             if (level) {
@@ -14771,6 +15240,9 @@
             // Star Wars y Pokémon ahora son visibles para todos los usuarios
             const starwarsBtn = document.getElementById('starwarsBtn');
             const pokemonBtn = document.getElementById('pokemonBtn');
+            const carsBtn = document.getElementById('carsBtn');
+            const mainViewRankingCarsBtn = document.getElementById('mainViewRankingCarsBtn');
+            const viewRankingCarsBtn = document.getElementById('viewRankingCarsBtn');
             
             // Hacer visibles para todos
             if (starwarsBtn) {
@@ -14779,6 +15251,25 @@
             
             if (pokemonBtn) {
                 pokemonBtn.style.display = 'block';
+            }
+            
+            // Coches solo visible para Martin (mpenalvart1@educacion.navarra.es)
+            if (carsBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                carsBtn.style.display = 'block';
+            } else if (carsBtn) {
+                carsBtn.style.display = 'none';
+            }
+            
+            if (mainViewRankingCarsBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                mainViewRankingCarsBtn.style.display = 'block';
+            } else if (mainViewRankingCarsBtn) {
+                mainViewRankingCarsBtn.style.display = 'none';
+            }
+            
+            if (viewRankingCarsBtn && window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                viewRankingCarsBtn.style.display = 'block';
+            } else if (viewRankingCarsBtn) {
+                viewRankingCarsBtn.style.display = 'none';
             }
         }
         
@@ -16523,7 +17014,8 @@
                     { key: 'impossible', name: '⚫ Imposible' },
                     { key: 'god', name: '✨ Dios' },
                     { key: 'starwars', name: '⭐ Star Wars' },
-                    { key: 'pokemon', name: '⚡ Pokémon' }
+                    { key: 'pokemon', name: '⚡ Pokémon' },
+                    { key: 'cars', name: '🚗 Coches' }
                 ];
                 
                 niveles.forEach(nivel => {
@@ -16699,7 +17191,8 @@
                     { key: 'impossible', name: '⚫ Imposible' },
                     { key: 'god', name: '✨ Dios' },
                     { key: 'starwars', name: '⭐ Star Wars' },
-                    { key: 'pokemon', name: '⚡ Pokémon' }
+                    { key: 'pokemon', name: '⚡ Pokémon' },
+                    { key: 'cars', name: '🚗 Coches' }
                 ];
                 
                 niveles.forEach(nivel => {
