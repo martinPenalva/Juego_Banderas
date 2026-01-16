@@ -10986,7 +10986,13 @@
                 'Guardia del Templo': 'https://tse2.mm.bing.net/th/id/OIP.g0qPtg-xDLWgkSJcMhoW3QHaMW?rs=1&pid=ImgDetMain&o=7&rm=3',
                 'Embo': 'https://images.saymedia-content.com/.image/t_share/MTc1MTE0MTUyOTIxNTM5Njc5/star-wars-best-bounty-hunters.png',
                 'Cad Bane': 'https://tse3.mm.bing.net/th/id/OIP.qAjc_6gzJNQF2P5agAj9JAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3',
-                'Gregor': 'https://tse1.mm.bing.net/th/id/OIP.t5HJ1Lm6i7ejpQhhvVIKGgHaKG?rs=1&pid=ImgDetMain&o=7&rm=3'
+                'Gregor': 'https://tse1.mm.bing.net/th/id/OIP.t5HJ1Lm6i7ejpQhhvVIKGgHaKG?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Mon Mothma': 'https://legendary-digital-network-assets.s3.amazonaws.com/wp-content/uploads/2022/08/30104223/Mon-Mothma-Rogue-One.jpg',
+                'Mon mothma': 'https://legendary-digital-network-assets.s3.amazonaws.com/wp-content/uploads/2022/08/30104223/Mon-Mothma-Rogue-One.jpg',
+                'Tarpals': 'https://tse4.mm.bing.net/th/id/OIP.GPfDmZg4MJgp4rGKj7mW2gHaJ3?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'rools tarpal': 'https://tse4.mm.bing.net/th/id/OIP.GPfDmZg4MJgp4rGKj7mW2gHaJ3?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Tarpal': 'https://tse4.mm.bing.net/th/id/OIP.GPfDmZg4MJgp4rGKj7mW2gHaJ3?rs=1&pid=ImgDetMain&o=7&rm=3',
+                'Shmi Skywalker': 'https://tse3.mm.bing.net/th/id/OIP.DPFM0WYGo_IMWINL1hXlvgHaKJ?rs=1&pid=ImgDetMain&o=7&rm=3'
             };
         }
         
@@ -11076,15 +11082,26 @@
                 }
                 
                 // Procesar TODOS los personajes del JSON (aplicar imágenes personalizadas si existen)
-                starWarsCharacters = allCharacters
-                    .filter(char => char && char.name) // Solo filtrar que tengan nombre
+                // Primero, eliminar duplicados por nombre (mantener el primero encontrado)
+                const seenNames = new Set();
+                const uniqueCharacters = allCharacters.filter(char => {
+                    if (!char || !char.name) return false;
+                    const nameLower = char.name.toLowerCase().trim();
+                    if (seenNames.has(nameLower)) {
+                        console.log(`⚠️ Personaje duplicado eliminado: ${char.name} (ID: ${char.id})`);
+                        return false; // Eliminar duplicado
+                    }
+                    seenNames.add(nameLower);
+                    return true; // Mantener el primero
+                });
+                
+                starWarsCharacters = uniqueCharacters
                     .map(char => {
                         // Verificar si tiene imagen personalizada
                         const customImage = getCustomImage(char.name, customImageMapping);
                         const imageToUse = customImage || char.image;
                         
                         // Usar imagen personalizada si existe, sino la del JSON
-                        // Si no tiene ninguna imagen, intentar usar la del JSON (aunque sea null, se filtrará después)
                         
                         return {
                             id: char.id,
