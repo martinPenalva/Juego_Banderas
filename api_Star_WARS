@@ -703,7 +703,7 @@
   {
     "id": 24,
     "name": "Bossk",
-    "height": 1.90,
+    "height": 1.9,
     "mass": 113,
     "gender": "male",
     "homeworld": "trandosha",
@@ -2138,7 +2138,11 @@
     "species": "clone",
     "homeworld": "kamino",
     "image": "https://static1.srcdn.com/wordpress/wp-content/uploads/2024/02/captain-rex-ahsoka-star-wars-poster.jpg",
-    "affiliations": ["501st Legion", "Galactic Republic", "Alliance to Restore the Republic"],
+    "affiliations": [
+      "501st Legion",
+      "Galactic Republic",
+      "Alliance to Restore the Republic"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2148,7 +2152,10 @@
     "species": "clone",
     "homeworld": "kamino",
     "image": "https://i.pinimg.com/736x/5a/d8/9d/5ad89dd5d33ca433d5771201750f236c.jpg",
-    "affiliations": ["212th Attack Battalion", "Galactic Republic"],
+    "affiliations": [
+      "212th Attack Battalion",
+      "Galactic Republic"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2158,8 +2165,14 @@
     "species": "human",
     "homeworld": "chandrila",
     "image": "https://static1.srcdn.com/wordpress/wp-content/uploads/2025/05/kylo-ren-in-the-force-awakens.jpg",
-    "affiliations": ["First Order", "Knights of Ren"],
-    "formerAffiliations": ["Jedi Order", "Resistance"]
+    "affiliations": [
+      "First Order",
+      "Knights of Ren"
+    ],
+    "formerAffiliations": [
+      "Jedi Order",
+      "Resistance"
+    ]
   },
   {
     "id": 104,
@@ -2168,7 +2181,10 @@
     "species": "clone",
     "homeworld": "kamino",
     "image": "https://vignette.wikia.nocookie.net/theclonewiki/images/9/99/Wolffe.png/revision/latest?cb=20111007003901",
-    "affiliations": ["104th Battalion", "Galactic Republic"],
+    "affiliations": [
+      "104th Battalion",
+      "Galactic Republic"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2178,7 +2194,10 @@
     "species": "human",
     "homeworld": "unknown",
     "image": "https://tse2.mm.bing.net/th/id/OIP.eibISl4bSyxjTkh0K7Iw4AHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3",
-    "affiliations": ["Inquisitorius", "Galactic Empire"],
+    "affiliations": [
+      "Inquisitorius",
+      "Galactic Empire"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2188,8 +2207,13 @@
     "species": "human",
     "homeworld": "unknown",
     "image": "https://fbi.cults3d.com/uploaders/20992866/illustration-file/b9b6de7e-c6c5-41c0-a3b3-ee15ef3f9f0c/325390-Second-Sister-Star-Wars-Jedi-Fallen-Order-Inquisitorius-4K-iphone-wallpaper.jpg",
-    "affiliations": ["Inquisitorius", "Galactic Empire"],
-    "formerAffiliations": ["Jedi Order"]
+    "affiliations": [
+      "Inquisitorius",
+      "Galactic Empire"
+    ],
+    "formerAffiliations": [
+      "Jedi Order"
+    ]
   },
   {
     "id": 108,
@@ -2198,7 +2222,10 @@
     "species": "mirialan",
     "homeworld": "mirial",
     "image": "https://static1.srcdn.com/wordpress/wp-content/uploads/2022/05/The-Fifth-Brother-in-Obi-Wan-Kenobi-show.jpg",
-    "affiliations": ["Inquisitorius", "Galactic Empire"],
+    "affiliations": [
+      "Inquisitorius",
+      "Galactic Empire"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2208,8 +2235,14 @@
     "species": "dathomirian",
     "homeworld": "dathomir",
     "image": "https://i.pinimg.com/originals/cb/51/e3/cb51e38a1199d67b9f747aa79a41fa6a.jpg",
-    "affiliations": ["Confederacy of Independent Systems", "Nightsisters"],
-    "formerAffiliations": ["Jedi Order", "Sith"]
+    "affiliations": [
+      "Confederacy of Independent Systems",
+      "Nightsisters"
+    ],
+    "formerAffiliations": [
+      "Jedi Order",
+      "Sith"
+    ]
   },
   {
     "id": 110,
@@ -2218,7 +2251,10 @@
     "species": "dathomirian",
     "homeworld": "dathomir",
     "image": "https://static1.cbrimages.com/wordpress/wp-content/uploads/2018/05/5239810-0918671357-48711.jpg",
-    "affiliations": ["Nightsisters", "Sith"],
+    "affiliations": [
+      "Nightsisters",
+      "Sith"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2228,7 +2264,12 @@
     "species": "togruta",
     "homeworld": "shili",
     "image": "https://tse4.mm.bing.net/th/id/OIP.UK2UYxMcqfOiFtV2qBCqYwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
-    "affiliations": ["Jedi Order", "501st Legion", "Alliance to Restore the Republic", "New Republic"],
+    "affiliations": [
+      "Jedi Order",
+      "501st Legion",
+      "Alliance to Restore the Republic",
+      "New Republic"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2238,7 +2279,9 @@
     "species": "drabatan",
     "homeworld": "drabata",
     "image": "https://vignette.wikia.nocookie.net/es.starwars/images/9/93/Pao-SW_Authentics.png/revision/latest?cb=20161224165445",
-    "affiliations": ["Alliance to Restore the Republic"],
+    "affiliations": [
+      "Alliance to Restore the Republic"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2248,7 +2291,9 @@
     "species": "human",
     "homeworld": "mandalore",
     "image": "https://tse4.mm.bing.net/th/id/OIP.lViQ7gZxk5NHC8LV_2SqYQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
-    "affiliations": ["Mandalorians"],
+    "affiliations": [
+      "Mandalorians"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2258,7 +2303,9 @@
     "species": "human",
     "homeworld": "unknown",
     "image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2a225713-c66c-4bc4-a661-cb42f30fe0f7/dcw7bgz-7fc81698-c9e1-4b6a-9e1e-de5634a44fbd.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzJhMjI1NzEzLWM2NmMtNGJjNC1hNjYxLWNiNDJmMzBmZTBmN1wvZGN3N2Jnei03ZmM4MTY5OC1jOWUxLTRiNmEtOWUxZS1kZTU2MzRhNDRmYmQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.ZlFqiQ2pBMpTBRVIryE8yfuhQedxextTk45f9d6dG8w",
-    "affiliations": ["Galactic Empire"],
+    "affiliations": [
+      "Galactic Empire"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2268,7 +2315,10 @@
     "species": "clone",
     "homeworld": "kamino",
     "image": "https://th.bing.com/th/id/R.6225d4040b4cef781e378d843c31f083?rik=CX4rBGWPTI3cww&riu=http%3a%2f%2fimg2.wikia.nocookie.net%2f__cb20140325013249%2fstarwarsanimated%2fimages%2fc%2fc1%2fCommander_Fox.PNG&ehk=MrkOU9OoCCRkzypH%2f6tkHkHxbDmYikNH2YLlw4EVPks%3d&risl=&pid=ImgRaw&r=0",
-    "affiliations": ["Coruscant Guard", "Galactic Republic"],
+    "affiliations": [
+      "Coruscant Guard",
+      "Galactic Republic"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2288,7 +2338,10 @@
     "species": "human",
     "homeworld": "vallt",
     "image": "https://i.pinimg.com/originals/d4/7b/e2/d47be2924a8706fd72a2bd2b0af087ca.jpg",
-    "affiliations": ["Alliance to Restore the Republic", "Rogue One"],
+    "affiliations": [
+      "Alliance to Restore the Republic",
+      "Rogue One"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2298,7 +2351,10 @@
     "species": "human",
     "homeworld": "ferrix",
     "image": "https://th.bing.com/th/id/R.682b6c911996e1aab948ee411cf8ef53?rik=r7o9YuyYUtEUPQ&pid=ImgRaw&r=0",
-    "affiliations": ["Alliance to Restore the Republic", "Rogue One"],
+    "affiliations": [
+      "Alliance to Restore the Republic",
+      "Rogue One"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2308,7 +2364,9 @@
     "species": "unknown",
     "homeworld": "unknown",
     "image": "https://tse2.mm.bing.net/th/id/OIP.g0qPtg-xDLWgkSJcMhoW3QHaMW?rs=1&pid=ImgDetMain&o=7&rm=3",
-    "affiliations": ["Jedi Order"],
+    "affiliations": [
+      "Jedi Order"
+    ],
     "formerAffiliations": []
   },
   {
@@ -2338,7 +2396,298 @@
     "species": "clone",
     "homeworld": "kamino",
     "image": "https://tse1.mm.bing.net/th/id/OIP.t5HJ1Lm6i7ejpQhhvVIKGgHaKG?rs=1&pid=ImgDetMain&o=7&rm=3",
-    "affiliations": ["212th Attack Battalion", "Galactic Republic", "Alliance to Restore the Republic"],
+    "affiliations": [
+      "212th Attack Battalion",
+      "Galactic Republic",
+      "Alliance to Restore the Republic"
+    ],
+    "formerAffiliations": []
+  },
+  {
+    "id": 124,
+    "name": "K-2SO",
+    "image": "https://p4.wallpaperbetter.com/wallpaper/505/442/425/rogue-one-a-star-wars-story-movies-film-stills-k-2so-robot-hd-wallpaper-preview.jpg",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 125,
+    "name": "Director Orson Krennic",
+    "image": "https://lumiere-a.akamaihd.net/v1/images/orson-krennic_4c6477e2.jpeg?region=0,138,1560,780",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 126,
+    "name": "Chirrut Îmwe",
+    "image": "https://th.bing.com/th/id/R.af26aff240ce39009f572679664375e6?rik=7UBhlwlH1p%2fwOQ&pid=ImgRaw&r=0",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 127,
+    "name": "Baze Malbus",
+    "image": "https://th.bing.com/th/id/R.2ea9b58b2e838a9a6e475f69d57f95cd?rik=Ztc8wY%2fU4er2lQ&pid=ImgRaw&r=0",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 128,
+    "name": "Bodhi Rook",
+    "image": "https://tse3.mm.bing.net/th/id/OIP.OhXvRAkAgy_6J_7XUFFzDwHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 129,
+    "name": "Galen Erso",
+    "image": "https://tse3.mm.bing.net/th/id/OIP.R8BGFOgU2JFrTzEWdSaoSAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 130,
+    "name": "Saw Gerrera (versión Rogue One)",
+    "image": "https://i.ytimg.com/vi/8n7sqDvy3Pc/maxresdefault.jpg",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 131,
+    "name": "Death Trooper",
+    "image": "https://www.thedigitalfix.com/wp-content/sites/thedigitalfix/2022/11/death-troopers.jpg",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 132,
+    "name": "Shore Trooper",
+    "image": "https://th.bing.com/th/id/R.1264b67873877442986449ad85dd01f0?rik=bEu8nWqCUf8Dig&riu=http%3a%2f%2fwww.shoretrooper.co.uk%2fimages%2fsquad2.jpg&ehk=vs%2fkJcWhji6gpflZV04TLs24VYxzhw1Oiyj1drL9DR8%3d&risl=&pid=ImgRaw&r=0",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 133,
+    "name": "Fives",
+    "image": "https://www.reddit.com/r/clonewars/comments/195q297/what_rank_is_fives/",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 134,
+    "name": "Echo",
+    "image": "https://starwars.fandom.com/es/wiki/Echo",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 135,
+    "name": "Jesse",
+    "image": "https://www.starwars.com/databank/jesse",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 136,
+    "name": "Hardcase",
+    "image": "https://clonetrooper.fandom.com/wiki/Hardcase",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 137,
+    "name": "Kix",
+    "image": "https://clonewars.fandom.com/wiki/Kix",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 138,
+    "name": "Tup",
+    "image": "https://starwars.fandom.com/es/wiki/CT-5385",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 139,
+    "name": "Dogma",
+    "image": "https://starwars.fandom.com/es/wiki/Dogma",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 140,
+    "name": "Boost",
+    "image": "https://starwars.fandom.com/es/wiki/Boost/Leyendas",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 141,
+    "name": "Depa Billaba",
+    "image": "https://www.starwars.com/databank/depa-billaba",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 142,
+    "name": "Even Piell",
+    "image": "https://static.wikia.nocookie.net/starwars/images/e/ea/EvenPiellInfobox-SWE.png/revision/latest?cb=20240209023854",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 143,
+    "name": "Coleman Trebor",
+    "image": "https://lumiere-a.akamaihd.net/v1/images/Coleman-trebor_6ac2cde4.jpeg?region=0%2C24%2C3536%2C1984",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 144,
+    "name": "Ima-Gun Di",
+    "image": "https://starwars.fandom.com/es/wiki/Ima-Gun_Di",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 145,
+    "name": "Tera Sinube",
+    "image": "https://starwars.fandom.com/es/wiki/Tera_Sinube",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 146,
+    "name": "Bo-Katan Kryze",
+    "image": "https://clonewars.fandom.com/wiki/Bo-Katan_Kryze",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 147,
+    "name": "Pre Vizsla",
+    "image": "https://www.starwars.com/databank/pre-vizsla",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 148,
+    "name": "Mother Talzin",
+    "image": "https://starwars.fandom.com/es/wiki/Talzin",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 149,
+    "name": "Hondo Ohnaka",
+    "image": "https://static.wikia.nocookie.net/esstarwars/images/f/f7/HondoHS-Revival.png/revision/latest?cb=20150928211341",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 150,
+    "name": "Pong Krell",
+    "image": "https://clonewars.fandom.com/wiki/Pong_Krell",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 151,
+    "name": "Satine Kryze",
+    "image": "https://starwars.fandom.com/wiki/Satine_Kryze",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 152,
+    "name": "Quinlan Vos",
+    "image": "https://starwars.fandom.com/es/wiki/Quinlan_Vos",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 153,
+    "name": "Commander Gree",
+    "image": "https://i.pinimg.com/originals/36/58/26/365826c5971891bed6e383eaf68f3bef.jpg",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 154,
+    "name": "Commander Bly",
+    "image": "https://th.bing.com/th/id/R.9a8b3942b1eca19265b19920dfe2467f?rik=UgExMqGpOXXK5g&pid=ImgRaw&r=0",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 155,
+    "name": "Commander Bacara",
+    "image": "https://tse4.mm.bing.net/th/id/OIP.71iKN9VRphqMXwbml4byigHaIW?rs=1&pid=ImgDetMain&o=7&rm=3",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 156,
+    "name": "Commander Neyo",
+    "image": "https://th.bing.com/th/id/R.ae256f26c15de35fe8c67ceb33c6602b?rik=%2fGNDhfegVsrV4A&riu=http%3a%2f%2fimg2.wikia.nocookie.net%2f__cb20130219231850%2fcwamilitarysquads%2fimages%2f5%2f56%2fClone-commander-neyo_detail.png&ehk=ptLyTPX7tD0pJ6RU3Cb3B74drPCsxnKaMmdJHI%2bVsHE%3d&risl=&pid=ImgRaw&r=0",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 157,
+    "name": "Commander Doom",
+    "image": "https://vignette.wikia.nocookie.net/starwars/images/8/84/CommanderDoom-RingoVinda.png/revision/latest?cb=20150408065444",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 158,
+    "name": "The Armorer",
+    "image": "https://th.bing.com/th/id/R.985cc331c2b04cf1468b5e9f5dfe6dbe?rik=m9D4GRH7ROrITw&pid=ImgRaw&r=0",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 159,
+    "name": "Paz Vizsla",
+    "image": "https://tse3.mm.bing.net/th/id/OIP.ibtRCx0dxTG98-97UKkkeAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 160,
+    "name": "Moff Gideon",
+    "image": "https://www.slashfilm.com/img/gallery/moff-gideons-new-makeover-truly-makes-him-the-darth-vader-of-the-mandalorian/the-new-look-1681286681.jpg",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 161,
+    "name": "Greef Karga",
+    "image": "https://tse4.mm.bing.net/th/id/OIP.c2ioN3Fz_sdxmbgrk604NwHaDt?rs=1&pid=ImgDetMain&o=7&rm=3",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 162,
+    "name": "Cara Dune",
+    "image": "https://tse3.mm.bing.net/th/id/OIP.G5j-L5FSb1gfXovuRpZMKAHaJ3?rs=1&pid=ImgDetMain&o=7&rm=3",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 163,
+    "name": "Peli Motto",
+    "image": "https://www.themarysue.com/wp-content/uploads/2023/02/Amy-Sedaris-Peli-Motto-The-Mandamorian.jpg?w=1200&resize=1200%2C594",
+    "affiliations": [],
+    "formerAffiliations": []
+  },
+  {
+    "id": 164,
+    "name": "Grogu",
+    "image": "https://www.denofgeek.com/wp-content/uploads/2023/03/star-wars-the-mandalorian-season-3-grogu.jpg",
+    "affiliations": [],
     "formerAffiliations": []
   }
 ]
