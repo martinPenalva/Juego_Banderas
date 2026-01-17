@@ -208,6 +208,29 @@
             }
         }
 
+        body.stranger-things-mode {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 20%, #16213e 40%, #0f3460 60%, #533483 80%, #e91e63 100%);
+            background-size: 400% 400%;
+            animation: strangerThingsBackgroundMove 22s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes strangerThingsBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 50%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            75% {
+                background-position: 0% 100%;
+            }
+        }
+
         body.cars-mode {
             background: linear-gradient(135deg, #1a0000 0%, #4d0000 20%, #800000 40%, #cc0000 60%, #ff3333 80%, #ff6666 100%);
             background-size: 400% 400%;
@@ -2021,6 +2044,19 @@
             background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 50%, #fde68a 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+        }
+
+        .difficulty-btn.strangerthings {
+            border-color: #e91e63;
+            background: linear-gradient(135deg, #533483 0%, #8b2fc9 50%, #e91e63 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .difficulty-btn.strangerthings:hover {
+            background: linear-gradient(135deg, #8b2fc9 0%, #e91e63 50%, #f06292 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
         }
 
         .difficulty-btn.cars {
@@ -9894,6 +9930,7 @@
                     <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
                     <button class="difficulty-btn cars" id="carsBtn">🚗 Coches<br><small>Adivina el modelo</small></button>
                     <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
+                    <button class="difficulty-btn strangerthings" id="strangerthingsBtn" style="display: none;">🔮 Stranger Things<br><small>Adivina el personaje</small></button>
                 </div>
             </div>
             <!-- Clasificaciones de Banderas (solo visible en sección de banderas) -->
@@ -9991,6 +10028,8 @@
         let pokemonList = []; // Lista de Pokémon cargados
         let currentCar = null; // Para el modo Coches
         let carsList = []; // Lista de modelos de coches
+        let currentStrangerThingsCharacter = null; // Para el modo Stranger Things
+        let strangerThingsCharacters = []; // Lista de personajes de Stranger Things cargados
         let currentSpaceImage = null; // Para el modo Espacio/Planetas
         let spaceImagesList = []; // Lista de imágenes del espacio de NASA
 
@@ -11171,6 +11210,100 @@
             }
         }
 
+        async function loadStrangerThingsCharacters() {
+            strangerThingsCharacters = [];
+            
+            // Verificar si está usando file:// protocol
+            const isFileProtocol = window.location.protocol === 'file:';
+            if (isFileProtocol) {
+                console.warn('⚠️ Modo file:// detectado. La API de Stranger Things requiere un servidor web.');
+                console.warn('💡 Para ver las imágenes, usa un servidor web local:');
+                console.warn('   - Python: python -m http.server 8000');
+                console.warn('   - Node.js: npx serve');
+                return;
+            }
+            
+            try {
+                // Paso 1: Cargar personajes con fotos desde la API de Stranger Things
+                const photosResponse = await fetch('https://stranger-things-api.fly.dev/api/v1/characters');
+                if (!photosResponse.ok) {
+                    throw new Error(`HTTP ${photosResponse.status} en API de fotos`);
+                }
+                
+                const charactersWithPhotos = await photosResponse.json();
+                console.log(`✅ Cargado desde API de Stranger Things (fotos): ${charactersWithPhotos.length} personajes`);
+                
+                // Paso 2: Cargar información detallada desde HawAPI
+                let detailedCharacters = [];
+                try {
+                    const hawapiResponse = await fetch('https://hawapi.theproject.id/api/v1/characters');
+                    if (hawapiResponse.ok) {
+                        detailedCharacters = await hawapiResponse.json();
+                        console.log(`✅ Cargado desde HawAPI (detalles): ${detailedCharacters.length} personajes`);
+                    } else {
+                        console.warn('⚠️ No se pudo cargar información detallada de HawAPI, usando solo datos básicos');
+                    }
+                } catch (hawapiError) {
+                    console.warn('⚠️ Error al cargar HawAPI, usando solo datos básicos:', hawapiError);
+                }
+                
+                // Paso 3: Combinar datos de ambas APIs
+                // Crear un mapa de personajes detallados por nombre (normalizado)
+                const detailedMap = new Map();
+                detailedCharacters.forEach(char => {
+                    if (char && char.name) {
+                        const normalizedName = char.name.toLowerCase().trim();
+                        detailedMap.set(normalizedName, char);
+                    }
+                });
+                
+                // Combinar datos: foto de la primera API + detalles de HawAPI
+                strangerThingsCharacters = charactersWithPhotos
+                    .filter(char => {
+                        if (!char || !char.name || !char.photo) return false;
+                        const photoUrl = String(char.photo).trim();
+                        return photoUrl !== '' && photoUrl !== 'null' && photoUrl !== 'undefined' && 
+                               (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) &&
+                               photoUrl.length > 10;
+                    })
+                    .map(char => {
+                        const normalizedName = char.name.toLowerCase().trim();
+                        const detailedInfo = detailedMap.get(normalizedName);
+                        
+                        // Combinar datos: foto de la primera API + detalles de HawAPI
+                        return {
+                            id: char.id || char.name.toLowerCase().replace(/\s+/g, '-'),
+                            name: char.name,
+                            photo: char.photo, // De la API de fotos
+                            gender: detailedInfo?.gender || char.gender || 'Unknown',
+                            actor: detailedInfo?.actor || char.actor || 'Unknown',
+                            species: detailedInfo?.species || char.species || 'Unknown',
+                            // Información adicional de HawAPI
+                            affiliations: detailedInfo?.affiliations || [],
+                            occupation: detailedInfo?.occupation || null,
+                            residence: detailedInfo?.residence || null,
+                            episodes: detailedInfo?.episodes || [],
+                            relations: detailedInfo?.relations || [],
+                            portrayedBy: detailedInfo?.portrayed_by || char.actor || 'Unknown'
+                        };
+                    });
+                
+                console.log(`Modo Stranger Things: ${strangerThingsCharacters.length} personajes con foto válida cargados (combinando ambas APIs)`);
+                
+                // Si no se cargaron suficientes, mostrar advertencia
+                if (strangerThingsCharacters.length < 5) {
+                    console.warn('⚠️ Se cargaron muy pocos personajes de Stranger Things');
+                } else {
+                    // Mostrar estadísticas de datos combinados
+                    const withDetails = strangerThingsCharacters.filter(c => c.affiliations && c.affiliations.length > 0).length;
+                    console.log(`📊 ${withDetails} personajes tienen información detallada de HawAPI`);
+                }
+            } catch (error) {
+                console.error('Error al cargar personajes de Stranger Things:', error);
+                strangerThingsCharacters = [];
+            }
+        }
+
         // Función para cargar lista de modelos de coches
         function getCarsList() {
             return [
@@ -11708,7 +11841,7 @@
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode', 'space-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode', 'space-mode', 'stranger-things-mode');
             
             if (level === 'pokemon') {
                 document.body.classList.add('pokemon-mode');
@@ -11799,6 +11932,31 @@
                         loadNewQuestion();
                     } else {
                         alert('Error al cargar imágenes del espacio. Por favor, recarga la página.');
+                    }
+                });
+            } else if (level === 'strangerthings') {
+                document.body.classList.add('stranger-things-mode');
+                // Verificar si está usando file:// y mostrar advertencia
+                if (window.location.protocol === 'file:') {
+                    console.warn('⚠️ Modo file:// detectado. Las imágenes de Stranger Things no estarán disponibles.');
+                    console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
+                }
+                // Cargar personajes de Stranger Things
+                loadStrangerThingsCharacters().then(() => {
+                    if (strangerThingsCharacters.length === 0) {
+                        alert('No se pudieron cargar personajes de Stranger Things. Por favor, recarga la página o usa un servidor web local.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar personajes de Stranger Things:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (strangerThingsCharacters.length > 0) {
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar personajes de Stranger Things. Por favor, recarga la página.');
                     }
                 });
             } else if (level === 'impossible') {
@@ -12074,6 +12232,8 @@
                         correctAnswer = currentPokemon?.name;
                     } else if (difficulty === 'starwars') {
                         correctAnswer = currentStarWarsCharacter?.name;
+                    } else if (difficulty === 'strangerthings') {
+                        correctAnswer = currentStrangerThingsCharacter?.name;
                     } else if (difficulty === 'cars') {
                         correctAnswer = currentCar?.name;
                     } else if (difficulty === 'space') {
@@ -12099,6 +12259,9 @@
             } else if (difficulty === 'starwars') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
+            } else if (difficulty === 'strangerthings') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStrangerThingsCharacter.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentStrangerThingsCharacter.name}`);
             } else if (difficulty === 'cars') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCar.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentCar.name}`);
@@ -12484,6 +12647,204 @@
                 
                 // Las opciones se generan dentro de onload/onerror ahora
                 // Si llegamos aquí sin imagen, ya se maneja arriba
+                return;
+            } else if (difficulty === 'strangerthings') {
+                // Modo Stranger Things
+                // Inicializar contador de reintentos si no existe
+                if (window.strangerThingsRetryCount === undefined) {
+                    window.strangerThingsRetryCount = 0;
+                }
+                
+                // Filtrar solo personajes con foto válida
+                const charactersWithPhoto = strangerThingsCharacters.filter(char => {
+                    if (!char || !char.photo) return false;
+                    const photoUrl = String(char.photo).trim();
+                    return photoUrl !== '' && photoUrl !== 'null' && photoUrl !== 'undefined' && 
+                           (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) &&
+                           photoUrl.length > 10;
+                });
+                
+                if (charactersWithPhoto.length === 0) {
+                    window.strangerThingsRetryCount = 0; // Resetear contador
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay personajes disponibles con foto. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
+                }
+                
+                // Seleccionar personaje aleatorio solo de los que tienen foto
+                const randomIndex = Math.floor(Math.random() * charactersWithPhoto.length);
+                currentStrangerThingsCharacter = charactersWithPhoto[randomIndex];
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                // Mostrar foto del personaje
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                // Intentar mostrar foto si está disponible
+                if (currentStrangerThingsCharacter.photo) {
+                    const img = new Image();
+                    img.src = currentStrangerThingsCharacter.photo;
+                    img.alt = `Foto de ${currentStrangerThingsCharacter.name}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver foto en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
+                        
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentStrangerThingsCharacter.photo;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
+                        
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
+                        
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    // Función auxiliar para generar las opciones y continuar el juego
+                    const generateOptionsAndContinue = function() {
+                        // Filtrar personajes disponibles actualizados (con foto válida)
+                        const availableCharacters = strangerThingsCharacters.filter(char => {
+                            if (!char || !char.photo) return false;
+                            const photoUrl = String(char.photo).trim();
+                            return photoUrl !== '' && photoUrl !== 'null' && photoUrl !== 'undefined' && 
+                                   (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) &&
+                                   photoUrl.length > 10;
+                        });
+                        
+                        // Generar opciones (1 correcta + 3 incorrectas) - solo de personajes con foto válida
+                        const wrongCharacters = availableCharacters
+                            .filter(c => c.name !== currentStrangerThingsCharacter.name)
+                            .sort(() => Math.random() - 0.5)
+                            .slice(0, 3);
+                        
+                        const options = [
+                            currentStrangerThingsCharacter.name,
+                            wrongCharacters[0]?.name || 'Personaje',
+                            wrongCharacters[1]?.name || 'Personaje',
+                            wrongCharacters[2]?.name || 'Personaje'
+                        ].sort(() => Math.random() - 0.5);
+                        
+                        // Asignar opciones a los botones
+                        document.getElementById('option1').textContent = options[0];
+                        document.getElementById('option2').textContent = options[1];
+                        document.getElementById('option3').textContent = options[2];
+                        document.getElementById('option4').textContent = options[3];
+                        
+                        // Resetear estado
+                        answered = false;
+                        jokerUsed = false;
+                        document.getElementById('message').textContent = '';
+                        document.getElementById('message').className = 'message';
+                        
+                        // Mostrar opciones
+                        [1, 2, 3, 4].forEach(i => {
+                            const btn = document.getElementById(`option${i}`);
+                            btn.style.display = 'block';
+                            btn.disabled = false;
+                            btn.classList.remove('correct', 'incorrect');
+                        });
+                        
+                        // Iniciar temporizador
+                        startTimer();
+                        
+                        // Actualizar comodín
+                        updateJokerButton();
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Foto cargada exitosamente: ${currentStrangerThingsCharacter.name}`);
+                        // Resetear contador de reintentos si la foto carga correctamente
+                        window.strangerThingsRetryCount = 0;
+                        // Generar opciones solo cuando la foto se haya cargado correctamente
+                        generateOptionsAndContinue();
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar foto de ${currentStrangerThingsCharacter.name}:`, currentStrangerThingsCharacter.photo);
+                        
+                        // Remover este personaje de la lista de disponibles (tiene foto inválida)
+                        const index = strangerThingsCharacters.findIndex(c => c.id === currentStrangerThingsCharacter.id);
+                        if (index !== -1) {
+                            strangerThingsCharacters.splice(index, 1);
+                            console.log(`Personaje ${currentStrangerThingsCharacter.name} removido de la lista (foto inválida)`);
+                        }
+                        
+                        // Intentar automáticamente con otro personaje (hasta 3 intentos)
+                        const maxRetries = 3;
+                        window.strangerThingsRetryCount = (window.strangerThingsRetryCount || 0) + 1;
+                        
+                        if (window.strangerThingsRetryCount < maxRetries && strangerThingsCharacters.length > 0) {
+                            console.log(`Reintentando con otro personaje (intento ${window.strangerThingsRetryCount}/${maxRetries})...`);
+                            // Intentar con otro personaje
+                            setTimeout(() => {
+                                loadNewQuestion();
+                            }, 100);
+                            // NO generar opciones, porque vamos a intentar con otro personaje
+                            return;
+                        } else {
+                            // Resetear contador
+                            window.strangerThingsRetryCount = 0;
+                            // Si después de varios intentos no hay fotos válidas, mostrar placeholder
+                            console.warn('No se pudo cargar una foto válida después de varios intentos');
+                            flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #e91e63;">🔮</div><div style="text-align: center; margin-top: 10px; color: #f8bbd0;">${currentStrangerThingsCharacter.name}</div>`;
+                            // Aún así generar opciones para que el juego pueda continuar
+                            generateOptionsAndContinue();
+                        }
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    // Si no hay foto, intentar con otro personaje o mostrar placeholder
+                    const maxRetries = 3;
+                    window.strangerThingsRetryCount = (window.strangerThingsRetryCount || 0) + 1;
+                    
+                    if (window.strangerThingsRetryCount < maxRetries && strangerThingsCharacters.length > 0) {
+                        console.log(`Personaje sin foto, reintentando (intento ${window.strangerThingsRetryCount}/${maxRetries})...`);
+                        setTimeout(() => {
+                            loadNewQuestion();
+                        }, 100);
+                        return;
+                    } else {
+                        window.strangerThingsRetryCount = 0;
+                        // Si no hay foto, mostrar placeholder
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #e91e63;">🔮</div><div style="text-align: center; margin-top: 10px; color: #f8bbd0;">${currentStrangerThingsCharacter.name}</div>`;
+                    }
+                }
+                
+                // Las opciones se generan dentro de onload/onerror ahora
+                // Si llegamos aquí sin foto, ya se maneja arriba
                 return;
             } else if (difficulty === 'cars') {
                 // Modo Coches
@@ -13314,6 +13675,8 @@
                 rankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
             } else if (levelToShow === 'space') {
                 rankingTitle.textContent = '🪐 Top 10 Ranking - Espacio';
+            } else if (levelToShow === 'strangerthings') {
+                rankingTitle.textContent = '🔮 Top 10 Ranking - Stranger Things';
             } else {
                 rankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -13401,6 +13764,7 @@
                     else if (level === 'pokemon') nivelTexto = 'Pokémon';
                     else if (level === 'cars') nivelTexto = 'Coches';
                     else if (level === 'space') nivelTexto = 'Espacio';
+                    else if (level === 'strangerthings') nivelTexto = 'Stranger Things';
                     difficultyRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -13518,6 +13882,7 @@
                     else if (level === 'pokemon') nivelTexto = 'Pokémon';
                     else if (level === 'cars') nivelTexto = 'Coches';
                     else if (level === 'space') nivelTexto = 'Espacio';
+                    else if (level === 'strangerthings') nivelTexto = 'Stranger Things';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -13611,6 +13976,7 @@
                     else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
                     else if (difficulty === 'cars') nivelTexto = 'Coches';
                     else if (difficulty === 'space') nivelTexto = 'Espacio';
+                    else if (difficulty === 'strangerthings') nivelTexto = 'Stranger Things';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -13950,6 +14316,8 @@
                 correctAnswer = currentPokemon.name;
             } else if (difficulty === 'starwars') {
                 correctAnswer = currentStarWarsCharacter.name;
+            } else if (difficulty === 'strangerthings') {
+                correctAnswer = currentStrangerThingsCharacter.name;
             } else if (difficulty === 'cars') {
                 correctAnswer = currentCar.name;
             } else if (difficulty === 'space') {
@@ -14186,6 +14554,12 @@
                     alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
                     return;
                 }
+            } else if (difficulty === 'strangerthings') {
+                if (!currentStrangerThingsCharacter || !currentStrangerThingsCharacter.name) {
+                    console.error('Error: currentStrangerThingsCharacter no está definido');
+                    alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
+                    return;
+                }
 
                 // Detener temporizador
                 stopTimer();
@@ -14227,6 +14601,67 @@
                     document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
                     document.getElementById('message').className = 'message incorrect';
                     showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
+                }
+
+                // Si se acabaron las vidas, mostrar game over
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 2000);
+                } else {
+                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
+                }
+                return;
+            } else if (difficulty === 'strangerthings') {
+                if (!currentStrangerThingsCharacter || !currentStrangerThingsCharacter.name) {
+                    console.error('Error: currentStrangerThingsCharacter no está definido');
+                    alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentStrangerThingsCharacter.name;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentStrangerThingsCharacter.name) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es ${currentStrangerThingsCharacter.name}! 🔮`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentStrangerThingsCharacter.name}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentStrangerThingsCharacter.name}`);
                 }
 
                 // Si se acabaron las vidas, mostrar game over
@@ -14382,6 +14817,14 @@
         document.getElementById('impossibleBtn').addEventListener('click', () => selectDifficulty('impossible'));
         document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
         document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
+        const strangerthingsBtnEl = document.getElementById('strangerthingsBtn');
+        if (strangerthingsBtnEl) {
+            strangerthingsBtnEl.addEventListener('click', () => selectDifficulty('strangerthings'));
+        }
+        const strangerthingsBtn = document.getElementById('strangerthingsBtn');
+        if (strangerthingsBtn) {
+            strangerthingsBtn.addEventListener('click', () => selectDifficulty('strangerthings'));
+        }
         document.getElementById('pokemonBtn').addEventListener('click', () => selectDifficulty('pokemon'));
         document.getElementById('carsBtn').addEventListener('click', () => selectDifficulty('cars'));
         document.getElementById('spaceBtn').addEventListener('click', () => selectDifficulty('space'));
@@ -15979,6 +16422,7 @@
             const pokemonBtn = document.getElementById('pokemonBtn');
             const carsBtn = document.getElementById('carsBtn');
             const spaceBtn = document.getElementById('spaceBtn');
+            const strangerthingsBtn = document.getElementById('strangerthingsBtn');
             const mainViewRankingCarsBtn = document.getElementById('mainViewRankingCarsBtn');
             const viewRankingCarsBtn = document.getElementById('viewRankingCarsBtn');
             const mainViewRankingSpaceBtn = document.getElementById('mainViewRankingSpaceBtn');
@@ -16001,6 +16445,15 @@
             // Espacio visible para todos los usuarios (ahora en Juegos Mart)
             if (spaceBtn) {
                 spaceBtn.style.display = 'block';
+            }
+            
+            // Stranger Things solo visible para Martin
+            if (strangerthingsBtn) {
+                const isMartin = window.currentUserName && (
+                    window.currentUserName.toLowerCase() === 'martin' ||
+                    window.currentUserName.toLowerCase().includes('martin')
+                );
+                strangerthingsBtn.style.display = isMartin ? 'block' : 'none';
             }
             
             // Botones de clasificación de Coches y Espacio visibles para todos los usuarios
