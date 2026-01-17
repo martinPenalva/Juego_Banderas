@@ -10030,6 +10030,8 @@
         let carsList = []; // Lista de modelos de coches
         let currentStrangerThingsCharacter = null; // Para el modo Stranger Things
         let strangerThingsCharacters = []; // Lista de personajes de Stranger Things cargados
+        let currentStrangerThingsQuestion = null; // Para preguntas sobre la serie
+        let strangerThingsQuestionType = 'character'; // 'character' o 'question'
         let currentSpaceImage = null; // Para el modo Espacio/Planetas
         let spaceImagesList = []; // Lista de imágenes del espacio de NASA
 
@@ -11304,6 +11306,162 @@
             }
         }
 
+        // Función para obtener preguntas sobre Stranger Things en español
+        function getStrangerThingsQuestions() {
+            return [
+                {
+                    question: "¿En qué año se estrenó la primera temporada de Stranger Things?",
+                    correctAnswer: "2016",
+                    wrongAnswers: ["2015", "2017", "2018"]
+                },
+                {
+                    question: "¿Cómo se llama el pueblo donde transcurre la serie?",
+                    correctAnswer: "Hawkins",
+                    wrongAnswers: ["Springfield", "Derry", "Castle Rock"]
+                },
+                {
+                    question: "¿Cuál es el nombre del laboratorio secreto donde experimentan?",
+                    correctAnswer: "Hawkins National Laboratory",
+                    wrongAnswers: ["Area 51", "Black Mesa", "Umbrella Corporation"]
+                },
+                {
+                    question: "¿Qué número tiene Eleven en el laboratorio?",
+                    correctAnswer: "011",
+                    wrongAnswers: ["007", "001", "010"]
+                },
+                {
+                    question: "¿Cómo se llama el mundo alternativo al que acceden?",
+                    correctAnswer: "El Otro Lado",
+                    wrongAnswers: ["El Inframundo", "La Dimensión Paralela", "El Vacío"]
+                },
+                {
+                    question: "¿Qué come Eleven cuando escapa del laboratorio?",
+                    correctAnswer: "Waffles",
+                    wrongAnswers: ["Hamburguesas", "Pizza", "Helado"]
+                },
+                {
+                    question: "¿Cuál es el nombre del grupo de amigos protagonistas?",
+                    correctAnswer: "Los Chicos",
+                    wrongAnswers: ["Los Cuatro", "El Club", "Los Amigos"]
+                },
+                {
+                    question: "¿Qué juego de mesa juegan los chicos frecuentemente?",
+                    correctAnswer: "Dungeons & Dragons",
+                    wrongAnswers: ["Risk", "Monopoly", "Clue"]
+                },
+                {
+                    question: "¿Cómo se llama el monstruo principal de la primera temporada?",
+                    correctAnswer: "Demogorgon",
+                    wrongAnswers: ["Vecna", "Mind Flayer", "Demodog"]
+                },
+                {
+                    question: "¿Qué canción de Kate Bush se hizo famosa por la serie?",
+                    correctAnswer: "Running Up That Hill",
+                    wrongAnswers: ["Wuthering Heights", "Babooshka", "Cloudbusting"]
+                },
+                {
+                    question: "¿Cuál es el nombre completo de Eleven?",
+                    correctAnswer: "Jane Ives",
+                    wrongAnswers: ["Sarah Hopper", "Max Mayfield", "Nancy Wheeler"]
+                },
+                {
+                    question: "¿Qué objeto usa Eleven para comunicarse con otros?",
+                    correctAnswer: "Radio",
+                    wrongAnswers: ["Teléfono", "Walkie-talkie", "Computadora"]
+                },
+                {
+                    question: "¿Cómo se llama el hermano mayor de Will?",
+                    correctAnswer: "Jonathan Byers",
+                    wrongAnswers: ["Steve Harrington", "Billy Hargrove", "Eddie Munson"]
+                },
+                {
+                    question: "¿Qué temporada introduce a Vecna como villano principal?",
+                    correctAnswer: "Cuarta",
+                    wrongAnswers: ["Segunda", "Tercera", "Quinta"]
+                },
+                {
+                    question: "¿Cuál es el nombre del personaje interpretado por Millie Bobby Brown?",
+                    correctAnswer: "Eleven",
+                    wrongAnswers: ["Max", "Nancy", "Joyce"]
+                },
+                {
+                    question: "¿Qué objeto busca Will en el bosque al inicio de la serie?",
+                    correctAnswer: "Su bicicleta",
+                    wrongAnswers: ["Su mochila", "Su walkie-talkie", "Su linterna"]
+                },
+                {
+                    question: "¿Cómo se llama el centro comercial donde trabajan varios personajes?",
+                    correctAnswer: "Starcourt Mall",
+                    wrongAnswers: ["Hawkins Mall", "Riverside Mall", "Westfield Mall"]
+                },
+                {
+                    question: "¿Qué personaje tiene poderes de telequinesis?",
+                    correctAnswer: "Eleven",
+                    wrongAnswers: ["Max", "Will", "Mike"]
+                },
+                {
+                    question: "¿Cuál es el nombre del científico que ayuda a los chicos?",
+                    correctAnswer: "Dr. Sam Owens",
+                    wrongAnswers: ["Dr. Brenner", "Dr. Martin", "Dr. Clarke"]
+                },
+                {
+                    question: "¿Qué temporada transcurre principalmente en el verano?",
+                    correctAnswer: "Tercera",
+                    wrongAnswers: ["Primera", "Segunda", "Cuarta"]
+                },
+                {
+                    question: "¿Cómo se llama el grupo de villanos rusos en la tercera temporada?",
+                    correctAnswer: "Los rusos",
+                    wrongAnswers: ["El KGB", "Los espías", "Los científicos"]
+                },
+                {
+                    question: "¿Qué personaje muere heroicamente en la tercera temporada?",
+                    correctAnswer: "Billy Hargrove",
+                    wrongAnswers: ["Bob Newby", "Alexei", "Barb"]
+                },
+                {
+                    question: "¿Cuál es el nombre del personaje que toca la guitarra en la cuarta temporada?",
+                    correctAnswer: "Eddie Munson",
+                    wrongAnswers: ["Steve Harrington", "Jonathan Byers", "Argyle"]
+                },
+                {
+                    question: "¿Qué canción toca Eddie para salvar a los chicos?",
+                    correctAnswer: "Master of Puppets",
+                    wrongAnswers: ["Enter Sandman", "Nothing Else Matters", "One"]
+                },
+                {
+                    question: "¿Cómo se llama el personaje que tiene poderes similares a Eleven?",
+                    correctAnswer: "Kali",
+                    wrongAnswers: ["Max", "Nancy", "Robin"]
+                },
+                {
+                    question: "¿Qué objeto usa Eleven para aumentar sus poderes?",
+                    correctAnswer: "Tanque de privación sensorial",
+                    wrongAnswers: ["Radio", "Computadora", "Espejo"]
+                },
+                {
+                    question: "¿Cuál es el nombre del personaje que trabaja en la tienda de helados?",
+                    correctAnswer: "Steve Harrington",
+                    wrongAnswers: ["Jonathan Byers", "Robin Buckley", "Dustin Henderson"]
+                },
+                {
+                    question: "¿Qué temporada introduce a Max como nuevo personaje?",
+                    correctAnswer: "Segunda",
+                    wrongAnswers: ["Primera", "Tercera", "Cuarta"]
+                },
+                {
+                    question: "¿Cómo se llama el personaje que es líder de los Hellfire Club?",
+                    correctAnswer: "Eddie Munson",
+                    wrongAnswers: ["Mike Wheeler", "Dustin Henderson", "Lucas Sinclair"]
+                },
+                {
+                    question: "¿Qué objeto usa Will para comunicarse desde el Otro Lado?",
+                    correctAnswer: "Luces de Navidad",
+                    wrongAnswers: ["Radio", "Teléfono", "Televisión"]
+                }
+            ];
+        }
+
         // Función para cargar lista de modelos de coches
         function getCarsList() {
             return [
@@ -12233,7 +12391,11 @@
                     } else if (difficulty === 'starwars') {
                         correctAnswer = currentStarWarsCharacter?.name;
                     } else if (difficulty === 'strangerthings') {
-                        correctAnswer = currentStrangerThingsCharacter?.name;
+                        if (strangerThingsQuestionType === 'question' && currentStrangerThingsQuestion) {
+                            correctAnswer = currentStrangerThingsQuestion?.correctAnswer;
+                        } else {
+                            correctAnswer = currentStrangerThingsCharacter?.name;
+                        }
                     } else if (difficulty === 'cars') {
                         correctAnswer = currentCar?.name;
                     } else if (difficulty === 'space') {
@@ -12260,8 +12422,16 @@
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
             } else if (difficulty === 'strangerthings') {
-                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStrangerThingsCharacter.name}`;
-                showAlert('error', '', `La respuesta correcta era: ${currentStrangerThingsCharacter.name}`);
+                let correctAnswerText;
+                if (strangerThingsQuestionType === 'question' && currentStrangerThingsQuestion) {
+                    correctAnswerText = currentStrangerThingsQuestion.correctAnswer;
+                } else if (currentStrangerThingsCharacter) {
+                    correctAnswerText = currentStrangerThingsCharacter.name;
+                } else {
+                    correctAnswerText = 'Desconocido';
+                }
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${correctAnswerText}`;
+                showAlert('error', '', `La respuesta correcta era: ${correctAnswerText}`);
             } else if (difficulty === 'cars') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCar.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentCar.name}`);
@@ -12649,7 +12819,79 @@
                 // Si llegamos aquí sin imagen, ya se maneja arriba
                 return;
             } else if (difficulty === 'strangerthings') {
-                // Modo Stranger Things
+                // Modo Stranger Things - Alternar entre personajes y preguntas
+                // Decidir aleatoriamente si mostrar personaje o pregunta (50% cada uno)
+                const isQuestion = Math.random() < 0.5;
+                strangerThingsQuestionType = isQuestion ? 'question' : 'character';
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                if (strangerThingsQuestionType === 'question') {
+                    // Mostrar pregunta sobre la serie
+                    const questions = getStrangerThingsQuestions();
+                    if (questions.length === 0) {
+                        // Si no hay preguntas, mostrar personaje
+                        strangerThingsQuestionType = 'character';
+                    } else {
+                        const randomQuestionIndex = Math.floor(Math.random() * questions.length);
+                        currentStrangerThingsQuestion = questions[randomQuestionIndex];
+                        
+                        // Mostrar la pregunta
+                        const questionDiv = document.createElement('div');
+                        questionDiv.style.textAlign = 'center';
+                        questionDiv.style.padding = '20px';
+                        questionDiv.style.color = '#f8bbd0';
+                        questionDiv.style.fontSize = '1.3em';
+                        questionDiv.style.fontWeight = 'bold';
+                        questionDiv.style.lineHeight = '1.6';
+                        questionDiv.innerHTML = `<div style="font-size: 3em; margin-bottom: 20px;">🔮</div><div>${currentStrangerThingsQuestion.question}</div>`;
+                        flagEl.appendChild(questionDiv);
+                        
+                        // Generar opciones
+                        const options = [
+                            currentStrangerThingsQuestion.correctAnswer,
+                            currentStrangerThingsQuestion.wrongAnswers[0],
+                            currentStrangerThingsQuestion.wrongAnswers[1],
+                            currentStrangerThingsQuestion.wrongAnswers[2]
+                        ].sort(() => Math.random() - 0.5);
+                        
+                        // Asignar opciones a los botones
+                        document.getElementById('option1').textContent = options[0];
+                        document.getElementById('option2').textContent = options[1];
+                        document.getElementById('option3').textContent = options[2];
+                        document.getElementById('option4').textContent = options[3];
+                        
+                        // Resetear estado
+                        answered = false;
+                        jokerUsed = false;
+                        document.getElementById('message').textContent = '';
+                        document.getElementById('message').className = 'message';
+                        
+                        // Mostrar opciones
+                        [1, 2, 3, 4].forEach(i => {
+                            const btn = document.getElementById(`option${i}`);
+                            btn.style.display = 'block';
+                            btn.disabled = false;
+                            btn.classList.remove('correct', 'incorrect');
+                        });
+                        
+                        // Iniciar temporizador
+                        startTimer();
+                        
+                        // Actualizar comodín
+                        updateJokerButton();
+                        
+                        return;
+                    }
+                }
+                
+                // Si llegamos aquí, mostrar personaje
+                strangerThingsQuestionType = 'character';
+                
                 // Inicializar contador de reintentos si no existe
                 if (window.strangerThingsRetryCount === undefined) {
                     window.strangerThingsRetryCount = 0;
@@ -12675,13 +12917,6 @@
                 // Seleccionar personaje aleatorio solo de los que tienen foto
                 const randomIndex = Math.floor(Math.random() * charactersWithPhoto.length);
                 currentStrangerThingsCharacter = charactersWithPhoto[randomIndex];
-                
-                // Detener temporizador anterior
-                stopTimer();
-                
-                // Mostrar foto del personaje
-                const flagEl = document.getElementById('flag');
-                flagEl.innerHTML = '';
                 
                 // Intentar mostrar foto si está disponible
                 if (currentStrangerThingsCharacter.photo) {
@@ -14317,7 +14552,11 @@
             } else if (difficulty === 'starwars') {
                 correctAnswer = currentStarWarsCharacter.name;
             } else if (difficulty === 'strangerthings') {
-                correctAnswer = currentStrangerThingsCharacter.name;
+                if (strangerThingsQuestionType === 'question' && currentStrangerThingsQuestion) {
+                    correctAnswer = currentStrangerThingsQuestion.correctAnswer;
+                } else {
+                    correctAnswer = currentStrangerThingsCharacter.name;
+                }
             } else if (difficulty === 'cars') {
                 correctAnswer = currentCar.name;
             } else if (difficulty === 'space') {
@@ -14623,6 +14862,71 @@
                 }
                 return;
             } else if (difficulty === 'strangerthings') {
+                // Detener temporizador
+                stopTimer();
+                
+                // Verificar si es pregunta o personaje
+                if (strangerThingsQuestionType === 'question') {
+                    if (!currentStrangerThingsQuestion) {
+                        console.error('Error: currentStrangerThingsQuestion no está definido');
+                        alert('Error: No hay pregunta seleccionada. Por favor, recarga la página.');
+                        return;
+                    }
+                    
+                    const selectedBtn = document.getElementById(`option${optionNumber}`);
+                    const selectedText = selectedBtn.textContent;
+                    const isCorrect = selectedText === currentStrangerThingsQuestion.correctAnswer;
+                    
+                    answered = true;
+                    
+                    // Deshabilitar todos los botones
+                    [1, 2, 3, 4].forEach(i => {
+                        const btn = document.getElementById(`option${i}`);
+                        if (btn.style.display !== 'none') {
+                            btn.disabled = true;
+                            
+                            if (btn.textContent === currentStrangerThingsQuestion.correctAnswer) {
+                                btn.classList.add('correct');
+                            } else if (btn === selectedBtn && !isCorrect) {
+                                btn.classList.add('incorrect');
+                            }
+                        }
+                    });
+                    
+                    if (isCorrect) {
+                        score++;
+                        streak++;
+                        if (streak > maxStreak) maxStreak = streak;
+                        updateStreak(true);
+                        document.getElementById('score').textContent = score;
+                        document.getElementById('message').textContent = '✅ ¡Correcto!';
+                        document.getElementById('message').className = 'message correct';
+                        showAlert('success', '¡Correcto!', `La respuesta correcta es: ${currentStrangerThingsQuestion.correctAnswer}! 🔮`);
+                    } else {
+                        streak = 0;
+                        updateStreak(false);
+                        lives--;
+                        updateHearts();
+                        document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentStrangerThingsQuestion.correctAnswer}`;
+                        document.getElementById('message').className = 'message incorrect';
+                        showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentStrangerThingsQuestion.correctAnswer}`);
+                    }
+                    
+                    // Si se acabaron las vidas, mostrar game over
+                    if (lives <= 0) {
+                        setTimeout(() => {
+                            showGameOver();
+                        }, 2000);
+                    } else {
+                        // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                        setTimeout(() => {
+                            loadNewQuestion();
+                        }, 2000);
+                    }
+                    return;
+                }
+                
+                // Si es personaje, continuar con la lógica de personajes
                 console.log('Modo Stranger Things - Verificando personaje:', currentStrangerThingsCharacter);
                 if (!currentStrangerThingsCharacter || !currentStrangerThingsCharacter.name) {
                     console.error('Error: currentStrangerThingsCharacter no está definido', {
@@ -14633,9 +14937,6 @@
                     alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
                     return;
                 }
-
-                // Detener temporizador
-                stopTimer();
 
                 const selectedBtn = document.getElementById(`option${optionNumber}`);
                 const selectedText = selectedBtn.textContent;
