@@ -14364,6 +14364,16 @@
         // Manejar selección de opción
         function selectOption(optionNumber) {
             if (answered) return;
+            
+            // Debug: verificar el modo actual y variables
+            console.log('selectOption - difficulty:', difficulty, 'optionNumber:', optionNumber);
+            console.log('Variables:', {
+                currentPokemon: currentPokemon ? currentPokemon.name : null,
+                currentStarWarsCharacter: currentStarWarsCharacter ? currentStarWarsCharacter.name : null,
+                currentStrangerThingsCharacter: currentStrangerThingsCharacter ? currentStrangerThingsCharacter.name : null,
+                currentCar: currentCar ? currentCar.name : null,
+                currentSpaceImage: currentSpaceImage ? currentSpaceImage.title : null
+            });
 
             if (difficulty === 'pokemon') {
                 if (!currentPokemon || !currentPokemon.name) {
@@ -14550,13 +14560,10 @@
                 return;
             } else if (difficulty === 'starwars') {
                 if (!currentStarWarsCharacter || !currentStarWarsCharacter.name) {
-                    console.error('Error: currentStarWarsCharacter no está definido');
-                    alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
-                    return;
-                }
-            } else if (difficulty === 'strangerthings') {
-                if (!currentStrangerThingsCharacter || !currentStrangerThingsCharacter.name) {
-                    console.error('Error: currentStrangerThingsCharacter no está definido');
+                    console.error('Error: currentStarWarsCharacter no está definido', {
+                        difficulty: difficulty,
+                        currentStarWarsCharacter: currentStarWarsCharacter
+                    });
                     alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
                     return;
                 }
@@ -14616,8 +14623,13 @@
                 }
                 return;
             } else if (difficulty === 'strangerthings') {
+                console.log('Modo Stranger Things - Verificando personaje:', currentStrangerThingsCharacter);
                 if (!currentStrangerThingsCharacter || !currentStrangerThingsCharacter.name) {
-                    console.error('Error: currentStrangerThingsCharacter no está definido');
+                    console.error('Error: currentStrangerThingsCharacter no está definido', {
+                        difficulty: difficulty,
+                        currentStrangerThingsCharacter: currentStrangerThingsCharacter,
+                        strangerThingsCharacters: strangerThingsCharacters.length
+                    });
                     alert('Error: No hay personaje seleccionado. Por favor, recarga la página.');
                     return;
                 }
