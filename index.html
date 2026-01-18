@@ -2059,6 +2059,19 @@
             box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
         }
 
+        .difficulty-btn.brainrots {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 50%, #c44569 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .difficulty-btn.brainrots:hover {
+            background: linear-gradient(135deg, #ff6b6b 0%, #c44569 50%, #b83b5e 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+        }
+
         .difficulty-btn.cars {
             border-color: #dc2626;
             background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
@@ -2208,6 +2221,26 @@
             background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%);
             color: white;
             box-shadow: 0 4px 15px rgba(251, 191, 36, 0.5);
+        }
+
+        .ranking-btn-brainrots {
+            border-color: #ff6b6b;
+        }
+
+        .ranking-btn-brainrots:hover {
+            background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 50%, #c44569 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5);
+        }
+
+        .ranking-btn-strangerthings {
+            border-color: #e91e63;
+        }
+
+        .ranking-btn-strangerthings:hover {
+            background: linear-gradient(135deg, #533483 0%, #8b2fc9 50%, #e91e63 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.5);
         }
 
         .game-over {
@@ -9880,6 +9913,8 @@
                     <button class="ranking-btn ranking-btn-pokemon" id="mainViewRankingPokemonBtn">⚡ Pokémon</button>
                     <button class="ranking-btn ranking-btn-cars" id="mainViewRankingCarsBtn">🚗 Coches</button>
                     <button class="ranking-btn ranking-btn-space" id="mainViewRankingSpaceBtn">🪐 Espacio</button>
+                    <button class="ranking-btn ranking-btn-brainrots" id="mainViewRankingBrainrotsBtn">🧠 Brainrots</button>
+                    <button class="ranking-btn ranking-btn-strangerthings" id="mainViewRankingStrangerThingsBtn">🔮 Stranger Things</button>
                 </div>
             </div>
         </div>
@@ -9930,6 +9965,7 @@
                     <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
                     <button class="difficulty-btn cars" id="carsBtn">🚗 Coches<br><small>Adivina el modelo</small></button>
                     <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
+                    <button class="difficulty-btn brainrots" id="brainrotsBtn">🧠 Brainrots<br><small>Adivina el personaje</small></button>
                     <button class="difficulty-btn strangerthings" id="strangerthingsBtn" style="display: none;">🔮 Stranger Things<br><small>Adivina el personaje</small></button>
                 </div>
             </div>
@@ -9952,6 +9988,8 @@
                     <button class="ranking-btn ranking-btn-pokemon" id="viewRankingPokemonBtn">⚡ Clasificación Pokémon</button>
                     <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn">🚗 Clasificación Coches</button>
                     <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn">🪐 Clasificación Espacio</button>
+                    <button class="ranking-btn ranking-btn-brainrots" id="viewRankingBrainrotsBtn">🧠 Clasificación Brainrots</button>
+                    <button class="ranking-btn ranking-btn-strangerthings" id="viewRankingStrangerThingsBtn">🔮 Clasificación Stranger Things</button>
                 </div>
             </div>
             <div class="ranking-buttons-container">
@@ -10034,6 +10072,8 @@
         let strangerThingsQuestionType = 'character'; // 'character' o 'question'
         let currentSpaceImage = null; // Para el modo Espacio/Planetas
         let spaceImagesList = []; // Lista de imágenes del espacio de NASA
+        let currentBrainrot = null; // Para el modo Brainrots
+        let brainrotsList = []; // Lista de personajes de Brainrots cargados
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -11212,6 +11252,65 @@
             }
         }
 
+        // Función para cargar personajes de Brainrots desde el JSON
+        async function loadBrainrots() {
+            brainrotsList = [];
+            
+            // Verificar si está usando file:// protocol
+            const isFileProtocol = window.location.protocol === 'file:';
+            if (isFileProtocol) {
+                console.warn('⚠️ Modo file:// detectado. Las imágenes de Brainrots pueden no estar disponibles.');
+                console.warn('💡 Para ver las imágenes, usa un servidor web local:');
+                console.warn('   - Python: python -m http.server 8000');
+                console.warn('   - Node.js: npx serve');
+            }
+            
+            try {
+                // Cargar datos desde el archivo JSON local
+                const response = await fetch('./api_Brainrots_martin.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Procesar los datos del JSON
+                if (Array.isArray(data) && data.length > 0) {
+                    brainrotsList = data
+                        .filter(item => item && item.name && item.image)
+                        .map(item => {
+                            // Verificar que la imagen sea válida
+                            const imageUrl = String(item.image).trim();
+                            const hasValidImage = imageUrl !== '' && 
+                                                  imageUrl !== 'null' && 
+                                                  imageUrl !== 'undefined' && 
+                                                  (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) &&
+                                                  imageUrl.length > 10;
+                            
+                            if (!hasValidImage) return null;
+                            
+                            return {
+                                id: item.id,
+                                name: item.name,
+                                description: item.description || '',
+                                image: item.image,
+                                category: item.category || 'main',
+                                level: item.level || 'Brainrots'
+                            };
+                        })
+                        .filter(item => item !== null);
+                    
+                    console.log(`Modo Brainrots: ${brainrotsList.length} personajes cargados del JSON`);
+                } else {
+                    throw new Error('El JSON no contiene un array válido');
+                }
+            } catch (error) {
+                console.error('Error al cargar personajes de Brainrots:', error);
+                brainrotsList = [];
+                console.log('Modo Brainrots: No se pudieron cargar los datos');
+            }
+        }
+
         async function loadStrangerThingsCharacters() {
             strangerThingsCharacters = [];
             
@@ -12117,6 +12216,31 @@
                         alert('Error al cargar personajes de Stranger Things. Por favor, recarga la página.');
                     }
                 });
+            } else if (level === 'brainrots') {
+                document.body.classList.add('brainrots-mode');
+                // Verificar si está usando file:// y mostrar advertencia
+                if (window.location.protocol === 'file:') {
+                    console.warn('⚠️ Modo file:// detectado. Las imágenes de Brainrots pueden no estar disponibles.');
+                    console.warn('💡 Para ver las imágenes, usa un servidor web local (python -m http.server o npx serve)');
+                }
+                // Cargar personajes de Brainrots
+                loadBrainrots().then(() => {
+                    if (brainrotsList.length === 0) {
+                        alert('No se pudieron cargar personajes de Brainrots. Por favor, recarga la página o usa un servidor web local.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar personajes de Brainrots:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (brainrotsList.length > 0) {
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar personajes de Brainrots. Por favor, recarga la página.');
+                    }
+                });
             } else if (level === 'impossible') {
                 document.body.classList.add('hell-mode');
                 createHellParticles();
@@ -12391,15 +12515,15 @@
                     } else if (difficulty === 'starwars') {
                         correctAnswer = currentStarWarsCharacter?.name;
                     } else if (difficulty === 'strangerthings') {
-                        if (strangerThingsQuestionType === 'question' && currentStrangerThingsQuestion) {
-                            correctAnswer = currentStrangerThingsQuestion?.correctAnswer;
-                        } else {
-                            correctAnswer = currentStrangerThingsCharacter?.name;
-                        }
+                        correctAnswer = currentStrangerThingsCharacter?.name;
                     } else if (difficulty === 'cars') {
                         correctAnswer = currentCar?.name;
                     } else if (difficulty === 'space') {
                         correctAnswer = currentSpaceImage?.title;
+                    } else if (difficulty === 'brainrots') {
+                        correctAnswer = currentBrainrot?.name;
+                    } else if (difficulty === 'brainrots') {
+                        correctAnswer = currentBrainrot?.name;
                     } else {
                         correctAnswer = currentCountry?.name?.common;
                     }
@@ -12422,14 +12546,7 @@
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentStarWarsCharacter.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentStarWarsCharacter.name}`);
             } else if (difficulty === 'strangerthings') {
-                let correctAnswerText;
-                if (strangerThingsQuestionType === 'question' && currentStrangerThingsQuestion) {
-                    correctAnswerText = currentStrangerThingsQuestion.correctAnswer;
-                } else if (currentStrangerThingsCharacter) {
-                    correctAnswerText = currentStrangerThingsCharacter.name;
-                } else {
-                    correctAnswerText = 'Desconocido';
-                }
+                const correctAnswerText = currentStrangerThingsCharacter?.name || 'Desconocido';
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${correctAnswerText}`;
                 showAlert('error', '', `La respuesta correcta era: ${correctAnswerText}`);
             } else if (difficulty === 'cars') {
@@ -12438,6 +12555,9 @@
             } else if (difficulty === 'space') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentSpaceImage.title}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentSpaceImage.title}`);
+            } else if (difficulty === 'brainrots') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentBrainrot.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentBrainrot.name}`);
             } else {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCountry.name.common}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
@@ -12818,78 +12938,131 @@
                 // Las opciones se generan dentro de onload/onerror ahora
                 // Si llegamos aquí sin imagen, ya se maneja arriba
                 return;
-            } else if (difficulty === 'strangerthings') {
-                // Modo Stranger Things - Alternar entre personajes y preguntas
-                // Decidir aleatoriamente si mostrar personaje o pregunta (50% cada uno)
-                const isQuestion = Math.random() < 0.5;
-                strangerThingsQuestionType = isQuestion ? 'question' : 'character';
+            } else if (difficulty === 'brainrots') {
+                // Modo Brainrots
+                if (brainrotsList.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay personajes de Brainrots disponibles. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
+                }
+                
+                // Seleccionar personaje aleatorio
+                const randomIndex = Math.floor(Math.random() * brainrotsList.length);
+                currentBrainrot = brainrotsList[randomIndex];
                 
                 // Detener temporizador anterior
                 stopTimer();
                 
+                // Mostrar imagen del personaje
                 const flagEl = document.getElementById('flag');
                 flagEl.innerHTML = '';
                 
-                if (strangerThingsQuestionType === 'question') {
-                    // Mostrar pregunta sobre la serie
-                    const questions = getStrangerThingsQuestions();
-                    if (questions.length === 0) {
-                        // Si no hay preguntas, mostrar personaje
-                        strangerThingsQuestionType = 'character';
-                    } else {
-                        const randomQuestionIndex = Math.floor(Math.random() * questions.length);
-                        currentStrangerThingsQuestion = questions[randomQuestionIndex];
+                // Intentar mostrar imagen si está disponible
+                if (currentBrainrot.image) {
+                    const img = new Image();
+                    img.src = currentBrainrot.image;
+                    img.alt = `Imagen de ${currentBrainrot.name}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver imagen en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
                         
-                        // Mostrar la pregunta
-                        const questionDiv = document.createElement('div');
-                        questionDiv.style.textAlign = 'center';
-                        questionDiv.style.padding = '20px';
-                        questionDiv.style.color = '#f8bbd0';
-                        questionDiv.style.fontSize = '1.3em';
-                        questionDiv.style.fontWeight = 'bold';
-                        questionDiv.style.lineHeight = '1.6';
-                        questionDiv.innerHTML = `<div style="font-size: 3em; margin-bottom: 20px;">🔮</div><div>${currentStrangerThingsQuestion.question}</div>`;
-                        flagEl.appendChild(questionDiv);
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentBrainrot.image;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
                         
-                        // Generar opciones
-                        const options = [
-                            currentStrangerThingsQuestion.correctAnswer,
-                            currentStrangerThingsQuestion.wrongAnswers[0],
-                            currentStrangerThingsQuestion.wrongAnswers[1],
-                            currentStrangerThingsQuestion.wrongAnswers[2]
-                        ].sort(() => Math.random() - 0.5);
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
                         
-                        // Asignar opciones a los botones
-                        document.getElementById('option1').textContent = options[0];
-                        document.getElementById('option2').textContent = options[1];
-                        document.getElementById('option3').textContent = options[2];
-                        document.getElementById('option4').textContent = options[3];
-                        
-                        // Resetear estado
-                        answered = false;
-                        jokerUsed = false;
-                        document.getElementById('message').textContent = '';
-                        document.getElementById('message').className = 'message';
-                        
-                        // Mostrar opciones
-                        [1, 2, 3, 4].forEach(i => {
-                            const btn = document.getElementById(`option${i}`);
-                            btn.style.display = 'block';
-                            btn.disabled = false;
-                            btn.classList.remove('correct', 'incorrect');
-                        });
-                        
-                        // Iniciar temporizador
-                        startTimer();
-                        
-                        // Actualizar comodín
-                        updateJokerButton();
-                        
-                        return;
-                    }
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar imagen de ${currentBrainrot.name}:`, currentBrainrot.image);
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #ff6b6b;">🧠</div><div style="text-align: center; margin-top: 10px; color: #ffe0e0;">${currentBrainrot.name}</div>`;
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Imagen cargada exitosamente: ${currentBrainrot.name}`);
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #ff6b6b;">🧠</div><div style="text-align: center; margin-top: 10px; color: #ffe0e0;">${currentBrainrot.name}</div>`;
                 }
                 
-                // Si llegamos aquí, mostrar personaje
+                // Generar opciones (1 correcta + 3 incorrectas)
+                const wrongBrainrots = brainrotsList
+                    .filter(b => b.name !== currentBrainrot.name)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const options = [
+                    currentBrainrot.name,
+                    wrongBrainrots[0]?.name || 'Brainrot',
+                    wrongBrainrots[1]?.name || 'Brainrot',
+                    wrongBrainrots[2]?.name || 'Brainrot'
+                ].sort(() => Math.random() - 0.5);
+                
+                // Asignar opciones a los botones
+                document.getElementById('option1').textContent = options[0];
+                document.getElementById('option2').textContent = options[1];
+                document.getElementById('option3').textContent = options[2];
+                document.getElementById('option4').textContent = options[3];
+                
+                // Resetear estado
+                answered = false;
+                jokerUsed = false;
+                document.getElementById('message').textContent = '';
+                document.getElementById('message').className = 'message';
+                
+                // Mostrar opciones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    btn.style.display = 'block';
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+                
+                // Iniciar temporizador
+                startTimer();
+                
+                // Actualizar comodín
+                updateJokerButton();
+                
+                return;
+            } else if (difficulty === 'strangerthings') {
+                // Modo Stranger Things - Solo personajes
                 strangerThingsQuestionType = 'character';
                 
                 // Inicializar contador de reintentos si no existe
@@ -13910,6 +14083,8 @@
                 rankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
             } else if (levelToShow === 'space') {
                 rankingTitle.textContent = '🪐 Top 10 Ranking - Espacio';
+            } else if (levelToShow === 'brainrots') {
+                rankingTitle.textContent = '🧠 Top 10 Ranking - Brainrots';
             } else if (levelToShow === 'strangerthings') {
                 rankingTitle.textContent = '🔮 Top 10 Ranking - Stranger Things';
             } else {
@@ -13958,6 +14133,10 @@
                 difficultyRankingTitle.textContent = '🚗 Top 10 Ranking - Coches';
             } else if (level === 'space') {
                 difficultyRankingTitle.textContent = '🪐 Top 10 Ranking - Espacio';
+            } else if (level === 'brainrots') {
+                difficultyRankingTitle.textContent = '🧠 Top 10 Ranking - Brainrots';
+            } else if (level === 'strangerthings') {
+                difficultyRankingTitle.textContent = '🔮 Top 10 Ranking - Stranger Things';
             } else {
                 difficultyRankingTitle.textContent = '🏆 Top 10 Ranking';
             }
@@ -14611,7 +14790,8 @@
                 currentStarWarsCharacter: currentStarWarsCharacter ? currentStarWarsCharacter.name : null,
                 currentStrangerThingsCharacter: currentStrangerThingsCharacter ? currentStrangerThingsCharacter.name : null,
                 currentCar: currentCar ? currentCar.name : null,
-                currentSpaceImage: currentSpaceImage ? currentSpaceImage.title : null
+                currentSpaceImage: currentSpaceImage ? currentSpaceImage.title : null,
+                currentBrainrot: currentBrainrot ? currentBrainrot.name : null
             });
 
             if (difficulty === 'pokemon') {
@@ -14797,6 +14977,67 @@
                     }, 2000);
                 }
                 return;
+            } else if (difficulty === 'brainrots') {
+                if (!currentBrainrot || !currentBrainrot.name) {
+                    console.error('Error: currentBrainrot no está definido');
+                    alert('Error: No hay personaje de Brainrots seleccionado. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentBrainrot.name;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentBrainrot.name) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es ${currentBrainrot.name}! 🧠`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentBrainrot.name}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentBrainrot.name}`);
+                }
+
+                // Si se acabaron las vidas, mostrar game over
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 2000);
+                } else {
+                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
+                }
+                return;
             } else if (difficulty === 'starwars') {
                 if (!currentStarWarsCharacter || !currentStarWarsCharacter.name) {
                     console.error('Error: currentStarWarsCharacter no está definido', {
@@ -14865,68 +15106,7 @@
                 // Detener temporizador
                 stopTimer();
                 
-                // Verificar si es pregunta o personaje
-                if (strangerThingsQuestionType === 'question') {
-                    if (!currentStrangerThingsQuestion) {
-                        console.error('Error: currentStrangerThingsQuestion no está definido');
-                        alert('Error: No hay pregunta seleccionada. Por favor, recarga la página.');
-                        return;
-                    }
-                    
-                    const selectedBtn = document.getElementById(`option${optionNumber}`);
-                    const selectedText = selectedBtn.textContent;
-                    const isCorrect = selectedText === currentStrangerThingsQuestion.correctAnswer;
-                    
-                    answered = true;
-                    
-                    // Deshabilitar todos los botones
-                    [1, 2, 3, 4].forEach(i => {
-                        const btn = document.getElementById(`option${i}`);
-                        if (btn.style.display !== 'none') {
-                            btn.disabled = true;
-                            
-                            if (btn.textContent === currentStrangerThingsQuestion.correctAnswer) {
-                                btn.classList.add('correct');
-                            } else if (btn === selectedBtn && !isCorrect) {
-                                btn.classList.add('incorrect');
-                            }
-                        }
-                    });
-                    
-                    if (isCorrect) {
-                        score++;
-                        streak++;
-                        if (streak > maxStreak) maxStreak = streak;
-                        updateStreak(true);
-                        document.getElementById('score').textContent = score;
-                        document.getElementById('message').textContent = '✅ ¡Correcto!';
-                        document.getElementById('message').className = 'message correct';
-                        showAlert('success', '¡Correcto!', `La respuesta correcta es: ${currentStrangerThingsQuestion.correctAnswer}! 🔮`);
-                    } else {
-                        streak = 0;
-                        updateStreak(false);
-                        lives--;
-                        updateHearts();
-                        document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentStrangerThingsQuestion.correctAnswer}`;
-                        document.getElementById('message').className = 'message incorrect';
-                        showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentStrangerThingsQuestion.correctAnswer}`);
-                    }
-                    
-                    // Si se acabaron las vidas, mostrar game over
-                    if (lives <= 0) {
-                        setTimeout(() => {
-                            showGameOver();
-                        }, 2000);
-                    } else {
-                        // Pasar automáticamente a la siguiente pregunta después de 2 segundos
-                        setTimeout(() => {
-                            loadNewQuestion();
-                        }, 2000);
-                    }
-                    return;
-                }
-                
-                // Si es personaje, continuar con la lógica de personajes
+                // Solo personajes (sin preguntas)
                 console.log('Modo Stranger Things - Verificando personaje:', currentStrangerThingsCharacter);
                 if (!currentStrangerThingsCharacter || !currentStrangerThingsCharacter.name) {
                     console.error('Error: currentStrangerThingsCharacter no está definido', {
@@ -15130,6 +15310,7 @@
         document.getElementById('impossibleBtn').addEventListener('click', () => selectDifficulty('impossible'));
         document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
         document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
+        document.getElementById('brainrotsBtn').addEventListener('click', () => selectDifficulty('brainrots'));
         const strangerthingsBtnEl = document.getElementById('strangerthingsBtn');
         if (strangerthingsBtnEl) {
             strangerthingsBtnEl.addEventListener('click', () => selectDifficulty('strangerthings'));
@@ -16084,6 +16265,11 @@
             if (mainViewRankingSpaceBtn) {
                 mainViewRankingSpaceBtn.onclick = async () => await showMainRanking('space');
             }
+            
+            const mainViewRankingBrainrotsBtn = document.getElementById('mainViewRankingBrainrotsBtn');
+            if (mainViewRankingBrainrotsBtn) {
+                mainViewRankingBrainrotsBtn.onclick = async () => await showMainRanking('brainrots');
+            }
         }
         
         // Inicializar botones cuando estén disponibles
@@ -16152,6 +16338,30 @@
                 viewRankingSpaceBtn.removeEventListener('click', handleSpaceRankingClick);
                 viewRankingSpaceBtn.addEventListener('click', handleSpaceRankingClick);
             }
+            
+            const viewRankingBrainrotsBtn = document.getElementById('viewRankingBrainrotsBtn');
+            if (viewRankingBrainrotsBtn) {
+                viewRankingBrainrotsBtn.removeEventListener('click', handleBrainrotsRankingClick);
+                viewRankingBrainrotsBtn.addEventListener('click', handleBrainrotsRankingClick);
+            }
+            
+            const mainViewRankingBrainrotsBtn = document.getElementById('mainViewRankingBrainrotsBtn');
+            if (mainViewRankingBrainrotsBtn) {
+                mainViewRankingBrainrotsBtn.removeEventListener('click', handleBrainrotsRankingClick);
+                mainViewRankingBrainrotsBtn.addEventListener('click', handleBrainrotsRankingClick);
+            }
+            
+            const viewRankingStrangerThingsBtn = document.getElementById('viewRankingStrangerThingsBtn');
+            if (viewRankingStrangerThingsBtn) {
+                viewRankingStrangerThingsBtn.removeEventListener('click', handleStrangerThingsRankingClick);
+                viewRankingStrangerThingsBtn.addEventListener('click', handleStrangerThingsRankingClick);
+            }
+            
+            const mainViewRankingStrangerThingsBtn = document.getElementById('mainViewRankingStrangerThingsBtn');
+            if (mainViewRankingStrangerThingsBtn) {
+                mainViewRankingStrangerThingsBtn.removeEventListener('click', handleStrangerThingsRankingClick);
+                mainViewRankingStrangerThingsBtn.addEventListener('click', handleStrangerThingsRankingClick);
+            }
         }
         
         // Handler para ranking de coches
@@ -16162,6 +16372,16 @@
         // Handler para ranking de espacio
         function handleSpaceRankingClick() {
             window.showRankingByLevel('space');
+        }
+        
+        // Handler para ranking de brainrots
+        function handleBrainrotsRankingClick() {
+            window.showRankingByLevel('brainrots');
+        }
+        
+        // Handler para ranking de stranger things
+        function handleStrangerThingsRankingClick() {
+            window.showRankingByLevel('strangerthings');
         }
         
         // Handler para delegación de eventos
@@ -16195,6 +16415,9 @@
                 console.log('Botón Clasificación Coches clickeado');
             } else if (button.id === 'viewRankingSpaceBtn') {
                 level = 'space';
+            } else if (button.id === 'viewRankingBrainrotsBtn' || button.id === 'mainViewRankingBrainrotsBtn') {
+                level = 'brainrots';
+                console.log('Botón Clasificación Brainrots clickeado');
                 console.log('Botón Clasificación Espacio clickeado');
             }
             
@@ -16761,12 +16984,15 @@
             }
             
             // Stranger Things solo visible para Martin
+            //if (strangerthingsBtn) {
+              //  const isMartin = window.currentUserName && (
+               //     window.currentUserName.toLowerCase() === 'martin' ||
+              //      window.currentUserName.toLowerCase().includes('martin')
+              //  );
+               // strangerthingsBtn.style.display = isMartin ? 'block' : 'none';
+           // }
             if (strangerthingsBtn) {
-                const isMartin = window.currentUserName && (
-                    window.currentUserName.toLowerCase() === 'martin' ||
-                    window.currentUserName.toLowerCase().includes('martin')
-                );
-                strangerthingsBtn.style.display = isMartin ? 'block' : 'none';
+               strangerthingsBtn.style.display = 'block';
             }
             
             // Botones de clasificación de Coches y Espacio visibles para todos los usuarios
