@@ -9966,7 +9966,7 @@
                     <button class="difficulty-btn cars" id="carsBtn">🚗 Coches<br><small>Adivina el modelo</small></button>
                     <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
                     <button class="difficulty-btn brainrots" id="brainrotsBtn">🧠 Brainrots<br><small>Adivina el personaje</small></button>
-                    <button class="difficulty-btn strangerthings" id="strangerthingsBtn" style="display: none;">🔮 Stranger Things<br><small>Adivina el personaje</small></button>
+                    <button class="difficulty-btn strangerthings" id="strangerthingsBtn">🔮 Stranger Things<br><small>Adivina el personaje</small></button>
                 </div>
             </div>
             <!-- Clasificaciones de Banderas (solo visible en sección de banderas) -->
@@ -11317,10 +11317,128 @@
             // Verificar si está usando file:// protocol
             const isFileProtocol = window.location.protocol === 'file:';
             if (isFileProtocol) {
-                console.warn('⚠️ Modo file:// detectado. La API de Stranger Things requiere un servidor web.');
-                console.warn('💡 Para ver las imágenes, usa un servidor web local:');
+                console.warn('⚠️ Modo file:// detectado. Usando personajes locales de Stranger Things.');
+                console.warn('💡 Para ver imágenes reales, usa un servidor web local:');
                 console.warn('   - Python: python -m http.server 8000');
                 console.warn('   - Node.js: npx serve');
+                
+                // Usar datos locales como fallback
+                strangerThingsCharacters = [
+                    {
+                        id: 'eleven',
+                        name: 'Eleven',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMzMzMyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+MTENCjx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Female',
+                        actor: 'Millie Bobby Brown',
+                        species: 'Human',
+                        affiliations: ['Party', 'Hawkins Lab'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Mike Wheeler', 'Jim Hopper'],
+                        portrayedBy: 'Millie Bobby Brown'
+                    },
+                    {
+                        id: 'mike-wheeler',
+                        name: 'Mike Wheeler',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwN2JmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+TWlrZQpXaGVlbGVyPHRzcGFuPjwvdHNwYW4+PC90ZXh0Pjwvc3ZnPg==',
+                        gender: 'Male',
+                        actor: 'Finn Wolfhard',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Eleven', 'Karen Wheeler'],
+                        portrayedBy: 'Finn Wolfhard'
+                    },
+                    {
+                        id: 'dustin-henderson',
+                        name: 'Dustin Henderson',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmYzAwNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RHVzdGluCkhlbmRlcnNvbjx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Male',
+                        actor: 'Gaten Matarazzo',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Steve Harrington', 'Claudia Henderson'],
+                        portrayedBy: 'Gaten Matarazzo'
+                    },
+                    {
+                        id: 'lucas-sinclair',
+                        name: 'Lucas Sinclair',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwN2YwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+THVjYXMKU2luY2xhaXI8dHNwYW4+PC90c3Bhbj48L3RleHQ+PC9zdmc+',
+                        gender: 'Male',
+                        actor: 'Caleb McLaughlin',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Max Mayfield', 'Erica Sinclair'],
+                        portrayedBy: 'Caleb McLaughlin'
+                    },
+                    {
+                        id: 'will-byers',
+                        name: 'Will Byers',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzgwMDA4MCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbCI+V2lsbApCeWVyczx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Male',
+                        actor: 'Noah Schnapp',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Joyce Byers', 'Jonathan Byers'],
+                        portrayedBy: 'Noah Schnapp'
+                    },
+                    {
+                        id: 'steve-harrington',
+                        name: 'Steve Harrington',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2JyMzIwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+U3RldmUKSGFycmluZ3Rvbjx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Male',
+                        actor: 'Joe Keery',
+                        species: 'Human',
+                        affiliations: ['Party Ally'],
+                        occupation: 'Video Store Employee',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Nancy Wheeler', 'Dustin Henderson'],
+                        portrayedBy: 'Joe Keery'
+                    },
+                    {
+                        id: 'nancy-wheeler',
+                        name: 'Nancy Wheeler',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U5MWU2MyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbCI+TmFuY3kKV2hlZWxlcjx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Female',
+                        actor: 'Natalia Dyer',
+                        species: 'Human',
+                        affiliations: ['Hawkins High'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Steve Harrington', 'Jonathan Byers'],
+                        portrayedBy: 'Natalia Dyer'
+                    },
+                    {
+                        id: 'max-mayfield',
+                        name: 'Max Mayfield',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmNjAwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+TWF4Ck1heWZpZWxkPHRzcGFuPjwvdHNwYW4+PC90ZXh0Pjwvc3ZnPg==',
+                        gender: 'Female',
+                        actor: 'Sadie Sink',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Lucas Sinclair', 'Billy Hargrove'],
+                        portrayedBy: 'Sadie Sink'
+                    }
+                ];
+                
+                console.log(`✅ Cargados ${strangerThingsCharacters.length} personajes de Stranger Things (modo local)`);
                 return;
             }
             
@@ -11401,7 +11519,125 @@
                 }
             } catch (error) {
                 console.error('Error al cargar personajes de Stranger Things:', error);
-                strangerThingsCharacters = [];
+                console.warn('⚠️ Usando personajes locales como fallback...');
+                
+                // Usar datos locales como fallback cuando las APIs fallan
+                strangerThingsCharacters = [
+                    {
+                        id: 'eleven',
+                        name: 'Eleven',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzMzMzMyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+MTENCjx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Female',
+                        actor: 'Millie Bobby Brown',
+                        species: 'Human',
+                        affiliations: ['Party', 'Hawkins Lab'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Mike Wheeler', 'Jim Hopper'],
+                        portrayedBy: 'Millie Bobby Brown'
+                    },
+                    {
+                        id: 'mike-wheeler',
+                        name: 'Mike Wheeler',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwN2JmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+TWlrZQpXaGVlbGVyPHRzcGFuPjwvdHNwYW4+PC90ZXh0Pjwvc3ZnPg==',
+                        gender: 'Male',
+                        actor: 'Finn Wolfhard',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Eleven', 'Karen Wheeler'],
+                        portrayedBy: 'Finn Wolfhard'
+                    },
+                    {
+                        id: 'dustin-henderson',
+                        name: 'Dustin Henderson',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmYzAwNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+RHVzdGluCkhlbmRlcnNvbjx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Male',
+                        actor: 'Gaten Matarazzo',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Steve Harrington', 'Claudia Henderson'],
+                        portrayedBy: 'Gaten Matarazzo'
+                    },
+                    {
+                        id: 'lucas-sinclair',
+                        name: 'Lucas Sinclair',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwN2YwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbCI+THVjYXMKU2luY2xhaXI8dHNwYW4+PC90c3Bhbj48L3RleHQ+PC9zdmc+',
+                        gender: 'Male',
+                        actor: 'Caleb McLaughlin',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Max Mayfield', 'Erica Sinclair'],
+                        portrayedBy: 'Caleb McLaughlin'
+                    },
+                    {
+                        id: 'will-byers',
+                        name: 'Will Byers',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzgwMDA4MCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbCI+V2lsbApCeWVyczx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Male',
+                        actor: 'Noah Schnapp',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Joyce Byers', 'Jonathan Byers'],
+                        portrayedBy: 'Noah Schnapp'
+                    },
+                    {
+                        id: 'steve-harrington',
+                        name: 'Steve Harrington',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2JyMzIwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbCI+U3RldmUKSGFycmluZ3Rvbjx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Male',
+                        actor: 'Joe Keery',
+                        species: 'Human',
+                        affiliations: ['Party Ally'],
+                        occupation: 'Video Store Employee',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Nancy Wheeler', 'Dustin Henderson'],
+                        portrayedBy: 'Joe Keery'
+                    },
+                    {
+                        id: 'nancy-wheeler',
+                        name: 'Nancy Wheeler',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2U5MWU2MyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbCI+TmFuY3kKV2hlZWxlcjx0c3Bhbj48L3RzcGFuPjwvdGV4dD48L3N2Zz4=',
+                        gender: 'Female',
+                        actor: 'Natalia Dyer',
+                        species: 'Human',
+                        affiliations: ['Hawkins High'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 1', 'Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Steve Harrington', 'Jonathan Byers'],
+                        portrayedBy: 'Natalia Dyer'
+                    },
+                    {
+                        id: 'max-mayfield',
+                        name: 'Max Mayfield',
+                        photo: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmNjAwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+TWF4Ck1heWZpZWxkPHRzcGFuPjwvdHNwYW4+PC90ZXh0Pjwvc3ZnPg==',
+                        gender: 'Female',
+                        actor: 'Sadie Sink',
+                        species: 'Human',
+                        affiliations: ['Party'],
+                        occupation: 'Student',
+                        residence: 'Hawkins, Indiana',
+                        episodes: ['Season 2', 'Season 3', 'Season 4'],
+                        relations: ['Lucas Sinclair', 'Billy Hargrove'],
+                        portrayedBy: 'Sadie Sink'
+                    }
+                ];
+                
+                console.log(`✅ Cargados ${strangerThingsCharacters.length} personajes de Stranger Things (modo fallback)`);
             }
         }
 
@@ -13065,6 +13301,13 @@
                 // Modo Stranger Things - Solo personajes
                 strangerThingsQuestionType = 'character';
                 
+                // Detener temporizador
+                stopTimer();
+                
+                // Mostrar foto del personaje
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
                 // Inicializar contador de reintentos si no existe
                 if (window.strangerThingsRetryCount === undefined) {
                     window.strangerThingsRetryCount = 0;
@@ -13075,7 +13318,7 @@
                     if (!char || !char.photo) return false;
                     const photoUrl = String(char.photo).trim();
                     return photoUrl !== '' && photoUrl !== 'null' && photoUrl !== 'undefined' && 
-                           (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) &&
+                           ((photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) || photoUrl.startsWith('data:image/')) &&
                            photoUrl.length > 10;
                 });
                 
@@ -13140,6 +13383,8 @@
                         };
                     };
                     
+                    flagEl.appendChild(img);
+                    
                     // Función auxiliar para generar las opciones y continuar el juego
                     const generateOptionsAndContinue = function() {
                         // Filtrar personajes disponibles actualizados (con foto válida)
@@ -13147,7 +13392,7 @@
                             if (!char || !char.photo) return false;
                             const photoUrl = String(char.photo).trim();
                             return photoUrl !== '' && photoUrl !== 'null' && photoUrl !== 'undefined' && 
-                                   (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) &&
+                                   ((photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) || photoUrl.startsWith('data:image/')) &&
                                    photoUrl.length > 10;
                         });
                         
