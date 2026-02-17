@@ -268,6 +268,29 @@
             }
         }
 
+        body.football-mode {
+            background: linear-gradient(135deg, #059669 0%, #10b981 20%, #34d399 40%, #6ee7b7 60%, #a7f3d0 80%, #d1fae5 100%);
+            background-size: 400% 400%;
+            animation: footballBackgroundMove 18s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes footballBackgroundMove {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 25%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            75% {
+                background-position: 0% 75%;
+            }
+        }
+
         body.god-mode {
             background: linear-gradient(135deg, #0f0c29 0%, #1a0d3a 20%, #2d1b69 40%, #4c1d95 60%, #6366f1 80%, #8b5cf6 100%);
             background-size: 400% 400%;
@@ -2059,6 +2082,19 @@
             box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
         }
 
+        .difficulty-btn.football {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .difficulty-btn.football:hover {
+            background: linear-gradient(135deg, #047857 0%, #10b981 50%, #6ee7b7 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+
         .difficulty-btn.brainrots {
             border-color: #ff6b6b;
             background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 50%, #c44569 100%);
@@ -2241,6 +2277,18 @@
             background: linear-gradient(135deg, #533483 0%, #8b2fc9 50%, #e91e63 100%);
             color: white;
             box-shadow: 0 4px 15px rgba(233, 30, 99, 0.5);
+        }
+
+        .ranking-btn-football {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+            color: #374151;
+            border-color: #10b981;
+        }
+
+        .ranking-btn-football:hover {
+            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.5);
         }
 
         .game-over {
@@ -9967,6 +10015,7 @@
                     <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
                     <button class="difficulty-btn brainrots" id="brainrotsBtn">🧠 Brainrots<br><small>Adivina el personaje</small></button>
                     <button class="difficulty-btn strangerthings" id="strangerthingsBtn">🔮 Stranger Things<br><small>Adivina el personaje</small></button>
+                    <button class="difficulty-btn football" id="footballBtn">⚽ Escudos de Fútbol<br><small>Adivina el equipo</small></button>
                 </div>
             </div>
             <!-- Clasificaciones de Banderas (solo visible en sección de banderas) -->
@@ -9990,6 +10039,7 @@
                     <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn">🪐 Clasificación Espacio</button>
                     <button class="ranking-btn ranking-btn-brainrots" id="viewRankingBrainrotsBtn">🧠 Clasificación Brainrots</button>
                     <button class="ranking-btn ranking-btn-strangerthings" id="viewRankingStrangerThingsBtn">🔮 Clasificación Stranger Things</button>
+                    <button class="ranking-btn ranking-btn-football" id="viewRankingFootballBtn">⚽ Clasificación Escudos</button>
                 </div>
             </div>
             <div class="ranking-buttons-container">
@@ -10074,6 +10124,8 @@
         let spaceImagesList = []; // Lista de imágenes del espacio de NASA
         let currentBrainrot = null; // Para el modo Brainrots
         let brainrotsList = []; // Lista de personajes de Brainrots cargados
+        let currentFootballTeam = null; // Para el modo Escudos de Fútbol
+        let footballTeamsList = []; // Lista de equipos de fútbol cargados
 
         // Lista de países como respaldo (si la API falla)
         const fallbackCountries = [
@@ -11311,6 +11363,500 @@
             }
         }
 
+        // Función para cargar equipos de fútbol desde el JSON
+        async function loadFootballTeams() {
+            footballTeamsList = [];
+            
+            // Datos de equipos de fútbol proporcionados
+            const footballData = [
+                {
+                    "id": "real-madrid",
+                    "name": "Real Madrid",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5566127330a66b90dd22a_real-madrid-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1902",
+                    "stadium": "Santiago Bernabéu",
+                    "description": "Club español con más títulos europeos"
+                },
+                {
+                    "id": "barcelona",
+                    "name": "Barcelona",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5633874f0b7adc82bc7f5_fc-barcelona-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1899",
+                    "stadium": "Camp Nou",
+                    "description": "Club español con gran base de aficionados"
+                },
+                {
+                    "id": "atletico-madrid",
+                    "name": "Atlético de Madrid",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f57af0f0a79fd0b2730ff9_atletico-madrid-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1903",
+                    "stadium": "Metropolitano",
+                    "description": "Club español conocido como Colchoneros"
+                },
+                {
+                    "id": "sevilla",
+                    "name": "Sevilla",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f57d4cd858cff37cd779c0_sevilla-fc-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1890",
+                    "stadium": "Ramón Sánchez Pizjuán",
+                    "description": "Club español con éxito en Europa League"
+                },
+                {
+                    "id": "real-sociedad",
+                    "name": "Real Sociedad",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f57cd739e52d48a094280a_real-sociedad-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1909",
+                    "stadium": "Reale Arena",
+                    "description": "Club español del País Vasco"
+                },
+                {
+                    "id": "valencia",
+                    "name": "Valencia",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f57de41df577c3ea306a66_valencia-cf-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1919",
+                    "stadium": "Mestalla",
+                    "description": "Club español con historia en Europa"
+                },
+                {
+                    "id": "athletic-bilbao",
+                    "name": "Athletic Bilbao",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f575e7dfbd72754ccedd4b_athletic-club-bilbao-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1898",
+                    "stadium": "San Mamés",
+                    "description": "Club español con política de cantera"
+                },
+                {
+                    "id": "villarreal",
+                    "name": "Villarreal",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f575e7dfbd72754ccedd4b_athletic-club-bilbao-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1923",
+                    "stadium": "La Cerámica",
+                    "description": "Club español conocido como El Submarino Amarillo"
+                },
+                {
+                    "id": "real-betis",
+                    "name": "Real Betis",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f565453009119bd69ad094_real-betis-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1907",
+                    "stadium": "Benito Villamarín",
+                    "description": "Club español de Andalucía"
+                },
+                {
+                    "id": "getafe",
+                    "name": "Getafe",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f57702504a85f4611ace49_getafe-cf-footballlogos-org.svg",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1983",
+                    "stadium": "Coliseum Alfonso Pérez",
+                    "description": "Club español de la Comunidad de Madrid"
+                },
+                {
+                    "id": "manchester-united",
+                    "name": "Manchester United",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f58a2606fdd830398bc400_manchester-united-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1878",
+                    "stadium": "Old Trafford",
+                    "description": "Club inglés con gran historia mundial"
+                },
+                {
+                    "id": "manchester-city",
+                    "name": "Manchester City",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f58a00d96dabb571b29589_manchester-city-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1880",
+                    "stadium": "Etihad Stadium",
+                    "description": "Club inglés con éxito reciente"
+                },
+                {
+                    "id": "liverpool",
+                    "name": "Liverpool",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f58972e72bf6e25562310a_liverpool-fc-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1892",
+                    "stadium": "Anfield",
+                    "description": "Club inglés con gran tradición europea"
+                },
+                {
+                    "id": "chelsea",
+                    "name": "Chelsea",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f588edfc3519b543627c40_chelsea-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1905",
+                    "stadium": "Stamford Bridge",
+                    "description": "Club inglés de Londres con éxito europeo"
+                },
+                {
+                    "id": "arsenal",
+                    "name": "Arsenal",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f587db0ac9b956516f0925_arsenal-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1886",
+                    "stadium": "Emirates Stadium",
+                    "description": "Club inglés conocido por su estilo de juego"
+                },
+                {
+                    "id": "tottenham",
+                    "name": "Tottenham",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f58ade8abeb45efd9e239b_tottenham-hotspur-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1882",
+                    "stadium": "Tottenham Hotspur Stadium",
+                    "description": "Club inglés de North London"
+                },
+                {
+                    "id": "leicester-city",
+                    "name": "Leicester City",
+                    "badge": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcpxDno5WOm3YK9ZWAHLLvg8lH74LXzjkqSQ&s",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1884",
+                    "stadium": "King Power Stadium",
+                    "description": "Club inglés famoso por su título sorpresa"
+                },
+                {
+                    "id": "west-ham",
+                    "name": "West Ham",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f58b0b219f9a58ee0a1496_west-ham-united-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1895",
+                    "stadium": "London Stadium",
+                    "description": "Club inglés de East London"
+                },
+                {
+                    "id": "newcastle-united",
+                    "name": "Newcastle United",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f58a543b232752361d0d0f_newcastle-united-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1892",
+                    "stadium": "St James' Park",
+                    "description": "Club inglés del noreste"
+                },
+                {
+                    "id": "aston-villa",
+                    "name": "Aston Villa",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5871564515d34fc6e69f4_aston-villa-footballlogos-org.svg",
+                    "league": "Premier League",
+                    "country": "Inglaterra",
+                    "formedYear": "1874",
+                    "stadium": "Villa Park",
+                    "description": "Club inglés con gran historia"
+                },
+                {
+                    "id": "juventus",
+                    "name": "Juventus",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5911076d6a294f1b7d810_juventus-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1897",
+                    "stadium": "Allianz Stadium",
+                    "description": "Club italiano más exitoso"
+                },
+                {
+                    "id": "ac-milan",
+                    "name": "AC Milan",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5917cb83332b9c5773254_ac-milan-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1899",
+                    "stadium": "San Siro",
+                    "description": "Club italiano con éxito europeo"
+                },
+                {
+                    "id": "inter-milan",
+                    "name": "Inter Milan",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f590e5149e16680de7ab2f_inter-milan-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1908",
+                    "stadium": "San Siro",
+                    "description": "Club italiano de Milán"
+                },
+                {
+                    "id": "napoli",
+                    "name": "Napoli",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f591ab1e1b5a51012401e8_napoli-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1926",
+                    "stadium": "Diego Armando Maradona Stadium",
+                    "description": "Club italiano del sur"
+                },
+                {
+                    "id": "roma",
+                    "name": "Roma",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f591f2f478918247b82c25_roma-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1927",
+                    "stadium": "Stadio Olimpico",
+                    "description": "Club italiano de la capital"
+                },
+                {
+                    "id": "lazio",
+                    "name": "Lazio",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f591322676d1e0f79d7dff_lazio-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1900",
+                    "stadium": "Stadio Olimpico",
+                    "description": "Club italiano de Roma"
+                },
+                {
+                    "id": "fiorentina",
+                    "name": "Fiorentina",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f58f9348283d6de47aefde_fiorentina-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1926",
+                    "stadium": "Artemio Franchi",
+                    "description": "Club italiano de Florencia"
+                },
+                {
+                    "id": "atalanta",
+                    "name": "Atalanta",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f590660f6204843a24dbb2_atalanta-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1907",
+                    "stadium": "Gewiss Stadium",
+                    "description": "Club italiano con estilo ofensivo"
+                },
+                {
+                    "id": "bologna",
+                    "name": "Bologna",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5903c98cd778cac4afe1c_bologna-footballlogos-org.svg",
+                    "league": "Serie A",
+                    "country": "Italia",
+                    "formedYear": "1909",
+                    "stadium": "Renato Dall'Ara",
+                    "description": "Club italiano histórico"
+                },
+                {
+                    "id": "bayern-munich",
+                    "name": "Bayern Munich",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f59397e06d4f150c04e9ef_bayern-munich-footballlogos-org.svg",
+                    "league": "Bundesliga",
+                    "country": "Alemania",
+                    "formedYear": "1900",
+                    "stadium": "Allianz Arena",
+                    "description": "Club alemán más exitoso"
+                },
+                {
+                    "id": "borussia-dortmund",
+                    "name": "Borussia Dortmund",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f592de82d343819638e02b_borussia-dortmund-footballlogos-org.svg",
+                    "league": "Bundesliga",
+                    "country": "Alemania",
+                    "formedYear": "1909",
+                    "stadium": "Signal Iduna Park",
+                    "description": "Club alemán con gran afición"
+                },
+                {
+                    "id": "rb-leipzig",
+                    "name": "RB Leipzig",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f59307077ea147881d22ca_rb-leipzig-footballlogos-org.svg",
+                    "league": "Bundesliga",
+                    "country": "Alemania",
+                    "formedYear": "2009",
+                    "stadium": "Red Bull Arena",
+                    "description": "Club alemán moderno y exitoso"
+                },
+                {
+                    "id": "bayer-leverkusen",
+                    "name": "Bayer Leverkusen",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5936c1aefe1dd0d87de61_bayer-leverkusen-footballlogos-org.svg",
+                    "league": "Bundesliga",
+                    "country": "Alemania",
+                    "formedYear": "1904",
+                    "stadium": "BayArena",
+                    "description": "Club alemán conocido como Werkself"
+                },
+                {
+                    "id": "eintracht-frankfurt",
+                    "name": "Eintracht Frankfurt",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f593f8118d684746a9e037_eintracht-frankfurt-footballlogos-org.svg",
+                    "league": "Bundesliga",
+                    "country": "Alemania",
+                    "formedYear": "1899",
+                    "stadium": "Deutsche Bank Park",
+                    "description": "Club alemán con éxito en Europa"
+                },
+                {
+                    "id": "wolfsburg",
+                    "name": "Wolfsburg",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5942cbf633265eee2a819_wfl-wolfsburg-footballlogos-org.svg",
+                    "league": "Bundesliga",
+                    "country": "Alemania",
+                    "formedYear": "1945",
+                    "stadium": "Volkswagen Arena",
+                    "description": "Club alemán patrocinado por VW"
+                },
+                {
+                    "id": "friburgo",
+                    "name": "Friburgo",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f5947c900b7b793a059a1a_sc-freiburg-footballlogos-org.svg",
+                    "league": "Bundesliga",
+                    "country": "Alemania",
+                    "formedYear": "1904",
+                    "stadium": "Europa-Park Stadion",
+                    "description": "Club alemán del sur"
+                },
+                {
+                    "id": "mainz",
+                    "name": "Mainz",
+                    "badge": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/250px-Logo_Mainz_05.svg.png",
+                    "league": "Bundesliga",
+                    "country": "Alemania",
+                    "formedYear": "1905",
+                    "stadium": "MEWA Arena",
+                    "description": "Club alemán del oeste"
+                },
+                {
+                    "id": "psg",
+                    "name": "PSG",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f600ecd5c3338dd7b8791a_paris-saint-germain-footballlogos-org.svg",
+                    "league": "Ligue 1",
+                    "country": "Francia",
+                    "formedYear": "1970",
+                    "stadium": "Parc des Princes",
+                    "description": "Club francés con estrellas mundiales"
+                },
+                {
+                    "id": "olympique-marseille",
+                    "name": "Olympique Marseille",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f60188908c9e57c0e22375_olympique-de-marseille-footballlogos-org.svg",
+                    "league": "Ligue 1",
+                    "country": "Francia",
+                    "formedYear": "1899",
+                    "stadium": "Vélodrome",
+                    "description": "Club francés con historia en Europa"
+                },
+                {
+                    "id": "monaco",
+                    "name": "Monaco",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f601bc2d95f01cf7da34fc_as-monaco-footballlogos-org.svg",
+                    "league": "Ligue 1",
+                    "country": "Mónaco",
+                    "formedYear": "1924",
+                    "stadium": "Louis II",
+                    "description": "Club monegasco con éxito europeo"
+                },
+                {
+                    "id": "lyon",
+                    "name": "Lyon",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f601f4555ff54bb38a9743_olympique-lyonnais-footballlogos-org.svg",
+                    "league": "Ligue 1",
+                    "country": "Francia",
+                    "formedYear": "1950",
+                    "stadium": "Groupama Stadium",
+                    "description": "Club francés con gran cantera"
+                },
+                {
+                    "id": "lille",
+                    "name": "Lille",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f60227a28dc9b483bf1ab7_losc-lille-footballlogos-org.svg",
+                    "league": "Ligue 1",
+                    "country": "Francia",
+                    "formedYear": "1944",
+                    "stadium": "Pierre Mauroy",
+                    "description": "Club francés del norte"
+                },
+                {
+                    "id": "nice",
+                    "name": "Nice",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f60156f059b025091ea26e_ofc-nice-footballlogos-org.svg",
+                    "league": "Ligue 1",
+                    "country": "Francia",
+                    "formedYear": "1904",
+                    "stadium": "Allianz Riviera",
+                    "description": "Club francés de la Costa Azul"
+                },
+                {
+                    "id": "rennes",
+                    "name": "Rennes",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f602903fd5f4df637cbe5b_stade-rennais-footballlogos-org.svg",
+                    "league": "Ligue 1",
+                    "country": "Francia",
+                    "formedYear": "1902",
+                    "stadium": "Roazhon Park",
+                    "description": "Club francés del oeste"
+                },
+                {
+                    "id": "strasbourg",
+                    "name": "Strasbourg",
+                    "badge": "https://cdn.prod.website-files.com/68f550992570ca0322737dc2/68f602be5a5d10d0cabe9a5c_rc-strasbourg-alsace-footballlogos-org.svg",
+                    "league": "Ligue 1",
+                    "country": "Francia",
+                    "formedYear": "1906",
+                    "stadium": "Stade de la Meinau",
+                    "description": "Club francés cerca de Alemania"
+                },
+                {
+                    "id": "osasuna",
+                    "name": "Osasuna",
+                    "badge": "https://i.pinimg.com/originals/75/25/cb/7525cb8a1a089b91b7ef9aff5f8f3825.png",
+                    "league": "La Liga",
+                    "country": "España",
+                    "formedYear": "1920",
+                    "stadium": "El Sadar",
+                    "description": "Club español de Navarra"
+                }
+            ];
+            
+            try {
+                // Procesar los datos de equipos
+                if (Array.isArray(footballData) && footballData.length > 0) {
+                    footballTeamsList = footballData
+                        .filter(team => team && team.name && team.badge)
+                        .map(team => ({
+                            id: team.id,
+                            name: team.name,
+                            badge: team.badge,
+                            league: team.league,
+                            country: team.country,
+                            formedYear: team.formedYear,
+                            stadium: team.stadium,
+                            description: team.description
+                        }));
+                    
+                    console.log(`Modo Escudos de Fútbol: ${footballTeamsList.length} equipos cargados`);
+                } else {
+                    throw new Error('Los datos de equipos no contienen un array válido');
+                }
+            } catch (error) {
+                console.error('Error al procesar datos de equipos:', error);
+                footballTeamsList = [];
+            }
+        }
+
         async function loadStrangerThingsCharacters() {
             strangerThingsCharacters = [];
             
@@ -12334,7 +12880,7 @@
             }
             
             // Activar efectos según el modo
-            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode', 'space-mode', 'stranger-things-mode');
+            document.body.classList.remove('hell-mode', 'war-mode', 'easy-mode', 'god-mode', 'starwars-mode', 'pokemon-mode', 'cars-mode', 'space-mode', 'stranger-things-mode', 'brainrots-mode', 'football-mode');
             
             if (level === 'pokemon') {
                 document.body.classList.add('pokemon-mode');
@@ -12475,6 +13021,26 @@
                         loadNewQuestion();
                     } else {
                         alert('Error al cargar personajes de Brainrots. Por favor, recarga la página.');
+                    }
+                });
+            } else if (level === 'football') {
+                document.body.classList.add('football-mode');
+                // Cargar equipos de fútbol
+                loadFootballTeams().then(() => {
+                    if (footballTeamsList.length === 0) {
+                        alert('No se pudieron cargar equipos de fútbol. Por favor, recarga la página.');
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    document.getElementById('loading').style.display = 'none';
+                    loadNewQuestion();
+                }).catch(error => {
+                    console.error('Error al cargar equipos de fútbol:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    if (footballTeamsList.length > 0) {
+                        loadNewQuestion();
+                    } else {
+                        alert('Error al cargar equipos de fútbol. Por favor, recarga la página.');
                     }
                 });
             } else if (level === 'impossible') {
@@ -12758,8 +13324,8 @@
                         correctAnswer = currentSpaceImage?.title;
                     } else if (difficulty === 'brainrots') {
                         correctAnswer = currentBrainrot?.name;
-                    } else if (difficulty === 'brainrots') {
-                        correctAnswer = currentBrainrot?.name;
+                    } else if (difficulty === 'football') {
+                        correctAnswer = currentFootballTeam?.name;
                     } else {
                         correctAnswer = currentCountry?.name?.common;
                     }
@@ -12794,6 +13360,9 @@
             } else if (difficulty === 'brainrots') {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentBrainrot.name}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentBrainrot.name}`);
+            } else if (difficulty === 'football') {
+                messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentFootballTeam.name}`;
+                showAlert('error', '', `La respuesta correcta era: ${currentFootballTeam.name}`);
             } else {
                 messageEl.textContent = `⏰ Tiempo agotado. La respuesta correcta es: ${currentCountry.name.common}`;
                 showAlert('error', '', `La respuesta correcta era: ${currentCountry.name.common}`);
@@ -13780,6 +14349,129 @@
                 updateJokerButton();
                 
                 return;
+            } else if (difficulty === 'football') {
+                // Modo Escudos de Fútbol
+                if (footballTeamsList.length === 0) {
+                    const messageEl = document.getElementById('message');
+                    messageEl.textContent = '⚠️ No hay equipos de fútbol disponibles. Por favor, recarga la página.';
+                    messageEl.className = 'message incorrect';
+                    return;
+                }
+                
+                // Seleccionar equipo aleatorio
+                const randomIndex = Math.floor(Math.random() * footballTeamsList.length);
+                currentFootballTeam = footballTeamsList[randomIndex];
+                
+                // Detener temporizador anterior
+                stopTimer();
+                
+                // Mostrar escudo del equipo
+                const flagEl = document.getElementById('flag');
+                flagEl.innerHTML = '';
+                
+                // Intentar mostrar imagen del escudo si está disponible
+                if (currentFootballTeam.badge) {
+                    const img = new Image();
+                    img.src = currentFootballTeam.badge;
+                    img.alt = `Escudo de ${currentFootballTeam.name}`;
+                    img.style.width = 'auto';
+                    img.style.height = 'auto';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '400px';
+                    img.style.minHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                    img.style.borderRadius = '12px';
+                    img.style.background = 'linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)';
+                    img.style.padding = '10px';
+                    img.style.display = 'block';
+                    img.style.margin = '0 auto';
+                    img.style.cursor = 'pointer';
+                    
+                    // Hacer clic para ver imagen en grande
+                    img.onclick = function() {
+                        const modal = document.createElement('div');
+                        modal.style.position = 'fixed';
+                        modal.style.top = '0';
+                        modal.style.left = '0';
+                        modal.style.width = '100%';
+                        modal.style.height = '100%';
+                        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                        modal.style.display = 'flex';
+                        modal.style.alignItems = 'center';
+                        modal.style.justifyContent = 'center';
+                        modal.style.zIndex = '10000';
+                        modal.style.cursor = 'pointer';
+                        
+                        const fullImg = document.createElement('img');
+                        fullImg.src = currentFootballTeam.badge;
+                        fullImg.style.maxWidth = '90%';
+                        fullImg.style.maxHeight = '90%';
+                        fullImg.style.objectFit = 'contain';
+                        fullImg.style.borderRadius = '8px';
+                        
+                        modal.appendChild(fullImg);
+                        document.body.appendChild(modal);
+                        
+                        modal.onclick = function() {
+                            document.body.removeChild(modal);
+                        };
+                    };
+                    
+                    img.onerror = function() {
+                        console.warn(`Error al cargar escudo de ${currentFootballTeam.name}:`, currentFootballTeam.badge);
+                        flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #10b981;">⚽</div><div style="text-align: center; margin-top: 10px; color: #34d399;">${currentFootballTeam.name}</div>`;
+                    };
+                    
+                    img.onload = function() {
+                        console.log(`Escudo cargado exitosamente: ${currentFootballTeam.name}`);
+                    };
+                    
+                    flagEl.appendChild(img);
+                } else {
+                    flagEl.innerHTML = `<div style="font-size: 6em; line-height: 1; user-select: none; text-align: center; color: #10b981;">⚽</div><div style="text-align: center; margin-top: 10px; color: #34d399;">${currentFootballTeam.name}</div>`;
+                }
+                
+                // Generar opciones (1 correcta + 3 incorrectas)
+                const wrongTeams = footballTeamsList
+                    .filter(t => t.name !== currentFootballTeam.name)
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+                
+                const options = [
+                    currentFootballTeam.name,
+                    wrongTeams[0]?.name || 'Equipo',
+                    wrongTeams[1]?.name || 'Equipo',
+                    wrongTeams[2]?.name || 'Equipo'
+                ].sort(() => Math.random() - 0.5);
+                
+                // Asignar opciones a los botones
+                document.getElementById('option1').textContent = options[0];
+                document.getElementById('option2').textContent = options[1];
+                document.getElementById('option3').textContent = options[2];
+                document.getElementById('option4').textContent = options[3];
+                
+                // Resetear estado
+                answered = false;
+                jokerUsed = false;
+                document.getElementById('message').textContent = '';
+                document.getElementById('message').className = 'message';
+                
+                // Mostrar opciones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    btn.style.display = 'block';
+                    btn.disabled = false;
+                    btn.classList.remove('correct', 'incorrect');
+                });
+                
+                // Iniciar temporizador
+                startTimer();
+                
+                // Actualizar comodín
+                updateJokerButton();
+                
+                return;
             }
             
             if (difficulty === 'god') {
@@ -14251,6 +14943,7 @@
                     else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
                     else if (difficulty === 'cars') nivelTexto = 'Coches';
                     else if (difficulty === 'space') nivelTexto = 'Espacio';
+                    else if (difficulty === 'football') nivelTexto = 'Escudos de Fútbol';
                     rankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}</div>`;
                     return;
                 }
@@ -14635,6 +15328,7 @@
                     else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
                     else if (difficulty === 'cars') nivelTexto = 'Coches';
                     else if (difficulty === 'space') nivelTexto = 'Espacio';
+                    else if (difficulty === 'football') nivelTexto = 'Escudos de Fútbol';
                     else if (difficulty === 'strangerthings') nivelTexto = 'Stranger Things';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
@@ -14985,6 +15679,8 @@
                 correctAnswer = currentCar.name;
             } else if (difficulty === 'space') {
                 correctAnswer = currentSpaceImage.title;
+            } else if (difficulty === 'football') {
+                correctAnswer = currentFootballTeam.name;
             } else {
                 correctAnswer = currentCountry.name.common;
             }
@@ -15036,7 +15732,8 @@
                 currentStrangerThingsCharacter: currentStrangerThingsCharacter ? currentStrangerThingsCharacter.name : null,
                 currentCar: currentCar ? currentCar.name : null,
                 currentSpaceImage: currentSpaceImage ? currentSpaceImage.title : null,
-                currentBrainrot: currentBrainrot ? currentBrainrot.name : null
+                currentBrainrot: currentBrainrot ? currentBrainrot.name : null,
+                currentFootballTeam: currentFootballTeam ? currentFootballTeam.name : null
             });
 
             if (difficulty === 'pokemon') {
@@ -15269,6 +15966,67 @@
                     document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentBrainrot.name}`;
                     document.getElementById('message').className = 'message incorrect';
                     showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentBrainrot.name}`);
+                }
+
+                // Si se acabaron las vidas, mostrar game over
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        showGameOver();
+                    }, 2000);
+                } else {
+                    // Pasar automáticamente a la siguiente pregunta después de 2 segundos
+                    setTimeout(() => {
+                        loadNewQuestion();
+                    }, 2000);
+                }
+                return;
+            } else if (difficulty === 'football') {
+                if (!currentFootballTeam || !currentFootballTeam.name) {
+                    console.error('Error: currentFootballTeam no está definido');
+                    alert('Error: No hay equipo de fútbol seleccionado. Por favor, recarga la página.');
+                    return;
+                }
+
+                // Detener temporizador
+                stopTimer();
+
+                const selectedBtn = document.getElementById(`option${optionNumber}`);
+                const selectedText = selectedBtn.textContent;
+                const isCorrect = selectedText === currentFootballTeam.name;
+
+                answered = true;
+
+                // Deshabilitar todos los botones
+                [1, 2, 3, 4].forEach(i => {
+                    const btn = document.getElementById(`option${i}`);
+                    if (btn.style.display !== 'none') {
+                        btn.disabled = true;
+
+                        if (btn.textContent === currentFootballTeam.name) {
+                            btn.classList.add('correct');
+                        } else if (btn === selectedBtn && !isCorrect) {
+                            btn.classList.add('incorrect');
+                        }
+                    }
+                });
+
+                if (isCorrect) {
+                    score++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    updateStreak(true);
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('message').textContent = '✅ ¡Correcto!';
+                    document.getElementById('message').className = 'message correct';
+                    showAlert('success', '¡Correcto!', `Es ${currentFootballTeam.name}! ⚽`);
+                } else {
+                    streak = 0;
+                    updateStreak(false);
+                    lives--;
+                    updateHearts();
+                    document.getElementById('message').textContent = `❌ Incorrecto. La respuesta correcta es: ${currentFootballTeam.name}`;
+                    document.getElementById('message').className = 'message incorrect';
+                    showAlert('error', 'Incorrecto', `La respuesta correcta era: ${currentFootballTeam.name}`);
                 }
 
                 // Si se acabaron las vidas, mostrar game over
@@ -15567,6 +16325,7 @@
         document.getElementById('pokemonBtn').addEventListener('click', () => selectDifficulty('pokemon'));
         document.getElementById('carsBtn').addEventListener('click', () => selectDifficulty('cars'));
         document.getElementById('spaceBtn').addEventListener('click', () => selectDifficulty('space'));
+        document.getElementById('footballBtn').addEventListener('click', () => selectDifficulty('football'));
         document.getElementById('restartBtn').addEventListener('click', restartGame);
         document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
         document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
@@ -16515,6 +17274,11 @@
             if (mainViewRankingBrainrotsBtn) {
                 mainViewRankingBrainrotsBtn.onclick = async () => await showMainRanking('brainrots');
             }
+
+            const mainViewRankingFootballBtn = document.getElementById('mainViewRankingFootballBtn');
+            if (mainViewRankingFootballBtn) {
+                mainViewRankingFootballBtn.onclick = async () => await showMainRanking('football');
+            }
         }
         
         // Inicializar botones cuando estén disponibles
@@ -16595,6 +17359,18 @@
                 mainViewRankingBrainrotsBtn.removeEventListener('click', handleBrainrotsRankingClick);
                 mainViewRankingBrainrotsBtn.addEventListener('click', handleBrainrotsRankingClick);
             }
+
+            const viewRankingFootballBtn = document.getElementById('viewRankingFootballBtn');
+            if (viewRankingFootballBtn) {
+                viewRankingFootballBtn.removeEventListener('click', handleFootballRankingClick);
+                viewRankingFootballBtn.addEventListener('click', handleFootballRankingClick);
+            }
+
+            const mainViewRankingFootballBtn = document.getElementById('mainViewRankingFootballBtn');
+            if (mainViewRankingFootballBtn) {
+                mainViewRankingFootballBtn.removeEventListener('click', handleFootballRankingClick);
+                mainViewRankingFootballBtn.addEventListener('click', handleFootballRankingClick);
+            }
             
             const viewRankingStrangerThingsBtn = document.getElementById('viewRankingStrangerThingsBtn');
             if (viewRankingStrangerThingsBtn) {
@@ -16627,6 +17403,11 @@
         // Handler para ranking de stranger things
         function handleStrangerThingsRankingClick() {
             window.showRankingByLevel('strangerthings');
+        }
+
+        // Handler para ranking de escudos de fútbol
+        function handleFootballRankingClick() {
+            window.showRankingByLevel('football');
         }
         
         // Handler para delegación de eventos
@@ -16663,7 +17444,9 @@
             } else if (button.id === 'viewRankingBrainrotsBtn' || button.id === 'mainViewRankingBrainrotsBtn') {
                 level = 'brainrots';
                 console.log('Botón Clasificación Brainrots clickeado');
-                console.log('Botón Clasificación Espacio clickeado');
+            } else if (button.id === 'viewRankingFootballBtn' || button.id === 'mainViewRankingFootballBtn') {
+                level = 'football';
+                console.log('Botón Clasificación Escudos clickeado');
             }
             
             if (level) {
