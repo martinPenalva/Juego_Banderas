@@ -12858,7 +12858,8 @@
             
             difficulty = level;
             // Reiniciar vidas al seleccionar dificultad
-            lives = 3;
+            // En modo Dios solo se permite 1 vida, en el resto 3
+            lives = (level === 'god') ? 1 : 3;
             updateHearts();
             document.getElementById('difficultySelector').style.display = 'none';
             document.getElementById('gameTypeSelector').style.display = 'none';
