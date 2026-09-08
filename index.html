@@ -11528,6 +11528,48 @@
                     icono: "💥",
                     descripcion: "Decisiones rápidas, riesgos altos y consecuencias inmediatas.",
                     getData: () => getHistoria_Accion()
+                },
+                {
+                    id: "terror",
+                    nombre: "Terror",
+                    icono: "🕯️",
+                    descripcion: "Lugares aislados, señales imposibles y decisiones que ponen a prueba tus nervios.",
+                    getData: () => getHistoria_LaHabitacion13()
+                },
+                {
+                    id: "casos-reales",
+                    nombre: "Casos reales",
+                    icono: "🗂️",
+                    descripcion: "Historias inspiradas en misterios y sucesos documentados, con licencia narrativa.",
+                    getData: () => getHistoria_ElPasoDyatlov()
+                },
+                {
+                    id: "misterios-reales",
+                    nombre: "Misterios reales",
+                    icono: "🔦",
+                    descripcion: "Investiga desapariciones y enigmas sin resolver basados en expedientes conocidos.",
+                    getData: () => getHistoria_ElMaryCeleste()
+                },
+                {
+                    id: "desapariciones",
+                    nombre: "Desapariciones",
+                    icono: "🧭",
+                    descripcion: "Ocho expedientes históricos sobre personas, tripulaciones y lugares que quedaron sin respuesta.",
+                    getData: () => getHistoria_Desapariciones()
+                },
+                {
+                    id: "leyendas-urbanas",
+                    nombre: "Leyendas urbanas",
+                    icono: "🌙",
+                    descripcion: "26 leyendas, rumores y creepypastas de distintos lugares del mundo.",
+                    getData: () => getHistoria_LeyendasUrbanas()
+                },
+                {
+                    id: "diablo",
+                    nombre: "DIABLO",
+                    icono: "😈",
+                    descripcion: "Historias de supervivencia inspiradas en casos criminales conocidos. Sin escenas gráficas.",
+                    getData: () => getHistoria_Diablo()
                 }
             ];
         }
@@ -12405,6 +12447,568 @@
                     { id: "pasarela", titulo: "Arriba", texto: "Desde la pasarela ves una escalera de servicio. Demasiado limpia: alguien la usó hace poco.", imagen: "🪜", esDecision: false, opciones: [] },
                     { id: "focos", titulo: "Herramientas", texto: "Encuentras una llave inglesa con iniciales grabadas. La guardas como evidencia.", imagen: "🔧", esDecision: false, opciones: [] }
                 ]
+            };
+        }
+
+        function getHistoria_LaHabitacion13() {
+            return {
+                titulo: "La Habitación 13",
+                descripcion: "Una historia de terror original sobre un hotel abandonado y una habitación que no aparece en los planos.",
+                capitulos: [
+                    {
+                        id: "inicio",
+                        titulo: "La Llave",
+                        texto: "Llegas a un hotel cerrado desde hace veinte años para fotografiarlo antes de su demolición. En recepción encuentras una llave oxidada con el número 13, aunque el pasillo solo tiene doce puertas.",
+                        imagen: "🕯️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Seguir las marcas de humedad del pasillo", siguiente: "pasillo", consecuencias: "Te acercas a la zona que no figura en los planos" },
+                            { texto: "Bajar a la sala de calderas", siguiente: "calderas", consecuencias: "Descubres de dónde viene el golpeteo" },
+                            { texto: "Salir y revisar las fotos en el coche", siguiente: "fotografias", consecuencias: "Compruebas si algo te ha seguido" }
+                        ]
+                    },
+                    { id: "pasillo", titulo: "La Puerta", texto: "Al fondo aparece una puerta nueva entre dos paredes antiguas. La llave encaja. Desde el otro lado alguien susurra tu nombre, con la misma voz que tienes tú.", imagen: "🚪", esDecision: true, opciones: [
+                        { texto: "Abrir la puerta", siguiente: "habitacion", consecuencias: "Entras en un lugar que no debería existir" },
+                        { texto: "Grabar el susurro y retroceder", siguiente: "grabacion", consecuencias: "Conservas una prueba, pero algo empieza a seguirte" },
+                        { texto: "Llamar a tu compañero", siguiente: "silencio", consecuencias: "La señal del teléfono se corta" }
+                    ] },
+                    { id: "calderas", titulo: "El Golpe", texto: "El ruido viene de una tubería sellada. Tres golpes, pausa, tres golpes. Cuando respondes, la tubería devuelve exactamente tu golpe, pero desde detrás de ti.", imagen: "🔧", esDecision: false, opciones: [] },
+                    { id: "fotografias", titulo: "La Última Foto", texto: "En la pantalla aparecen todas las habitaciones vacías, salvo una fotografía tomada desde dentro de la habitación 13. En ella estás mirando la pantalla.", imagen: "📷", esDecision: false, opciones: [] },
+                    { id: "habitacion", titulo: "Dentro", texto: "La habitación está intacta y llena de relojes detenidos a la misma hora. En el espejo ves el pasillo, pero no te ves a ti. La puerta se cierra sin hacer ruido.", imagen: "🪞", esDecision: false, opciones: [] },
+                    { id: "grabacion", titulo: "La Voz", texto: "Escuchas la grabación fuera del hotel. La voz dice tu nombre antes de que tú entres en el pasillo. Decides entregar el archivo y no volver.", imagen: "🎙️", esDecision: false, opciones: [] },
+                    { id: "silencio", titulo: "Sin Señal", texto: "Tu compañero contesta desde el vestíbulo: te está viendo salir por la puerta principal. Tú sigues en el pasillo. Las luces se apagan una a una.", imagen: "🌑", esDecision: false, opciones: [] }
+                ]
+            };
+        }
+
+        function getHistoria_ElPasoDyatlov() {
+            return {
+                titulo: "El Paso de la Montaña",
+                descripcion: "Dramatización inspirada en el incidente del paso Diátlov de 1959, un caso real con muchas preguntas abiertas.",
+                capitulos: [
+                    {
+                        id: "inicio",
+                        titulo: "La Tienda Abierta",
+                        texto: "Invierno de 1959. Sigues una expedición de rescate en los Urales. La tienda aparece cortada desde dentro y el equipo sigue allí, pero las huellas se alejan hacia el bosque en plena noche.",
+                        imagen: "🏔️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Seguir las huellas hacia el bosque", siguiente: "cedro", consecuencias: "Encuentras el primer punto de reunión" },
+                            { texto: "Examinar la tienda con cuidado", siguiente: "tienda", consecuencias: "Buscas señales de una salida desesperada" },
+                            { texto: "Subir a la ladera para buscar señales", siguiente: "ladera", consecuencias: "Te expones al viento y a la poca visibilidad" }
+                        ]
+                    },
+                    { id: "cedro", titulo: "Bajo el Cedro", texto: "Bajo un cedro antiguo aparecen restos de una pequeña hoguera. El frío ha borrado casi todo, pero hay ramas rotas demasiado altas para haber sido pisadas por accidente.", imagen: "🌲", esDecision: true, opciones: [
+                        { texto: "Revisar el barranco cercano", siguiente: "barranco", consecuencias: "Buscas a quienes pudieron caer" },
+                        { texto: "Documentar el árbol y regresar", siguiente: "informe", consecuencias: "Preservas la escena para la investigación" },
+                        { texto: "Seguir una segunda huella", siguiente: "huella", consecuencias: "Te separas del grupo durante unos minutos" }
+                    ] },
+                    { id: "tienda", titulo: "El Diario", texto: "El diario termina con una frase sobre una luz extraña en el cielo. No hay una explicación definitiva: solo viento, nieve y demasiadas versiones contradictorias.", imagen: "📓", esDecision: false, opciones: [] },
+                    { id: "ladera", titulo: "La Luz", texto: "Una nube baja cubre la montaña. Por un instante una luz cruza el cielo, pero la tormenta impide saber si fue una bengala, un reflejo o algo lejano.", imagen: "🌌", esDecision: false, opciones: [] },
+                    { id: "barranco", titulo: "El Descenso", texto: "El barranco conserva objetos de la expedición. El informe podrá describir dónde fueron hallados, pero no responderá por sí solo qué ocurrió aquella noche.", imagen: "🔎", esDecision: false, opciones: [] },
+                    { id: "informe", titulo: "Sin Respuesta Única", texto: "Entregas las pruebas. La investigación queda abierta a hipótesis: una avalancha, el clima extremo u otras posibilidades. El misterio permanece.", imagen: "📁", esDecision: false, opciones: [] },
+                    { id: "huella", titulo: "La Nieve", texto: "La huella termina junto a una zona cubierta por nieve reciente. Oyes al equipo llamarte desde muy lejos y decides volver antes de perderte tú también.", imagen: "👣", esDecision: false, opciones: [] }
+                ]
+            };
+        }
+
+        function getHistoria_ElMaryCeleste() {
+            return {
+                titulo: "El Mary Celeste",
+                descripcion: "Dramatización inspirada en el barco Mary Celeste, encontrado abandonado en el Atlántico en 1872.",
+                capitulos: [
+                    {
+                        id: "inicio",
+                        titulo: "A la Deriva",
+                        texto: "Diciembre de 1872. Tu barco se acerca a un bergantín que navega sin rumbo. No hay respuesta a las señales. La cubierta parece intacta, pero no ves a nadie.",
+                        imagen: "⚓",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Subir con dos marineros", siguiente: "cubierta", consecuencias: "Puedes registrar el barco antes de que cambie el tiempo" },
+                            { texto: "Rodear el barco y observarlo", siguiente: "costado", consecuencias: "Buscas daños que expliquen el abandono" },
+                            { texto: "Seguir tu ruta y avisar al puerto", siguiente: "distancia", consecuencias: "Evitas un riesgo, pero dejas el misterio atrás" }
+                        ]
+                    },
+                    { id: "cubierta", titulo: "La Cocina", texto: "Hay comida reciente, efectos personales y un bote salvavidas ausente. Un mapa está abierto sobre la mesa, detenido a mitad de una anotación.", imagen: "🧭", esDecision: true, opciones: [
+                        { texto: "Buscar el cuaderno de navegación", siguiente: "cuaderno", consecuencias: "Podrías encontrar la última decisión del capitán" },
+                        { texto: "Revisar la bodega", siguiente: "bodega", consecuencias: "Compruebas si la carga sufrió daños" },
+                        { texto: "Seguir las marcas hasta la borda", siguiente: "borda", consecuencias: "Investigas por qué bajaron al bote" }
+                    ] },
+                    { id: "costado", titulo: "Sin Señales de Abordaje", texto: "El casco no muestra una colisión clara. Una bomba de achique parece haber fallado, pero no basta para explicar por qué todos abandonaron el barco.", imagen: "🌊", esDecision: false, opciones: [] },
+                    { id: "distancia", titulo: "El Barco Vacío", texto: "Te alejas y registras el avistamiento. Durante horas, el bergantín sigue navegando detrás de ti como una silueta sin tripulación.", imagen: "🌫️", esDecision: false, opciones: [] },
+                    { id: "cuaderno", titulo: "La Última Línea", texto: "El cuaderno no ofrece una respuesta final. Solo coordenadas, una fecha y una página arrancada. El caso quedará rodeado de teorías durante generaciones.", imagen: "📜", esDecision: false, opciones: [] },
+                    { id: "bodega", titulo: "La Carga", texto: "La carga está casi intacta. No encuentras pruebas de piratas ni de una lucha. El silencio del barco resulta más inquietante que cualquier rastro.", imagen: "📦", esDecision: false, opciones: [] },
+                    { id: "borda", titulo: "El Bote Ausente", texto: "Junto a la borda hay una cuerda cortada y marcas de agua. No sabes si fue una decisión precipitada, un accidente o algo que nunca se documentó.", imagen: "🪢", esDecision: false, opciones: [] }
+                ]
+            };
+        }
+
+        function getHistoria_Desapariciones() {
+            const casos = [
+                {
+                    titulo: "Los príncipes de la Torre de Londres",
+                    fecha: "1483",
+                    imagen: "🏰",
+                    texto: "Eduardo V de Inglaterra y Ricardo, duque de York, fueron encerrados en la Torre de Londres en 1483. Después dejaron de aparecer en los registros públicos y su destino nunca quedó demostrado de forma definitiva.",
+                    pistas: ["Revisar las crónicas de la Torre", "Comparar las versiones políticas de la sucesión", "Separar tradición, rumores y pruebas arqueológicas"]
+                },
+                {
+                    titulo: "La colonia perdida de Roanoke",
+                    fecha: "hacia 1590",
+                    imagen: "🌲",
+                    texto: "Más de cien colonos ingleses desaparecieron de Roanoke. Virginia Dare, una de las primeras niñas inglesas nacidas en América, quedó ligada a la historia. La palabra CROATOAN fue la pista más famosa.",
+                    pistas: ["Buscar el significado de CROATOAN", "Rastrear mapas y asentamientos cercanos", "Comparar hipótesis de integración y abandono"]
+                },
+                {
+                    titulo: "Jimmy Hoffa",
+                    fecha: "30 de julio de 1975",
+                    imagen: "🚘",
+                    texto: "El dirigente sindical estadounidense Jimmy Hoffa desapareció cerca de Detroit el 30 de julio de 1975. Fue declarado legalmente muerto en 1982, pero nunca se encontró su cuerpo.",
+                    pistas: ["Reconstruir la cronología de sus últimas horas", "Revisar testimonios y lugares relacionados", "Distinguir rumores de hallazgos confirmados"]
+                },
+                {
+                    titulo: "Wallace D. Fard",
+                    fecha: "1934",
+                    imagen: "📜",
+                    texto: "Wallace D. Fard, fundador de la Nación del Islam, desapareció en 1934. Su origen, sus identidades atribuidas y su destino posterior siguen rodeados de incertidumbre.",
+                    pistas: ["Comparar los registros de la organización", "Revisar las identidades que se le atribuyeron", "Marcar qué datos son hechos y cuáles son hipótesis"]
+                },
+                {
+                    titulo: "Amelia Earhart y Fred Noonan",
+                    fecha: "2 de julio de 1937",
+                    imagen: "✈️",
+                    texto: "La aviadora Amelia Earhart y su copiloto Fred Noonan desaparecieron el 2 de julio de 1937 durante un vuelo alrededor del mundo. Su avión tampoco fue localizado de forma definitiva.",
+                    pistas: ["Estudiar la ruta prevista y las comunicaciones", "Comparar las búsquedas realizadas", "Evaluar teorías sin presentarlas como conclusiones"]
+                },
+                {
+                    titulo: "Los tres fareros de las islas Flannan",
+                    fecha: "diciembre de 1900",
+                    imagen: "💡",
+                    texto: "James Ducat, Thomas Marshall y Donald McArthur desaparecieron del faro de Eilean Mòr, en Escocia. Cuando llegó el relevo, los tres habían desaparecido y el misterio quedó unido al faro.",
+                    pistas: ["Examinar el diario y el estado del faro", "Reconstruir el tiempo y el oleaje", "Comparar accidente, tormenta y otras hipótesis"]
+                },
+                {
+                    titulo: "El vuelo MH370",
+                    fecha: "8 de marzo de 2014",
+                    imagen: "📡",
+                    texto: "El vuelo 370 de Malaysia Airlines desapareció durante la ruta de Kuala Lumpur a Pekín con 239 personas a bordo. Es uno de los mayores misterios de la aviación moderna.",
+                    pistas: ["Ordenar las comunicaciones y los datos de radar", "Consultar los informes de búsqueda", "Distinguir restos confirmados de objetos no identificados"]
+                },
+                {
+                    titulo: "El Mary Celeste",
+                    fecha: "4 de diciembre de 1872",
+                    imagen: "⚓",
+                    texto: "El Mary Celeste fue encontrado abandonado en el Atlántico el 4 de diciembre de 1872. La tripulación y los pasajeros nunca fueron encontrados, aunque el barco seguía navegable.",
+                    pistas: ["Revisar el estado del barco y la carga", "Estudiar la ruta y las condiciones del mar", "Comparar las teorías sin convertirlas en certezas"]
+                }
+            ];
+
+            const capitulos = [
+                {
+                    id: "inicio",
+                    titulo: "Archivo de desapariciones",
+                    texto: "Ocho expedientes históricos. Algunos tienen documentos y búsquedas oficiales; otros están rodeados de rumores. Investiga con cuidado: una hipótesis no es una prueba y las personas desaparecidas no son un espectáculo.",
+                    imagen: "🧭",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Expediente 1: ${casos[0].titulo}`, siguiente: "desaparicion-caso-0", consecuencias: "Abres el primer expediente" },
+                        { texto: `Expediente 2: ${casos[1].titulo}`, siguiente: "desaparicion-caso-1", consecuencias: "Abres el segundo expediente" },
+                        { texto: "Ver más expedientes", siguiente: "desapariciones-mas-1", consecuencias: "Continúas por el archivo" }
+                    ]
+                },
+                {
+                    id: "desapariciones-mas-1",
+                    titulo: "Expedientes 3 y 4",
+                    texto: "Cada caso exige separar las últimas pruebas conocidas de las versiones que se han repetido con el tiempo.",
+                    imagen: "📂",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Expediente 3: ${casos[2].titulo}`, siguiente: "desaparicion-caso-2", consecuencias: "Abres el tercer expediente" },
+                        { texto: `Expediente 4: ${casos[3].titulo}`, siguiente: "desaparicion-caso-3", consecuencias: "Abres el cuarto expediente" },
+                        { texto: "Ver más expedientes", siguiente: "desapariciones-mas-2", consecuencias: "Continúas por el archivo" }
+                    ]
+                },
+                {
+                    id: "desapariciones-mas-2",
+                    titulo: "Expedientes 5 y 6",
+                    texto: "Las búsquedas pueden durar años y aun así dejar preguntas abiertas. Consulta siempre las fechas y el grado de certeza de cada dato.",
+                    imagen: "🔎",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Expediente 5: ${casos[4].titulo}`, siguiente: "desaparicion-caso-4", consecuencias: "Abres el quinto expediente" },
+                        { texto: `Expediente 6: ${casos[5].titulo}`, siguiente: "desaparicion-caso-5", consecuencias: "Abres el sexto expediente" },
+                        { texto: "Ver últimos expedientes", siguiente: "desapariciones-mas-3", consecuencias: "Continúas por el archivo" }
+                    ]
+                },
+                {
+                    id: "desapariciones-mas-3",
+                    titulo: "Expedientes 7 y 8",
+                    texto: "Los últimos expedientes reúnen búsquedas modernas, datos técnicos y testimonios que deben evaluarse con prudencia.",
+                    imagen: "📡",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Expediente 7: ${casos[6].titulo}`, siguiente: "desaparicion-caso-6", consecuencias: "Abres el séptimo expediente" },
+                        { texto: `Expediente 8: ${casos[7].titulo}`, siguiente: "desaparicion-caso-7", consecuencias: "Abres el octavo expediente" },
+                        { texto: "Volver al inicio", siguiente: "inicio", consecuencias: "Regresas al archivo principal" }
+                    ]
+                }
+            ];
+
+            casos.forEach((caso, indice) => {
+                const base = `desaparicion-${indice}`;
+                capitulos.push({
+                    id: `desaparicion-caso-${indice}`,
+                    titulo: caso.titulo,
+                    texto: `${caso.fecha}. ${caso.texto}`,
+                    imagen: caso.imagen,
+                    esDecision: true,
+                    opciones: caso.pistas.map((pista, pistaIndice) => ({
+                        texto: pista,
+                        siguiente: `${base}-pista-${pistaIndice}`,
+                        consecuencias: "Investigas una línea del expediente sin confundirla con una conclusión"
+                    }))
+                });
+                caso.pistas.forEach((pista, pistaIndice) => {
+                    capitulos.push({
+                        id: `${base}-pista-${pistaIndice}`,
+                        titulo: `${caso.titulo}: ${pista}`,
+                        texto: `La investigación avanza, pero el expediente no ofrece una respuesta definitiva. En este punto conviene registrar qué se sabe, qué se ha descartado y qué permanece como hipótesis. ${pista}.`,
+                        imagen: "📝",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Registrar la evidencia y consultar fuentes", siguiente: `${base}-final-documentado`, consecuencias: "Priorizas la precisión" },
+                            { texto: "Comparar las hipótesis con los datos", siguiente: `${base}-final-hipotesis`, consecuencias: "Distingues posibilidad de certeza" },
+                            { texto: "Reconocer que el caso sigue abierto", siguiente: `${base}-final-abierto`, consecuencias: "Aceptas los límites de la investigación" }
+                        ]
+                    });
+                });
+                capitulos.push(
+                    { id: `${base}-final-documentado`, titulo: "Expediente documentado", texto: "Organizas las fechas, los testimonios y las pruebas conocidas. No resuelves el misterio, pero dejas una investigación honesta y respetuosa.", imagen: "📚", esDecision: false, opciones: [] },
+                    { id: `${base}-final-hipotesis`, titulo: "Hipótesis separadas", texto: "Comparas las teorías sin elegir una por sensacionalismo. El expediente queda abierto a nuevas pruebas.", imagen: "⚖️", esDecision: false, opciones: [] },
+                    { id: `${base}-final-abierto`, titulo: "Sin respuesta definitiva", texto: "Aceptas que algunas desapariciones siguen sin explicación completa. Recordar a las personas y respetar a sus familias importa más que fabricar un final.", imagen: "🕯️", esDecision: false, opciones: [] }
+                );
+            });
+
+            return {
+                titulo: "Desapariciones",
+                descripcion: "Expedientes históricos de personas, tripulaciones y colonias desaparecidas. Las hipótesis no son hechos.",
+                capitulos
+            };
+        }
+
+        function getHistoria_LeyendasUrbanas() {
+            const leyendas = [
+                { titulo: "No solo los perros lamen", resumen: "Una niña cree que su perro la tranquiliza bajo la cama, hasta que una pista macabra cambia por completo lo que pensaba.", imagen: "🐕" },
+                { titulo: "La autoestopista fantasma", resumen: "Un conductor recoge a una mujer en una carretera solitaria. Al llegar a una curva peligrosa, la pasajera desaparece sin explicación.", imagen: "🚗" },
+                { titulo: "La dama de blanco", resumen: "Una aparición vestida de blanco se relaciona con tragedias locales y aparece de noche cerca de caminos, castillos y tejados.", imagen: "👻" },
+                { titulo: "El Pueblo Lavanda", resumen: "Una leyenda de internet afirmó que la música de un videojuego podía causar daños a los niños. No hay pruebas de que el rumor fuera real.", imagen: "🎮" },
+                { titulo: "La llamada viene de dentro", resumen: "Una cuidadora recibe llamadas inquietantes mientras está sola en una casa. El origen de la llamada convierte una noche normal en una pesadilla.", imagen: "☎️" },
+                { titulo: "El robo del riñón", resumen: "Un viajero despierta sin recordar la noche anterior y descubre una historia sobre tráfico de órganos que se ha repetido durante décadas sin pruebas locales.", imagen: "🏨" },
+                { titulo: "La picadura del insecto", resumen: "Una pequeña picadura parece esconder algo imposible. La leyenda mezcla miedo corporal, rumores médicos y películas de terror.", imagen: "🕷️" },
+                { titulo: "El hombre del gancho", resumen: "Una pareja aparca en un lugar apartado mientras la radio anuncia que un fugitivo peligroso anda suelto cerca.", imagen: "🪝" },
+                { titulo: "El camarero fantasma", resumen: "Un viajero conversa con el camarero de un bar nocturno y al día siguiente descubre que el local llevaba meses cerrado.", imagen: "🍸" },
+                { titulo: "Las cartas en cadena", resumen: "Un mensaje promete desgracias si no se reenvía. Una vieja superstición encuentra una nueva vida en internet y las redes sociales.", imagen: "✉️" },
+                { titulo: "La comida adulterada", resumen: "Rumores sobre restaurantes y alimentos extraños se extienden de boca en boca, mezclando noticias reales con exageraciones imposibles.", imagen: "🍔" },
+                { titulo: "La sonrisa del payaso", resumen: "Una historia de campus cuenta que una joven fue perseguida por un grupo violento. El caso nunca pudo confirmarse, pero provocó alarma.", imagen: "🎭" },
+                { titulo: "El túnel de Kiyotaki", resumen: "La leyenda japonesa sitúa apariciones y accidentes en un túnel asociado a muertes de trabajadores y a supersticiones sobre el número cuatro.", imagen: "🚇" },
+                { titulo: "Verónica ante el espejo", resumen: "Un juego frente a un espejo y una sesión de espiritismo dan origen a una leyenda escolar sobre una aparición vengativa.", imagen: "🪞" },
+                { titulo: "El hombre de los sueños", resumen: "Un retrato de un desconocido se hizo viral porque muchas personas aseguraron haber soñado con el mismo rostro.", imagen: "💤" },
+                { titulo: "Las gemelas", resumen: "Una familia cree reconocer en sus nuevas hijas a dos niñas perdidas. La historia termina con una frase que nadie consigue explicar.", imagen: "👭" },
+                { titulo: "El rokurokubi", resumen: "En el folclore japonés, una persona aparentemente normal puede convertirse durante la noche en una criatura de cuello imposible.", imagen: "🐉" },
+                { titulo: "El espíritu de Sor Úrsula", resumen: "Una leyenda sevillana habla de una monja que aún recorrería de noche los pasillos de un antiguo hospital con sus llaves.", imagen: "🔑" },
+                { titulo: "El hombre sin rostro", resumen: "Una figura alta y sin rostro nació en un concurso de imágenes de internet y acabó convertida en una de las creepypastas más conocidas.", imagen: "🕴️" },
+                { titulo: "Teke Teke", resumen: "El folclore japonés cuenta que una aparición se desplaza por estaciones y túneles buscando a quienes se cruzan con ella.", imagen: "🚉" },
+                { titulo: "Las estatuas cobran vida", resumen: "Estudiantes de distintas universidades aseguran que algunas estatuas y retratos cambian de posición cuando el campus queda vacío.", imagen: "🗿" },
+                { titulo: "El corredor fantasma", resumen: "Un corredor aparece junto a un coche o pasa frente a una ventana, pero algo en su silueta revela que no puede ser una persona normal.", imagen: "🏃" },
+                { titulo: "El experimento ruso del sueño", resumen: "Una historia de internet presenta un supuesto experimento secreto de privación del sueño. Es una creepypasta, no un hecho histórico.", imagen: "🧪" },
+                { titulo: "La vecina", resumen: "Una mujer pide refugio varias noches y desaparece al amanecer. En la comisaría, una fotografía revela un detalle imposible.", imagen: "🏠" },
+                { titulo: "El paso Diátlov", resumen: "Un grupo de excursionistas abandonó su tienda en los Urales en 1959. El caso real sigue rodeado de hipótesis y preguntas.", imagen: "🏔️" },
+                { titulo: "La figura en la niebla", resumen: "En un pueblo rodeado de bosque, una silueta aparece durante las noches de niebla y deja a quienes la ven paralizados de miedo.", imagen: "🌫️" }
+            ];
+
+            const capitulos = [];
+            const paginas = Math.ceil(leyendas.length / 2);
+            for (let pagina = 0; pagina < paginas; pagina++) {
+                const inicio = pagina * 2;
+                const opciones = leyendas.slice(inicio, inicio + 2).map((leyenda, indice) => ({
+                    texto: `Leer: ${leyenda.titulo}`,
+                    siguiente: `leyenda-${inicio + indice}`,
+                    consecuencias: "Descubres el origen y la versión más conocida del relato"
+                }));
+                opciones.push({
+                    texto: pagina === paginas - 1 ? "Volver a la primera página" : "Ver más leyendas",
+                    siguiente: pagina === paginas - 1 ? "inicio" : `menu-leyendas-${pagina + 1}`,
+                    consecuencias: pagina === paginas - 1 ? "Revisas el catálogo desde el principio" : "Abres otra página del archivo"
+                });
+
+                capitulos.push({
+                    id: pagina === 0 ? "inicio" : `menu-leyendas-${pagina}`,
+                    titulo: `Archivo de leyendas · ${pagina + 1}/${paginas}`,
+                    texto: "Estas historias circulan como leyendas urbanas, rumores o ficción de internet. Elige una para conocer su versión resumida.",
+                    imagen: "📚",
+                    esDecision: true,
+                    opciones
+                });
+            }
+
+            leyendas.forEach((leyenda, indice) => {
+                capitulos.push({
+                    id: `leyenda-${indice}`,
+                    titulo: leyenda.titulo,
+                    texto: leyenda.resumen,
+                    imagen: leyenda.imagen,
+                    esDecision: false,
+                    opciones: []
+                });
+            });
+
+            return {
+                titulo: "Leyendas urbanas",
+                descripcion: "Un archivo de leyendas, rumores y creepypastas. No todas las historias están verificadas.",
+                capitulos
+            };
+        }
+
+        function getHistoria_Diablo() {
+            const casos = [
+                {
+                    titulo: "La red de influencia",
+                    imagen: "🏝️",
+                    inspirado: "Inspirado en el caso de Jeffrey Epstein. Protagonista y hechos narrados son ficticios.",
+                    texto: "Te ofrecen un trabajo sencillo a través de una persona con mucho poder y contactos. Pronto notas que las reuniones ocurren a puerta cerrada y que intentan aislarte de quienes podrían ayudarte.",
+                    opciones: [
+                        { texto: "Guardar mensajes y pedir ayuda a una persona de confianza", siguiente: "diablo-0-a-1", consecuencias: "Creas un registro y recuperas apoyo" },
+                        { texto: "Aceptar otra reunión a solas", siguiente: "diablo-0-b-1", consecuencias: "La presión aumenta y pierdes margen de decisión" },
+                        { texto: "Salir del lugar y contactar con las autoridades", siguiente: "diablo-0-c-1", consecuencias: "Priorizas tu seguridad y dejas constancia" }
+                    ]
+                },
+                {
+                    titulo: "La puerta del tercer piso",
+                    imagen: "🚪",
+                    inspirado: "Inspirado en el caso de Jeffrey Dahmer. No reproduce ni describe sus crímenes.",
+                    texto: "En un edificio donde haces una entrega, una persona te invita a pasar y trata de impedir que te marches. La música está demasiado alta y nadie responde a tus llamadas.",
+                    opciones: [
+                        { texto: "Pedir ayuda en voz alta y dirigirte a la salida", siguiente: "diablo-1-a-1", consecuencias: "Llamas la atención de los vecinos" },
+                        { texto: "Fingir calma mientras buscas una oportunidad", siguiente: "diablo-1-b-1", consecuencias: "Esperas el momento menos vigilado" },
+                        { texto: "Enviar tu ubicación en secreto", siguiente: "diablo-1-c-1", consecuencias: "Alguien recibe tu señal de auxilio" }
+                    ]
+                },
+                {
+                    titulo: "El coche con la avería",
+                    imagen: "🚗",
+                    inspirado: "Inspirado en los métodos de engaño asociados al caso de Ted Bundy. Es una ficción de prevención.",
+                    texto: "En un aparcamiento casi vacío, una persona te pide ayuda junto a un coche y dice estar herida. Algo no encaja: insiste en que te acerques y mira constantemente a tu alrededor.",
+                    opciones: [
+                        { texto: "Llamar a emergencias sin acercarte", siguiente: "diablo-2-a-1", consecuencias: "Mantienes distancia y verificas la situación" },
+                        { texto: "Pedir ayuda a más personas del aparcamiento", siguiente: "diablo-2-b-1", consecuencias: "Evitas quedarte a solas" },
+                        { texto: "Acercarte porque parece urgente", siguiente: "diablo-2-c-1", consecuencias: "Te expones a una situación peligrosa" }
+                    ]
+                },
+                {
+                    titulo: "La invitación al sótano",
+                    imagen: "🎪",
+                    inspirado: "Inspirado en el caso de John Wayne Gacy. No contiene descripciones gráficas.",
+                    texto: "En una fiesta local, un adulto amable te ofrece un trabajo y te invita a ver un taller privado. Varias personas dicen que es de confianza, pero nadie sabe explicar por qué nunca dejan entrar a nadie.",
+                    opciones: [
+                        { texto: "Rechazar la invitación y avisar a alguien", siguiente: "diablo-3-a-1", consecuencias: "No permites que la presión social decida por ti" },
+                        { texto: "Preguntar por qué el lugar está aislado", siguiente: "diablo-3-b-1", consecuencias: "Las contradicciones salen a la luz" },
+                        { texto: "Entrar sin avisar a nadie", siguiente: "diablo-3-c-1", consecuencias: "Te quedas sin una red de apoyo" }
+                    ]
+                },
+                {
+                    titulo: "El archivo de Düsseldorf",
+                    imagen: "🗃️",
+                    inspirado: "Inspirado en Peter Kürten, conocido como el Vampiro de Düsseldorf. La historia del juego es ficticia.",
+                    texto: "Investigas un archivo histórico para un documental. Varias pistas apuntan a una persona que usaba la confianza y el miedo para controlar a quienes la rodeaban. Tu trabajo consiste en documentar el patrón y mantenerte a salvo.",
+                    opciones: [
+                        { texto: "Trabajar acompañado y entregar las notas", siguiente: "diablo-4-a-1", consecuencias: "Evitas investigar a solas" },
+                        { texto: "Citar a la fuente en un lugar público", siguiente: "diablo-4-b-1", consecuencias: "Mantienes testigos cerca" },
+                        { texto: "Guardar todo en una copia segura", siguiente: "diablo-4-c-1", consecuencias: "Proteges la información" }
+                    ]
+                },
+                {
+                    titulo: "La consulta silenciosa",
+                    imagen: "🩺",
+                    inspirado: "Inspirado en Harold Shipman, conocido como Doctor Muerte. No representa a pacientes reales.",
+                    texto: "Tu personaje trabaja en una residencia y detecta patrones extraños en historiales que deberían revisarse. La prioridad no es acusar sin pruebas, sino proteger a las personas y comunicar las irregularidades por los canales adecuados.",
+                    opciones: [
+                        { texto: "Solicitar una revisión independiente", siguiente: "diablo-5-a-1", consecuencias: "Buscas una comprobación profesional" },
+                        { texto: "Conservar copias de los registros permitidos", siguiente: "diablo-5-b-1", consecuencias: "Evitas que se pierda información relevante" },
+                        { texto: "Hablar con un superior acompañado", siguiente: "diablo-5-c-1", consecuencias: "No cargas solo con la denuncia" }
+                    ]
+                },
+                {
+                    titulo: "El líder y la promesa",
+                    imagen: "🌹",
+                    inspirado: "Inspirado en Charles Manson y la Familia Manson. El juego no recrea los asesinatos ni convierte a víctimas reales en personajes.",
+                    texto: "Una comunidad aislada promete respuestas fáciles y exige obediencia total. Poco a poco intenta separar a sus miembros de familiares y amistades. Empiezas a comprender que el peligro también puede disfrazarse de pertenencia.",
+                    opciones: [
+                        { texto: "Contactar en secreto con tu familia", siguiente: "diablo-6-a-1", consecuencias: "Recuperas un vínculo fuera del grupo" },
+                        { texto: "Preguntar qué ocurre a quienes se marchan", siguiente: "diablo-6-b-1", consecuencias: "Detectas contradicciones y amenazas" },
+                        { texto: "Salir durante una actividad pública", siguiente: "diablo-6-c-1", consecuencias: "Buscas distancia sin provocar una confrontación" }
+                    ]
+                },
+                {
+                    titulo: "Las cartas del Zodiaco",
+                    imagen: "✉️",
+                    inspirado: "Inspirado en el Asesino del Zodiaco, autor no identificado de cartas y ataques en California a finales de los años sesenta.",
+                    texto: "Recibes mensajes anónimos que intentan convertir una investigación en un espectáculo. La persona que los envía presume de crímenes y busca que alguien actúe impulsivamente.",
+                    opciones: [
+                        { texto: "No responder y entregar los mensajes", siguiente: "diablo-7-a-1", consecuencias: "Evitas alimentar la provocación" },
+                        { texto: "Verificar fechas y datos con especialistas", siguiente: "diablo-7-b-1", consecuencias: "Separás hechos de afirmaciones" },
+                        { texto: "Avisar a quienes aparecen mencionados", siguiente: "diablo-7-c-1", consecuencias: "Reduces el riesgo de que alguien quede aislado" }
+                    ]
+                },
+                {
+                    titulo: "La condesa de la leyenda",
+                    imagen: "🏰",
+                    inspirado: "Inspirado en Erzsébet Báthory. Las acusaciones históricas y la leyenda de los baños de sangre son objeto de debate.",
+                    texto: "En un castillo convertido en museo, una guía te cuenta la historia de una noble acusada de crímenes terribles. A medida que comparas documentos, descubres que la fama, la propaganda y los hechos no siempre coinciden.",
+                    opciones: [
+                        { texto: "Comparar testimonios y documentos", siguiente: "diablo-8-a-1", consecuencias: "Investigas sin tratar la leyenda como una prueba" },
+                        { texto: "Preguntar por el contexto político", siguiente: "diablo-8-b-1", consecuencias: "Comprendes quién contó la historia y por qué" },
+                        { texto: "Separar claramente mito y evidencia", siguiente: "diablo-8-c-1", consecuencias: "Evitas difundir una acusación sin matices" }
+                    ]
+                },
+                {
+                    titulo: "Las calles de Whitechapel",
+                    imagen: "🌫️",
+                    inspirado: "Inspirado en Jack el Destripador, asesino no identificado asociado a varios crímenes en Londres en 1888.",
+                    texto: "Caminas por una exposición sobre Whitechapel y descubres cómo la prensa convirtió una investigación sin resolver en un mito. Tu reto es reconstruir la información sin convertir el sufrimiento de las víctimas en entretenimiento.",
+                    opciones: [
+                        { texto: "Centrarte en las víctimas y el contexto", siguiente: "diablo-9-a-1", consecuencias: "Tratas el caso con respeto" },
+                        { texto: "Comparar las fuentes de la época", siguiente: "diablo-9-b-1", consecuencias: "Detectas exageraciones periodísticas" },
+                        { texto: "No seguir pistas de sospechosos sin pruebas", siguiente: "diablo-9-c-1", consecuencias: "Evitas convertir rumores en acusaciones" }
+                    ]
+                }
+            ];
+
+            const capitulos = [
+                {
+                    id: "inicio",
+                    titulo: "Archivo DIABLO",
+                    texto: "Este modo presenta ficciones de supervivencia inspiradas en casos criminales conocidos. No son testimonios reales ni pretenden representar a víctimas concretas. Elige un caso y prioriza siempre pedir ayuda.",
+                    imagen: "😈",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Caso 1: ${casos[0].titulo}`, siguiente: "diablo-caso-0", consecuencias: "Entras en el primer expediente" },
+                        { texto: `Caso 2: ${casos[1].titulo}`, siguiente: "diablo-caso-1", consecuencias: "Entras en el segundo expediente" },
+                        { texto: "Ver más expedientes", siguiente: "diablo-mas", consecuencias: "Abres la segunda página del archivo" }
+                    ]
+                },
+                {
+                    id: "diablo-mas",
+                    titulo: "Más expedientes",
+                    texto: "Cada historia recuerda una regla: si algo te incomoda, aléjate, contacta con alguien de confianza y busca ayuda profesional o de emergencia.",
+                    imagen: "📁",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Caso 3: ${casos[2].titulo}`, siguiente: "diablo-caso-2", consecuencias: "Entras en el tercer expediente" },
+                        { texto: `Caso 4: ${casos[3].titulo}`, siguiente: "diablo-caso-3", consecuencias: "Entras en el cuarto expediente" },
+                        { texto: "Ver más expedientes", siguiente: "diablo-mas-2", consecuencias: "Abres la última página del archivo" }
+                    ]
+                },
+                {
+                    id: "diablo-mas-2",
+                    titulo: "Últimos expedientes",
+                    texto: "Estos casos requieren especial cuidado: algunos tienen autor desconocido y otros mezclan documentos, acusaciones históricas y leyendas posteriores. La precisión también protege.",
+                    imagen: "🔍",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Caso 5: ${casos[4].titulo}`, siguiente: "diablo-caso-4", consecuencias: "Entras en el quinto expediente" },
+                        { texto: `Caso 6: ${casos[5].titulo}`, siguiente: "diablo-caso-5", consecuencias: "Entras en el sexto expediente" },
+                        { texto: "Ver más expedientes", siguiente: "diablo-mas-3", consecuencias: "Abres otra página del archivo" }
+                    ]
+                },
+                {
+                    id: "diablo-mas-3",
+                    titulo: "Expedientes históricos",
+                    texto: "Los siguientes casos muestran cómo una investigación responsable distingue entre pruebas, testimonios, propaganda y rumores.",
+                    imagen: "📚",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Caso 7: ${casos[6].titulo}`, siguiente: "diablo-caso-6", consecuencias: "Entras en el séptimo expediente" },
+                        { texto: `Caso 8: ${casos[7].titulo}`, siguiente: "diablo-caso-7", consecuencias: "Entras en el octavo expediente" },
+                        { texto: "Ver los últimos expedientes", siguiente: "diablo-mas-4", consecuencias: "Continúas con el archivo" }
+                    ]
+                },
+                {
+                    id: "diablo-mas-4",
+                    titulo: "Últimos expedientes",
+                    texto: "Los dos últimos archivos tratan casos históricos y leyendas con especial cuidado hacia las víctimas y las fuentes.",
+                    imagen: "🕯️",
+                    esDecision: true,
+                    opciones: [
+                        { texto: `Caso 9: ${casos[8].titulo}`, siguiente: "diablo-caso-8", consecuencias: "Entras en el noveno expediente" },
+                        { texto: `Caso 10: ${casos[9].titulo}`, siguiente: "diablo-caso-9", consecuencias: "Entras en el décimo expediente" },
+                        { texto: "Volver al inicio", siguiente: "inicio", consecuencias: "Revisas el archivo desde el principio" }
+                    ]
+                }
+            ];
+
+            casos.forEach((caso, indice) => {
+                capitulos.push({
+                    id: `diablo-caso-${indice}`,
+                    titulo: caso.titulo,
+                    texto: `${caso.inspirado} ${caso.texto}`,
+                    imagen: caso.imagen,
+                    esDecision: true,
+                    opciones: caso.opciones
+                });
+
+                ["a", "b", "c"].forEach((ruta, rutaIndice) => {
+                    const rutaNombre = ruta === "a" ? "La red de apoyo" : ruta === "b" ? "La salida" : "La señal de auxilio";
+                    const rutaImagen = ruta === "a" ? "📞" : ruta === "b" ? "🚪" : "🛡️";
+                    const base = `diablo-${indice}-${ruta}`;
+                    capitulos.push({
+                        id: `${base}-1`,
+                        titulo: `${rutaNombre}: primer paso`,
+                        texto: "La situación se vuelve más incómoda. Recuerdas que no tienes que demostrar valentía ni enfrentarte a nadie: tu objetivo es ganar distancia, conservar pruebas y llegar a un lugar seguro.",
+                        imagen: rutaImagen,
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Ir hacia un lugar público y bien iluminado", siguiente: `${base}-2`, consecuencias: "Aumentas las posibilidades de que otras personas te vean" },
+                            { texto: "Compartir tu ubicación y una palabra clave", siguiente: `${base}-3`, consecuencias: "Tu red puede reaccionar aunque no puedas explicar todo" },
+                            { texto: "Pedir que te acompañen hasta la salida", siguiente: `${base}-2`, consecuencias: "Evitas quedarte a solas" }
+                        ]
+                    });
+                    capitulos.push({
+                        id: `${base}-2`,
+                        titulo: `${rutaNombre}: la salida`,
+                        texto: "Encuentras un momento para moverte. La persona intenta convencerte de que exageras y promete que todo se arreglará si guardas silencio. La presión no cambia lo que has visto.",
+                        imagen: "🏃",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Salir sin discutir y llamar a emergencias", siguiente: `${base}-final-seguro`, consecuencias: "Priorizas tu integridad" },
+                            { texto: "Entrar en un negocio o edificio con personal", siguiente: `${base}-final-testigo`, consecuencias: "Consigues un lugar seguro y un testigo" },
+                            { texto: "Volver atrás para recuperar tus cosas", siguiente: `${base}-final-regreso`, consecuencias: "Te arriesgas a prolongar la situación" }
+                        ]
+                    });
+                    capitulos.push({
+                        id: `${base}-3`,
+                        titulo: `${rutaNombre}: la comprobación`,
+                        texto: "Tu contacto responde y confirma que ha recibido la señal. Te pide que no borres nada, que no vuelvas a quedar a solas y que mantengas el teléfono disponible.",
+                        imagen: "📍",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Seguir sus indicaciones y esperar en público", siguiente: `${base}-final-seguro`, consecuencias: "La ayuda llega sin que tengas que enfrentarte a nadie" },
+                            { texto: "Enviar capturas y nombres relevantes", siguiente: `${base}-final-investigacion`, consecuencias: "Facilitas que se investigue el patrón" },
+                            { texto: "Pedir que llamen a una persona adulta de confianza", siguiente: `${base}-final-testigo`, consecuencias: "Amplías tu red de protección" }
+                        ]
+                    });
+                    capitulos.push(
+                        { id: `${base}-final-seguro`, titulo: "A salvo", texto: "Llegas a un lugar seguro y recibes ayuda. La experiencia ha sido difícil, pero reconociste las señales, rompiste el aislamiento y conservaste el control sobre la siguiente decisión.", imagen: "✅", esDecision: false, opciones: [] },
+                        { id: `${base}-final-testigo`, titulo: "Con compañía", texto: "Una persona de confianza te acompaña mientras explicas lo ocurrido. Tener un testigo y un registro permite que otros profesionales actúen con más información.", imagen: "👥", esDecision: false, opciones: [] },
+                        { id: `${base}-final-investigacion`, titulo: "El expediente", texto: "La información queda registrada y se abre una investigación. No tienes que resolver el caso por tu cuenta: tu parte fue ponerte a salvo y contar lo que sabías.", imagen: "📋", esDecision: false, opciones: [] },
+                        { id: `${base}-final-regreso`, titulo: "Una segunda oportunidad", texto: "Te das cuenta de que recuperar objetos no merece ponerte en riesgo. Retrocedes hacia una zona segura, avisas a alguien y dejas que profesionales se ocupen de lo demás.", imagen: "🕊️", esDecision: false, opciones: [] }
+                    );
+                });
+            });
+
+            return {
+                titulo: "DIABLO",
+                descripcion: "Ficciones de supervivencia inspiradas en casos criminales conocidos, sin violencia gráfica.",
+                capitulos
             };
         }
 
