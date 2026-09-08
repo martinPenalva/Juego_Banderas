@@ -10632,11 +10632,14 @@
                     <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn">🚗 Clasificación Coches</button>
                     <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn">🪐 Clasificación Espacio</button>
                     <button class="ranking-btn ranking-btn-brainrots" id="viewRankingBrainrotsBtn">🧠 Clasificación Brainrots</button>
-            <div class="ranking-buttons-container">
-                <div class="difficulty-ranking-container" id="difficultyRankingContainer" style="display: none;">
-                    <h3 id="difficultyRankingTitle" style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.5em; text-align: center;"></h3>
-                    <div class="difficulty-ranking-list" id="difficultyRankingList"></div>
+                    <button class="ranking-btn ranking-btn-strangerthings" id="viewRankingStrangerThingsBtn">🔮 Clasificación Stranger Things</button>
+                    <button class="ranking-btn ranking-btn-football" id="viewRankingFootballBtn">⚽ Clasificación Fútbol</button>
                 </div>
+            </div>
+
+            <div class="difficulty-ranking-container" id="difficultyRankingContainer" style="display: none;">
+                <h3 id="difficultyRankingTitle" style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.5em; text-align: center;"></h3>
+                <div class="difficulty-ranking-list" id="difficultyRankingList"></div>
             </div>
             <button class="creator-info-btn" id="creatorInfoBtn" title="Información del creador">ℹ️ Información del Creador</button>
         </div>
@@ -16515,13 +16518,17 @@
         // Guardar puntuación en Firebase
         async function saveScore() {
             const playerName = window.currentUserName || 'Anónimo';
+            const currentDifficulty = difficulty || 'easy';
+            if (!difficulty) {
+                difficulty = currentDifficulty;
+            }
             
             const saveBtn = document.getElementById('saveScoreBtn');
             saveBtn.disabled = true;
             saveBtn.textContent = '💾 Guardando...';
             
             try {
-                const success = await window.guardarPuntuacion(playerName, score, difficulty);
+                const success = await window.guardarPuntuacion(playerName, score, currentDifficulty);
                 if (success) {
                     saveBtn.textContent = '✅ Guardado';
                     document.getElementById('showRankingBtn').style.display = 'block';
@@ -16737,25 +16744,27 @@
         async function loadRanking() {
             const rankingContainer = document.getElementById('rankingContainer');
             const rankingList = document.getElementById('rankingList');
+            const levelToLoad = difficulty || 'easy';
             
             rankingContainer.style.display = 'block';
             rankingList.innerHTML = '<div style="text-align: center; padding: 20px;">Cargando ranking...</div>';
             
             try {
                 // Obtener ranking del nivel actual
-                const ranking = await window.obtenerRanking(difficulty);
+                const ranking = await window.obtenerRanking(levelToLoad);
                 
                 if (ranking.length === 0) {
                     let nivelTexto = '';
-                    if (difficulty === 'easy') nivelTexto = 'Fácil';
-                    else if (difficulty === 'hard') nivelTexto = 'Difícil';
-                    else if (difficulty === 'impossible') nivelTexto = 'Imposible';
-                    else if (difficulty === 'god') nivelTexto = 'Dios';
-                    else if (difficulty === 'starwars') nivelTexto = 'Star Wars';
-                    else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
-                    else if (difficulty === 'cars') nivelTexto = 'Coches';
-                    else if (difficulty === 'space') nivelTexto = 'Espacio';
-                    else if (difficulty === 'football') nivelTexto = 'Escudos de Fútbol';
+                    if (levelToLoad === 'easy') nivelTexto = 'Fácil';
+                    else if (levelToLoad === 'hard') nivelTexto = 'Difícil';
+                    else if (levelToLoad === 'impossible') nivelTexto = 'Imposible';
+                    else if (levelToLoad === 'god') nivelTexto = 'Dios';
+                    else if (levelToLoad === 'starwars') nivelTexto = 'Star Wars';
+                    else if (levelToLoad === 'pokemon') nivelTexto = 'Pokémon';
+                    else if (levelToLoad === 'cars') nivelTexto = 'Coches';
+                    else if (levelToLoad === 'space') nivelTexto = 'Espacio';
+                    else if (levelToLoad === 'football') nivelTexto = 'Escudos de Fútbol';
+                    else if (levelToLoad === 'strangerthings') nivelTexto = 'Stranger Things';
                     rankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}</div>`;
                     return;
                 }
@@ -16814,7 +16823,7 @@
             const rankingTitle = document.getElementById('rankingTitle');
             
             // Usar levelOverride si se proporciona, sino usar difficulty actual
-            const levelToShow = levelOverride || difficulty;
+            const levelToShow = levelOverride || difficulty || 'easy';
             
             // Actualizar título según el nivel
             if (levelToShow === 'easy') {
@@ -17118,6 +17127,7 @@
         // Cargar y mostrar ranking principal (en la pantalla del juego)
         async function loadMainRanking() {
             const mainRankingList = document.getElementById('mainRankingList');
+            const levelToLoad = difficulty || 'easy';
             
             if (!mainRankingList) {
                 console.error('mainRankingList no encontrado');
@@ -17128,20 +17138,20 @@
             
             try {
                 // Obtener ranking del nivel actual
-                const ranking = await window.obtenerRanking(difficulty);
+                const ranking = await window.obtenerRanking(levelToLoad);
                 
                 if (ranking.length === 0) {
                     let nivelTexto = '';
-                    if (difficulty === 'easy') nivelTexto = 'Fácil';
-                    else if (difficulty === 'hard') nivelTexto = 'Difícil';
-                    else if (difficulty === 'impossible') nivelTexto = 'Imposible';
-                    else if (difficulty === 'god') nivelTexto = 'Dios';
-                    else if (difficulty === 'starwars') nivelTexto = 'Star Wars';
-                    else if (difficulty === 'pokemon') nivelTexto = 'Pokémon';
-                    else if (difficulty === 'cars') nivelTexto = 'Coches';
-                    else if (difficulty === 'space') nivelTexto = 'Espacio';
-                    else if (difficulty === 'football') nivelTexto = 'Escudos de Fútbol';
-                    else if (difficulty === 'strangerthings') nivelTexto = 'Stranger Things';
+                    if (levelToLoad === 'easy') nivelTexto = 'Fácil';
+                    else if (levelToLoad === 'hard') nivelTexto = 'Difícil';
+                    else if (levelToLoad === 'impossible') nivelTexto = 'Imposible';
+                    else if (levelToLoad === 'god') nivelTexto = 'Dios';
+                    else if (levelToLoad === 'starwars') nivelTexto = 'Star Wars';
+                    else if (levelToLoad === 'pokemon') nivelTexto = 'Pokémon';
+                    else if (levelToLoad === 'cars') nivelTexto = 'Coches';
+                    else if (levelToLoad === 'space') nivelTexto = 'Espacio';
+                    else if (levelToLoad === 'football') nivelTexto = 'Escudos de Fútbol';
+                    else if (levelToLoad === 'strangerthings') nivelTexto = 'Stranger Things';
                     mainRankingList.innerHTML = `<div style="text-align: center; padding: 20px; color: #718096;">No hay puntuaciones aún en nivel ${nivelTexto}. ¡Sé el primero en jugar!</div>`;
                     return;
                 }
@@ -18962,7 +18972,7 @@
         }
         const viewRankingBtn = document.getElementById('viewRankingBtn');
         if (viewRankingBtn) {
-            viewRankingBtn.addEventListener('click', showMainRanking);
+            viewRankingBtn.addEventListener('click', () => showMainRanking());
         }
         
         const closeRankingBtn = document.getElementById('closeRankingBtn');
@@ -19735,7 +19745,7 @@
             const viewRankingCarsBtn = document.getElementById('viewRankingCarsBtn');
             const mainViewRankingSpaceBtn = document.getElementById('mainViewRankingSpaceBtn');
             const viewRankingSpaceBtn = document.getElementById('viewRankingSpaceBtn');
-            
+
             // Hacer visibles para todos
             if (starwarsBtn) {
                 starwarsBtn.style.display = 'block';
@@ -19784,7 +19794,9 @@
                 viewRankingSpaceBtn.style.display = 'block';
             }
         }
-        
+
+        window.updateAnimalButtonVisibility = updateAnimalButtonVisibility;
+
         // Observar cambios en el estado de autenticación
         onAuthStateChanged(auth, async (user) => {
             if (user) {
