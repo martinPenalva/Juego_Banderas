@@ -1265,6 +1265,16 @@
             filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.8));
             animation: rocketTrail 2s ease-out forwards;
         }
+        
+            .mailbox-message-item.important-notice {
+                border-left: 4px solid #ea580c;
+                background: #fff7ed;
+            }
+        
+            .mailbox-message-item.important-notice.unread {
+                border-left-color: #dc2626;
+                box-shadow: 0 0 0 1px #fed7aa;
+            }
 
         @keyframes rocketTrail {
             0% {
@@ -1982,6 +1992,88 @@
             flex-wrap: wrap;
         }
 
+        body.difficulty-selector-active .game-play-ui {
+            display: none !important;
+        }
+
+        body.difficulty-selector-active .profile-picture-container {
+            position: fixed;
+            top: 18px;
+            right: 22px;
+            z-index: 1000;
+            margin: 0;
+        }
+
+        .main-brand-hero {
+            position: relative;
+            overflow: hidden;
+            margin: -10px -10px 32px;
+            padding: 30px 24px 26px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #172554 0%, #2563eb 52%, #0f766e 100%);
+            color: white;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.28);
+        }
+
+        .main-brand-hero::after {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            right: -60px;
+            top: -75px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            box-shadow: 0 0 0 22px rgba(255, 255, 255, 0.06), 0 0 0 44px rgba(255, 255, 255, 0.04);
+        }
+
+        .main-brand-icon {
+            position: relative;
+            z-index: 1;
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 12px;
+            border: 4px solid rgba(255, 255, 255, 0.85);
+            border-radius: 22px;
+            object-fit: cover;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.3);
+        }
+
+        .main-brand-hero h1 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            color: white;
+            font-size: 2.15em;
+            letter-spacing: 0;
+        }
+
+        .main-brand-tagline {
+            position: relative;
+            z-index: 1;
+            margin: 8px 0 18px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1em;
+        }
+
+        .main-brand-prompts {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .main-brand-prompts span {
+            padding: 7px 11px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            font-size: 0.82em;
+        }
+
         .difficulty-btn {
             background: white;
             border: 2px solid #667eea;
@@ -2153,6 +2245,70 @@
             margin-top: 5px;
             font-weight: 400;
             opacity: 0.8;
+        }
+
+        .level-info-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-left: 8px;
+            border: 1px solid currentColor;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            color: inherit;
+            font-size: 0.7em;
+            font-weight: 800;
+            cursor: help;
+            vertical-align: middle;
+        }
+
+        .level-info-btn:hover {
+            background: rgba(255, 255, 255, 0.45);
+            transform: scale(1.08);
+        }
+
+        .level-info-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .level-info-box {
+            width: min(440px, 100%);
+            padding: 24px;
+            border-radius: 16px;
+            background: white;
+            color: #1e293b;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.3);
+        }
+
+        .level-info-box h3 {
+            margin: 0 0 14px;
+            color: #4338ca;
+        }
+
+        .level-info-box p {
+            margin: 8px 0;
+            line-height: 1.55;
+        }
+
+        .level-info-close {
+            width: 100%;
+            margin-top: 16px;
+            padding: 10px 14px;
+            border: 0;
+            border-radius: 8px;
+            background: #4338ca;
+            color: white;
+            cursor: pointer;
+            font-weight: 700;
         }
 
         /* Estilos para los botones de tipo de juego */
@@ -6625,6 +6781,28 @@
             font-size: 1.2em;
         }
 
+        .profile-friends-section.collapsed .friends-list {
+            display: none;
+        }
+
+        .profile-section-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .profile-section-arrow {
+            color: #667eea;
+            font-size: 0.9em;
+            transition: transform 0.2s ease;
+        }
+
+        .profile-friends-section:not(.collapsed) .profile-section-arrow {
+            transform: rotate(90deg);
+        }
+
         .friends-list {
             display: flex;
             flex-direction: column;
@@ -8165,6 +8343,99 @@
             transform: translateX(5px);
         }
 
+        .profile-important-notice-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .profile-important-notice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+        }
+
+        .important-notice-content {
+            max-width: 720px;
+        }
+
+        .important-notice-help {
+            margin: 0 0 15px;
+            color: #4b5563;
+        }
+
+        .important-notice-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            padding: 10px 12px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            color: #9a3412;
+            font-weight: 600;
+        }
+
+        .important-notice-users {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .important-notice-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 13px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+        }
+
+        .important-notice-user:last-child {
+            border-bottom: 0;
+        }
+
+        .important-notice-user:hover {
+            background: #fff7ed;
+        }
+
+        .important-notice-user input {
+            width: 18px;
+            height: 18px;
+            accent-color: #ea580c;
+        }
+
+        .important-notice-user-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .important-notice-user-name {
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        .important-notice-user-email {
+            overflow: hidden;
+            color: #64748b;
+            font-size: 0.85em;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         .send-mail-compose {
             margin-top: 20px;
             padding-top: 20px;
@@ -8703,6 +8974,12 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .active-chat-header-picture:hover,
+        .active-chat-header-name:hover {
+            opacity: 0.8;
+            text-decoration: underline;
         }
 
         .active-chat-header-name {
@@ -10151,13 +10428,14 @@
                     <button class="profile-inbox-btn" id="profileInboxBtn">📬 Bandeja de Solicitudes</button>
                     <button class="profile-mailbox-btn" id="profileMailboxBtn">📮 Buzón de Correo</button>
                     <button class="profile-send-mail-btn" id="profileSendMailBtn" style="display: none;">✉️ Enviar Mensaje</button>
+                    <button class="profile-important-notice-btn" id="profileImportantNoticeBtn" style="display: none;">📢 Avisos Importantes</button>
                     <button class="profile-recommendations-inbox-btn" id="profileRecommendationsInboxBtn" style="display: none;">📧 Correo de Recomendaciones</button>
                     <div class="profile-scores-section" id="profileScoresSection" style="display: none;">
                         <h3>Mis Puntuaciones Máximas</h3>
                         <div class="scores-list" id="scoresList"></div>
                     </div>
                     <div class="profile-friends-section" id="profileFriendsSection" style="display: none;">
-                        <h3>👥 Mis Amigos</h3>
+                        <h3 class="profile-section-toggle" id="profileFriendsToggle" role="button" tabindex="0" aria-expanded="false">👥 Mis Amigos <span class="profile-section-arrow">▸</span></h3>
                         <div class="friends-list" id="friendsList"></div>
                     </div>
                     <div class="profile-chats-section" id="profileChatsSection" style="display: none;">
@@ -10406,6 +10684,28 @@
         </div>
     </div>
 
+    <!-- Modal para enviar avisos importantes (solo para Martin) -->
+    <div class="send-mail-modal" id="importantNoticeModal" style="display: none;">
+        <div class="send-mail-modal-content important-notice-content">
+            <div class="send-mail-modal-header">
+                <h2>📢 Avisos Importantes</h2>
+                <button class="send-mail-modal-close" id="importantNoticeModalClose">✕</button>
+            </div>
+            <div class="send-mail-modal-body">
+                <p class="important-notice-help">Selecciona los usuarios que recibirán el aviso.</p>
+                <div class="important-notice-toolbar">
+                    <label><input type="checkbox" id="importantNoticeSelectAll"> Seleccionar todos</label>
+                    <span id="importantNoticeSelectedCount">0 seleccionados</span>
+                </div>
+                <div class="important-notice-users" id="importantNoticeUsers">
+                    <div style="text-align: center; color: #718096; padding: 20px;">Cargando usuarios...</div>
+                </div>
+                <textarea id="importantNoticeText" class="send-mail-textarea" placeholder="Escribe el aviso importante..." rows="6" maxlength="1000"></textarea>
+                <button class="send-mail-submit-btn" id="importantNoticeSubmitBtn">📤 Enviar Aviso</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de búsqueda de amigos -->
     <div class="friends-modal" id="friendsModal" style="display: none;">
         <div class="friends-modal-content">
@@ -10485,7 +10785,7 @@
             <button class="logout-btn" id="logoutBtn" style="display: none;">Cerrar Sesión</button>
         </div>
         <div class="title-container">
-        <h1>🏳️ Adivina la Bandera</h1>
+        <h1 class="game-play-ui">🏳️ Adivina la Bandera</h1>
             <div class="profile-picture-container" id="profilePictureContainer" style="display: none;">
                 <div class="profile-picture-circle" id="profilePictureCircle">
                     <img id="profilePictureImg" src="" alt="Foto de perfil" style="display: none;">
@@ -10493,23 +10793,23 @@
                 </div>
             </div>
         </div>
-        <div class="lives-container">
+        <div class="lives-container game-play-ui">
             <div class="lives-text">Vidas:</div>
             <div class="hearts" id="hearts">❤️ ❤️ ❤️</div>
         </div>
-        <div class="score">Puntuación: <span id="score">0</span></div>
-        <div class="streak-container">
+        <div class="score game-play-ui">Puntuación: <span id="score">0</span></div>
+        <div class="streak-container game-play-ui">
             <div class="streak-fire" id="streakFire">🔥</div>
             <div class="streak-text">Racha: <span id="streak">0</span></div>
             <button class="joker-btn-inline" id="jokerBtn" style="display: none;">🎯 Comodín</button>
         </div>
         
-        <div class="flag-container">
+        <div class="flag-container game-play-ui">
             <div class="flag" id="flag">🏳️</div>
         </div>
 
         <!-- Contador de tiempo -->
-        <div class="timer-container" id="timerContainer" style="display: none;">
+        <div class="timer-container game-play-ui" id="timerContainer" style="display: none;">
             <div class="timer-circle">
                 <svg class="timer-svg" viewBox="0 0 100 100">
                     <circle class="timer-circle-bg" cx="50" cy="50" r="45"></circle>
@@ -10520,7 +10820,7 @@
         </div>
 
         <!-- Botón para ver ranking -->
-        <button class="view-ranking-btn" id="viewRankingBtn" style="display: none;">📊 Ver Tabla de Ranking</button>
+        <button class="view-ranking-btn game-play-ui" id="viewRankingBtn" style="display: none;">📊 Ver Tabla de Ranking</button>
 
         <!-- Ranking principal -->
         <div class="main-ranking-container" id="mainRankingContainer" style="display: none;">
@@ -10551,6 +10851,15 @@
         <div class="difficulty-selector" id="difficultySelector">
             <!-- Pantalla inicial: Selección de tipo de juego -->
             <div class="game-type-selector" id="gameTypeSelector">
+                <div class="main-brand-hero">
+                    <img class="main-brand-icon main-brand-flag" id="mainBrandFlag" src="https://flagcdn.com/w320/es.png" alt="Bandera decorativa">
+                    <h1>Adivina la Bandera</h1>
+                    <p class="main-brand-tagline">Aprende el mundo, una bandera cada vez.</p>
+                    <div class="main-brand-prompts" aria-label="Preguntas del juego">
+                        <span>🌍 ¿Las reconoces todas?</span>
+                        <span>🔥 ¿Cuánto durará tu racha?</span>
+                    </div>
+                </div>
                 <h2 style="margin-bottom: 40px; color: #667eea; font-size: 2em;">🏳️ Elige tu juego</h2>
                 <div class="game-type-buttons" style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
                     <button class="game-type-btn" id="banderasTypeBtn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 40px 60px; border-radius: 20px; font-size: 1.5em; cursor: pointer; box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); transition: all 0.3s ease; min-width: 250px;">
@@ -10581,10 +10890,10 @@
                     <button id="backToMainBtn" style="background: #718096; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">← Volver</button>
                 </div>
                 <div class="difficulty-buttons">
-                    <button class="difficulty-btn easy" id="easyBtn">🟢 Fácil<br><small>Países de Europa</small></button>
-                    <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil<br><small>Todos los países</small></button>
-                    <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible<br><small>Islas y paraísos fiscales</small></button>
-                    <button class="difficulty-btn god" id="godBtn">✨ Dios<br><small>Todas las banderas del mundo </small></button>
+                    <button class="difficulty-btn easy" id="easyBtn">🟢 Fácil <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('easy')" title="Cómo funciona Fácil">i</span><br><small>Países de Europa</small></button>
+                    <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('hard')" title="Cómo funciona Difícil">i</span><br><small>Todos los países</small></button>
+                    <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('impossible')" title="Cómo funciona Imposible">i</span><br><small>Islas y paraísos fiscales</small></button>
+                    <button class="difficulty-btn god" id="godBtn">✨ Dios <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('god')" title="Cómo funciona Dios">i</span><br><small>Todas las banderas del mundo</small></button>
                 </div>
             </div>
             
@@ -10602,14 +10911,14 @@
                     <button id="backToMainBtn2" style="background: #718096; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">← Volver</button>
                 </div>
                 <div class="difficulty-buttons">
-                    <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars<br><small>Adivina el personaje</small></button>
-                    <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon<br><small>Adivina el Pokémon</small></button>
-                    <button class="difficulty-btn cars" id="carsBtn">🚗 Coches<br><small>Adivina el modelo</small></button>
-                    <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio<br><small>Adivina el objeto espacial</small></button>
-                    <button class="difficulty-btn brainrots" id="brainrotsBtn">🧠 Brainrots<br><small>Adivina el personaje</small></button>
-                    <button class="difficulty-btn strangerthings" id="strangerthingsBtn">🔮 Stranger Things<br><small>Adivina el personaje</small></button>
-                    <button class="difficulty-btn football" id="footballBtn">⚽ Escudos de Fútbol<br><small>Adivina el equipo</small></button>
-                    <button class="difficulty-btn historia" id="historiaBtn">📖 HISTORIA<br><small>Aventura interactiva</small></button>
+                    <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('starwars')" title="Cómo funciona Star Wars">i</span><br><small>Adivina el personaje</small></button>
+                    <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('pokemon')" title="Cómo funciona Pokémon">i</span><br><small>Adivina el Pokémon</small></button>
+                    <button class="difficulty-btn cars" id="carsBtn">🚗 Coches <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('cars')" title="Cómo funciona Coches">i</span><br><small>Adivina el modelo</small></button>
+                    <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('space')" title="Cómo funciona Espacio">i</span><br><small>Adivina el objeto espacial</small></button>
+                    <button class="difficulty-btn brainrots" id="brainrotsBtn">🧠 Brainrots <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('brainrots')" title="Cómo funciona Brainrots">i</span><br><small>Adivina el personaje</small></button>
+                    <button class="difficulty-btn strangerthings" id="strangerthingsBtn">🔮 Stranger Things <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('strangerthings')" title="Cómo funciona Stranger Things">i</span><br><small>Adivina el personaje</small></button>
+                    <button class="difficulty-btn football" id="footballBtn">⚽ Escudos de Fútbol <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('football')" title="Cómo funciona Fútbol">i</span><br><small>Adivina el equipo</small></button>
+                    <button class="difficulty-btn historia" id="historiaBtn">📖 HISTORIA <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('historia')" title="Cómo funciona Historia">i</span><br><small>Aventura interactiva</small></button>
                 </div>
             </div>
             <!-- Clasificaciones de Banderas (solo visible en sección de banderas) -->
@@ -10703,6 +11012,69 @@
         let timeLeft = 20;
         let usedCountries = []; // Para el modo Dios: países ya mostrados
         let availableCountries = []; // Para el modo Dios: países disponibles
+        let mainFlagRotationInterval = null;
+        let mainFlagRotationIndex = 0;
+
+        function renderMainFlag(country) {
+            const flagImage = document.getElementById('mainBrandFlag');
+            if (!flagImage || !country?.cca2) return;
+            flagImage.src = `https://flagcdn.com/w320/${country.cca2.toLowerCase()}.png`;
+            flagImage.alt = `Bandera de ${country.name?.common || country.cca2}`;
+        }
+
+        async function startMainFlagRotation() {
+            const fallbackPool = fallbackCountries.filter(country => country.cca2);
+            let flagPool = fallbackPool;
+            renderMainFlag(flagPool[0]);
+
+            if (!mainFlagRotationInterval) {
+                mainFlagRotationInterval = setInterval(() => {
+                    if (!document.body.classList.contains('difficulty-selector-active')) return;
+                    if (flagPool.length === 0) return;
+                    mainFlagRotationIndex = (mainFlagRotationIndex + 1) % flagPool.length;
+                    renderMainFlag(flagPool[mainFlagRotationIndex]);
+                }, 5000);
+            }
+
+            try {
+                const response = await fetch('https://restcountries.com/v3.1/all', {
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!response.ok) return;
+                const countries = await response.json();
+                if (!Array.isArray(countries)) return;
+                const seenCodes = new Set();
+                flagPool = countries.filter(country => {
+                    const code = country?.cca2;
+                    if (!code || seenCodes.has(code)) return false;
+                    seenCodes.add(code);
+                    return true;
+                });
+                mainFlagRotationIndex = 0;
+                renderMainFlag(flagPool[0]);
+            } catch (error) {
+                console.warn('No se pudieron cargar las banderas decorativas:', error);
+            }
+        }
+
+        function stopMainFlagRotation() {
+            if (mainFlagRotationInterval) {
+                clearInterval(mainFlagRotationInterval);
+                mainFlagRotationInterval = null;
+            }
+        }
+
+        function getUniqueCountries(countryList) {
+            const uniqueCountries = new Map();
+            countryList.forEach(country => {
+                const key = country.cca2 || country.cca3 || country.name?.common;
+                if (key && !uniqueCountries.has(key)) {
+                    uniqueCountries.set(key, country);
+                }
+            });
+            return Array.from(uniqueCountries.values());
+        }
+
         let currentStarWarsCharacter = null; // Para el modo Star Wars
         let starWarsCharacters = []; // Lista de personajes de Star Wars cargados
         let currentPokemon = null; // Para el modo Pokémon
@@ -11003,11 +11375,11 @@
             } else if (difficulty === 'god') {
                 // Dios: TODOS los países sin filtros (examen completo de todas las banderas)
                 // Usar TODOS los países de la API sin ningún filtro
-                countries = [...allCountries]; // Usar todos los países disponibles
+                countries = getUniqueCountries(allCountries); // Usar todas las banderas únicas de la API
                 
                 // Inicializar arrays para tracking de países usados
                 // Crear una copia profunda para evitar referencias
-                availableCountries = allCountries.map(country => ({ ...country }));
+                availableCountries = getUniqueCountries(allCountries).map(country => ({ ...country }));
                 usedCountries = [];
                 
                 console.log(`Modo Dios: ${availableCountries.length} países cargados (examen completo sin repeticiones)`);
@@ -15272,6 +15644,7 @@
         function selectDifficulty(level) {
             // Detener temporizador si existe
             stopTimer();
+            stopMainFlagRotation();
             document.getElementById('timerContainer').style.display = 'none';
             
             difficulty = level;
@@ -15293,7 +15666,7 @@
                 usedCountries = [];
                 // Reinicializar con todos los países de la API (copia profunda)
                 availableCountries = allCountries.length > 0 
-                    ? allCountries.map(country => ({ ...country }))
+                    ? getUniqueCountries(allCountries).map(country => ({ ...country }))
                     : [];
                 console.log(`Modo Dios reiniciado: ${availableCountries.length} países disponibles`);
             }
@@ -17895,6 +18268,7 @@
             
             // Crear partículas flotantes en el selector de dificultad
             createDifficultySelectorParticles();
+            startMainFlagRotation();
             
             // Actualizar corazones
             updateHearts();
@@ -18685,10 +19059,78 @@
         if (difficultySelector && (difficultySelector.style.display !== 'none' && difficultySelector.style.display !== '')) {
             document.body.classList.add('difficulty-selector-active');
             createDifficultySelectorParticles();
+            startMainFlagRotation();
         } else if (difficultySelector && !difficultySelector.style.display) {
             // Si no tiene estilo display definido, está visible por defecto
             document.body.classList.add('difficulty-selector-active');
             createDifficultySelectorParticles();
+            startMainFlagRotation();
+        }
+
+        const levelInfo = {
+            easy: {
+                title: '🟢 Fácil',
+                description: 'Banderas de Europa para empezar.',
+                streak: 'La racha sube con cada respuesta correcta y se reinicia al fallar.',
+                joker: 'El comodín aparece al conseguir 5 aciertos seguidos y elimina 2 opciones. Al usarlo, la racha baja 5 puntos.'
+            },
+            hard: {
+                title: '🔴 Difícil',
+                description: 'Incluye países de todo el mundo, evitando los más conocidos.',
+                streak: 'La racha sube con cada acierto y vuelve a cero al fallar.',
+                joker: 'El comodín aparece con 5 aciertos seguidos, elimina 2 opciones y reduce la racha en 5.'
+            },
+            impossible: {
+                title: '⚫ Imposible',
+                description: 'Se centra en islas, microestados y países difíciles de reconocer.',
+                streak: 'La racha se activa normalmente, pero el fuego y el comodín se alcanzan antes.',
+                joker: 'Solo necesitas 2 aciertos seguidos. El comodín elimina 2 opciones y reduce la racha en 2.'
+            },
+            god: {
+                title: '✨ Dios',
+                description: 'Examen completo: aparecen todas las banderas únicas de la API sin repetir. Solo tienes 1 vida.',
+                streak: 'Cada acierto aumenta la racha; un fallo la reinicia y termina el intento porque solo tienes una vida.',
+                joker: 'Funciona con 5 aciertos seguidos, elimina 2 opciones y descuenta 5 puntos de racha. No repite banderas.'
+            },
+            starwars: { title: '⭐ Star Wars', description: 'Adivina personajes de Star Wars.', streak: 'La racha aumenta al acertar y se reinicia al fallar.', joker: 'Con 5 aciertos elimina 2 respuestas incorrectas y resta 5 puntos de racha.' },
+            pokemon: { title: '⚡ Pokémon', description: 'Adivina el Pokémon mostrado.', streak: 'La racha aumenta al acertar y se reinicia al fallar.', joker: 'Con 5 aciertos elimina 2 respuestas incorrectas y resta 5 puntos de racha.' },
+            cars: { title: '🚗 Coches', description: 'Adivina el modelo de coche.', streak: 'La racha aumenta al acertar y se reinicia al fallar.', joker: 'Con 5 aciertos elimina 2 respuestas incorrectas y resta 5 puntos de racha.' },
+            space: { title: '🪐 Espacio', description: 'Adivina el objeto espacial.', streak: 'La racha aumenta al acertar y se reinicia al fallar.', joker: 'Con 5 aciertos elimina 2 respuestas incorrectas y resta 5 puntos de racha.' },
+            brainrots: { title: '🧠 Brainrots', description: 'Adivina el personaje Brainrot.', streak: 'La racha aumenta al acertar y se reinicia al fallar.', joker: 'Con 5 aciertos elimina 2 respuestas incorrectas y resta 5 puntos de racha.' },
+            strangerthings: { title: '🔮 Stranger Things', description: 'Adivina personajes y preguntas de la serie.', streak: 'La racha aumenta al acertar y se reinicia al fallar.', joker: 'Con 5 aciertos elimina 2 respuestas incorrectas y resta 5 puntos de racha.' },
+            football: { title: '⚽ Escudos de Fútbol', description: 'Adivina el equipo a partir de su escudo.', streak: 'La racha aumenta al acertar y se reinicia al fallar.', joker: 'Con 5 aciertos elimina 2 respuestas incorrectas y resta 5 puntos de racha.' },
+            historia: { title: '📖 Historia', description: 'Aventura interactiva con decisiones y finales diferentes.', streak: 'Este modo no usa la racha ni el comodín del juego de banderas.', joker: 'Tus decisiones cambian el camino y la puntuación de la historia.' }
+        };
+
+        function mostrarInfoNivel(level) {
+            const info = levelInfo[level];
+            if (!info) return;
+
+            const overlay = document.createElement('div');
+            overlay.className = 'level-info-overlay';
+            overlay.setAttribute('role', 'dialog');
+            overlay.setAttribute('aria-modal', 'true');
+            overlay.addEventListener('click', event => {
+                if (event.target === overlay) overlay.remove();
+            });
+
+            const box = document.createElement('div');
+            box.className = 'level-info-box';
+            box.innerHTML = `
+                <h3>${info.title}</h3>
+                <p>${info.description}</p>
+                <p><strong>🔥 Racha:</strong> ${info.streak}</p>
+                <p><strong>🎯 Comodín:</strong> ${info.joker}</p>
+            `;
+
+            const closeButton = document.createElement('button');
+            closeButton.className = 'level-info-close';
+            closeButton.type = 'button';
+            closeButton.textContent = 'Entendido';
+            closeButton.addEventListener('click', () => overlay.remove());
+            box.appendChild(closeButton);
+            overlay.appendChild(box);
+            document.body.appendChild(overlay);
         }
 
         // Event listeners para selección de dificultad
@@ -18759,6 +19201,8 @@
                     document.getElementById('juegosMartSection').style.display = 'none';
                     document.getElementById('banderasRankingContainer').style.display = 'none';
                     document.getElementById('martRankingContainer').style.display = 'none';
+                    document.body.classList.add('difficulty-selector-active');
+                    startMainFlagRotation();
                 });
             }
             
@@ -18770,6 +19214,8 @@
                     document.getElementById('juegosMartSection').style.display = 'none';
                     document.getElementById('banderasRankingContainer').style.display = 'none';
                     document.getElementById('martRankingContainer').style.display = 'none';
+                    document.body.classList.add('difficulty-selector-active');
+                    startMainFlagRotation();
                 });
             }
             
@@ -18867,6 +19313,23 @@
                 });
             }
 
+            const profileFriendsToggle = document.getElementById('profileFriendsToggle');
+            const toggleFriendsSection = () => {
+                const friendsSection = document.getElementById('profileFriendsSection');
+                if (!friendsSection || !profileFriendsToggle) return;
+                const collapsed = friendsSection.classList.toggle('collapsed');
+                profileFriendsToggle.setAttribute('aria-expanded', String(!collapsed));
+            };
+            if (profileFriendsToggle) {
+                profileFriendsToggle.addEventListener('click', toggleFriendsSection);
+                profileFriendsToggle.addEventListener('keydown', event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        toggleFriendsSection();
+                    }
+                });
+            }
+
             const profileInboxBtn = document.getElementById('profileInboxBtn');
             if (profileInboxBtn) {
                 profileInboxBtn.addEventListener('click', async () => {
@@ -18941,6 +19404,46 @@
                             searchInput.focus();
                         }
                     }
+                });
+            }
+
+            const profileImportantNoticeBtn = document.getElementById('profileImportantNoticeBtn');
+            const importantNoticeModal = document.getElementById('importantNoticeModal');
+            const importantNoticeModalClose = document.getElementById('importantNoticeModalClose');
+            if (profileImportantNoticeBtn) {
+                profileImportantNoticeBtn.addEventListener('click', async () => {
+                    if (importantNoticeModal) importantNoticeModal.style.display = 'flex';
+                    if (window.loadImportantNoticeUsers) await window.loadImportantNoticeUsers();
+                });
+            }
+            if (importantNoticeModalClose) {
+                importantNoticeModalClose.addEventListener('click', () => {
+                    if (importantNoticeModal) importantNoticeModal.style.display = 'none';
+                });
+            }
+            if (importantNoticeModal) {
+                importantNoticeModal.addEventListener('click', event => {
+                    if (event.target === importantNoticeModal) importantNoticeModal.style.display = 'none';
+                });
+            }
+
+            const importantNoticeSelectAll = document.getElementById('importantNoticeSelectAll');
+            if (importantNoticeSelectAll) {
+                importantNoticeSelectAll.addEventListener('change', () => {
+                    const usersContainer = document.getElementById('importantNoticeUsers');
+                    if (usersContainer) {
+                        usersContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                            checkbox.checked = importantNoticeSelectAll.checked;
+                        });
+                    }
+                    window.updateImportantNoticeSelectedCount?.();
+                });
+            }
+
+            const importantNoticeSubmitBtn = document.getElementById('importantNoticeSubmitBtn');
+            if (importantNoticeSubmitBtn) {
+                importantNoticeSubmitBtn.addEventListener('click', async () => {
+                    if (window.sendImportantNotice) await window.sendImportantNotice();
                 });
             }
 
@@ -21232,6 +21735,13 @@
                     }
                 }
 
+                const importantNoticeBtn = document.getElementById('profileImportantNoticeBtn');
+                if (importantNoticeBtn && window.currentUser) {
+                    importantNoticeBtn.style.display = window.currentUser.email === 'mpenalvart1@educacion.navarra.es'
+                        ? 'block'
+                        : 'none';
+                }
+
                 // Mostrar botón de crear grupo solo para mpenalvart1
                 const createGroupBtn = document.getElementById('createGroupBtn');
                 if (createGroupBtn && window.currentUser) {
@@ -21535,7 +22045,7 @@
                 // Cargar cada mensaje
                 for (const data of messages) {
                     const messageItem = document.createElement('div');
-                    messageItem.className = 'mailbox-message-item' + (data.leido ? '' : ' unread');
+                    messageItem.className = 'mailbox-message-item' + (data.leido ? '' : ' unread') + (data.esAvisoImportante ? ' important-notice' : '');
 
                     // Contenedor de foto de perfil
                     const profileContainer = document.createElement('div');
@@ -21865,6 +22375,150 @@
             } catch (error) {
                 console.error('Error al enviar mensaje:', error);
                 alert('Error al enviar el mensaje. Por favor, intenta de nuevo.');
+            }
+        };
+
+        function updateImportantNoticeSelectedCount() {
+            const usersContainer = document.getElementById('importantNoticeUsers');
+            const countEl = document.getElementById('importantNoticeSelectedCount');
+            if (!usersContainer || !countEl) return;
+            const selected = usersContainer.querySelectorAll('input[type="checkbox"]:checked').length;
+            countEl.textContent = `${selected} seleccionados`;
+        }
+
+        window.updateImportantNoticeSelectedCount = updateImportantNoticeSelectedCount;
+
+        window.loadImportantNoticeUsers = async function() {
+            if (!window.currentUser || window.currentUser.email !== 'mpenalvart1@educacion.navarra.es') return;
+
+            const usersContainer = document.getElementById('importantNoticeUsers');
+            const selectAll = document.getElementById('importantNoticeSelectAll');
+            if (!usersContainer) return;
+
+            if (selectAll) {
+                selectAll.onchange = () => {
+                    usersContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = selectAll.checked;
+                    });
+                    updateImportantNoticeSelectedCount();
+                };
+            }
+
+            usersContainer.innerHTML = '<div style="text-align: center; color: #718096; padding: 20px;">Cargando usuarios...</div>';
+            if (selectAll) selectAll.checked = false;
+
+            try {
+                const snapshot = await getDocs(collection(db, 'usuarios'));
+                usersContainer.innerHTML = '';
+
+                const users = snapshot.docs
+                    .map(userDoc => ({ id: userDoc.id, ...userDoc.data() }))
+                    .filter(user => user.id !== window.currentUser.uid)
+                    .sort((a, b) => (a.nombre || a.email || '').localeCompare(b.nombre || b.email || '', 'es'));
+
+                if (users.length === 0) {
+                    usersContainer.innerHTML = '<div style="text-align: center; color: #718096; padding: 20px;">No hay usuarios disponibles.</div>';
+                    updateImportantNoticeSelectedCount();
+                    return;
+                }
+
+                users.forEach(user => {
+                    const row = document.createElement('label');
+                    row.className = 'important-notice-user';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = user.id;
+                    checkbox.dataset.name = user.nombre || 'Sin nombre';
+                    checkbox.addEventListener('change', () => {
+                        updateImportantNoticeSelectedCount();
+                        if (selectAll) {
+                            const boxes = usersContainer.querySelectorAll('input[type="checkbox"]');
+                            selectAll.checked = boxes.length > 0 && Array.from(boxes).every(box => box.checked);
+                        }
+                    });
+
+                    const info = document.createElement('span');
+                    info.className = 'important-notice-user-info';
+                    const name = document.createElement('span');
+                    name.className = 'important-notice-user-name';
+                    name.textContent = user.nombre || 'Sin nombre';
+                    const email = document.createElement('span');
+                    email.className = 'important-notice-user-email';
+                    email.textContent = user.email || 'Sin email';
+                    info.appendChild(name);
+                    info.appendChild(email);
+
+                    row.appendChild(checkbox);
+                    row.appendChild(info);
+                    usersContainer.appendChild(row);
+                });
+                updateImportantNoticeSelectedCount();
+            } catch (error) {
+                console.error('Error al cargar usuarios para el aviso:', error);
+                usersContainer.innerHTML = '<div style="text-align: center; color: #f56565; padding: 20px;">No se pudieron cargar los usuarios.</div>';
+            }
+        };
+
+        window.sendImportantNotice = async function() {
+            if (!window.currentUser || window.currentUser.email !== 'mpenalvart1@educacion.navarra.es') return;
+
+            const usersContainer = document.getElementById('importantNoticeUsers');
+            const messageText = document.getElementById('importantNoticeText');
+            if (!usersContainer || !messageText) return;
+
+            const selectedIds = Array.from(usersContainer.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value)
+                .filter(Boolean);
+            const texto = messageText.value.trim();
+
+            if (selectedIds.length === 0) {
+                alert('Selecciona al menos un usuario.');
+                return;
+            }
+            if (!texto) {
+                alert('Escribe el aviso antes de enviarlo.');
+                return;
+            }
+
+            try {
+                const remitenteDoc = await getDoc(doc(db, 'usuarios', window.currentUser.uid));
+                const remitenteData = remitenteDoc.exists() ? remitenteDoc.data() : {};
+                const nombreRemitente = remitenteData.nombre || window.currentUserName || 'Martin';
+                const messagesRef = collection(db, 'mensajesCorreo');
+                const BATCH_LIMIT = 450;
+
+                for (let start = 0; start < selectedIds.length; start += BATCH_LIMIT) {
+                    const batch = writeBatch(db);
+                    const chunk = selectedIds.slice(start, start + BATCH_LIMIT);
+                    chunk.forEach(destinatarioId => {
+                        batch.set(doc(messagesRef), {
+                            remitenteId: window.currentUser.uid,
+                            nombreRemitente,
+                            emailRemitente: window.currentUser.email,
+                            destinatarioId,
+                            texto,
+                            timestamp: Date.now(),
+                            leido: false,
+                            esAvisoImportante: true,
+                            tipo: 'aviso-importante'
+                        });
+                    });
+                    await batch.commit();
+                }
+
+                alert(`✅ Aviso enviado a ${selectedIds.length} usuario${selectedIds.length === 1 ? '' : 's'}.`);
+                messageText.value = '';
+                document.getElementById('importantNoticeModal').style.display = 'none';
+                const selectAll = document.getElementById('importantNoticeSelectAll');
+                if (selectAll) selectAll.checked = false;
+                usersContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                updateImportantNoticeSelectedCount();
+            } catch (error) {
+                console.error('Error al enviar aviso importante:', error);
+                alert('Error al enviar el aviso. Por favor, inténtalo de nuevo.');
             }
         };
 
@@ -23299,6 +23953,14 @@
                 } else {
                     headerPicture.innerHTML = '<div style="font-size: 1.2em;">👤</div>';
                 }
+
+                const openFriendProfile = () => window.showFriendProfile(friendId, friendData);
+                headerName.style.cursor = 'pointer';
+                headerName.title = 'Ver perfil';
+                headerName.onclick = openFriendProfile;
+                headerPicture.style.cursor = 'pointer';
+                headerPicture.title = 'Ver perfil';
+                headerPicture.onclick = openFriendProfile;
                 
                 // Limpiar mensajes anteriores
                 messagesEl.innerHTML = '';
@@ -25215,6 +25877,8 @@
                             
                             const chatItem = document.createElement('div');
                             chatItem.className = 'chat-item';
+                            chatItem.style.cursor = 'pointer';
+                            chatItem.onclick = () => window.openChat(friendId, friendData);
                             // Agregar clase si tiene mensajes no leídos
                             if (unreadCount > 0) {
                                 chatItem.classList.add('has-unread');
@@ -25249,32 +25913,8 @@
                             info.appendChild(name);
                             info.appendChild(lastMsg);
                             
-                            // Botón para abrir el chat (solo se abre al hacer clic aquí)
-                            const messageBtn = document.createElement('button');
-                            messageBtn.className = 'friend-item-message';
-                            if (unreadCount > 0) {
-                                messageBtn.classList.add('has-unread');
-                            }
-                            messageBtn.textContent = '💬';
-                            messageBtn.title = unreadCount > 0 ? `${unreadCount} mensaje${unreadCount > 1 ? 's' : ''} no leído${unreadCount > 1 ? 's' : ''}` : 'Abrir chat';
-                            messageBtn.style.marginLeft = 'auto';
-                            messageBtn.style.flexShrink = '0';
-                            messageBtn.onclick = async (e) => {
-                                e.stopPropagation(); // Evitar que se propague el evento
-                                await window.openChat(friendId, friendData);
-                            };
-                            
-                            // Agregar badge de notificación si hay mensajes no leídos
-                            if (unreadCount > 0) {
-                                const badge = document.createElement('span');
-                                badge.className = 'friend-item-message-badge';
-                                badge.textContent = unreadCount > 9 ? '9+' : unreadCount.toString();
-                                messageBtn.appendChild(badge);
-                            }
-                            
                             chatItem.appendChild(picture);
                             chatItem.appendChild(info);
-                            chatItem.appendChild(messageBtn);
                             
                             if (unreadCount > 0) {
                                 const unread = document.createElement('div');
@@ -25352,6 +25992,8 @@
                             
                             const chatItem = document.createElement('div');
                             chatItem.className = 'chat-item group-chat-item';
+                            chatItem.style.cursor = 'pointer';
+                            chatItem.onclick = () => window.openGroupChat(grupoId, grupoData);
                             if (unreadCount > 0) {
                                 chatItem.classList.add('has-unread');
                             }
@@ -25392,28 +26034,6 @@
                             info.appendChild(name);
                             info.appendChild(lastMsg);
                             
-                            // Botón para abrir el chat del grupo
-                            const messageBtn = document.createElement('button');
-                            messageBtn.className = 'friend-item-message';
-                            if (unreadCount > 0) {
-                                messageBtn.classList.add('has-unread');
-                            }
-                            messageBtn.textContent = '💬';
-                            messageBtn.title = unreadCount > 0 ? `${unreadCount} mensaje${unreadCount > 1 ? 's' : ''} no leído${unreadCount > 1 ? 's' : ''}` : 'Abrir chat';
-                            messageBtn.style.marginLeft = 'auto';
-                            messageBtn.style.flexShrink = '0';
-                            messageBtn.onclick = async (e) => {
-                                e.stopPropagation();
-                                await window.openGroupChat(grupoId, grupoData);
-                            };
-                            
-                            if (unreadCount > 0) {
-                                const badge = document.createElement('span');
-                                badge.className = 'friend-item-message-badge';
-                                badge.textContent = unreadCount > 9 ? '9+' : unreadCount.toString();
-                                messageBtn.appendChild(badge);
-                            }
-                            
                             // Botón para salir del grupo
                             const leaveBtn = document.createElement('button');
                             leaveBtn.className = 'group-leave-btn';
@@ -25437,7 +26057,6 @@
                             
                             chatItem.appendChild(picture);
                             chatItem.appendChild(info);
-                            chatItem.appendChild(messageBtn);
                             chatItem.appendChild(leaveBtn);
                             
                             if (unreadCount > 0) {
@@ -26958,6 +27577,31 @@
             localStorage.setItem('notaLikes', JSON.stringify(map));
         }
 
+        function getNotaReadKey(note) {
+            const noteId = note?.id || `local-${note?.autorUid || 'unknown'}`;
+            const version = note?.fechaCreacion?.toMillis
+                ? note.fechaCreacion.toMillis()
+                : note?.fechaCreacion || note?.contenido || '';
+            return `${window.currentUser?.uid || 'anonymous'}:${noteId}:${version}`;
+        }
+
+        function isNotaRead(note) {
+            try {
+                const readNotes = JSON.parse(localStorage.getItem('notasLeidas') || '{}');
+                return readNotes[getNotaReadKey(note)] === true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function markNotaAsRead(note) {
+            try {
+                const readNotes = JSON.parse(localStorage.getItem('notasLeidas') || '{}');
+                readNotes[getNotaReadKey(note)] = true;
+                localStorage.setItem('notasLeidas', JSON.stringify(readNotes));
+            } catch (_) {}
+        }
+
         function updateNoteLikeButton(likeCount, userLiked) {
             const likeCountEl = document.getElementById('noteLikeCount');
             const likeBtn = document.getElementById('noteLikeBtn');
@@ -27060,12 +27704,13 @@
             storyDiv.className = 'story-item';
             
             const hasNote = note && note.contenido && note.contenido.trim() !== '';
+            const hasUnreadNote = hasNote && !user.isCurrentUser && !isNotaRead(note);
             
             const likeCount = Number(note && note.likesCount) || 0;
             
             storyDiv.innerHTML = `
                 <div class="story-avatar-wrapper">
-                    <div class="story-avatar ${hasNote ? 'has-note' : ''}">
+                    <div class="story-avatar ${hasUnreadNote ? 'has-note' : ''}">
                         ${user.foto ? 
                             `<img src="${user.foto}" alt="${user.nombre}">` : 
                             `<div class="story-avatar-placeholder">👤</div>`
@@ -27081,6 +27726,7 @@
                 if (user.isCurrentUser) {
                     window.openNoteEditor();
                 } else if (hasNote) {
+                    markNotaAsRead(note);
                     window.viewNoteFull(note);
                 } else {
                     // Mostrar mensaje que no tiene nota
@@ -27105,6 +27751,10 @@
             window.currentNoteLocal = false;
             const likeBar = document.getElementById('noteLikeBar');
             if (likeBar) likeBar.style.display = 'none';
+
+            if (window.currentUser && window.loadNotes) {
+                window.loadNotes();
+            }
 
             // Volver a la pantalla que se ve tras iniciar sesión
             const authContainer = document.getElementById('authContainer');
