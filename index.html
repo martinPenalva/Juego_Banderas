@@ -6576,6 +6576,22 @@
             font-size: 1.3em;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
         }
+        .profile-chats-section.collapsed .chats-list {
+            display: none;
+        }
+
+        .profile-chats-section .profile-section-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .profile-chats-section .profile-section-arrow {
+            margin-left: auto;
+        }
+
+        .profile-chats-section:not(.collapsed) .profile-section-arrow {
+            transform: rotate(90deg);
+        }
 
         /* Estilos para lista de chats */
         .chats-list {
@@ -10440,7 +10456,7 @@
                     </div>
                     <div class="profile-chats-section" id="profileChatsSection" style="display: none;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <h3 style="margin: 0;">Conversaciones</h3>
+                            <h3 class="profile-section-toggle" id="profileChatsToggle" role="button" tabindex="0" aria-expanded="false" style="margin: 0;">Conversaciones <span class="profile-section-arrow">▸</span></h3>
                             <button id="createGroupBtn" class="create-group-btn" style="display: none;" title="Crear grupo">👥 Grupo</button>
                         </div>
                         <div class="chats-list" id="chatsList"></div>
@@ -19326,6 +19342,23 @@
                     if (event.key === 'Enter' || event.key === ' ') {
                         event.preventDefault();
                         toggleFriendsSection();
+                    }
+                });
+            }
+
+            const profileChatsToggle = document.getElementById('profileChatsToggle');
+            const toggleChatsSection = () => {
+                const chatsSection = document.getElementById('profileChatsSection');
+                if (!chatsSection || !profileChatsToggle) return;
+                const collapsed = chatsSection.classList.toggle('collapsed');
+                profileChatsToggle.setAttribute('aria-expanded', String(!collapsed));
+            };
+            if (profileChatsToggle) {
+                profileChatsToggle.addEventListener('click', toggleChatsSection);
+                profileChatsToggle.addEventListener('keydown', event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        toggleChatsSection();
                     }
                 });
             }
