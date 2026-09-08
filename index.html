@@ -2056,6 +2056,19 @@
             box-shadow: 0 6px 20px rgba(128, 0, 255, 0.5);
         }
 
+        .difficulty-btn.historia {
+            border-color: #d97706;
+            background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+        }
+
+        .difficulty-btn.historia:hover {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5);
+        }
+
         .difficulty-btn.pokemon {
             border-color: #fbbf24;
             background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%);
@@ -9301,6 +9314,574 @@
                 font-size: 0.9em;
             }
         }
+        
+        /* Estilos para sección de NOTAS */
+        .notas-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .friends-stories-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .friends-stories-container h3 {
+            margin: 0 0 20px 0;
+            color: #667eea;
+            font-size: 1.3em;
+        }
+
+        .notes-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: nowrap;
+            margin-bottom: 16px;
+        }
+
+        .notes-section-header h3 {
+            margin: 0;
+            flex: 1 1 auto;
+            min-width: 0;
+            font-size: 1.15em;
+            line-height: 1.3;
+        }
+
+        .refresh-notes-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+
+        .refresh-notes-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.45);
+        }
+
+        .stories-grid {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            flex-wrap: nowrap;
+        }
+
+        .stories-grid::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .stories-grid::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .stories-grid::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .story-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .story-item:hover {
+            transform: scale(1.05);
+        }
+
+        .story-avatar-wrapper {
+            position: relative;
+            width: 70px;
+            height: 70px;
+        }
+
+        .story-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid #667eea;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .story-avatar.has-note {
+            border-color: #f59e0b;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+        }
+
+        .story-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-avatar-placeholder {
+            font-size: 2em;
+            color: white;
+        }
+
+        .story-name {
+            font-size: 0.8em;
+            color: #333;
+            text-align: center;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .story-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 20px;
+            height: 20px;
+            background: #f59e0b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7em;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        /* Modal para ver/editar nota */
+        .note-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+        }
+
+        .note-modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .note-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .note-view-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .note-view-author .note-author-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .note-view-author .note-author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .note-view-author .note-author-avatar-placeholder {
+            font-size: 1.5em;
+            color: white;
+        }
+
+        .note-view-author .note-author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .note-view-author .note-author-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1em;
+        }
+
+        .note-view-author .note-time {
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .note-edit-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .note-modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .note-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .note-modal-body {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1.05em;
+            margin-bottom: 20px;
+            flex-basis: 100%;
+            width: 100%;
+        }
+
+        .note-edit-container {
+            margin-top: 20px;
+        }
+
+        .note-edit-container textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .note-edit-container textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .note-save-btn {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .note-save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .note-buttons-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        .note-cancel-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .note-cancel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .story-like-count {
+            font-size: 0.72em;
+            color: #e11d48;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .note-like-bar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            flex-basis: 100%;
+            width: 100%;
+        }
+
+        .note-like-btn {
+            background: none;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .note-like-btn:hover {
+            border-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .note-like-btn.liked {
+            border-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .note-like-icon {
+            font-size: 1.2em;
+        }
+
+        .note-like-count {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .note-like-label {
+            font-weight: 600;
+            color: #64748b;
+            font-size: 0.9em;
+        }
+
+        /* Estilos responsive para NOTAS */
+        @media (max-width: 768px) {
+            .notas-section {
+                padding: 20px;
+            }
+            
+            .friends-stories-container {
+                padding: 20px;
+            }
+            
+            .stories-grid {
+                gap: 10px;
+            }
+            
+            .story-avatar-wrapper {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .story-avatar {
+                width: 55px;
+                height: 55px;
+            }
+            
+            .note-modal-content {
+                padding: 20px;
+                margin: 20px;
+            }
+        }
+
+        /* Estilos para sección de HISTORIA */
+        #historiaContainer {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        #historiaContent {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .capitulo-header {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capitulo-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        .capitulo-contenido {
+            position: relative;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .opcion-btn {
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .opcion-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .opcion-btn:hover::before {
+            left: 100%;
+        }
+
+        .opcion-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+        }
+
+        .opcion-btn:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        .progreso-historia {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .final-container {
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .resultados-estadisticas {
+            animation: slideUp 0.6s ease-out 0.3s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .acciones-finales {
+            animation: fadeIn 0.6s ease-out 0.6s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive para historia */
+        @media (max-width: 768px) {
+            #historiaContainer {
+                padding: 10px;
+            }
+            
+            #historiaContent {
+                padding: 20px;
+            }
+            
+            .capitulo-header div:first-child {
+                font-size: 3em !important;
+            }
+            
+            .capitulo-header h2 {
+                font-size: 1.4em !important;
+            }
+            
+            .capitulo-contenido {
+                font-size: 1em !important;
+            }
+            
+            .opcion-btn {
+                padding: 15px !important;
+            }
+            
+            .opcion-btn div:first-child {
+                font-size: 1em !important;
+            }
+            
+            .resultados-estadisticas {
+                padding: 20px;
+            }
+            
+            .acciones-finales {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .acciones-finales button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -9979,6 +10560,18 @@
                         🎮 Juegos MART
                     </button>
                 </div>
+                
+                <!-- Contenedor de notas de amigos directamente en la pantalla principal -->
+                <div class="friends-stories-container" style="margin-top: 40px;">
+                    <div class="notes-section-header">
+                        <h3>📝 Notas de tus Amigos</h3>
+                        <button type="button" class="refresh-notes-btn" id="notasTypeBtn">🔄 Actualizar notas</button>
+                    </div>
+                    <div class="stories-grid" id="notesStoriesGrid">
+                        <!-- Los stories de amigos se cargarán dinámicamente aquí -->
+                    </div>
+                    <p class="notes-hint" style="margin: 14px 0 0; color: #64748b; font-size: 0.9em;">Pulsa la foto de perfil para ver la nota. Solo se pueden ver así.</p>
+                </div>
             </div>
             
             <!-- Sección de niveles de banderas (oculta por defecto) -->
@@ -10016,6 +10609,7 @@
                     <button class="difficulty-btn brainrots" id="brainrotsBtn">🧠 Brainrots<br><small>Adivina el personaje</small></button>
                     <button class="difficulty-btn strangerthings" id="strangerthingsBtn">🔮 Stranger Things<br><small>Adivina el personaje</small></button>
                     <button class="difficulty-btn football" id="footballBtn">⚽ Escudos de Fútbol<br><small>Adivina el equipo</small></button>
+                    <button class="difficulty-btn historia" id="historiaBtn">📖 HISTORIA<br><small>Aventura interactiva</small></button>
                 </div>
             </div>
             <!-- Clasificaciones de Banderas (solo visible en sección de banderas) -->
@@ -10038,10 +10632,6 @@
                     <button class="ranking-btn ranking-btn-cars" id="viewRankingCarsBtn">🚗 Clasificación Coches</button>
                     <button class="ranking-btn ranking-btn-space" id="viewRankingSpaceBtn">🪐 Clasificación Espacio</button>
                     <button class="ranking-btn ranking-btn-brainrots" id="viewRankingBrainrotsBtn">🧠 Clasificación Brainrots</button>
-                    <button class="ranking-btn ranking-btn-strangerthings" id="viewRankingStrangerThingsBtn">🔮 Clasificación Stranger Things</button>
-                    <button class="ranking-btn ranking-btn-football" id="viewRankingFootballBtn">⚽ Clasificación Escudos</button>
-                </div>
-            </div>
             <div class="ranking-buttons-container">
                 <div class="difficulty-ranking-container" id="difficultyRankingContainer" style="display: none;">
                     <h3 id="difficultyRankingTitle" style="margin: 30px 0 15px 0; color: #667eea; font-size: 1.5em; text-align: center;"></h3>
@@ -10900,6 +11490,1227 @@
             ];
         }
         */
+
+        // Función para cargar historias interactivas por tema
+        // Sistema de historias con múltiples caminos y 3 opciones en cada punto clave
+        async function loadHistoria(themeId) {
+            const themes = getHistoriaThemes();
+            const selected = themes.find(t => t.id === themeId) || themes[0];
+            historiaData = selected.getData();
+            historiaData.temaId = selected.id;
+            historiaData.temaNombre = selected.nombre;
+            historiaData.temaIcono = selected.icono;
+            console.log(`Modo HISTORIA (${selected.id}): ${historiaData.titulo} cargado con ${historiaData.capitulos.length} capítulos`);
+        }
+
+        function getHistoriaThemes() {
+            return [
+                {
+                    id: "aventura",
+                    nombre: "Aventura",
+                    icono: "🧭",
+                    descripcion: "Exploración y decisiones arriesgadas con finales múltiples.",
+                    getData: () => getHistoria_TemploPerdido()
+                },
+                {
+                    id: "fantasia",
+                    nombre: "Fantasía",
+                    icono: "🧙",
+                    descripcion: "Magia, criaturas y un destino que cambia con cada elección.",
+                    getData: () => getHistoria_Fantasia()
+                },
+                {
+                    id: "accion",
+                    nombre: "Acción",
+                    icono: "💥",
+                    descripcion: "Decisiones rápidas, riesgos altos y consecuencias inmediatas.",
+                    getData: () => getHistoria_Accion()
+                }
+            ];
+        }
+
+        function getHistoria_TemploPerdido() {
+            return {
+                titulo: "El Misterio del Templo Perdido",
+                descripcion: "Una aventura interactiva donde tus decisiones cambiarán el destino del explorador",
+                capitulos: [
+                    {
+                        id: "inicio",
+                        titulo: "El Descubrimiento",
+                        texto: "Eres un famoso arqueólogo que acaba de descubrir un mapa antiguo en una biblioteca de El Cairo. El mapa parece llevar a un templo perdido lleno de tesoros, pero también de peligros. El mapa tiene tres marcas misteriosas que podrían indicar diferentes rutas.",
+                        imagen: "🗺️",
+        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Seguir la ruta del desierto - más directa pero peligrosa",
+                                siguiente: "desierto",
+                                consecuencias: "Riesgo de tormentas de arena"
+                            },
+                            {
+                                texto: "Tomar el camino a través de la jungla - más seguro pero lento",
+                                siguiente: "jungla",
+                                consecuencias: "Podría haber animales salvajes"
+                            },
+                            {
+                                texto: "Explorar las cuevas subterráneas - misterioso y desconocido",
+                                siguiente: "cuevas",
+                                consecuencias: "Podría haber trampas antiguas"
+                            }
+                        ]
+                    },
+                    {
+                        id: "desierto",
+                        titulo: "La Tormenta de Arena",
+                        texto: "Has elegido el camino del desierto. A mitad de camino, una tormenta de arena masiva se acerca rápidamente. Ves una pequeña ruina antigua que podría servir de refugio, pero también hay un cañón cercano que podría proteger mejor. El tiempo se agota.",
+                        imagen: "🏜️",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Correr hacia la ruina antigua - refugio inmediato",
+                                siguiente: "ruina",
+                                consecuencias: "La ruina podría tener secretos o trampas"
+                            },
+                            {
+                                texto: "Intentar llegar al cañón - mejor protección pero más lejos",
+                                siguiente: "canon",
+                                consecuencias: "Riesgo de no llegar a tiempo"
+                            },
+                            {
+                                texto: "Cavar un hoyo y cubrirse - protección natural",
+                                siguiente: "hoyo",
+                                consecuencias: "Podría ser sofocante pero seguro"
+                            }
+                        ]
+                    },
+                    {
+                        id: "jungla",
+                        titulo: "El Susurro de la Selva",
+                        texto: "La jungla es densa y húmeda. De repente, escuchas susurros en un idioma que no reconoces. Ves tres caminos posibles: uno sigue las marcas en los árboles, otro va hacia donde viene el sonido, y el tercero es un río que podría llevar más rápido.",
+                        imagen: "🌴",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Seguir las marcas en los árboles - probablemente hechas por humanos",
+                                siguiente: "marcas",
+                                consecuencias: "Podrían ser una guía o una trampa"
+                            },
+                            {
+                                texto: "Investigar el origen de los susurros",
+                                siguiente: "susurros",
+                                consecuencias: "Podría ser una tribu local o algo sobrenatural"
+                            },
+                            {
+                                texto: "Navegar por el río - más rápido pero menos control",
+                                siguiente: "rio",
+                                consecuencias: "El río podría tener rápidos peligrosos"
+                            }
+                        ]
+                    },
+                    {
+                        id: "cuevas",
+                        titulo: "Las Profundidades Ocultas",
+                        texto: "Las cuevas son más extensas de lo que imaginabas. Tu linterna ilumina inscripciones antiguas en las paredes. Hay tres túneles: uno con dibujos de tesoros, otro con símbolos de advertencia, y el tercero con corrientes de aire fresco.",
+                        imagen: "🕳️",
+        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Túnel de los tesoros - la recompensa podría estar cerca",
+                                siguiente: "tesoros",
+                                consecuencias: "Las trampas guardianas podrían estar activas"
+                            },
+                            {
+                                texto: "Túnel de advertencias - mejor prevenir que lamentar",
+                                siguiente: "advertencia",
+                                consecuencias: "Podría llevar a una salida segura"
+                            },
+                            {
+                                texto: "Túnel con aire fresco - probablemente lleva a la superficie",
+                                siguiente: "aire",
+                                consecuencias: "Podría perderse el templo principal"
+                            }
+                        ]
+                    },
+                    {
+                        id: "ruina",
+                        titulo: "Secretos Antiguos",
+                        texto: "Dentro de la ruina encuentras jeroglíficos que cuentan la historia de un faraón que escondió su tesoro. También hay un pasaje secreto y una cámara con ofrendas. La tormenta ruge fuera.",
+                        imagen: "🏛️",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Descifrar los jeroglíficos completamente",
+                                siguiente: "jeroglifos",
+                                consecuencias: "Podría revelar la ubicación exacta del tesoro"
+                            },
+                            {
+                                texto: "Explorar el pasaje secreto inmediatamente",
+                                siguiente: "pasaje",
+                                consecuencias: "Podría llevar directamente al tesoro o a peligro"
+                            },
+                            {
+                                texto: "Investigar las ofrendas - podrían tener pistas",
+                                siguiente: "ofrendas",
+                                consecuencias: "Las ofrendas podrían estar malditas"
+                            }
+                        ]
+                    },
+                    {
+                        id: "canon",
+                        titulo: "Refugio Precario",
+                        texto: "Llegas al cañón justo cuando la tormenta golpea con toda su fuerza. Encuentras una pequeña cueva en la pared, pero también ves una estructura antigua incrustada en la roca y un camino que baja hacia el fondo del cañón.",
+                        imagen: "⛰️",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Refugiarse en la cueva pequeña",
+                                siguiente: "cueva_pequena",
+                                consecuencias: "Segura pero podrías quedar atrapado"
+                            },
+                            {
+                                texto: "Investigar la estructura antigua",
+                                siguiente: "estructura",
+                                consecuencias: "Podría ser una entrada al templo"
+                            },
+                            {
+                                texto: "Bajar al fondo del cañón",
+                                siguiente: "fondo_canon",
+                                consecuencias: "Podría haber un río o salida secreta"
+                            }
+                        ]
+                    },
+                    {
+                        id: "hoyo",
+                        titulo: "Esperando en la Oscuridad",
+                        texto: "Te has enterrado vivo con éxito. La tormenta pasa encima de ti. Cuando sales, te das cuenta de que el mapa ha cambiado misteriosamente y ahora muestra una entrada secreta que no estaba antes.",
+                        imagen: "⬛",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Investigar la nueva entrada secreta",
+                                siguiente: "entrada_secreta",
+                                consecuencias: "Podría ser la puerta principal del templo"
+                            },
+                            {
+                                texto: "Ignorar el cambio y continuar el camino original",
+                                siguiente: "camino_original",
+                                consecuencias: "El mapa podría estar tratando de engañarte"
+                            },
+                            {
+                                texto: "Buscar quién o qué cambió el mapa",
+                                siguiente: "cambiador",
+                                consecuencias: "Podría encontrar a un espíritu guardián"
+                            }
+                        ]
+                    },
+                    {
+                        id: "marcas",
+                        titulo: "La Guía Perdida",
+                        texto: "Las marcas te llevan a un altar abandonado con un diario de un explorador anterior. El diario menciona tres pruebas que deben superarse para alcanzar el templo: prueba de valor, de sabiduría y de sacrificio.",
+                        imagen: "📖",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Comenzar con la prueba de valor",
+                                siguiente: "prueba_valor",
+                                consecuencias: "Podría enfrentar tus mayores miedos"
+                            },
+                            {
+                                texto: "Empezar con la prueba de sabiduría",
+                                siguiente: "prueba_sabiduria",
+                                consecuencias: "Podría resolver acertijos antiguos"
+                            },
+                            {
+                                texto: "Afrontar la prueba de sacrificio primero",
+                                siguiente: "prueba_sacrificio",
+                                consecuencias: "Podría tener que renunciar a algo valioso"
+                            }
+                        ]
+                    },
+                    {
+                        id: "susurros",
+                        titulo: "Encuentro Inesperado",
+                        texto: "Los susurros provienen de una tribu que protege el templo. El jefe te explica que el templo está maldito y solo允许 a los puros de corazón entrar. Te ofrecen una oportunidad para demostrar tu valía.",
+                        imagen: "👥",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Aceptar su prueba de pureza",
+                                siguiente: "prueba_pureza",
+                                consecuencias: "Podría revelar tu verdadera naturaleza"
+                            },
+                            {
+                                texto: "Intentar convencerlos con historias de tus descubrimientos",
+                                siguiente: "convencer",
+                                consecuencias: "Tus palabras podrían inspirar confianza o desconfianza"
+                            },
+                            {
+                                texto: "Ofrecerles un intercambio - conocimiento por acceso",
+                                siguiente: "intercambio",
+                                consecuencias: "Podría ganar aliados o enemigos"
+                            }
+                        ]
+                    },
+                    {
+                        id: "rio",
+                        titulo: "Corriente Imprevista",
+                        texto: "El río te lleva más rápido de lo esperado. De repente, el agua se divide en tres caminos: uno hacia una cascada, otro hacia un lago tranquilo, y el tercero desaparece bajo tierra.",
+                        imagen: "🌊",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Navegar hacia la cascada",
+                                siguiente: "cascada",
+                                consecuencias: "Podría haber una cueva detrás del agua"
+                            },
+                            {
+                                texto: "Ir hacia el lago tranquilo",
+                                siguiente: "lago",
+                                consecuencias: "La calma podría ser engañosa"
+                            },
+                            {
+                                texto: "Seguir el río subterráneo",
+                                siguiente: "subterraneo",
+                                consecuencias: "Podría llevar directamente al templo subterráneo"
+                            }
+                        ]
+                    },
+                    {
+                        id: "tesoros",
+                        titulo: "La Sala Dorada",
+                        texto: "Has llegado a una sala llena de oro y joyas, pero también hay trampas. En el centro hay un pedestal con tres artefactos: un amuleto, una espada y un pergamino. Solo puedes tomar uno.",
+                        imagen: "💰",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Tomar el amuleto dorado",
+                                siguiente: "amuleto",
+                                consecuencias: "Podría tener poderes mágicos"
+                            },
+                            {
+                                texto: "Agarrar la espada antigua",
+                                siguiente: "espada",
+                                consecuencias: "Podría ser la clave para derrotar un guardián"
+                            },
+                            {
+                                texto: "Leer el pergamino",
+                                siguiente: "pergamino",
+                                consecuencias: "Podría contener el mapa definitivo"
+                            }
+                        ]
+                    },
+                    {
+                        id: "advertencia",
+                        titulo: "El Camino Seguro",
+                        texto: "Las advertencias te llevan a una salida segura del templo. Desde aquí, puedes ver la entrada principal y planificar tu estrategia. Tienes información valiosa sobre los peligros dentro.",
+                        imagen: "⚠️",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Entrar por la puerta principal con precaución",
+                                siguiente: "puerta_principal",
+                                consecuencias: "Ahora conoces algunos peligros"
+                            },
+                            {
+                                texto: "Buscar otra entrada menos obvia",
+                                siguiente: "entrada_oculta",
+                                consecuencias: "Podría haber caminos alternativos"
+                            },
+                            {
+                                texto: "Preparar equipo y provisiones antes de entrar",
+                                siguiente: "preparacion",
+                                consecuencias: "Mejor preparado pero más tiempo perdido"
+                            }
+                        ]
+                    },
+                    {
+                        id: "aire",
+                        titulo: "La Salida Inesperada",
+                        texto: "El túnel con aire fresco te lleva a un hermoso oasis en medio del desierto. Hay un monasterio antiguo y un comerciante que ofrece información valiosa sobre el templo.",
+                        imagen: "🏝️",
+                        esDecision: true,
+                        opciones: [
+                            {
+                                texto: "Visitar el monasterio",
+                                siguiente: "monasterio",
+                                consecuencias: "Los monjes podrían tener registros antiguos"
+                            },
+                            {
+                                texto: "Hablar con el comerciante",
+                                siguiente: "comerciante",
+                                consecuencias: "Podría vender mapas o artefactos útiles"
+                            },
+                            {
+                                texto: "Explorar el oasis por tu cuenta",
+                                siguiente: "explorar_oasis",
+                                consecuencias: "Podría encontrar pistas ocultas"
+                            }
+                        ]
+                    },
+                    {
+                        id: "final_bueno",
+                        titulo: "El Tesoro Encontrado",
+                        texto: "¡Felicidades! Has llegado a la cámara principal del templo. El tesoro del faraón está frente a ti: oro, joyas, artefactos antiguos y, lo más importante, el conocimiento de una civilización perdida. Tu nombre será recordado por siempre como el descubridor del templo perdido. Has tomado las decisiones correctas y superado todos los obstáculos.",
+                        imagen: "🏆",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "final_neutro",
+                        titulo: "Un Descubrimiento Parcial",
+                        texto: "Has encontrado parte del tesoro, pero no todo. Aunque no alcanzaste la cámara principal, descubrirás artefactos valiosos y conocimiento importante. Tu expedición será considerada un éxito parcial, y siempre te quedarás preguntando qué podría haber sido si hubieras tomado otras decisiones.",
+                        imagen: "📦",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "final_malo",
+                        titulo: "El Fracaso",
+                        texto: "Las fuerzas del templo han sido demasiado fuertes. Ya sea por trampas, guardianes o simplemente por tomar el camino equivocado, no has alcanzado tu objetivo. Pero no todo está perdido: has ganado experiencia y conocimiento para tu próxima expedición. A veces, el mayor tesoro es la lección aprendida.",
+                        imagen: "💀",
+                        esDecision: false,
+                        opciones: []
+                    }
+                ]
+            };
+        }
+
+        function getHistoria_NaveALaDeriva() {
+            return {
+                titulo: "Nave a la Deriva",
+                descripcion: "Despiertas solo en una nave dañada. Cada decisión consume tiempo y recursos.",
+                capitulos: [
+                    {
+                        id: "inicio",
+                        titulo: "Despertar",
+                        texto: "La alarma parpadea. Los motores están apagados, el oxígeno al 42% y una señal desconocida llega desde un sector cercano. Tu interfaz muestra tres tareas urgentes.",
+                        imagen: "🛰️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Reparar el soporte vital", siguiente: "soporte", consecuencias: "Aumenta la supervivencia, consumes piezas" },
+                            { texto: "Escanear la señal desconocida", siguiente: "senal", consecuencias: "Obtienes información, consumes energía" },
+                            { texto: "Forzar reinicio de motores", siguiente: "motores", consecuencias: "Riesgo alto, posible salida rápida" }
+                        ]
+                    },
+                    {
+                        id: "soporte",
+                        titulo: "Aire y Silencio",
+                        texto: "Encuentras un filtro obstruido y un módulo de control quemado. Puedes improvisar un bypass, reemplazar el módulo o cerrar secciones para ahorrar aire.",
+                        imagen: "🫁",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Improvisar un bypass", siguiente: "bypass", consecuencias: "Solución temporal, podría fallar" },
+                            { texto: "Reemplazar el módulo", siguiente: "reemplazo", consecuencias: "Consume piezas, queda estable" },
+                            { texto: "Cerrar secciones de la nave", siguiente: "cerrar", consecuencias: "Ahorra oxígeno, limita opciones" }
+                        ]
+                    },
+                    {
+                        id: "senal",
+                        titulo: "Eco en la Oscuridad",
+                        texto: "La señal parece una baliza antigua… pero el patrón es demasiado perfecto. Puedes responder, rastrear su origen o aislar antenas por seguridad.",
+                        imagen: "📡",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Responder a la baliza", siguiente: "respuesta", consecuencias: "Podrías obtener ayuda… o atraer algo" },
+                            { texto: "Rastrear el origen", siguiente: "rastro", consecuencias: "Localizas coordenadas, consumes energía" },
+                            { texto: "Aislar antenas", siguiente: "aislar", consecuencias: "Más seguro, pierdes comunicación" }
+                        ]
+                    },
+                    {
+                        id: "motores",
+                        titulo: "Chispas",
+                        texto: "El reinicio fuerza el sistema. Un panel explota y el casco vibra. Puedes apagar todo, continuar forzando o desviar energía del escudo.",
+                        imagen: "⚡",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Apagar y estabilizar", siguiente: "estabilizar", consecuencias: "Evitas daños, pierdes tiempo" },
+                            { texto: "Seguir forzando", siguiente: "forzar", consecuencias: "Alta probabilidad de fallo… o éxito" },
+                            { texto: "Desviar energía del escudo", siguiente: "desviar", consecuencias: "Arrancas motores, quedas vulnerable" }
+                        ]
+                    },
+                    { id: "bypass", titulo: "Aguanta", texto: "El bypass funciona. El oxígeno sube lentamente. Pero un pitido indica microfugas en el compartimento de carga.", imagen: "🧰", esDecision: true,
+                        opciones: [
+                            { texto: "Sellar microfugas", siguiente: "final_bueno", consecuencias: "Ganas estabilidad" },
+                            { texto: "Ignorar y acelerar salida", siguiente: "final_malo", consecuencias: "Riesgo de colapso" },
+                            { texto: "Ir a por suministros", siguiente: "final_neutro", consecuencias: "Mejoras recursos, pierdes tiempo" }
+                        ]
+                    },
+                    { id: "reemplazo", titulo: "Sistema Verde", texto: "El módulo nuevo encaja. La nave vuelve a sentirse viva. Ahora decides qué hacer con la señal que sigue entrando.", imagen: "🟢", esDecision: true,
+                        opciones: [
+                            { texto: "Rastrear y acercarte", siguiente: "final_neutro", consecuencias: "Podrías descubrir algo" },
+                            { texto: "Ignorar y trazar ruta a casa", siguiente: "final_bueno", consecuencias: "Sobrevives sin más riesgos" },
+                            { texto: "Responder para pedir rescate", siguiente: "final_malo", consecuencias: "Podrías atraer una amenaza" }
+                        ]
+                    },
+                    { id: "cerrar", titulo: "Compartimentos Sellados", texto: "Cierras sectores. Sobrevives… pero la nave ya no es la misma. Te quedan pocas opciones y debes decidir rápido.", imagen: "🚪", esDecision: true,
+                        opciones: [
+                            { texto: "Intentar llegar a un puerto cercano", siguiente: "final_neutro", consecuencias: "Arriesgas aterrizaje" },
+                            { texto: "Esperar a la deriva y ahorrar", siguiente: "final_malo", consecuencias: "La ayuda puede no llegar" },
+                            { texto: "Reiniciar motores con menos carga", siguiente: "final_bueno", consecuencias: "Mayor probabilidad de éxito" }
+                        ]
+                    },
+                    { id: "respuesta", titulo: "Respuesta", texto: "Envías tu señal. Una respuesta llega: 'TE VEMOS'. El radar marca un punto acercándose.", imagen: "👁️", esDecision: false, opciones: [] },
+                    { id: "rastro", titulo: "Coordenadas", texto: "Rastreaste el origen: una estación abandonada. Podría tener piezas… o algo peor. Decides no acercarte por ahora.", imagen: "🧭", esDecision: false, opciones: [] },
+                    { id: "aislar", titulo: "Silencio Total", texto: "Cortas comunicaciones. Ganas seguridad, pero te quedas solo con tus sistemas. Al menos, respiras.", imagen: "🔇", esDecision: false, opciones: [] },
+                    { id: "estabilizar", titulo: "Control", texto: "Estabilizas todo. El precio: el oxígeno cae. Te sientas y entiendes que esta vez la paciencia salva.", imagen: "🧊", esDecision: false, opciones: [] },
+                    { id: "forzar", titulo: "Ruleta", texto: "El sistema se rompe. Una última luz parpadea… y luego oscuridad. Fin.", imagen: "💥", esDecision: false, opciones: [] },
+                    { id: "desviar", titulo: "Arranque", texto: "Los motores arrancan, pero sin escudo. Un impacto leve abre una grieta. Te salvas… por poco.", imagen: "🛡️", esDecision: false, opciones: [] },
+                    { id: "final_bueno", titulo: "Superviviente", texto: "Te las arreglaste. La nave aguanta, tú también. Vuelves a casa con cicatrices… y una historia increíble.", imagen: "🏁", esDecision: false, opciones: [] },
+                    { id: "final_neutro", titulo: "Desconocido", texto: "Sales con vida, pero el destino queda abierto. Lo que encontraste (o evitaste) te perseguirá un tiempo.", imagen: "❓", esDecision: false, opciones: [] },
+                    { id: "final_malo", titulo: "Sin Señal", texto: "La decisión fue demasiado arriesgada. La nave no aguanta. A veces el espacio no perdona.", imagen: "☠️", esDecision: false, opciones: [] }
+                ]
+            };
+        }
+
+        function getHistoria_Fantasia() {
+            return {
+                titulo: "La Piedra de Bruma",
+                descripcion: "Una reliquia mágica se ha roto. Tus decisiones decidirán el destino del reino.",
+                capitulos: [
+                    {
+                        id: "inicio",
+                        titulo: "El Encargo",
+                        texto: "En la posada, una mensajera del Consejo te entrega un mapa sellado con cera azul. La Piedra de Bruma se ha fracturado y criaturas de niebla aparecen en los caminos. Tienes tres pistas: un bosque encantado, una torre en ruinas y un mercado negro de artefactos.",
+                        imagen: "🗺️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Ir al bosque encantado", siguiente: "bosque", consecuencias: "Magia antigua y pactos peligrosos" },
+                            { texto: "Explorar la torre en ruinas", siguiente: "torre", consecuencias: "Trampas, secretos y conocimiento prohibido" },
+                            { texto: "Buscar un artefacto en el mercado negro", siguiente: "mercado", consecuencias: "Información rápida, precio alto" }
+                        ]
+                    },
+                    {
+                        id: "bosque",
+                        titulo: "Susurros Verdes",
+                        texto: "Los árboles se inclinan como si escucharan. Un ciervo blanco te observa. La niebla aquí no se mueve con el viento, sino con intención.",
+                        imagen: "🌲",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Seguir al ciervo blanco", siguiente: "ciervo", consecuencias: "Podría guiarte… o probarte" },
+                            { texto: "Encender una antorcha y avanzar con fuerza", siguiente: "antorcha", consecuencias: "Ahuyentas cosas… y atraes otras" },
+                            { texto: "Pronunciar un hechizo de protección", siguiente: "hechizo", consecuencias: "Ganas ventaja si tu magia es correcta" }
+                        ]
+                    },
+                    {
+                        id: "torre",
+                        titulo: "La Escalera Rota",
+                        texto: "La torre huele a polvo y a ozono. En la entrada hay runas partidas. Dentro, una escalera sube a oscuridad total y un sótano baja a un brillo azul.",
+                        imagen: "🏰",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Subir por la escalera", siguiente: "alto", consecuencias: "Arriesgas caer… pero puedes hallar el grimorio" },
+                            { texto: "Bajar al brillo azul", siguiente: "sotano", consecuencias: "La piedra podría estar cerca" },
+                            { texto: "Inspeccionar runas antes de entrar", siguiente: "runas", consecuencias: "Evitas trampas si aciertas" }
+                        ]
+                    },
+                    {
+                        id: "mercado",
+                        titulo: "Trato Sombrío",
+                        texto: "Entre capuchas y susurros, un vendedor te ofrece una brújula que apunta a 'lo que no debe encontrarse'. A cambio quiere tu nombre verdadero… o tu última memoria feliz.",
+                        imagen: "🕯️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Dar tu nombre verdadero", siguiente: "nombre", consecuencias: "Poder a cambio de identidad" },
+                            { texto: "Entregar tu última memoria feliz", siguiente: "memoria", consecuencias: "Obtienes el artefacto, pierdes algo humano" },
+                            { texto: "Rechazar el trato y seguir el mapa", siguiente: "bosque", consecuencias: "Vuelves al camino difícil" }
+                        ]
+                    },
+                    {
+                        id: "ciervo",
+                        titulo: "La Fuente",
+                        texto: "El ciervo te lleva a una fuente circular. En el agua flota un fragmento de bruma sólida. Una voz dice: 'Elige: fuerza, astucia o compasión'.",
+                        imagen: "💧",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Fuerza: tomar el fragmento sin negociar", siguiente: "final_malo", consecuencias: "La bruma no se deja dominar" },
+                            { texto: "Astucia: ofrecer una promesa al bosque", siguiente: "final_neutro", consecuencias: "Consigues poder, pero debes algo" },
+                            { texto: "Compasión: curar el árbol enfermo cercano", siguiente: "final_bueno", consecuencias: "El bosque te acepta" }
+                        ]
+                    },
+                    {
+                        id: "antorcha",
+                        titulo: "Ojos en la Niebla",
+                        texto: "La luz revela decenas de ojos. No parpadean. La niebla se vuelve pesada y te rodea.",
+                        imagen: "👁️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Correr hacia adelante", siguiente: "final_malo", consecuencias: "La bruma te alcanza" },
+                            { texto: "Apagar la antorcha", siguiente: "hechizo", consecuencias: "Pierdes luz, ganas silencio" },
+                            { texto: "Hablar y pedir paso", siguiente: "final_neutro", consecuencias: "Negocias con lo desconocido" }
+                        ]
+                    },
+                    {
+                        id: "hechizo",
+                        titulo: "Círculo de Sal",
+                        texto: "Tu hechizo crea un círculo pálido. La bruma se detiene al borde. Un fragmento cae a tus pies como un regalo… o una trampa.",
+                        imagen: "🔮",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Recoger el fragmento y marcharte", siguiente: "final_neutro", consecuencias: "Sales, pero la bruma te recuerda" },
+                            { texto: "Sellarlo con un juramento", siguiente: "final_bueno", consecuencias: "Lo estabilizas para el Consejo" },
+                            { texto: "Romperlo para más poder", siguiente: "final_malo", consecuencias: "La fractura empeora" }
+                        ]
+                    },
+                    {
+                        id: "alto",
+                        titulo: "El Grimorio",
+                        texto: "Arriba encuentras un grimorio empapado en polvo. Describe cómo recomponer la Piedra de Bruma, pero exige un sacrificio pequeño.",
+                        imagen: "📜",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Aceptar el sacrificio y aprender el ritual", siguiente: "final_bueno", consecuencias: "Salvas el reino" },
+                            { texto: "Robar el grimorio y huir", siguiente: "final_neutro", consecuencias: "Te persiguen, pero tienes el conocimiento" },
+                            { texto: "Quemar el grimorio", siguiente: "final_malo", consecuencias: "La bruma queda libre" }
+                        ]
+                    },
+                    {
+                        id: "sotano",
+                        titulo: "Corazón Azul",
+                        texto: "En el sótano, un fragmento azul late como un corazón. Cuando te acercas, la bruma toma forma de tu mayor miedo.",
+                        imagen: "💙",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Enfrentarlo", siguiente: "final_neutro", consecuencias: "Sales marcado pero con el fragmento" },
+                            { texto: "Usar el fragmento para sellarlo", siguiente: "final_bueno", consecuencias: "Dominas el miedo, cierras la grieta" },
+                            { texto: "Retroceder y cerrar la puerta", siguiente: "final_malo", consecuencias: "La bruma se expande" }
+                        ]
+                    },
+                    {
+                        id: "runas",
+                        titulo: "Runas Partidas",
+                        texto: "Descifras las runas: 'Solo quien no desea poder puede tocar la bruma'.",
+                        imagen: "🧩",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Entrar con humildad", siguiente: "sotano", consecuencias: "La bruma no te ataca" },
+                            { texto: "Entrar buscando poder", siguiente: "final_malo", consecuencias: "La torre te castiga" },
+                            { texto: "Volver al bosque", siguiente: "bosque", consecuencias: "Otra ruta, otra prueba" }
+                        ]
+                    },
+                    {
+                        id: "nombre",
+                        titulo: "Nombre Verdadero",
+                        texto: "Dices tu nombre verdadero. La brújula gira y apunta directo a tu corazón. Desde hoy, cualquiera que lo sepa puede llamarte… y obligarte.",
+                        imagen: "🪶",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "memoria",
+                        titulo: "Hueco",
+                        texto: "Entregas tu última memoria feliz. Sales con la brújula, pero no recuerdas por qué sonreías. El mundo se ve un poco más gris.",
+                        imagen: "🫥",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "final_bueno",
+                        titulo: "La Piedra Recompleta",
+                        texto: "Reconstruyes el fragmento y la niebla se calma. El Consejo te nombra Guardián de Bruma. El reino respira de nuevo.",
+                        imagen: "🏆",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "final_neutro",
+                        titulo: "Pacto Incierto",
+                        texto: "Consigues el fragmento, pero algo queda pendiente. Un día, cuando menos lo esperes, la bruma vendrá a cobrar.",
+                        imagen: "📦",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "final_malo",
+                        titulo: "La Niebla Devora",
+                        texto: "La bruma se desata. Caminos desaparecen y nombres se olvidan. Escapas… pero el reino no vuelve a ser el mismo.",
+                        imagen: "💀",
+                        esDecision: false,
+                        opciones: []
+                    }
+                ]
+            };
+        }
+
+        function getHistoria_Accion() {
+            return {
+                titulo: "Operación Relámpago",
+                descripcion: "Una misión nocturna. Cada segundo cuenta. Cada decisión cambia el resultado.",
+                capitulos: [
+                    {
+                        id: "inicio",
+                        titulo: "Entrada",
+                        texto: "Tu equipo está fuera del edificio objetivo. Dentro hay un servidor con datos críticos y un rehén. Tienes tres formas de entrar: tejado, alcantarilla o puerta principal con distracción.",
+                        imagen: "🎯",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Entrar por el tejado", siguiente: "tejado", consecuencias: "Sigilo, pero riesgo de cámaras" },
+                            { texto: "Entrar por alcantarilla", siguiente: "alcantarilla", consecuencias: "Seguro, pero lento y claustrofóbico" },
+                            { texto: "Entrar por la puerta con distracción", siguiente: "puerta", consecuencias: "Rápido, pero ruidoso" }
+                        ]
+                    },
+                    {
+                        id: "tejado",
+                        titulo: "Altura",
+                        texto: "En el tejado, un guardia fuma. Hay una claraboya y un conducto de ventilación. El viento tapa sonidos… o los amplifica.",
+                        imagen: "🏙️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Neutralizar al guardia", siguiente: "neutralizar", consecuencias: "Seguro, pero deja evidencia" },
+                            { texto: "Evitarlo y entrar por ventilación", siguiente: "ventilacion", consecuencias: "Sigilo, pero estrecho" },
+                            { texto: "Bajar por la claraboya", siguiente: "claraboya", consecuencias: "Rápido, pero puede sonar" }
+                        ]
+                    },
+                    {
+                        id: "alcantarilla",
+                        titulo: "Bajo Tierra",
+                        texto: "El túnel te lleva a una rejilla. Oyes pasos arriba. Puedes esperar, salir ya o plantar un inhibidor de cámaras antes de entrar.",
+                        imagen: "🕳️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Esperar a que pase la patrulla", siguiente: "esperar", consecuencias: "Más seguro, pierdes tiempo" },
+                            { texto: "Salir ya", siguiente: "pasillo", consecuencias: "Rápido, pero te pueden ver" },
+                            { texto: "Plantar inhibidor de cámaras", siguiente: "inhibidor", consecuencias: "Te da control, consume batería" }
+                        ]
+                    },
+                    {
+                        id: "puerta",
+                        titulo: "Distracción",
+                        texto: "Tu compañero activa una alarma falsa. Dos guardias salen corriendo. La entrada queda medio libre, pero un tercero se queda revisando identidades.",
+                        imagen: "🚨",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Pasar con credencial falsa", siguiente: "credencial", consecuencias: "Si cuela, entras limpio" },
+                            { texto: "Reducir al guardia en silencio", siguiente: "neutralizar", consecuencias: "Rápido, pero riesgo de cámaras" },
+                            { texto: "Cambiar a plan alcantarilla", siguiente: "alcantarilla", consecuencias: "Pierdes la ventana de tiempo" }
+                        ]
+                    },
+                    {
+                        id: "neutralizar",
+                        titulo: "Cuerpo al Suelo",
+                        texto: "Lo reduces sin ruido. En su radio se escucha: 'Informe'. Tienes segundos para responder o apagarla.",
+                        imagen: "🤐",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Responder imitando su voz", siguiente: "pasillo", consecuencias: "Arriesgado, pero gana tiempo" },
+                            { texto: "Apagar la radio", siguiente: "alerta", consecuencias: "Sospecha inmediata" },
+                            { texto: "Mandar mensaje de 'todo bien'", siguiente: "pasillo", consecuencias: "Puede colar" }
+                        ]
+                    },
+                    {
+                        id: "ventilacion",
+                        titulo: "Conductos",
+                        texto: "Avanzas por conductos. Abajo ves el servidor y una habitación con el rehén. Una rejilla cae si sigues, pero puedes salir antes.",
+                        imagen: "🧱",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Ir al servidor primero", siguiente: "servidor", consecuencias: "Aseguras datos, el rehén espera" },
+                            { texto: "Ir al rehén primero", siguiente: "rehen", consecuencias: "Salvas vida, arriesgas datos" },
+                            { texto: "Dividir al equipo", siguiente: "dividir", consecuencias: "Eficiente, pero peligroso" }
+                        ]
+                    },
+                    {
+                        id: "claraboya",
+                        titulo: "Cristal",
+                        texto: "Caes en una oficina. Suena un crujido. Una cámara te enfoca y una luz roja parpadea.",
+                        imagen: "🟥",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Romper la cámara", siguiente: "alerta", consecuencias: "Te verán, pero no te grabarán más" },
+                            { texto: "Quedarte quieto y esperar", siguiente: "pasillo", consecuencias: "Puede que no revisen ahora" },
+                            { texto: "Volver al conducto", siguiente: "ventilacion", consecuencias: "Pierdes segundos" }
+                        ]
+                    },
+                    {
+                        id: "esperar",
+                        titulo: "Minutos Caros",
+                        texto: "La patrulla pasa. Pero ahora escuchas más pasos. El tiempo se agota.",
+                        imagen: "⏱️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Salir ahora", siguiente: "pasillo", consecuencias: "Te la juegas" },
+                            { texto: "Cambiar a entrada tejado", siguiente: "tejado", consecuencias: "Reubicas, pierdes más tiempo" },
+                            { texto: "Cancelar misión", siguiente: "final_neutro", consecuencias: "Vuelves vivo, sin objetivos" }
+                        ]
+                    },
+                    {
+                        id: "inhibidor",
+                        titulo: "Pantalla Negra",
+                        texto: "Las cámaras se apagan. Tienes una ventana corta antes de que el sistema auxiliar se active.",
+                        imagen: "📵",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Correr al servidor", siguiente: "servidor", consecuencias: "Aprovechas la ventana" },
+                            { texto: "Correr al rehén", siguiente: "rehen", consecuencias: "Prioridad humana" },
+                            { texto: "Cerrar puertas de seguridad", siguiente: "final_bueno", consecuencias: "Aíslas el piso y sales" }
+                        ]
+                    },
+                    {
+                        id: "credencial",
+                        titulo: "Mirada",
+                        texto: "El guardia mira tu credencial. Sus ojos se estrechan. '¿Tu unidad?'.",
+                        imagen: "🪪",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Inventar una unidad", siguiente: "alerta", consecuencias: "Puede fallar" },
+                            { texto: "Decir la verdad y disparar humo", siguiente: "pasillo", consecuencias: "Caos controlado" },
+                            { texto: "Retirarte y cambiar plan", siguiente: "alcantarilla", consecuencias: "Pierdes la oportunidad" }
+                        ]
+                    },
+                    {
+                        id: "pasillo",
+                        titulo: "En Movimiento",
+                        texto: "Llegas al pasillo central. Al fondo: servidor. A la derecha: rehén. A la izquierda: salida de emergencia.",
+                        imagen: "🚪",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Servidor primero", siguiente: "servidor", consecuencias: "Aseguras objetivo" },
+                            { texto: "Rehén primero", siguiente: "rehen", consecuencias: "Aseguras vida" },
+                            { texto: "Salida de emergencia para reagrupar", siguiente: "final_neutro", consecuencias: "Te retiras con parte de info" }
+                        ]
+                    },
+                    {
+                        id: "servidor",
+                        titulo: "Extracción",
+                        texto: "Conectas el dispositivo. Descarga al 62%. Oyes pasos acercándose.",
+                        imagen: "💾",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Esperar al 100%", siguiente: "final_malo", consecuencias: "Te rodean" },
+                            { texto: "Cortar al 70% y salir", siguiente: "final_neutro", consecuencias: "No todo, pero suficiente" },
+                            { texto: "Dejar un señuelo y rescatar al rehén", siguiente: "final_bueno", consecuencias: "Equilibrio perfecto" }
+                        ]
+                    },
+                    {
+                        id: "rehen",
+                        titulo: "Cuerda",
+                        texto: "El rehén tiembla. 'No soy el único', susurra. En el pasillo hay dos sombras.",
+                        imagen: "🧷",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Salir ya por la salida", siguiente: "final_bueno", consecuencias: "Salvas al rehén" },
+                            { texto: "Buscar al otro rehén", siguiente: "final_malo", consecuencias: "Te quedas demasiado" },
+                            { texto: "Volver por el servidor rápido", siguiente: "servidor", consecuencias: "Intentas hacerlo todo" }
+                        ]
+                    },
+                    {
+                        id: "dividir",
+                        titulo: "Separación",
+                        texto: "Te divides. Un pasillo se cierra entre vosotros. Si sigues, puede que no vuelvas a ver a tu compañero.",
+                        imagen: "🔀",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Reagrupar inmediatamente", siguiente: "final_neutro", consecuencias: "Pierdes tiempo pero sobrevives" },
+                            { texto: "Continuar cada uno a su objetivo", siguiente: "final_malo", consecuencias: "Demasiado riesgo" },
+                            { texto: "Mandar al compañero al rehén y tú al servidor", siguiente: "final_bueno", consecuencias: "Plan frío, resultado sólido" }
+                        ]
+                    },
+                    {
+                        id: "alerta",
+                        titulo: "Alerta",
+                        texto: "Las luces cambian a rojo. Sirenas. Has activado el protocolo de bloqueo. Solo queda improvisar.",
+                        imagen: "🔴",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "final_bueno",
+                        titulo: "Éxito",
+                        texto: "Sales con datos suficientes y el rehén a salvo. Nadie te siguió. En el auricular suena: 'Buen trabajo'.",
+                        imagen: "🏆",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "final_neutro",
+                        titulo: "A medias",
+                        texto: "Te retiras con parte del objetivo. Sobrevives, pero la misión no queda cerrada. Habrá una próxima vez.",
+                        imagen: "📦",
+                        esDecision: false,
+                        opciones: []
+                    },
+                    {
+                        id: "final_malo",
+                        titulo: "Captura",
+                        texto: "Te quedas un segundo de más. Te rodean. La pantalla se va a negro.",
+                        imagen: "💀",
+                        esDecision: false,
+                        opciones: []
+                    }
+                ]
+            };
+        }
+
+        function getHistoria_CasoDelTeatro() {
+            return {
+                titulo: "El Caso del Teatro",
+                descripcion: "Una nota anónima, un camerino vacío y tres sospechosos con coartada perfecta.",
+                capitulos: [
+                    {
+                        id: "inicio",
+                        titulo: "La Nota",
+                        texto: "A las 23:17 recibes un mensaje: 'Ven al teatro. No vengas solo.' Al llegar, el escenario está oscuro y el camerino principal… abierto. Falta el actor principal.",
+                        imagen: "🕵️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Hablar con la directora", siguiente: "directora", consecuencias: "Obtienes contexto, pero puede mentir" },
+                            { texto: "Revisar el camerino", siguiente: "camerino", consecuencias: "Encuentras pistas físicas" },
+                            { texto: "Interrogar al técnico", siguiente: "tecnico", consecuencias: "Sabe del edificio y horarios" }
+                        ]
+                    },
+                    {
+                        id: "directora",
+                        titulo: "La Directora",
+                        texto: "La directora tiembla. Dice que el actor recibió amenazas. Te ofrece el listado de personal… o la llave del sótano donde guardan utilería.",
+                        imagen: "🎬",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Pedir listado de personal", siguiente: "personal", consecuencias: "Amplías sospechosos" },
+                            { texto: "Bajar al sótano", siguiente: "sotano", consecuencias: "Zona peligrosa, posible evidencia" },
+                            { texto: "Exigir ver el móvil del actor", siguiente: "movil", consecuencias: "Pistas directas, crea tensión" }
+                        ]
+                    },
+                    {
+                        id: "camerino",
+                        titulo: "El Camerino",
+                        texto: "Hay maquillaje corrido en el espejo y una flor prensada dentro de un guion. Una ventana está entreabierta. También notas olor a colonia fuerte.",
+                        imagen: "🪞",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Seguir la pista de la colonia", siguiente: "colonia", consecuencias: "Podrías seguir a alguien" },
+                            { texto: "Examinar la ventana", siguiente: "ventana", consecuencias: "Ruta de huida" },
+                            { texto: "Leer el guion a fondo", siguiente: "guion", consecuencias: "Descubres mensajes ocultos" }
+                        ]
+                    },
+                    {
+                        id: "tecnico",
+                        titulo: "El Técnico",
+                        texto: "El técnico asegura que no vio nada, pero menciona que las cámaras fallaron 7 minutos. Te ofrece revisar los focos, la sala de cámaras o la pasarela superior.",
+                        imagen: "🎛️",
+                        esDecision: true,
+                        opciones: [
+                            { texto: "Sala de cámaras", siguiente: "camaras", consecuencias: "Logs y cortes de energía" },
+                            { texto: "Pasarela superior", siguiente: "pasarela", consecuencias: "Vistas y rutas ocultas" },
+                            { texto: "Revisar focos", siguiente: "focos", consecuencias: "Herramientas usadas recientemente" }
+                        ]
+                    },
+                    { id: "personal", titulo: "Tres Nombres", texto: "En el listado hay tres personas con acceso: la directora, el técnico y la suplente. Todos tienen motivo.", imagen: "📋", esDecision: false, opciones: [] },
+                    { id: "sotano", titulo: "Bajo el Teatro", texto: "En el sótano escuchas un golpe. Una puerta metálica está cerrada. Decides no forzarla solo. Fin… por ahora.", imagen: "🔒", esDecision: false, opciones: [] },
+                    { id: "movil", titulo: "Mensajes Borrados", texto: "Ves capturas de amenazas y un número bloqueado repetido. Es suficiente para abrir una investigación formal. Fin.", imagen: "📱", esDecision: false, opciones: [] },
+                    { id: "colonia", titulo: "Aromas", texto: "La colonia te lleva a la salida trasera. Un coche arranca. No llegas a verlo, pero apuntas la hora exacta.", imagen: "🚗", esDecision: false, opciones: [] },
+                    { id: "ventana", titulo: "Huida", texto: "La ventana da a un callejón. Hay marcas de zapatos en polvo. No son del actor.", imagen: "👣", esDecision: false, opciones: [] },
+                    { id: "guion", titulo: "Subtexto", texto: "Entre líneas, alguien escribió: 'NO CONFÍES'. El actor sabía algo. Fin.", imagen: "📜", esDecision: false, opciones: [] },
+                    { id: "camaras", titulo: "Siete Minutos", texto: "La energía cayó justo 7 minutos. Alguien programó el corte. Tienes un sospechoso con conocimientos técnicos.", imagen: "⏱️", esDecision: false, opciones: [] },
+                    { id: "pasarela", titulo: "Arriba", texto: "Desde la pasarela ves una escalera de servicio. Demasiado limpia: alguien la usó hace poco.", imagen: "🪜", esDecision: false, opciones: [] },
+                    { id: "focos", titulo: "Herramientas", texto: "Encuentras una llave inglesa con iniciales grabadas. La guardas como evidencia.", imagen: "🔧", esDecision: false, opciones: [] }
+                ]
+            };
+        }
+
+        // Variables globales para el modo historia
+        let historiaData = null;
+        let capituloActual = "inicio";
+        let decisionesTomadas = [];
+        let puntuacionHistoria = 0;
+
+        // Función para iniciar el modo historia
+        function iniciarHistoria() {
+            // Ocultar UI del juego (vidas/puntuación/etc.) para que solo se vea la historia
+            const gameContainer = document.getElementById('gameContainer');
+            if (gameContainer) gameContainer.style.display = 'none';
+
+            document.getElementById('juegosMartSection').style.display = 'none';
+            document.getElementById('martRankingContainer').style.display = 'none';
+            
+            // Reset estado historia
+            historiaData = null;
+            capituloActual = "inicio";
+            decisionesTomadas = [];
+            puntuacionHistoria = 0;
+
+            // Crear interfaz de historia
+            crearInterfazHistoria();
+            
+            // Mostrar selector de temas primero
+            mostrarSelectorTemasHistoria();
+        }
+
+        // Función para crear la interfaz visual de la historia
+        function crearInterfazHistoria() {
+            const historiaHTML = `
+                <div id="historiaContainer" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h2 style="color: #667eea; font-size: 2em; margin: 0;" id="historiaHeaderTitle">📖 HISTORIA</h2>
+                        <button onclick="volverJuegosMart()" style="background: #718096; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em;">← Volver</button>
+                    </div>
+                    
+                    <div id="historiaContent" style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);">
+                        <!-- El contenido de la historia se cargará aquí dinámicamente -->
+                    </div>
+                </div>
+            `;
+            
+            // Insertar el HTML en el body
+            const historiaContainer = document.createElement('div');
+            historiaContainer.innerHTML = historiaHTML;
+            document.body.appendChild(historiaContainer.firstElementChild);
+        }
+
+        function mostrarSelectorTemasHistoria() {
+            const contentDiv = document.getElementById('historiaContent');
+            if (!contentDiv) return;
+
+            const themes = getHistoriaThemes();
+            const headerTitle = document.getElementById('historiaHeaderTitle');
+            if (headerTitle) headerTitle.textContent = '📖 HISTORIA';
+
+            contentDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 18px;">
+                    <h2 style="color: #667eea; margin: 0 0 10px 0;">Elige un tema</h2>
+                    <p style="color:#475569; margin: 0;">Cada tema tiene una historia con preguntas y opciones que cambian el camino.</p>
+                </div>
+                <div style="display:grid; gap: 14px;">
+                    ${themes.map(t => `
+                        <button onclick="seleccionarTemaHistoria('${t.id}')" style="
+                            background: white;
+                            border: 2px solid #e2e8f0;
+                            border-radius: 14px;
+                            padding: 18px 16px;
+                            cursor: pointer;
+                            text-align: left;
+                            transition: all 0.2s ease;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                        ">
+                            <div style="display:flex; align-items:center; gap: 12px;">
+                                <div style="font-size: 2em; width: 42px; text-align:center;">${t.icono}</div>
+                                <div style="min-width:0;">
+                                    <div style="font-weight:800; color:#0f172a; font-size: 1.15em;">${t.nombre}</div>
+                                    <div style="color:#64748b; margin-top: 4px;">${t.descripcion}</div>
+                                </div>
+                            </div>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        window.seleccionarTemaHistoria = async function(themeId) {
+            await loadHistoria(themeId);
+            const headerTitle = document.getElementById('historiaHeaderTitle');
+            if (headerTitle && historiaData) {
+                headerTitle.textContent = `${historiaData.temaIcono || '📖'} HISTORIA · ${historiaData.temaNombre || ''}`;
+            }
+            mostrarCapitulo("inicio");
+        };
+
+        // Función para mostrar un capítulo
+        function mostrarCapitulo(capituloId) {
+            const capitulo = historiaData.capitulos.find(c => c.id === capituloId);
+            if (!capitulo) return;
+            
+            capituloActual = capituloId;
+            
+            const contentDiv = document.getElementById('historiaContent');
+            if (!contentDiv) return;
+            
+            let opcionesHTML = '';
+            if (capitulo.esDecision) {
+                opcionesHTML = `
+                    <div class="opciones-container" style="margin-top: 30px;">
+                        <h3 style="color: #667eea; margin-bottom: 20px;">¿Qué decides hacer?</h3>
+                        <div class="opciones-grid" style="display: grid; gap: 15px;">
+                            ${capitulo.opciones.map((opcion, index) => `
+                                <button class="opcion-btn" onclick="elegirOpcion('${opcion.siguiente}')" style="
+                                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                    color: white;
+                                    border: none;
+                                    padding: 20px;
+                                    border-radius: 12px;
+                                    cursor: pointer;
+                                    text-align: left;
+                                    transition: all 0.3s ease;
+                                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                                ">
+                                    <div style="font-size: 1.1em; font-weight: 600; margin-bottom: 8px;">
+                                        ${index + 1}. ${opcion.texto}
+                                    </div>
+                                    <div style="font-size: 0.9em; opacity: 0.9;">
+                                        ${opcion.consecuencias}
+                                    </div>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            contentDiv.innerHTML = `
+                <div class="capitulo-header" style="text-align: center; margin-bottom: 30px;">
+                    <div style="font-size: 4em; margin-bottom: 20px;">${capitulo.imagen}</div>
+                    <h2 style="color: #667eea; font-size: 1.8em; margin-bottom: 10px;">${capitulo.titulo}</h2>
+                </div>
+                
+                <div class="capitulo-contenido" style="font-size: 1.1em; line-height: 1.8; color: #2d3748; text-align: justify;">
+                    ${capitulo.texto}
+                </div>
+                
+                ${opcionesHTML}
+                
+                <div class="progreso-historia" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="color: #718096; font-size: 0.9em;">
+                            Decisiones tomadas: ${decisionesTomadas.length}
+                        </div>
+                        <div style="color: #718096; font-size: 0.9em;">
+                            Puntuación: ${puntuacionHistoria}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Agregar efecto de aparición suave
+            contentDiv.style.opacity = '0';
+            contentDiv.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                contentDiv.style.transition = 'all 0.5s ease';
+                contentDiv.style.opacity = '1';
+                contentDiv.style.transform = 'translateY(0)';
+            }, 100);
+        }
+
+        // Función para manejar la elección del usuario
+        function elegirOpcion(siguienteCapitulo) {
+            // Guardar la decisión tomada
+            decisionesTomadas.push({
+                desde: capituloActual,
+                hacia: siguienteCapitulo,
+                timestamp: Date.now()
+            });
+            
+            // Calcular puntuación basada en la decisión
+            puntuacionHistoria += calcularPuntosDecision(capituloActual, siguienteCapitulo);
+            
+            // Verificar si es un capítulo final
+            const capituloSiguiente = historiaData.capitulos.find(c => c.id === siguienteCapitulo);
+            if (capituloSiguiente && !capituloSiguiente.esDecision) {
+                // Es un final, mostrar resultados
+                mostrarResultadosFinales(siguienteCapitulo);
+            } else {
+                // Continuar con el siguiente capítulo
+                mostrarCapitulo(siguienteCapitulo);
+            }
+        }
+
+        // Función para calcular puntos de una decisión
+        function calcularPuntosDecision(desde, hacia) {
+            // Lógica simple de puntuación - puede ser más compleja
+            const decisionesBuenas = {
+                'inicio-desierto': 10,
+                'inicio-jungla': 15,
+                'inicio-cuevas': 20,
+                'desierto-ruina': 15,
+                'desierto-canon': 10,
+                'desierto-hoyo': 20,
+                'jungla-marcas': 15,
+                'jungla-susurros': 20,
+                'jungla-rio': 10,
+                'cuevas-tesoros': 25,
+                'cuevas-advertencia': 15,
+                'cuevas-aire': 10
+            };
+            
+            const clave = `${desde}-${hacia}`;
+            return decisionesBuenas[clave] || 5;
+        }
+
+        // Función para mostrar los resultados finales
+        function mostrarResultadosFinales(finalId) {
+            const final = historiaData.capitulos.find(c => c.id === finalId);
+            if (!final) return;
+            
+            const contentDiv = document.getElementById('historiaContent');
+            const resultadoHTML = `
+                <div class="final-container" style="text-align: center; padding: 40px;">
+                    <div style="font-size: 5em; margin-bottom: 30px;">${final.imagen}</div>
+                    <h2 style="color: #667eea; font-size: 2em; margin-bottom: 20px;">${final.titulo}</h2>
+                    <div style="font-size: 1.2em; line-height: 1.8; color: #2d3748; margin-bottom: 40px;">
+                        ${final.texto}
+                    </div>
+                    
+                    <div class="resultados-estadisticas" style="background: rgba(102, 126, 234, 0.1); border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                        <h3 style="color: #667eea; margin-bottom: 20px;">📊 Tus Estadísticas</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;">${decisionesTomadas.length}</div>
+                                <div style="color: #718096;">Decisiones tomadas</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;">${puntuacionHistoria}</div>
+                                <div style="color: #718096;">Puntuación total</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2em; font-weight: bold; color: #667eea;">${Math.round((puntuacionHistoria / (decisionesTomadas.length * 25)) * 100)}%</div>
+                                <div style="color: #718096;">Aprovechamiento</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="acciones-finales" style="display: flex; gap: 15px; justify-content: center;">
+                        <button onclick="reiniciarHistoria()" style="
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            border: none;
+                            padding: 15px 30px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-size: 1em;
+                            transition: all 0.3s ease;
+                        ">
+                            🔄 Jugar de nuevo
+                        </button>
+                        <button onclick="volverJuegosMart()" style="
+                            background: #718096;
+                            color: white;
+                            border: none;
+                            padding: 15px 30px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-size: 1em;
+                            transition: all 0.3s ease;
+                        ">
+                            ← Volver a Juegos MART
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            contentDiv.innerHTML = resultadoHTML;
+        }
+
+        // Función para reiniciar la historia
+        function reiniciarHistoria() {
+            capituloActual = "inicio";
+            decisionesTomadas = [];
+            puntuacionHistoria = 0;
+            mostrarCapitulo("inicio");
+        }
+
+        // Función para volver a Juegos MART
+        function volverJuegosMart() {
+            // Eliminar el contenedor de historia
+            const historiaContainer = document.getElementById('historiaContainer');
+            if (historiaContainer) {
+                historiaContainer.remove();
+            }
+            
+            // Restaurar UI del juego (contenedor principal) si corresponde
+            const gameContainer = document.getElementById('gameContainer');
+            if (gameContainer && window.currentUser) {
+                gameContainer.style.display = 'block';
+            }
+            
+            // Mostrar nuevamente la sección de Juegos MART
+            document.getElementById('juegosMartSection').style.display = 'block';
+            document.getElementById('martRankingContainer').style.display = 'block';
+        }
 
         // Función para cargar Pokémon desde PokeAPI
         // API: https://pokeapi.co/api/v2/pokemon/<id o nombre>
@@ -16254,13 +18065,6 @@
         }
 
         // Event listeners
-        document.getElementById('option1').addEventListener('click', () => selectOption(1));
-        document.getElementById('option2').addEventListener('click', () => selectOption(2));
-        document.getElementById('option3').addEventListener('click', () => selectOption(3));
-        document.getElementById('option4').addEventListener('click', () => selectOption(4));
-        document.getElementById('jokerBtn').addEventListener('click', useJoker);
-        document.getElementById('nextBtn').addEventListener('click', loadNewQuestion);
-        document.getElementById('endAttemptBtn').addEventListener('click', endAttempt);
         
         // Crear partículas en el selector de dificultad al cargar la página
         const difficultySelector = document.getElementById('difficultySelector');
@@ -16274,486 +18078,424 @@
         }
 
         // Event listeners para selección de dificultad
-        // Event listeners para selección de tipo de juego
-        document.getElementById('banderasTypeBtn').addEventListener('click', () => {
-            document.getElementById('gameTypeSelector').style.display = 'none';
-            document.getElementById('banderasLevelsSection').style.display = 'block';
-            document.getElementById('juegosMartSection').style.display = 'none';
-            document.getElementById('banderasRankingContainer').style.display = 'block';
-            document.getElementById('martRankingContainer').style.display = 'none';
-        });
-        
-        document.getElementById('martTypeBtn').addEventListener('click', () => {
-            document.getElementById('gameTypeSelector').style.display = 'none';
-            document.getElementById('banderasLevelsSection').style.display = 'none';
-            document.getElementById('juegosMartSection').style.display = 'block';
-            document.getElementById('banderasRankingContainer').style.display = 'none';
-            document.getElementById('martRankingContainer').style.display = 'block';
-        });
-        
-        // Event listeners para botones de volver
-        document.getElementById('backToMainBtn').addEventListener('click', () => {
-            document.getElementById('gameTypeSelector').style.display = 'block';
-            document.getElementById('banderasLevelsSection').style.display = 'none';
-            document.getElementById('juegosMartSection').style.display = 'none';
-            document.getElementById('banderasRankingContainer').style.display = 'none';
-            document.getElementById('martRankingContainer').style.display = 'none';
-        });
-        
-        document.getElementById('backToMainBtn2').addEventListener('click', () => {
-            document.getElementById('gameTypeSelector').style.display = 'block';
-            document.getElementById('banderasLevelsSection').style.display = 'none';
-            document.getElementById('juegosMartSection').style.display = 'none';
-            document.getElementById('banderasRankingContainer').style.display = 'none';
-            document.getElementById('martRankingContainer').style.display = 'none';
-        });
-        
-        // Event listeners para los niveles
-        document.getElementById('easyBtn').addEventListener('click', () => selectDifficulty('easy'));
-        document.getElementById('hardBtn').addEventListener('click', () => selectDifficulty('hard'));
-        document.getElementById('impossibleBtn').addEventListener('click', () => selectDifficulty('impossible'));
-        document.getElementById('godBtn').addEventListener('click', () => selectDifficulty('god'));
-        document.getElementById('starwarsBtn').addEventListener('click', () => selectDifficulty('starwars'));
-        document.getElementById('brainrotsBtn').addEventListener('click', () => selectDifficulty('brainrots'));
-        const strangerthingsBtnEl = document.getElementById('strangerthingsBtn');
-        if (strangerthingsBtnEl) {
-            strangerthingsBtnEl.addEventListener('click', () => selectDifficulty('strangerthings'));
-        }
-        const strangerthingsBtn = document.getElementById('strangerthingsBtn');
-        if (strangerthingsBtn) {
-            strangerthingsBtn.addEventListener('click', () => selectDifficulty('strangerthings'));
-        }
-        document.getElementById('pokemonBtn').addEventListener('click', () => selectDifficulty('pokemon'));
-        document.getElementById('carsBtn').addEventListener('click', () => selectDifficulty('cars'));
-        document.getElementById('spaceBtn').addEventListener('click', () => selectDifficulty('space'));
-        document.getElementById('footballBtn').addEventListener('click', () => selectDifficulty('football'));
-        document.getElementById('restartBtn').addEventListener('click', restartGame);
-        document.getElementById('saveScoreBtn').addEventListener('click', saveScore);
-        document.getElementById('showRankingBtn').addEventListener('click', loadRanking);
-        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-        const profileLogoutBtn = document.getElementById('profileLogoutBtn');
-        if (profileLogoutBtn) {
-            profileLogoutBtn.addEventListener('click', async () => {
-                // Cerrar modal primero
-                if (window.hideProfileModal) {
-                    window.hideProfileModal();
-                }
-                // Luego cerrar sesión
-                await handleLogout();
-            });
-        }
+        // NOTA: Las notas ahora se cargan automáticamente en la pantalla principal
 
-        // Event listeners para sistema de amigos
-        const profileFriendsBtn = document.getElementById('profileFriendsBtn');
-        if (profileFriendsBtn) {
-            profileFriendsBtn.addEventListener('click', () => {
-                if (window.showFriendsModal) {
-                    window.showFriendsModal();
-                }
-            });
-        }
+        // Event listeners para modal de notas - ENFOQUE SIMPLE DIRECTO
+            // Event listeners para selección de tipo de juego
+            const banderasTypeBtn = document.getElementById('banderasTypeBtn');
+            if (banderasTypeBtn) {
+                banderasTypeBtn.addEventListener('click', () => {
+                    document.getElementById('gameTypeSelector').style.display = 'none';
+                    document.getElementById('banderasLevelsSection').style.display = 'block';
+                    document.getElementById('juegosMartSection').style.display = 'none';
+                    document.getElementById('banderasRankingContainer').style.display = 'block';
+                    document.getElementById('martRankingContainer').style.display = 'none';
+                });
+            }
+            
+            const martTypeBtn = document.getElementById('martTypeBtn');
+            if (martTypeBtn) {
+                martTypeBtn.addEventListener('click', () => {
+                    document.getElementById('gameTypeSelector').style.display = 'none';
+                    document.getElementById('banderasLevelsSection').style.display = 'none';
+                    document.getElementById('juegosMartSection').style.display = 'block';
+                    document.getElementById('banderasRankingContainer').style.display = 'none';
+                    document.getElementById('martRankingContainer').style.display = 'block';
+                });
+            }
+            
+            const notasTypeBtn = document.getElementById('notasTypeBtn');
+            if (notasTypeBtn) {
+                notasTypeBtn.addEventListener('click', () => {
+                    // Para NOTAS, simplemente recargar las notas y mantener la vista actual
+                    if (window.loadNotes) {
+                        window.loadNotes();
+                    }
+                    // Opcional: mostrar un mensaje o animación
+                    const successMsg = document.createElement('div');
+                    successMsg.textContent = '📝 Notas actualizadas';
+                    successMsg.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+                        color: white;
+                        padding: 15px 20px;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+                        z-index: 10000;
+                        font-weight: 600;
+                    `;
+                    document.body.appendChild(successMsg);
+                    
+                    setTimeout(() => {
+                        if (successMsg.parentNode) {
+                            successMsg.parentNode.removeChild(successMsg);
+                        }
+                    }, 2000);
+                });
+            }
+            
+            // Event listeners para botones de volver
+            const backToMainBtn = document.getElementById('backToMainBtn');
+            if (backToMainBtn) {
+                backToMainBtn.addEventListener('click', () => {
+                    document.getElementById('gameTypeSelector').style.display = 'block';
+                    document.getElementById('banderasLevelsSection').style.display = 'none';
+                    document.getElementById('juegosMartSection').style.display = 'none';
+                    document.getElementById('banderasRankingContainer').style.display = 'none';
+                    document.getElementById('martRankingContainer').style.display = 'none';
+                });
+            }
+            
+            const backToMainBtn2 = document.getElementById('backToMainBtn2');
+            if (backToMainBtn2) {
+                backToMainBtn2.addEventListener('click', () => {
+                    document.getElementById('gameTypeSelector').style.display = 'block';
+                    document.getElementById('banderasLevelsSection').style.display = 'none';
+                    document.getElementById('juegosMartSection').style.display = 'none';
+                    document.getElementById('banderasRankingContainer').style.display = 'none';
+                    document.getElementById('martRankingContainer').style.display = 'none';
+                });
+            }
+            
+            // Event listeners para los niveles
+            const easyBtn = document.getElementById('easyBtn');
+            if (easyBtn) easyBtn.addEventListener('click', () => selectDifficulty('easy'));
+            
+            const hardBtn = document.getElementById('hardBtn');
+            if (hardBtn) hardBtn.addEventListener('click', () => selectDifficulty('hard'));
+            
+            const impossibleBtn = document.getElementById('impossibleBtn');
+            if (impossibleBtn) impossibleBtn.addEventListener('click', () => selectDifficulty('impossible'));
+            
+            const godBtn = document.getElementById('godBtn');
+            if (godBtn) godBtn.addEventListener('click', () => selectDifficulty('god'));
+            
+            const starwarsBtn = document.getElementById('starwarsBtn');
+            if (starwarsBtn) starwarsBtn.addEventListener('click', () => selectDifficulty('starwars'));
+            
+            const brainrotsBtn = document.getElementById('brainrotsBtn');
+            if (brainrotsBtn) brainrotsBtn.addEventListener('click', () => selectDifficulty('brainrots'));
+            
+            const historiaBtn = document.getElementById('historiaBtn');
+            if (historiaBtn) historiaBtn.addEventListener('click', () => iniciarHistoria());
+            
+            const strangerthingsBtn = document.getElementById('strangerthingsBtn');
+            if (strangerthingsBtn) strangerthingsBtn.addEventListener('click', () => selectDifficulty('strangerthings'));
+            
+            const pokemonBtn = document.getElementById('pokemonBtn');
+            if (pokemonBtn) pokemonBtn.addEventListener('click', () => selectDifficulty('pokemon'));
+            
+            const carsBtn = document.getElementById('carsBtn');
+            if (carsBtn) carsBtn.addEventListener('click', () => selectDifficulty('cars'));
+            
+            const spaceBtn = document.getElementById('spaceBtn');
+            if (spaceBtn) spaceBtn.addEventListener('click', () => selectDifficulty('space'));
+            
+            const footballBtn = document.getElementById('footballBtn');
+            if (footballBtn) footballBtn.addEventListener('click', () => selectDifficulty('football'));
+            
+            // Event listeners para opciones de juego
+            const option1 = document.getElementById('option1');
+            if (option1) option1.addEventListener('click', () => selectOption(1));
+            
+            const option2 = document.getElementById('option2');
+            if (option2) option2.addEventListener('click', () => selectOption(2));
+            
+            const option3 = document.getElementById('option3');
+            if (option3) option3.addEventListener('click', () => selectOption(3));
+            
+            const option4 = document.getElementById('option4');
+            if (option4) option4.addEventListener('click', () => selectOption(4));
+            
+            const jokerBtn = document.getElementById('jokerBtn');
+            if (jokerBtn) jokerBtn.addEventListener('click', useJoker);
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) nextBtn.addEventListener('click', loadNewQuestion);
+            
+            const endAttemptBtn = document.getElementById('endAttemptBtn');
+            if (endAttemptBtn) endAttemptBtn.addEventListener('click', endAttempt);
+            
+            // Event listeners principales
+            const restartBtn = document.getElementById('restartBtn');
+            if (restartBtn) restartBtn.addEventListener('click', restartGame);
+            
+            const saveScoreBtn = document.getElementById('saveScoreBtn');
+            if (saveScoreBtn) saveScoreBtn.addEventListener('click', saveScore);
+            
+            const showRankingBtn = document.getElementById('showRankingBtn');
+            if (showRankingBtn) showRankingBtn.addEventListener('click', loadRanking);
+            
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+            
+            const profileLogoutBtn = document.getElementById('profileLogoutBtn');
+            if (profileLogoutBtn) {
+                profileLogoutBtn.addEventListener('click', async () => {
+                    // Cerrar modal primero
+                    if (window.hideProfileModal) {
+                        window.hideProfileModal();
+                    }
+                    // Luego cerrar sesión
+                    await handleLogout();
+                });
+            }
+            
+            // Event listeners para sistema de amigos
+            const profileFriendsBtn = document.getElementById('profileFriendsBtn');
+            if (profileFriendsBtn) {
+                profileFriendsBtn.addEventListener('click', () => {
+                    if (window.showFriendsModal) {
+                        window.showFriendsModal();
+                    }
+                });
+            }
 
-        const profileInboxBtn = document.getElementById('profileInboxBtn');
-        if (profileInboxBtn) {
-            profileInboxBtn.addEventListener('click', async () => {
-                if (window.showInboxModal) {
-                    await window.showInboxModal();
-                }
-                // Ya no se abren las recomendaciones aquí, van en el buzón
-            });
-        }
+            const profileInboxBtn = document.getElementById('profileInboxBtn');
+            if (profileInboxBtn) {
+                profileInboxBtn.addEventListener('click', async () => {
+                    if (window.showInboxModal) {
+                        await window.showInboxModal();
+                    }
+                    // Ya no se abren las recomendaciones aquí, van en el buzón
+                });
+            }
 
-        const profileRecommendationsInboxBtn = document.getElementById('profileRecommendationsInboxBtn');
-        if (profileRecommendationsInboxBtn) {
-            profileRecommendationsInboxBtn.addEventListener('click', async () => {
-                const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
-                if (recommendationsInboxModal && window.loadRecommendations) {
-                    recommendationsInboxModal.style.display = 'flex';
-                    await window.loadRecommendations();
-                }
-            });
-        }
-
-        // Event listeners para buzón de correo
-        const profileMailboxBtn = document.getElementById('profileMailboxBtn');
-        if (profileMailboxBtn) {
-            profileMailboxBtn.addEventListener('click', async () => {
-                // Para mpenalvart1, el buzón muestra las recomendaciones
-                if (window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+            const profileRecommendationsInboxBtn = document.getElementById('profileRecommendationsInboxBtn');
+            if (profileRecommendationsInboxBtn) {
+                profileRecommendationsInboxBtn.addEventListener('click', async () => {
                     const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
                     if (recommendationsInboxModal && window.loadRecommendations) {
                         recommendationsInboxModal.style.display = 'flex';
                         await window.loadRecommendations();
                     }
-                } else {
-                    // Para otros usuarios, muestra los mensajes del buzón normal
-                    const mailboxModal = document.getElementById('mailboxModal');
-                    if (mailboxModal && window.loadMailboxMessages) {
-                        mailboxModal.style.display = 'flex';
-                        await window.loadMailboxMessages();
+                });
+            }
+            
+            // Event listeners para buzón de correo
+            const profileMailboxBtn = document.getElementById('profileMailboxBtn');
+            if (profileMailboxBtn) {
+                profileMailboxBtn.addEventListener('click', async () => {
+                    // Para mpenalvart1, el buzón muestra las recomendaciones
+                    if (window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es') {
+                        const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
+                        if (recommendationsInboxModal && window.loadRecommendations) {
+                            recommendationsInboxModal.style.display = 'flex';
+                            await window.loadRecommendations();
+                        }
+                    } else {
+                        // Para otros usuarios, muestra los mensajes del buzón normal
+                        const mailboxModal = document.getElementById('mailboxModal');
+                        if (mailboxModal && window.loadMailboxMessages) {
+                            mailboxModal.style.display = 'flex';
+                            await window.loadMailboxMessages();
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
 
-        const mailboxModal = document.getElementById('mailboxModal');
-        const mailboxModalClose = document.getElementById('mailboxModalClose');
-        if (mailboxModalClose) {
-            mailboxModalClose.addEventListener('click', () => {
-                if (mailboxModal) {
-                    mailboxModal.style.display = 'none';
-                }
-            });
-        }
-
-        if (mailboxModal) {
-            mailboxModal.addEventListener('click', (e) => {
-                if (e.target === mailboxModal) {
-                    mailboxModal.style.display = 'none';
-                }
-            });
-        }
-
-        // Event listeners para enviar mensaje (solo mpenalvart1)
-        const profileSendMailBtn = document.getElementById('profileSendMailBtn');
-        if (profileSendMailBtn) {
-            profileSendMailBtn.addEventListener('click', () => {
-                const sendMailModal = document.getElementById('sendMailModal');
-                if (sendMailModal) {
-                    sendMailModal.style.display = 'flex';
-                    const searchInput = document.getElementById('sendMailSearchInput');
-                    if (searchInput) {
-                        searchInput.value = '';
-                        searchInput.focus();
+            const mailboxModal = document.getElementById('mailboxModal');
+            const mailboxModalClose = document.getElementById('mailboxModalClose');
+            if (mailboxModalClose) {
+                mailboxModalClose.addEventListener('click', () => {
+                    if (mailboxModal) {
+                        mailboxModal.style.display = 'none';
                     }
-                }
-            });
-        }
+                });
+            }
 
-        const sendMailModal = document.getElementById('sendMailModal');
-        const sendMailModalClose = document.getElementById('sendMailModalClose');
-        if (sendMailModalClose) {
-            sendMailModalClose.addEventListener('click', () => {
-                if (sendMailModal) {
-                    sendMailModal.style.display = 'none';
-                    // Limpiar formulario
-                    const compose = document.getElementById('sendMailCompose');
-                    const results = document.getElementById('sendMailResults');
-                    if (compose) compose.style.display = 'none';
-                    if (results) results.innerHTML = '';
-                }
-            });
-        }
+            if (mailboxModal) {
+                mailboxModal.addEventListener('click', (e) => {
+                    if (e.target === mailboxModal) {
+                        mailboxModal.style.display = 'none';
+                    }
+                });
+            }
 
-        if (sendMailModal) {
-            sendMailModal.addEventListener('click', (e) => {
-                if (e.target === sendMailModal) {
-                    sendMailModal.style.display = 'none';
-                }
-            });
-        }
+            // Event listeners para enviar mensaje (solo mpenalvart1)
+            const profileSendMailBtn = document.getElementById('profileSendMailBtn');
+            if (profileSendMailBtn) {
+                profileSendMailBtn.addEventListener('click', () => {
+                    const sendMailModal = document.getElementById('sendMailModal');
+                    if (sendMailModal) {
+                        sendMailModal.style.display = 'flex';
+                        const searchInput = document.getElementById('sendMailSearchInput');
+                        if (searchInput) {
+                            searchInput.value = '';
+                            searchInput.focus();
+                        }
+                    }
+                });
+            }
 
-        const sendMailSearchBtn = document.getElementById('sendMailSearchBtn');
-        if (sendMailSearchBtn) {
-            sendMailSearchBtn.addEventListener('click', async () => {
-                if (window.searchUsersForMail) {
-                    await window.searchUsersForMail();
-                }
-            });
-        }
+            const sendMailModal = document.getElementById('sendMailModal');
+            const sendMailModalClose = document.getElementById('sendMailModalClose');
+            if (sendMailModalClose) {
+                sendMailModalClose.addEventListener('click', () => {
+                    if (sendMailModal) {
+                        sendMailModal.style.display = 'none';
+                        // Limpiar formulario
+                        const compose = document.getElementById('sendMailCompose');
+                        const results = document.getElementById('sendMailResults');
+                        if (compose) compose.style.display = 'none';
+                        if (results) results.style.display = 'block';
+                        const searchInput = document.getElementById('sendMailSearchInput');
+                        if (searchInput) searchInput.value = '';
+                    }
+                });
+            }
 
-        const sendMailSearchInput = document.getElementById('sendMailSearchInput');
-        if (sendMailSearchInput) {
-            sendMailSearchInput.addEventListener('keypress', async (e) => {
-                if (e.key === 'Enter' && window.searchUsersForMail) {
-                    await window.searchUsersForMail();
-                }
-            });
-        }
+            if (sendMailModal) {
+                sendMailModal.addEventListener('click', (e) => {
+                    if (e.target === sendMailModal) {
+                        sendMailModal.style.display = 'none';
+                        // Limpiar formulario
+                        const compose = document.getElementById('sendMailCompose');
+                        const results = document.getElementById('sendMailResults');
+                        if (compose) compose.style.display = 'none';
+                        if (results) results.style.display = 'block';
+                        const searchInput = document.getElementById('sendMailSearchInput');
+                        if (searchInput) searchInput.value = '';
+                    }
+                });
+            }
 
-        const sendMailSubmitBtn = document.getElementById('sendMailSubmitBtn');
-        if (sendMailSubmitBtn) {
-            sendMailSubmitBtn.addEventListener('click', async () => {
-                if (window.sendMailToUser) {
-                    await window.sendMailToUser();
-                }
-            });
-        }
+            const sendMailSearchBtn = document.getElementById('sendMailSearchBtn');
+            if (sendMailSearchBtn) {
+                sendMailSearchBtn.addEventListener('click', async () => {
+                    if (window.searchUsersForMail) {
+                        await window.searchUsersForMail();
+                    }
+                });
+            }
 
-        const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
-        const recommendationsInboxModalClose = document.getElementById('recommendationsInboxModalClose');
-        if (recommendationsInboxModalClose) {
-            recommendationsInboxModalClose.addEventListener('click', () => {
-                if (recommendationsInboxModal) {
-                    recommendationsInboxModal.style.display = 'none';
-                }
-            });
-        }
+            const sendMailSearchInput = document.getElementById('sendMailSearchInput');
+            if (sendMailSearchInput) {
+                sendMailSearchInput.addEventListener('keypress', async (e) => {
+                    if (e.key === 'Enter' && window.searchUsersForMail) {
+                        await window.searchUsersForMail();
+                    }
+                });
+            }
 
-        if (recommendationsInboxModal) {
-            recommendationsInboxModal.addEventListener('click', (e) => {
-                if (e.target === recommendationsInboxModal) {
-                    recommendationsInboxModal.style.display = 'none';
-                }
-            });
-        }
+            const sendMailSubmitBtn = document.getElementById('sendMailSubmitBtn');
+            if (sendMailSubmitBtn) {
+                sendMailSubmitBtn.addEventListener('click', async () => {
+                    if (window.submitMailForm) {
+                        await window.submitMailForm();
+                    }
+                });
+            }
 
-        const profileToggleScoresBtn = document.getElementById('profileToggleScoresBtn');
-        if (profileToggleScoresBtn) {
-            profileToggleScoresBtn.addEventListener('click', () => {
-                if (window.toggleScoresVisibility) {
-                    window.toggleScoresVisibility();
-                }
-            });
-        }
+            const recommendationsInboxModal = document.getElementById('recommendationsInboxModal');
+            const recommendationsInboxModalClose = document.getElementById('recommendationsInboxModalClose');
+            if (recommendationsInboxModalClose) {
+                recommendationsInboxModalClose.addEventListener('click', () => {
+                    if (recommendationsInboxModal) {
+                        recommendationsInboxModal.style.display = 'none';
+                    }
+                });
+            }
 
-        // Toggle para estilos de perfil
-        const profileStyleSelectorToggle = document.getElementById('profileStyleSelectorToggle');
-        if (profileStyleSelectorToggle) {
-            profileStyleSelectorToggle.addEventListener('click', () => {
-                profileStyleSelectorToggle.classList.toggle('expanded');
-            });
-        }
+            if (recommendationsInboxModal) {
+                recommendationsInboxModal.addEventListener('click', (e) => {
+                    if (e.target === recommendationsInboxModal) {
+                        recommendationsInboxModal.style.display = 'none';
+                    }
+                });
+            }
 
-        // Toggle para decoraciones de perfil
-        const profileDecorationSelectorToggle = document.getElementById('profileDecorationSelectorToggle');
-        if (profileDecorationSelectorToggle) {
-            profileDecorationSelectorToggle.addEventListener('click', () => {
-                profileDecorationSelectorToggle.classList.toggle('expanded');
-            });
-        }
+            const profileToggleScoresBtn = document.getElementById('profileToggleScoresBtn');
+            if (profileToggleScoresBtn) {
+                profileToggleScoresBtn.addEventListener('click', () => {
+                    if (window.toggleScoresVisibility) {
+                        window.toggleScoresVisibility();
+                    }
+                });
+            }
 
-        const friendProfileModalClose = document.getElementById('friendProfileModalClose');
-        if (friendProfileModalClose) {
-            friendProfileModalClose.addEventListener('click', () => {
-                if (window.hideFriendProfileModal) {
-                    window.hideFriendProfileModal();
-                }
-            });
-        }
+            // Toggle para estilos de perfil
+            const profileStyleSelectorToggle = document.getElementById('profileStyleSelectorToggle');
+            if (profileStyleSelectorToggle) {
+                profileStyleSelectorToggle.addEventListener('click', () => {
+                    profileStyleSelectorToggle.classList.toggle('expanded');
+                });
+            }
 
-        // Cerrar modal de perfil de amigo al hacer clic fuera
-        const friendProfileModal = document.getElementById('friendProfileModal');
-        if (friendProfileModal) {
-            friendProfileModal.addEventListener('click', (e) => {
-                if (e.target === friendProfileModal) {
+            // Toggle para decoraciones de perfil
+            const profileDecorationSelectorToggle = document.getElementById('profileDecorationSelectorToggle');
+            if (profileDecorationSelectorToggle) {
+                profileDecorationSelectorToggle.addEventListener('click', () => {
+                    profileDecorationSelectorToggle.classList.toggle('expanded');
+                });
+            }
+
+            const friendProfileModalClose = document.getElementById('friendProfileModalClose');
+            if (friendProfileModalClose) {
+                friendProfileModalClose.addEventListener('click', () => {
                     if (window.hideFriendProfileModal) {
                         window.hideFriendProfileModal();
                     }
-                }
-            });
-        }
+                });
+            }
 
-        // Event listener para guardar descripción
-        const profileSaveDescriptionBtn = document.getElementById('profileSaveDescriptionBtn');
-        if (profileSaveDescriptionBtn) {
-            profileSaveDescriptionBtn.addEventListener('click', async () => {
-                if (window.saveProfileDescription) {
-                    await window.saveProfileDescription();
-                }
-            });
-        }
+            // Cerrar modal de perfil de amigo al hacer clic fuera
+            const friendProfileModal = document.getElementById('friendProfileModal');
+            if (friendProfileModal) {
+                friendProfileModal.addEventListener('click', (e) => {
+                    if (e.target === friendProfileModal) {
+                        if (window.hideFriendProfileModal) {
+                            window.hideFriendProfileModal();
+                        }
+                    }
+                });
+            }
+            
+            // El modal de notas está definido más abajo en el HTML, así que los botones
+            // pueden no existir aún. Delegación para que Cancelar / Guardar / X siempre funcionen.
+            document.addEventListener('click', (e) => {
+                const target = e.target && e.target.closest ? e.target : null;
+                if (!target) return;
 
-        // Event listeners para crear grupo
-        const createGroupBtn = document.getElementById('createGroupBtn');
-        if (createGroupBtn) {
-            createGroupBtn.addEventListener('click', () => {
-                const createGroupModal = document.getElementById('createGroupModal');
-                if (createGroupModal) {
-                    createGroupModal.style.display = 'flex';
-                    const searchInput = document.getElementById('groupUserSearch');
-                    if (searchInput) {
-                        searchInput.value = '';
-                        searchInput.focus();
+                if (target.closest('#noteLikeBtn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (window.toggleNotaLike) {
+                        window.toggleNotaLike().catch((error) => {
+                            console.error('Error al dar like a la nota:', error);
+                            alert('Error al dar like. Por favor, intenta de nuevo.');
+                        });
                     }
-                    // Limpiar selección anterior
-                    window.selectedGroupUsers = [];
-                    if (window.updateGroupSelectedUsers) window.updateGroupSelectedUsers();
-                    if (window.updateGroupSearchResults) window.updateGroupSearchResults([]);
-                }
-            });
-        }
-
-        const createGroupModal = document.getElementById('createGroupModal');
-        const createGroupModalClose = document.getElementById('createGroupModalClose');
-        if (createGroupModalClose) {
-            createGroupModalClose.addEventListener('click', () => {
-                if (createGroupModal) {
-                    createGroupModal.style.display = 'none';
-                    // Limpiar variables cuando se cierra el modal
-                    window.currentAddMembersGroupId = null;
-                    window.currentAddMembersExistingMembers = null;
-                    window.selectedGroupUsers = [];
-                    // Restaurar título y botón
-                    const modalTitle = createGroupModal.querySelector('h2');
-                    if (modalTitle) {
-                        modalTitle.textContent = 'Crear Grupo';
-                    }
-                    const groupNextBtn = document.getElementById('groupNextBtn');
-                    if (groupNextBtn) {
-                        groupNextBtn.textContent = 'Siguiente';
-                    }
-                }
-            });
-        }
-
-        if (createGroupModal) {
-            createGroupModal.addEventListener('click', (e) => {
-                if (e.target === createGroupModal) {
-                    createGroupModal.style.display = 'none';
-                    // Limpiar variables cuando se cierra el modal
-                    window.currentAddMembersGroupId = null;
-                    window.currentAddMembersExistingMembers = null;
-                    window.selectedGroupUsers = [];
-                    // Restaurar título y botón
-                    const modalTitle = createGroupModal.querySelector('h2');
-                    if (modalTitle) {
-                        modalTitle.textContent = 'Crear Grupo';
-                    }
-                    const groupNextBtn = document.getElementById('groupNextBtn');
-                    if (groupNextBtn) {
-                        groupNextBtn.textContent = 'Siguiente';
-                    }
-                }
-            });
-        }
-
-        const groupUserSearch = document.getElementById('groupUserSearch');
-        if (groupUserSearch) {
-            let searchTimeout;
-            groupUserSearch.addEventListener('input', async (e) => {
-                clearTimeout(searchTimeout);
-                const searchTerm = e.target.value.trim();
-                if (searchTerm.length < 2) {
-                    if (window.updateGroupSearchResults) window.updateGroupSearchResults([]);
                     return;
                 }
-                searchTimeout = setTimeout(async () => {
-                    if (window.searchUsers) {
-                        const users = await window.searchUsers(searchTerm);
-                        if (window.updateGroupSearchResults) window.updateGroupSearchResults(users);
+
+                if (target.id === 'noteModal' || target.closest('#noteCancelBtn') || target.closest('#noteModalClose')) {
+                    e.preventDefault();
+                    if (window.closeNoteModal) {
+                        window.closeNoteModal();
                     }
-                }, 300);
-            });
-        }
+                    return;
+                }
 
-        const groupNextBtn = document.getElementById('groupNextBtn');
-        if (groupNextBtn) {
-            groupNextBtn.addEventListener('click', async () => {
-                if (window.selectedGroupUsers && window.selectedGroupUsers.length > 0) {
-                    // Si estamos añadiendo miembros a un grupo existente
-                    if (window.currentAddMembersGroupId) {
-                        const userIds = window.selectedGroupUsers.map(u => u.id);
-                        if (window.addMembersToGroup) {
-                            await window.addMembersToGroup(window.currentAddMembersGroupId, userIds);
-                        }
-                    } else {
-                        // Si estamos creando un nuevo grupo
-                        const createGroupModal = document.getElementById('createGroupModal');
-                        const createGroupNameModal = document.getElementById('createGroupNameModal');
-                        if (createGroupModal) createGroupModal.style.display = 'none';
-                        if (createGroupNameModal) {
-                            createGroupNameModal.style.display = 'flex';
-                            if (window.updateGroupNamePreview) window.updateGroupNamePreview();
-                            const nameInput = document.getElementById('groupNameInput');
-                            if (nameInput) {
-                                nameInput.value = '';
-                                nameInput.focus();
-                            }
-                        }
-                    }
+                const saveBtn = target.closest('#noteSaveBtn');
+                if (!saveBtn) return;
+                
+                console.log('Botón guardar clickeado');
+                console.log('Función saveNote existe:', typeof window.saveNote);
+                console.log('Usuario actual:', window.currentUser);
+                
+                if (window.saveNote) {
+                    window.saveNote().catch(error => {
+                        console.error('Error en saveNote:', error);
+                        alert('Error al guardar la nota: ' + error.message);
+                    });
+                } else {
+                    console.error('Función saveNote no encontrada');
+                    alert('Error: La función para guardar notas no está disponible');
                 }
             });
-        }
-
-        const groupCancelBtn = document.getElementById('groupCancelBtn');
-        if (groupCancelBtn) {
-            groupCancelBtn.addEventListener('click', () => {
-                const createGroupModal = document.getElementById('createGroupModal');
-                if (createGroupModal) {
-                    createGroupModal.style.display = 'none';
-                    // Limpiar variables cuando se cierra el modal
-                    window.currentAddMembersGroupId = null;
-                    window.currentAddMembersExistingMembers = null;
-                    window.selectedGroupUsers = [];
-                    // Restaurar título y botón
-                    const modalTitle = createGroupModal.querySelector('h2');
-                    if (modalTitle) {
-                        modalTitle.textContent = 'Crear Grupo';
-                    }
-                    const groupNextBtn = document.getElementById('groupNextBtn');
-                    if (groupNextBtn) {
-                        groupNextBtn.textContent = 'Siguiente';
-                    }
-                }
-            });
-        }
-
-        const createGroupNameModal = document.getElementById('createGroupNameModal');
-        const createGroupNameModalClose = document.getElementById('createGroupNameModalClose');
-        if (createGroupNameModalClose) {
-            createGroupNameModalClose.addEventListener('click', () => {
-                if (createGroupNameModal) {
-                    createGroupNameModal.style.display = 'none';
-                }
-            });
-        }
-
-        if (createGroupNameModal) {
-            createGroupNameModal.addEventListener('click', (e) => {
-                if (e.target === createGroupNameModal) {
-                    createGroupNameModal.style.display = 'none';
-                }
-            });
-        }
-
-        const groupNameInput = document.getElementById('groupNameInput');
-        if (groupNameInput) {
-            groupNameInput.addEventListener('input', (e) => {
-                const createBtn = document.getElementById('groupCreateBtn');
-                if (createBtn) {
-                    createBtn.disabled = !e.target.value.trim();
-                }
-            });
-        }
-
-        const groupCreateBtn = document.getElementById('groupCreateBtn');
-        if (groupCreateBtn) {
-            groupCreateBtn.addEventListener('click', async () => {
-                if (window.createGroup) {
-                    await window.createGroup();
-                }
-            });
-        }
-
-        const groupNameBackBtn = document.getElementById('groupNameBackBtn');
-        if (groupNameBackBtn) {
-            groupNameBackBtn.addEventListener('click', () => {
-                const createGroupModal = document.getElementById('createGroupModal');
-                const createGroupNameModal = document.getElementById('createGroupNameModal');
-                if (createGroupNameModal) createGroupNameModal.style.display = 'none';
-                if (createGroupModal) createGroupModal.style.display = 'flex';
-            });
-        }
-
-        // Event listeners para modal de información del grupo
-        const groupInfoModal = document.getElementById('groupInfoModal');
-        const groupInfoModalClose = document.getElementById('groupInfoModalClose');
-        if (groupInfoModalClose) {
-            groupInfoModalClose.addEventListener('click', () => {
-                if (groupInfoModal) {
-                    groupInfoModal.style.display = 'none';
-                }
-            });
-        }
-
-        if (groupInfoModal) {
-            groupInfoModal.addEventListener('click', (e) => {
-                if (e.target === groupInfoModal) {
-                    groupInfoModal.style.display = 'none';
-                }
-            });
-        }
 
         const groupChangePictureBtn = document.getElementById('groupChangePictureBtn');
         if (groupChangePictureBtn) {
@@ -16829,7 +18571,6 @@
                 emojiPicker.classList.remove('show');
             }
         });
-        
         // Autoajustar altura del textarea
         if (activeChatInput) {
             activeChatInput.addEventListener('input', function() {
@@ -17812,6 +19553,8 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         const storage = getStorage(app);
+        // Hacer accesible db globalmente para funciones que usan window.db
+        window.db = db;
         
         // Inicializar Firebase Messaging (solo en el cliente, no en Service Worker)
         let messaging = null;
@@ -18068,6 +19811,11 @@
                 
                 // Actualizar visibilidad del botón de animales según el usuario
                 updateAnimalButtonVisibility();
+                
+                // Cargar notas automáticamente
+                if (window.loadNotes) {
+                    window.loadNotes();
+                }
                 
                 // Cargar foto de perfil
                 loadProfilePicture();
@@ -23315,6 +25063,13 @@
                             const friendData = friendDoc.data();
                             const friendItem = document.createElement('div');
                             friendItem.className = 'friend-item';
+                            // Necesario para que el sistema de NOTAS pueda obtener el uid/foto/nombre del amigo
+                            friendItem.dataset.uid = friendId;
+                            friendItem.dataset.friend = JSON.stringify({
+                                uid: friendId,
+                                nombre: friendData.nombre || 'Sin nombre',
+                                foto: friendData.fotoPerfil || null
+                            });
                             
                             const picture = document.createElement('div');
                             picture.className = 'friend-item-picture';
@@ -24406,8 +26161,698 @@
                 connectionLostShown = false;
             }
         }, 5000); // Verificar cada 5 segundos
+
+        // Funciones para el sistema de NOTAS
+        window.currentNoteId = null;
+        window.currentNoteLocal = false;
+
+        window.loadNotes = async function() {
+            if (!window.currentUser) return;
+            
+            try {
+                const storiesGrid = document.getElementById('notesStoriesGrid');
+                const notesFeedContainer = document.getElementById('notesFeedContainer');
+                if (notesFeedContainer) notesFeedContainer.style.display = 'none';
+                
+                if (!storiesGrid) return;
+                storiesGrid.innerHTML = '';
+                
+                // Obtener amigos directamente desde Firestore (no depender del DOM/perfil)
+                const userFriends = await window.getFriendsForNotes();
+                
+                // Agregar al usuario actual primero
+                const currentUserPhoto = await window.getCurrentUserPhotoForNotes();
+                
+                const allUsers = [
+                    {
+                        uid: window.currentUser.uid,
+                        nombre: window.currentUser.displayName || 'Tú',
+                        foto: currentUserPhoto,
+                        isCurrentUser: true
+                    },
+                    ...userFriends.map(friend => ({
+                        ...friend,
+                        foto: friend.foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(friend.nombre || 'Amigo')}&background=f59e0b&color=fff&size=128`
+                    }))
+                ];
+                
+                // Cargar notas SOLO de: yo + amigos (evita depender de leer toda la colección)
+                const uidsToFetch = allUsers.map(u => u.uid).filter(Boolean);
+                const notesMap = await window.fetchNotesForUids(uidsToFetch);
+
+                // Fallback local para TU nota si estás en file:// o sin Firebase
+                if (!notesMap.has(window.currentUser.uid)) {
+                    try {
+                        const local = localStorage.getItem('userNote');
+                        if (local) {
+                            const localNote = JSON.parse(local);
+                            if (localNote && localNote.contenido) {
+                                notesMap.set(window.currentUser.uid, localNote);
+                            }
+                        }
+                    } catch (_) {}
+                }
+                
+                // Crear stories: la nota solo se abre al pulsar la foto de perfil
+                allUsers.forEach(user => {
+                    const storyElement = createStoryElement(user, notesMap.get(user.uid));
+                    storiesGrid.appendChild(storyElement);
+                });
+                
+            } catch (error) {
+                console.error('Error al cargar notas:', error);
+                const storiesGrid = document.getElementById('notesStoriesGrid');
+                if (!storiesGrid) return;
+                storiesGrid.innerHTML = '';
+                const currentUserPhoto = await window.getCurrentUserPhotoForNotes();
+                
+                const yourStory = createStoryElement({
+                    uid: window.currentUser.uid,
+                    nombre: window.currentUser.displayName || 'Tú',
+                    foto: currentUserPhoto,
+                    isCurrentUser: true
+                }, null);
+                
+                storiesGrid.appendChild(yourStory);
+                const msg = (error && error.message) ? error.message : String(error);
+                const err = document.createElement('div');
+                err.style.cssText = 'flex: 1 1 100%; padding: 12px; background: rgba(255,255,255,0.9); border-radius: 12px; border: 1px solid #fecaca; color: #7f1d1d;';
+                err.textContent = 'No se pudieron cargar las notas de amigos. Detalle: ' + msg;
+                storiesGrid.appendChild(err);
+            }
+        };
+
+        // Obtener notas para un conjunto de UIDs (Firestore "in" por lotes de 10)
+        window.fetchNotesForUids = async function(uids) {
+            const notesMap = new Map();
+            if (!window.db || !Array.isArray(uids) || uids.length === 0) return notesMap;
+            
+            const uniqueUids = Array.from(new Set(uids.filter(Boolean)));
+            const chunks = [];
+            for (let i = 0; i < uniqueUids.length; i += 10) {
+                chunks.push(uniqueUids.slice(i, i + 10));
+            }
+            
+            const notesRef = collection(db, "notas");
+            for (const chunk of chunks) {
+                const q = query(notesRef, where("autorUid", "in", chunk));
+                const snap = await getDocs(q);
+                snap.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (data && data.autorUid) {
+                        notesMap.set(data.autorUid, { id: docSnap.id, ...data });
+                    }
+                });
+            }
+            
+            return notesMap;
+        };
+
+        // Amigos para NOTAS: desde `usuarios/{uid}.amigos`
+        window.getFriendsForNotes = async function() {
+            if (!window.currentUser || !window.db) return [];
+            
+            try {
+                const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                if (!userDoc.exists()) return [];
+                
+                const amigos = userDoc.data().amigos || [];
+                if (!Array.isArray(amigos) || amigos.length === 0) return [];
+                
+                const friendDocs = await Promise.all(
+                    amigos.map(async (friendId) => {
+                        try {
+                            const friendDoc = await getDoc(doc(db, "usuarios", friendId));
+                            if (!friendDoc.exists()) return null;
+                            const data = friendDoc.data();
+                            return {
+                                uid: friendId,
+                                nombre: data.nombre || 'Amigo',
+                                foto: data.fotoPerfil || null
+                            };
+                        } catch (_) {
+                            return null;
+                        }
+                    })
+                );
+                
+                return friendDocs.filter(Boolean);
+            } catch (error) {
+                console.error('Error al obtener amigos para notas:', error);
+                return [];
+            }
+        };
+
+        // Foto para NOTAS: prioriza la foto real (Firestore) que ya está cargada en el UI
+        window.getCurrentUserPhotoForNotes = async function() {
+            const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(window.currentUser?.displayName || 'Usuario')}&background=667eea&color=fff&size=128`;
+            
+            try {
+                const img = document.getElementById('profilePictureImg');
+                if (img && img.style.display !== 'none' && img.src && img.src.startsWith('data:image/')) {
+                    return img.src;
+                }
+            } catch (_) {}
+            
+            try {
+                if (window.currentUser?.photoURL) return window.currentUser.photoURL;
+            } catch (_) {}
+            
+            try {
+                if (window.db && window.currentUser?.uid) {
+                    const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
+                    if (userDoc.exists() && userDoc.data().fotoPerfil) {
+                        return userDoc.data().fotoPerfil;
+                    }
+                }
+            } catch (_) {}
+            
+            return fallback;
+        };
+
+        function getLocalNotaLikesMap() {
+            try {
+                return JSON.parse(localStorage.getItem('notaLikes') || '{}');
+            } catch (_) {
+                return {};
+            }
+        }
+
+        function setLocalNotaLikesMap(map) {
+            localStorage.setItem('notaLikes', JSON.stringify(map));
+        }
+
+        function updateNoteLikeButton(likeCount, userLiked) {
+            const likeCountEl = document.getElementById('noteLikeCount');
+            const likeBtn = document.getElementById('noteLikeBtn');
+            const likeIcon = likeBtn ? likeBtn.querySelector('.note-like-icon') : null;
+            const likeLabel = likeBtn ? likeBtn.querySelector('.note-like-label') : null;
+            if (likeCountEl) likeCountEl.textContent = String(likeCount);
+            if (likeBtn) {
+                if (userLiked) likeBtn.classList.add('liked');
+                else likeBtn.classList.remove('liked');
+            }
+            if (likeIcon) likeIcon.textContent = userLiked ? '❤️' : '🤍';
+            if (likeLabel) likeLabel.textContent = userLiked ? 'Te gusta' : 'Me gusta';
+        }
+
+        window.loadNotaLikes = async function(noteId, isLocal) {
+            if (!noteId) {
+                updateNoteLikeButton(0, false);
+                return;
+            }
+
+            if (isLocal || !window.db) {
+                const map = getLocalNotaLikesMap();
+                const users = Array.isArray(map[noteId]) ? map[noteId] : [];
+                const userLiked = !!(window.currentUser && users.includes(window.currentUser.uid));
+                updateNoteLikeButton(users.length, userLiked);
+                return;
+            }
+
+            try {
+                const likesRef = collection(db, "notaLikes");
+                const q = query(likesRef, where("notaId", "==", noteId));
+                const snapshot = await getDocs(q);
+                const likeCount = snapshot.size;
+                const userLiked = window.currentUser
+                    ? snapshot.docs.some(d => d.data().userId === window.currentUser.uid)
+                    : false;
+                updateNoteLikeButton(likeCount, userLiked);
+            } catch (error) {
+                console.error('Error al cargar likes de la nota:', error);
+            }
+        };
+
+        window.toggleNotaLike = async function() {
+            const noteId = window.currentNoteId;
+            if (!window.currentUser || !noteId) return false;
+            const userId = window.currentUser.uid;
+
+            try {
+                if (window.currentNoteLocal || !window.db) {
+                    const map = getLocalNotaLikesMap();
+                    const users = Array.isArray(map[noteId]) ? map[noteId] : [];
+                    const idx = users.indexOf(userId);
+                    if (idx === -1) users.push(userId);
+                    else users.splice(idx, 1);
+                    map[noteId] = users;
+                    setLocalNotaLikesMap(map);
+                    await window.loadNotaLikes(noteId, true);
+                    return true;
+                }
+
+                const likesRef = collection(db, "notaLikes");
+                const q = query(likesRef, where("notaId", "==", noteId), where("userId", "==", userId));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    await addDoc(likesRef, {
+                        notaId: noteId,
+                        userId: userId,
+                        timestamp: Date.now()
+                    });
+                } else {
+                    await Promise.all(snapshot.docs.map(d => deleteDoc(doc(db, "notaLikes", d.id))));
+                }
+
+                const allLikes = await getDocs(query(likesRef, where("notaId", "==", noteId)));
+                try {
+                    await updateDoc(doc(db, "notas", noteId), { likesCount: allLikes.size });
+                } catch (_) {}
+
+                await window.loadNotaLikes(noteId, false);
+                return true;
+            } catch (error) {
+                console.error('Error al dar like a la nota:', error);
+                alert('Error al dar like: ' + error.message);
+                return false;
+            }
+        };
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function createStoryElement(user, note) {
+            const storyDiv = document.createElement('div');
+            storyDiv.className = 'story-item';
+            
+            const hasNote = note && note.contenido && note.contenido.trim() !== '';
+            
+            const likeCount = Number(note && note.likesCount) || 0;
+            
+            storyDiv.innerHTML = `
+                <div class="story-avatar-wrapper">
+                    <div class="story-avatar ${hasNote ? 'has-note' : ''}">
+                        ${user.foto ? 
+                            `<img src="${user.foto}" alt="${user.nombre}">` : 
+                            `<div class="story-avatar-placeholder">👤</div>`
+                        }
+                    </div>
+                    ${hasNote ? '<div class="story-indicator">📝</div>' : ''}
+                </div>
+                <div class="story-name">${user.nombre}</div>
+                ${hasNote && likeCount > 0 ? `<div class="story-like-count">❤️ ${likeCount}</div>` : ''}
+            `;
+            
+            storyDiv.onclick = () => {
+                if (user.isCurrentUser) {
+                    window.openNoteEditor();
+                } else if (hasNote) {
+                    window.viewNoteFull(note);
+                } else {
+                    // Mostrar mensaje que no tiene nota
+                    alert(`${user.nombre} aún no ha publicado ninguna nota.`);
+                }
+            };
+            
+            return storyDiv;
+        }
+
+        window.closeNoteModal = function() {
+            const modal = document.getElementById('noteModal');
+            const noteEditText = document.getElementById('noteEditText');
+
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            if (noteEditText) {
+                noteEditText.value = '';
+            }
+            window.currentNoteId = null;
+            window.currentNoteLocal = false;
+            const likeBar = document.getElementById('noteLikeBar');
+            if (likeBar) likeBar.style.display = 'none';
+
+            // Volver a la pantalla que se ve tras iniciar sesión
+            const authContainer = document.getElementById('authContainer');
+            const gameContainer = document.getElementById('gameContainer');
+            const difficultySelector = document.getElementById('difficultySelector');
+            const gameTypeSelector = document.getElementById('gameTypeSelector');
+            const banderasLevelsSection = document.getElementById('banderasLevelsSection');
+            const juegosMartSection = document.getElementById('juegosMartSection');
+            const banderasRankingContainer = document.getElementById('banderasRankingContainer');
+            const martRankingContainer = document.getElementById('martRankingContainer');
+
+            if (authContainer) authContainer.style.display = 'none';
+            if (gameContainer) gameContainer.style.display = 'block';
+            if (difficultySelector) difficultySelector.style.display = 'block';
+            if (gameTypeSelector) gameTypeSelector.style.display = 'block';
+            if (banderasLevelsSection) banderasLevelsSection.style.display = 'none';
+            if (juegosMartSection) juegosMartSection.style.display = 'none';
+            if (banderasRankingContainer) banderasRankingContainer.style.display = 'none';
+            if (martRankingContainer) martRankingContainer.style.display = 'none';
+            document.body.classList.add('difficulty-selector-active');
+        };
+
+        window.openNoteEditor = async function() {
+            // Verificar si el modal existe, si no, recrearlo
+            let modal = document.getElementById('noteModal');
+            if (!modal) {
+                recreateNoteModal();
+                modal = document.getElementById('noteModal');
+            }
+            
+            const viewAuthor = document.getElementById('noteViewAuthor');
+            const editHeader = document.getElementById('noteEditHeader');
+            const modalBody = document.getElementById('noteModalBody');
+            const editContainer = document.getElementById('noteEditContainer');
+            const noteEditText = document.getElementById('noteEditText');
+            const likeBar = document.getElementById('noteLikeBar');
+            
+            // Ocultar vista de autor, mostrar edición
+            viewAuthor.style.display = 'none';
+            editHeader.style.display = 'block';
+            modalBody.style.display = 'none';
+            editContainer.style.display = 'block';
+            if (likeBar) likeBar.style.display = 'none';
+            window.currentNoteId = null;
+            window.currentNoteLocal = false;
+            
+            // Cargar nota actual si existe
+            try {
+                const notesRef = collection(db, "notas");
+                const q = query(notesRef, where("autorUid", "==", window.currentUser.uid));
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    const userNote = querySnapshot.docs[0].data();
+                    noteEditText.value = userNote.contenido || '';
+                } else {
+                    noteEditText.value = '';
+                }
+            } catch (error) {
+                console.error('Error al cargar nota del usuario:', error);
+                noteEditText.value = '';
+            }
+            
+            modal.style.display = 'flex';
+        };
+
+        window.viewNoteFull = function(note) {
+            // Verificar si el modal existe, si no, recrearlo
+            let modal = document.getElementById('noteModal');
+            if (!modal) {
+                recreateNoteModal();
+                modal = document.getElementById('noteModal');
+            }
+            
+            const viewAuthor = document.getElementById('noteViewAuthor');
+            const editHeader = document.getElementById('noteEditHeader');
+            const modalBody = document.getElementById('noteModalBody');
+            const editContainer = document.getElementById('noteEditContainer');
+            const likeBar = document.getElementById('noteLikeBar');
+            
+            // Mostrar vista de autor, ocultar edición
+            viewAuthor.style.display = 'flex';
+            editHeader.style.display = 'none';
+            modalBody.style.display = 'block';
+            editContainer.style.display = 'none';
+            if (likeBar) likeBar.style.display = 'flex';
+            
+            // Configurar información del autor
+            const authorAvatarImg = document.getElementById('noteModalAuthorAvatarImg');
+            const authorAvatarPlaceholder = document.getElementById('noteModalAuthorAvatarPlaceholder');
+            const authorName = document.getElementById('noteModalAuthorName');
+            const timeElement = document.getElementById('noteModalTime');
+            
+            if (note.autorFoto) {
+                authorAvatarImg.src = note.autorFoto;
+                authorAvatarImg.style.display = 'block';
+                authorAvatarPlaceholder.style.display = 'none';
+            } else {
+                authorAvatarImg.style.display = 'none';
+                authorAvatarPlaceholder.style.display = 'block';
+            }
+            
+            authorName.textContent = note.autorNombre;
+            timeElement.textContent = getTimeAgo(note.fechaCreacion);
+            
+            // Mostrar contenido de la nota
+            modalBody.textContent = note.contenido || 'Sin contenido';
+
+            const isLocal = !!(note.localMode || !note.id);
+            window.currentNoteId = note.id || ('local-' + (note.autorUid || 'unknown'));
+            window.currentNoteLocal = isLocal;
+            window.loadNotaLikes(window.currentNoteId, isLocal);
+            
+            modal.style.display = 'flex';
+        };
+
+        window.saveNote = async function() {
+            console.log('saveNote() llamada - Iniciando proceso de guardado');
+            
+            const noteEditText = document.getElementById('noteEditText');
+            console.log('Textarea encontrado:', noteEditText);
+            
+            if (!noteEditText) {
+                console.error('No se encontró el textarea noteEditText');
+                return;
+            }
+            
+            const content = noteEditText.value.trim();
+            console.log('Contenido a guardar:', content);
+            
+            if (!content) {
+                console.log('Contenido vacío, mostrando alert');
+                alert('Por favor, escribe algo en tu nota.');
+                return;
+            }
+            
+            // Usar Firebase siempre que esté disponible (aunque sea file://).
+            // Solo usar localStorage si Firestore no está disponible o si falla el guardado.
+            const canUseFirebase = !!window.db;
+            
+            try {
+                // Deshabilitar botón para evitar doble clic
+                const saveBtn = document.getElementById('noteSaveBtn');
+                if (saveBtn) {
+                    saveBtn.disabled = true;
+                    saveBtn.textContent = 'Guardando...';
+                    console.log('Botón deshabilitado');
+                }
+                
+                if (!canUseFirebase) {
+                    console.log('Firebase no disponible, usando localStorage');
+                    
+                    // Guardar en localStorage como fallback
+                    const autorFoto = window.currentUser ? await window.getCurrentUserPhotoForNotes() : '';
+                    const noteData = {
+                        contenido: content,
+                        autorUid: window.currentUser?.uid || 'local-user',
+                        autorNombre: window.currentUser?.displayName || 'Usuario Local',
+                        autorFoto,
+                        fechaCreacion: Date.now(),
+                        localMode: true
+                    };
+                    
+                    localStorage.setItem('userNote', JSON.stringify(noteData));
+                    console.log('Nota guardada en localStorage');
+                    
+                } else {
+                    console.log('Iniciando guardado en Firebase...');
+                    
+                    const notesRef = collection(db, "notas");
+                    const q = query(notesRef, where("autorUid", "==", window.currentUser.uid));
+                    const querySnapshot = await getDocs(q);
+                    
+                    const autorFoto = await window.getCurrentUserPhotoForNotes();
+                    const noteData = {
+                        contenido: content,
+                        autorUid: window.currentUser.uid,
+                        autorNombre: window.currentUser.displayName || 'Usuario',
+                        autorFoto,
+                        fechaCreacion: Date.now()
+                    };
+                    
+                    if (querySnapshot.empty) {
+                        // Crear nueva nota
+                        await addDoc(notesRef, { ...noteData, likesCount: 0 });
+                    } else {
+                        // Actualizar nota existente (no tocar likesCount)
+                        const docRef = doc(db, "notas", querySnapshot.docs[0].id);
+                        await updateDoc(docRef, noteData);
+                    }
+                    console.log('Nota guardada en Firebase');
+                }
+                
+                if (window.closeNoteModal) {
+                    window.closeNoteModal();
+                }
+                
+                // Mostrar mensaje de éxito
+                const successMsg = document.createElement('div');
+                successMsg.textContent = '✅ ¡Nota guardada exitosamente!';
+                successMsg.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+                    z-index: 10000;
+                    font-weight: 600;
+                `;
+                document.body.appendChild(successMsg);
+                
+                // Remover mensaje después de 3 segundos
+                setTimeout(() => {
+                    if (successMsg.parentNode) {
+                        successMsg.parentNode.removeChild(successMsg);
+                    }
+                }, 3000);
+                
+                // Recargar notas después de cerrar
+                setTimeout(() => {
+                    if (window.loadNotes) {
+                        window.loadNotes();
+                    }
+                }, 200);
+                
+            } catch (error) {
+                console.error('Error al guardar la nota:', error);
+                
+                // Intentar guardar en localStorage como fallback
+                try {
+                        const autorFoto = window.currentUser ? await window.getCurrentUserPhotoForNotes() : '';
+                    const noteData = {
+                        contenido: content,
+                        autorUid: window.currentUser?.uid || 'local-user',
+                        autorNombre: window.currentUser?.displayName || 'Usuario Local',
+                            autorFoto,
+                        fechaCreacion: Date.now(),
+                        localMode: true,
+                        error: error.message
+                    };
+                    
+                    localStorage.setItem('userNote', JSON.stringify(noteData));
+                    console.log('Nota guardada en localStorage como fallback');
+                    
+                    // Cerrar modal
+                    const modal = document.getElementById('noteModal');
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                    
+                    // Limpiar textarea
+                    noteEditText.value = '';
+                    
+                    alert('✅ Nota guardada localmente (sin conexión a Firebase)');
+                    
+                } catch (localError) {
+                    console.error('Error al guardar en localStorage:', localError);
+                    alert('Error al guardar la nota. Por favor, intenta de nuevo.');
+                }
+            } finally {
+                // Rehabilitar botón
+                const saveBtn = document.getElementById('noteSaveBtn');
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = '💾 Guardar Nota';
+                }
+            }
+        };
+
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            
+            if (seconds < 60) return 'ahora';
+            if (seconds < 3600) return `hace ${Math.floor(seconds / 60)} min`;
+            if (seconds < 86400) return `hace ${Math.floor(seconds / 3600)} h`;
+            if (seconds < 604800) return `hace ${Math.floor(seconds / 86400)} días`;
+            return `hace ${Math.floor(seconds / 604800)} semanas`;
+        }
+
+        function recreateNoteModal() {
+            const modalHTML = `
+                <div class="note-modal" id="noteModal" style="display: none;">
+                    <div class="note-modal-content">
+                        <div class="note-modal-header">
+                            <div class="note-view-author" id="noteViewAuthor" style="display: none;">
+                                <div class="note-author-avatar" id="noteModalAuthorAvatar">
+                                    <img id="noteModalAuthorAvatarImg" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; display: none;">
+                                    <div id="noteModalAuthorAvatarPlaceholder" style="width: 60px; height: 60px; border-radius: 50%; background: #667eea; display: flex; align-items: center; justify-content: center; font-size: 24px;">👤</div>
+                                </div>
+                                <div class="note-author-info">
+                                    <div class="note-author-name" id="noteModalAuthorName"></div>
+                                    <div class="note-time" id="noteModalTime"></div>
+                                </div>
+                                <div class="note-edit-header" id="noteEditHeader" style="display: none;">
+                                    <h3>📝 Tu Nota</h3>
+                                </div>
+                                <button class="note-modal-close" id="noteModalClose">✕</button>
+                            </div>
+                            <div class="note-modal-body" id="noteModalBody"></div>
+                            <div class="note-like-bar" id="noteLikeBar" style="display: none;">
+                                <button type="button" class="note-like-btn" id="noteLikeBtn">
+                                    <span class="note-like-icon">🤍</span>
+                                    <span class="note-like-count" id="noteLikeCount">0</span>
+                                    <span class="note-like-label">Me gusta</span>
+                                </button>
+                            </div>
+                            <div class="note-edit-container" id="noteEditContainer" style="display: none;">
+                                <textarea id="noteEditText" placeholder="Escribe tu nota aquí..." rows="4"></textarea>
+                                <div class="note-buttons-container">
+                                    <button type="button" class="note-cancel-btn" id="noteCancelBtn">❌ Cancelar</button>
+                                    <button type="button" class="note-save-btn" id="noteSaveBtn">💾 Guardar Nota</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Insertar el modal antes del cierre del body
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            console.log('Modal recreado exitosamente');
+        }
     </script>
+
+    <!-- Modal para ver/editar nota -->
+    <div class="note-modal" id="noteModal" style="display: none;">
+        <div class="note-modal-content">
+            <div class="note-modal-header">
+                <div class="note-view-author" id="noteViewAuthor" style="display: none;">
+                    <div class="note-author-avatar" id="noteModalAuthorAvatar">
+                        <img id="noteModalAuthorAvatarImg" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; display: none;">
+                        <div id="noteModalAuthorAvatarPlaceholder" style="width: 60px; height: 60px; border-radius: 50%; background: #667eea; display: flex; align-items: center; justify-content: center; font-size: 24px;">👤</div>
+                    </div>
+                    <div class="note-author-info">
+                        <div class="note-author-name" id="noteModalAuthorName"></div>
+                        <div class="note-time" id="noteModalTime"></div>
+                    </div>
+                    <div class="note-edit-header" id="noteEditHeader" style="display: none;">
+                        <h3>📝 Tu Nota</h3>
+                    </div>
+                    <button class="note-modal-close" id="noteModalClose">✕</button>
+                </div>
+                <div class="note-modal-body" id="noteModalBody"></div>
+                <div class="note-like-bar" id="noteLikeBar" style="display: none;">
+                    <button type="button" class="note-like-btn" id="noteLikeBtn">
+                        <span class="note-like-icon">🤍</span>
+                        <span class="note-like-count" id="noteLikeCount">0</span>
+                        <span class="note-like-label">Me gusta</span>
+                    </button>
+                </div>
+                <div class="note-edit-container" id="noteEditContainer" style="display: none;">
+                    <textarea id="noteEditText" placeholder="Escribe tu nota aquí..." rows="4"></textarea>
+                    <div class="note-buttons-container">
+                        <button type="button" class="note-cancel-btn" id="noteCancelBtn">❌ Cancelar</button>
+                        <button type="button" class="note-save-btn" id="noteSaveBtn">💾 Guardar Nota</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
-
