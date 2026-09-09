@@ -6124,15 +6124,16 @@
         }
 
         .comment-author {
-            display: inline;
+            display: block;
             font-weight: 600;
             color: #2d3748;
-            margin: 0 6px 0 0;
+            margin: 0 0 2px;
             font-size: 0.88em;
+            line-height: 1.3;
         }
 
         .comment-text {
-            display: inline;
+            display: block;
             color: #2d3748;
             word-wrap: break-word;
             overflow-wrap: anywhere;
@@ -23383,11 +23384,11 @@
                 if (biblioteca.length > 0) {
                     for (let index = 0; index < biblioteca.length; index++) {
                         const item = biblioteca[index];
-                        const { imagen } = getLibraryImageData(item);
+                        const { imagen, fotoId: storedFotoId } = getLibraryImageData(item);
                         if (!imagen) continue;
-                        const fotoId = await generateFotoId(imagen, userId, index);
-                        const lastViewed = getFotoLastViewed(fotosVistas, fotoId, userId);
-                        const unread = await countUnreadFotoInteractions(fotoId, lastViewed, userId);
+                        const identity = await resolveFotoIdentity(imagen, userId, index, storedFotoId);
+                        const lastViewed = getFotoLastViewedForIds(fotosVistas, identity.aliasIds, userId);
+                        const unread = await countUnreadFotoInteractions(identity.aliasIds, lastViewed, userId);
                         unreadLikes += unread.likes;
                         unreadComments += unread.comments;
                     }
@@ -23917,22 +23918,27 @@
                 const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
                 const biblioteca = userDoc.exists() ? (userDoc.data().biblioteca || []) : [];
                 
-                biblioteca.push(description
-                    ? { imagen: compressedBase64, descripcion: description }
-                    : compressedBase64);
-                
-                await updateDoc(doc(db, "usuarios", window.currentUser.uid), {
-                    biblioteca: biblioteca
-                });
-
+                const visibilidad = visibility === 'publica' ? 'publica' : 'privada';
                 const userName = await window.getCurrentUserAppName();
-                await addDoc(collection(db, 'fotos'), {
+                const fotoRef = await addDoc(collection(db, 'fotos'), {
                     imagen: compressedBase64,
                     userId: window.currentUser.uid,
                     nombreUsuario: userName,
                     descripcion: description,
-                    visibilidad: visibility === 'publica' ? 'publica' : 'privada',
+                    visibilidad,
                     fechaCreacion: Date.now()
+                });
+
+                const bibliotecaItem = {
+                    imagen: compressedBase64,
+                    fotoId: fotoRef.id,
+                    visibilidad
+                };
+                if (description) bibliotecaItem.descripcion = description;
+                biblioteca.push(bibliotecaItem);
+                
+                await updateDoc(doc(db, "usuarios", window.currentUser.uid), {
+                    biblioteca: biblioteca
                 });
                 
                 // Recargar biblioteca
@@ -23967,12 +23973,12 @@
             return (data.timestamp || 0) > lastViewed;
         }
 
-        async function countUnreadFotoInteractions(fotoId, lastViewed, currentUserId) {
-            const likesSnapshot = await getDocs(query(collection(db, "fotoLikes"), where("fotoId", "==", fotoId)));
-            const commentsSnapshot = await getDocs(query(collection(db, "fotoComentarios"), where("fotoId", "==", fotoId)));
-            const likes = likesSnapshot.docs.filter(docSnap => interactionIsUnread(docSnap.data(), lastViewed, currentUserId)).length;
-            const comments = commentsSnapshot.docs.filter(docSnap => interactionIsUnread(docSnap.data(), lastViewed, currentUserId)).length;
-            return { likes, comments, likesSnapshot, commentsSnapshot };
+        async function countUnreadFotoInteractions(fotoIdOrIds, lastViewed, currentUserId) {
+            const likesDocs = await getDocsForFotoIds('fotoLikes', Array.isArray(fotoIdOrIds) ? fotoIdOrIds : [fotoIdOrIds]);
+            const commentsDocs = await getDocsForFotoIds('fotoComentarios', Array.isArray(fotoIdOrIds) ? fotoIdOrIds : [fotoIdOrIds]);
+            const likes = likesDocs.filter(docSnap => interactionIsUnread(docSnap.data(), lastViewed, currentUserId)).length;
+            const comments = commentsDocs.filter(docSnap => interactionIsUnread(docSnap.data(), lastViewed, currentUserId)).length;
+            return { likes, comments };
         }
 
         async function markFotoAsViewed(fotoId) {
@@ -24003,10 +24009,121 @@
             if (item && typeof item === 'object') {
                 return {
                     imagen: item.imagen || '',
-                    descripcion: item.descripcion || ''
+                    descripcion: item.descripcion || '',
+                    fotoId: item.fotoId || '',
+                    visibilidad: item.visibilidad || ''
                 };
             }
-            return { imagen: item || '', descripcion: '' };
+            return { imagen: item || '', descripcion: '', fotoId: '', visibilidad: '' };
+        }
+
+        function isFirestoreFotoId(fotoId) {
+            return Boolean(fotoId) && !String(fotoId).startsWith('foto_');
+        }
+
+        async function getDocsForFotoIds(collectionName, fotoIds) {
+            const uniqueIds = [...new Set((fotoIds || []).filter(Boolean))];
+            const docsById = new Map();
+            for (const fotoId of uniqueIds) {
+                const snapshot = await getDocs(query(collection(db, collectionName), where('fotoId', '==', fotoId)));
+                snapshot.docs.forEach(docSnap => docsById.set(docSnap.id, docSnap));
+            }
+            return [...docsById.values()];
+        }
+
+        function getCurrentFotoInteractionIds(fallbackFotoId) {
+            const ids = new Set();
+            if (fallbackFotoId) ids.add(fallbackFotoId);
+            if (window.currentFotoId) ids.add(window.currentFotoId);
+            (window.currentFotoAliasIds || []).forEach(id => ids.add(id));
+            return [...ids];
+        }
+
+        async function resolveFotoIdentity(imageBase64, ownerId, index = null, storedFotoId = '') {
+            const aliasIds = new Set();
+            if (storedFotoId) aliasIds.add(storedFotoId);
+
+            let resolvedIndex = typeof index === 'number' ? index : -1;
+            if (resolvedIndex < 0 && ownerId && imageBase64) {
+                try {
+                    const ownerDoc = await getDoc(doc(db, 'usuarios', ownerId));
+                    const biblioteca = ownerDoc.exists() ? (ownerDoc.data().biblioteca || []) : [];
+                    resolvedIndex = biblioteca.findIndex(item => getLibraryImageData(item).imagen === imageBase64);
+                    const matched = resolvedIndex >= 0 ? getLibraryImageData(biblioteca[resolvedIndex]) : null;
+                    if (matched?.fotoId) aliasIds.add(matched.fotoId);
+                } catch (error) {
+                    console.warn('No se pudo resolver el índice de la foto:', error);
+                }
+            }
+
+            if (ownerId && imageBase64 && resolvedIndex >= 0) {
+                aliasIds.add(await generateFotoId(imageBase64, ownerId, resolvedIndex));
+            }
+
+            let canonicalId = isFirestoreFotoId(storedFotoId) ? storedFotoId : '';
+            if (ownerId && imageBase64) {
+                try {
+                    const snapshot = await getDocs(query(collection(db, 'fotos'), where('userId', '==', ownerId)));
+                    const matches = snapshot.docs.filter(fotoDoc => fotoDoc.data().imagen === imageBase64);
+                    if (canonicalId) {
+                        aliasIds.add(canonicalId);
+                    } else if (matches[0]) {
+                        canonicalId = matches[0].id;
+                        aliasIds.add(canonicalId);
+                    }
+                } catch (error) {
+                    console.warn('No se pudieron resolver las copias públicas de la foto:', error);
+                }
+            }
+
+            if (!canonicalId) {
+                canonicalId = storedFotoId || [...aliasIds][0] || '';
+            }
+            if (canonicalId) aliasIds.add(canonicalId);
+            return { canonicalId, aliasIds: [...aliasIds], index: resolvedIndex };
+        }
+
+        function getFotoLastViewedForIds(fotosVistas, fotoIds, userId) {
+            return (fotoIds || []).reduce((max, fotoId) => Math.max(max, getFotoLastViewed(fotosVistas, fotoId, userId)), 0);
+        }
+
+        async function deleteInteractionsForFotoId(fotoId) {
+            if (!fotoId) return;
+            const commentsSnapshot = await getDocs(query(collection(db, 'fotoComentarios'), where('fotoId', '==', fotoId)));
+            for (const commentDoc of commentsSnapshot.docs) {
+                const commentLikesSnapshot = await getDocs(query(collection(db, 'comentarioLikes'), where('commentId', '==', commentDoc.id)));
+                await Promise.all(commentLikesSnapshot.docs.map(likeDoc => deleteDoc(likeDoc.ref)));
+                await deleteDoc(commentDoc.ref);
+            }
+            const likesSnapshot = await getDocs(query(collection(db, 'fotoLikes'), where('fotoId', '==', fotoId)));
+            await Promise.all(likesSnapshot.docs.map(likeDoc => deleteDoc(likeDoc.ref)));
+        }
+
+        async function deleteFotoCopiesAndInteractions(userId, imageBase64, identity) {
+            const ids = new Set(identity?.aliasIds || []);
+            if (identity?.canonicalId) ids.add(identity.canonicalId);
+
+            let remainingUsesSameImage = false;
+            if (userId) {
+                const userDoc = await getDoc(doc(db, 'usuarios', userId));
+                const remaining = userDoc.exists() ? (userDoc.data().biblioteca || []) : [];
+                remainingUsesSameImage = remaining.some(item => getLibraryImageData(item).imagen === imageBase64);
+            }
+
+            if (userId) {
+                const snapshot = await getDocs(query(collection(db, 'fotos'), where('userId', '==', userId)));
+                for (const fotoDoc of snapshot.docs) {
+                    const isKnownId = ids.has(fotoDoc.id);
+                    const isOrphanPublicCopy = !remainingUsesSameImage && imageBase64 && fotoDoc.data().imagen === imageBase64;
+                    if (isKnownId || isOrphanPublicCopy) {
+                        ids.add(fotoDoc.id);
+                        await deleteDoc(fotoDoc.ref);
+                    }
+                }
+            }
+            for (const fotoId of ids) {
+                await deleteInteractionsForFotoId(fotoId);
+            }
         }
 
         async function resolveFotoDescription(imageBase64, ownerId, fotoId, fallback = '') {
@@ -24041,7 +24158,7 @@
                 
                 // Usar Promise.all para esperar a que se generen todos los fotoIds
                 const items = await Promise.all(biblioteca.map(async (item, index) => {
-                    const { imagen: imageBase64, descripcion } = getLibraryImageData(item);
+                    const { imagen: imageBase64, descripcion, fotoId: storedFotoId } = getLibraryImageData(item);
                     const libraryItem = document.createElement('div');
                     libraryItem.className = 'library-item';
                     
@@ -24059,17 +24176,15 @@
                         }
                     };
                     
-                    // Generar fotoId único
-                    const fotoId = await generateFotoId(imageBase64, window.currentUser.uid, index);
-                    console.log(`Foto ${index} - fotoId generado:`, fotoId);
+                    const identity = await resolveFotoIdentity(imageBase64, window.currentUser.uid, index, storedFotoId);
+                    const fotoId = identity.canonicalId;
+                    console.log(`Foto ${index} - fotoId:`, fotoId);
                     
-                    // Guardar fotoId en el elemento para poder encontrarlo después
                     libraryItem.setAttribute('data-foto-id', fotoId);
                     
-                    // Marcar en rojo solo si hay likes o comentarios nuevos desde la última visita
                     try {
-                        const lastViewed = getFotoLastViewed(userDoc.exists() ? (userDoc.data().fotosVistas || {}) : {}, fotoId, window.currentUser.uid);
-                        const unread = await countUnreadFotoInteractions(fotoId, lastViewed, window.currentUser.uid);
+                        const lastViewed = getFotoLastViewedForIds(userDoc.exists() ? (userDoc.data().fotosVistas || {}) : {}, identity.aliasIds, window.currentUser.uid);
+                        const unread = await countUnreadFotoInteractions(identity.aliasIds, lastViewed, window.currentUser.uid);
                         if (unread.likes > 0 || unread.comments > 0) {
                             libraryItem.classList.add('has-interactions');
                         }
@@ -24080,7 +24195,7 @@
                     libraryItem.onclick = async () => {
                         console.log('Click en foto, abriendo con fotoId:', fotoId);
                         libraryItem.classList.remove('has-interactions');
-                        await window.showLibraryImage(imageBase64, fotoId, window.currentUser.uid, descripcion);
+                        await window.showLibraryImage(imageBase64, fotoId, window.currentUser.uid, descripcion, index);
                     };
                     
                     libraryItem.appendChild(img);
@@ -24123,7 +24238,7 @@
                 
                 // Usar Promise.all para esperar a que se generen todos los fotoIds
                 const items = await Promise.all(biblioteca.map(async (item, index) => {
-                    const { imagen: imageBase64, descripcion } = getLibraryImageData(item);
+                    const { imagen: imageBase64, descripcion, fotoId: storedFotoId } = getLibraryImageData(item);
                     const libraryItem = document.createElement('div');
                     libraryItem.className = 'friend-library-item';
                     
@@ -24131,13 +24246,13 @@
                     img.src = imageBase64;
                     img.alt = 'Foto de biblioteca';
                     
-                    // Generar fotoId único
-                    const fotoId = await generateFotoId(imageBase64, friendId, index);
-                    console.log(`Foto amigo ${index} - fotoId generado:`, fotoId);
+                    const identity = await resolveFotoIdentity(imageBase64, friendId, index, storedFotoId);
+                    const fotoId = identity.canonicalId;
+                    console.log(`Foto amigo ${index} - fotoId:`, fotoId);
                     
                     libraryItem.onclick = async () => {
                         console.log('Click en foto de amigo, abriendo con fotoId:', fotoId);
-                        await window.showLibraryImage(imageBase64, fotoId, friendId, descripcion);
+                        await window.showLibraryImage(imageBase64, fotoId, friendId, descripcion, index);
                     };
                     
                     libraryItem.appendChild(img);
@@ -24157,15 +24272,24 @@
             try {
                 const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
                 const biblioteca = userDoc.exists() ? (userDoc.data().biblioteca || []) : [];
+                const removed = biblioteca[index];
+                if (!removed) return false;
+
+                const { imagen, fotoId: storedFotoId } = getLibraryImageData(removed);
+                const identity = await resolveFotoIdentity(imagen, window.currentUser.uid, index, storedFotoId);
                 
                 biblioteca.splice(index, 1);
                 
                 await updateDoc(doc(db, "usuarios", window.currentUser.uid), {
                     biblioteca: biblioteca
                 });
-                
-                // Recargar biblioteca
+
+                await deleteFotoCopiesAndInteractions(window.currentUser.uid, imagen, identity);
+
                 await window.loadLibrary();
+                if (window.loadPublicPosts) {
+                    await window.loadPublicPosts();
+                }
                 
                 return true;
             } catch (error) {
@@ -24195,21 +24319,27 @@
         }
 
         // Mostrar imagen en grande
-        window.showLibraryImage = async function(imageBase64, fotoId = null, ownerId = null, description = '') {
+        window.showLibraryImage = async function(imageBase64, fotoId = null, ownerId = null, description = '', bibliotecaIndex = null) {
             const modal = document.getElementById('libraryImageModal');
             const modalImg = document.getElementById('libraryImageModalImg');
             const descriptionEl = document.getElementById('libraryImageDescriptionView');
             
             if (modal && modalImg) {
+                const identity = ownerId && imageBase64
+                    ? await resolveFotoIdentity(imageBase64, ownerId, bibliotecaIndex, fotoId)
+                    : { canonicalId: fotoId, aliasIds: fotoId ? [fotoId] : [] };
+                const resolvedFotoId = identity.canonicalId || fotoId;
+
                 modalImg.src = imageBase64;
-                window.currentFotoId = fotoId;
+                window.currentFotoId = resolvedFotoId;
+                window.currentFotoAliasIds = identity.aliasIds || [];
                 window.currentFotoOwnerId = ownerId;
                 window.currentImageBase64 = imageBase64; // Guardar para la vista ampliada
                 if (descriptionEl) descriptionEl.textContent = description || '';
-                console.log('Mostrando imagen, fotoId:', fotoId, 'ownerId:', ownerId);
+                console.log('Mostrando imagen, fotoId:', resolvedFotoId, 'ownerId:', ownerId, 'aliases:', window.currentFotoAliasIds);
                 modal.style.display = 'flex';
                 if (descriptionEl && !description) {
-                    descriptionEl.textContent = await resolveFotoDescription(imageBase64, ownerId, fotoId, description);
+                    descriptionEl.textContent = await resolveFotoDescription(imageBase64, ownerId, resolvedFotoId, description);
                 }
                 
                 // Agregar evento click en la imagen para vista ampliada
@@ -24221,12 +24351,12 @@
                 }
                 
                 // Cargar likes y comentarios si hay fotoId
-                if (fotoId) {
+                if (resolvedFotoId) {
                     try {
-                        await loadFotoLikes(fotoId);
-                        await loadFotoComments(fotoId);
+                        await loadFotoLikes(resolvedFotoId);
+                        await loadFotoComments(resolvedFotoId);
                         if (window.currentUser && ownerId === window.currentUser.uid) {
-                            await markFotoAsViewed(fotoId);
+                            await markFotoAsViewed(resolvedFotoId);
                         }
                     } catch (error) {
                         console.error('Error al cargar likes/comentarios:', error);
@@ -24272,6 +24402,7 @@
             if (modal) {
                 modal.style.display = 'none';
                 window.currentFotoId = null;
+                window.currentFotoAliasIds = [];
                 window.currentFotoOwnerId = null;
                 window.currentImageBase64 = null;
             }
@@ -24296,11 +24427,11 @@
                 const userId = window.currentUser.uid;
                 console.log('toggleFotoLike: Buscando like para fotoId:', fotoId, 'userId:', userId);
                 const likesRef = collection(db, "fotoLikes");
-                const q = query(likesRef, where("fotoId", "==", fotoId), where("userId", "==", userId));
-                const snapshot = await getDocs(q);
-                
-                if (snapshot.empty) {
-                    // No hay like, agregar uno
+                const interactionIds = getCurrentFotoInteractionIds(fotoId);
+                const existingLikes = await getDocsForFotoIds('fotoLikes', interactionIds);
+                const userLikes = existingLikes.filter(docSnap => docSnap.data().userId === userId);
+
+                if (userLikes.length === 0) {
                     console.log('toggleFotoLike: Agregando like');
                     await addDoc(likesRef, {
                         fotoId: fotoId,
@@ -24308,12 +24439,8 @@
                         timestamp: Date.now()
                     });
                 } else {
-                    // Ya hay like, eliminarlo
                     console.log('toggleFotoLike: Eliminando like');
-                    const deletePromises = snapshot.docs.map(docSnapshot => 
-                        deleteDoc(doc(db, "fotoLikes", docSnapshot.id))
-                    );
-                    await Promise.all(deletePromises);
+                    await Promise.all(userLikes.map(docSnapshot => deleteDoc(docSnapshot.ref)));
                 }
                 
                 // Recargar likes
@@ -24331,11 +24458,9 @@
             if (!fotoId) return;
             
             try {
-                const likesRef = collection(db, "fotoLikes");
-                const q = query(likesRef, where("fotoId", "==", fotoId));
-                const snapshot = await getDocs(q);
+                const likesDocs = await getDocsForFotoIds('fotoLikes', getCurrentFotoInteractionIds(fotoId));
                 
-                const likeCount = snapshot.size;
+                const likeCount = likesDocs.length;
                 const likeCountEl = document.getElementById('libraryImageLikeCount');
                 if (likeCountEl) {
                     likeCountEl.textContent = likeCount;
@@ -24343,7 +24468,7 @@
                 
                 // Verificar si el usuario actual dio like
                 if (window.currentUser) {
-                    const userLiked = snapshot.docs.some(doc => doc.data().userId === window.currentUser.uid);
+                    const userLiked = likesDocs.some(docSnap => docSnap.data().userId === window.currentUser.uid);
                     const likeBtn = document.getElementById('libraryImageLikeBtn');
                     if (likeBtn) {
                         if (userLiked) {
@@ -24361,9 +24486,8 @@
         // Agregar comentario a una foto (o respuesta a un comentario)
         window.addFotoComment = async function(fotoId, comentario, parentCommentId = null) {
             // Usar el fotoId del modal actual si no se proporciona uno
-            if (!fotoId && window.currentFotoId) {
+            if (window.currentFotoId) {
                 fotoId = window.currentFotoId;
-                console.log('addFotoComment: Usando fotoId del modal actual:', fotoId);
             }
             
             if (!window.currentUser || !fotoId || !comentario || comentario.trim() === '') {
@@ -24683,23 +24807,21 @@
             
             try {
                 console.log('loadFotoComments: Cargando comentarios para fotoId:', fotoId);
-                const comentariosRef = collection(db, "fotoComentarios");
-                const q = query(comentariosRef, where("fotoId", "==", fotoId));
-                const snapshot = await getDocs(q);
-                console.log('loadFotoComments: Encontrados', snapshot.size, 'comentarios para fotoId:', fotoId);
+                const commentDocs = await getDocsForFotoIds('fotoComentarios', getCurrentFotoInteractionIds(fotoId));
+                console.log('loadFotoComments: Encontrados', commentDocs.length, 'comentarios para fotoId:', fotoId);
                 
                 const commentsList = document.getElementById('libraryImageCommentsList');
                 if (!commentsList) return;
                 
                 commentsList.innerHTML = '';
                 
-                if (snapshot.empty) {
+                if (commentDocs.length === 0) {
                     commentsList.innerHTML = '<div style="text-align: center; color: #718096; padding: 12px 8px; font-size: 0.88em;">No hay comentarios aún. ¡Sé el primero!</div>';
                     return;
                 }
                 
                 // Separar comentarios principales de respuestas
-                const allComments = snapshot.docs.map(docSnapshot => ({
+                const allComments = commentDocs.map(docSnapshot => ({
                     id: docSnapshot.id,
                     ...docSnapshot.data()
                 }));
