@@ -5852,14 +5852,14 @@
 
         .library-image-container {
             flex: 0 0 auto;
-            min-height: 300px;
-            max-height: 60vh;
+            min-height: 180px;
+            max-height: 48vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             background: #000;
-            padding: 20px;
+            padding: 12px;
         }
 
         .library-image-container {
@@ -5972,10 +5972,10 @@
         .library-image-interactions {
             flex: 1 1 auto;
             min-height: 0;
-            padding: 20px;
-            overflow-y: auto;
-            border-top: 2px solid #e2e8f0;
-            background: #fafafa;
+            padding: 12px 14px 10px;
+            overflow: hidden;
+            border-top: 1px solid #e2e8f0;
+            background: #fff;
             display: flex;
             flex-direction: column;
         }
@@ -5999,19 +5999,20 @@
         }
 
         .library-image-likes {
-            margin-bottom: 20px;
+            margin-bottom: 8px;
+            flex-shrink: 0;
         }
 
         .like-btn {
             background: none;
-            border: 2px solid #e2e8f0;
-            border-radius: 25px;
-            padding: 8px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 4px 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 1em;
+            gap: 6px;
+            font-size: 0.9em;
             transition: all 0.3s ease;
         }
 
@@ -6034,17 +6035,27 @@
             color: #333;
         }
 
+        .library-image-comments {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
         .library-image-comments h4 {
-            margin-bottom: 15px;
+            margin: 0 0 8px;
             color: #333;
+            font-size: 0.95em;
+            flex-shrink: 0;
         }
 
         .comments-list {
             flex: 1 1 auto;
             min-height: 0;
             overflow-y: auto;
-            margin-bottom: 15px;
-            padding-right: 5px;
+            margin-bottom: 8px;
+            padding-right: 2px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .comments-list::-webkit-scrollbar {
@@ -6066,20 +6077,26 @@
         }
 
         .comment-item {
-            padding: 15px;
-            margin-bottom: 15px;
-            background: #f7fafc;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+            padding: 8px 0;
+            margin-bottom: 2px;
+            background: transparent;
+            border: none;
             display: flex;
-            gap: 12px;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: none;
+        }
+
+        .comment-main {
+            display: flex;
+            gap: 10px;
             align-items: flex-start;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            width: 100%;
         }
 
         .comment-profile-picture {
-            width: 45px;
-            height: 45px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             flex-shrink: 0;
             overflow: hidden;
@@ -6087,8 +6104,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #667eea;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: none;
+            box-shadow: none;
         }
 
         .comment-profile-picture img {
@@ -6098,7 +6115,7 @@
         }
 
         .comment-profile-picture .placeholder {
-            font-size: 1.5em;
+            font-size: 1.1em;
         }
 
         .comment-content {
@@ -6107,25 +6124,28 @@
         }
 
         .comment-author {
+            display: inline;
             font-weight: 600;
-            color: #667eea;
-            margin-bottom: 6px;
-            font-size: 0.95em;
+            color: #2d3748;
+            margin: 0 6px 0 0;
+            font-size: 0.88em;
         }
 
         .comment-text {
+            display: inline;
             color: #2d3748;
             word-wrap: break-word;
-            margin-bottom: 10px;
-            line-height: 1.5;
-            font-size: 0.9em;
+            overflow-wrap: anywhere;
+            margin: 0;
+            line-height: 1.4;
+            font-size: 0.88em;
         }
 
         .comment-actions {
             display: flex;
-            gap: 15px;
+            gap: 4px;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 4px;
             flex-wrap: wrap;
         }
 
@@ -6136,10 +6156,11 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.9em;
-            padding: 5px 10px;
-            border-radius: 15px;
+            gap: 4px;
+            font-size: 0.78em;
+            padding: 4px 6px;
+            min-height: 32px;
+            border-radius: 8px;
             transition: all 0.2s ease;
         }
 
@@ -6168,10 +6189,12 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.9em;
-            padding: 5px 10px;
-            border-radius: 15px;
+            gap: 4px;
+            font-size: 0.78em;
+            font-weight: 600;
+            padding: 4px 6px;
+            min-height: 32px;
+            border-radius: 8px;
             transition: all 0.2s ease;
         }
 
@@ -6183,14 +6206,15 @@
         .comment-delete-btn {
             background: none;
             border: none;
-            color: #718096;
+            color: #a0aec0;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.9em;
-            padding: 5px 10px;
-            border-radius: 15px;
+            gap: 4px;
+            font-size: 0.78em;
+            padding: 4px 6px;
+            min-height: 32px;
+            border-radius: 8px;
             transition: all 0.2s ease;
         }
 
@@ -6200,13 +6224,14 @@
         }
 
         .comment-replies {
-            margin-top: 15px;
-            margin-left: 55px;
-            padding-left: 20px;
-            padding-top: 5px;
-            border-left: 3px solid #cbd5e0;
+            margin-top: 2px;
+            margin-left: 16px;
+            padding-left: 10px;
+            padding-top: 0;
+            border-left: 2px solid #e2e8f0;
             position: relative;
             display: none;
+            width: auto;
         }
 
         .comment-replies.show {
@@ -6214,30 +6239,25 @@
         }
 
         .comment-replies::before {
-            content: '';
-            position: absolute;
-            left: -3px;
-            top: 0;
-            width: 3px;
-            height: 20px;
-            background: #667eea;
-            border-radius: 0 0 0 3px;
+            display: none;
         }
 
         .comment-replies-toggle {
-            margin-top: 10px;
-            margin-left: 55px;
-            padding: 8px 12px;
+            margin: 0 0 0 42px;
+            padding: 2px 4px;
             background: transparent;
             border: none;
             color: #667eea;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.78em;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             transition: all 0.2s ease;
             border-radius: 6px;
+            min-height: 28px;
+            align-self: flex-start;
         }
 
         .comment-replies-toggle:hover {
@@ -6260,41 +6280,41 @@
         }
 
         .comment-reply-item {
-            margin-bottom: 12px;
-            padding: 12px 15px;
-            background: #edf2f7;
-            border-radius: 8px;
-            border-left: 3px solid #a0aec0;
+            margin: 0 0 2px;
+            padding: 6px 0;
+            background: transparent;
+            border: none;
             display: flex;
-            gap: 12px;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 4px;
             position: relative;
-            margin-left: 0;
         }
 
         .comment-reply-item .comment-profile-picture {
-            width: 35px;
-            height: 35px;
-            border: 2px solid #a0aec0;
+            width: 26px;
+            height: 26px;
+            border: none;
         }
 
         .comment-reply-item .comment-author {
-            font-size: 0.9em;
-            color: #4a5568;
+            font-size: 0.84em;
+            color: #2d3748;
         }
 
         .comment-reply-item .comment-text {
-            font-size: 0.85em;
+            font-size: 0.84em;
+        }
+
+        .comment-reply-item .comment-replies-toggle {
+            margin-left: 36px;
         }
 
         .comment-reply-indicator {
-            font-size: 0.75em;
+            font-size: 0.72em;
             color: #718096;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             font-style: italic;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            display: block;
         }
 
         .comment-reply-indicator::before {
@@ -6304,27 +6324,27 @@
         }
 
         .comment-reply-input-container {
-            margin-top: 12px;
-            margin-left: 60px;
+            margin-top: 6px;
+            margin-left: 0;
             display: none;
         }
 
         .comment-reply-input-container.active {
             display: flex;
-            gap: 10px;
-            margin-top: 12px;
-            padding: 10px;
-            background: #f7fafc;
-            border-radius: 8px;
-            border-left: 3px solid #667eea;
+            gap: 8px;
+            margin-top: 6px;
+            padding: 0;
+            background: transparent;
+            border: none;
         }
 
         .comment-reply-input {
             flex: 1;
-            padding: 8px;
-            border: 2px solid #e2e8f0;
-            border-radius: 6px;
-            font-size: 0.9em;
+            min-width: 0;
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            font-size: 16px;
         }
 
         .comment-reply-input:focus {
@@ -6350,15 +6370,19 @@
 
         .comment-input-container {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-shrink: 0;
+            padding-top: 8px;
+            border-top: 1px solid #edf2f7;
         }
 
         .comment-input {
             flex: 1;
-            padding: 10px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1em;
+            min-width: 0;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 16px;
         }
 
         .comment-input:focus {
@@ -6367,11 +6391,11 @@
         }
 
         .comment-submit-btn {
-            padding: 10px 20px;
+            padding: 10px 16px;
             background: #667eea;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
             transition: background 0.3s ease;
@@ -6406,6 +6430,52 @@
             background: rgba(245, 101, 101, 0.9);
             transform: rotate(90deg) scale(1.1);
             box-shadow: 0 4px 12px rgba(245, 101, 101, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .library-image-modal {
+                align-items: stretch;
+                justify-content: stretch;
+            }
+
+            .library-image-modal-content {
+                max-width: 100%;
+                width: 100%;
+                height: 100%;
+                max-height: 100%;
+                border-radius: 0;
+            }
+
+            .library-image-container {
+                min-height: 0;
+                max-height: 36vh;
+                padding: 0;
+            }
+
+            .library-image-interactions {
+                padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+            }
+
+            .library-image-comments h4 {
+                font-size: 0.85em;
+                margin-bottom: 4px;
+            }
+
+            .comment-replies {
+                margin-left: 12px;
+                padding-left: 8px;
+            }
+
+            .comment-replies-toggle {
+                margin-left: 42px;
+            }
+
+            .comment-submit-btn,
+            .comment-reply-submit {
+                padding: 8px 12px;
+                font-size: 0.85em;
+                white-space: nowrap;
+            }
         }
 
         .profile-actions {
@@ -10442,12 +10512,13 @@
         }
 
         .library-image-description {
-            margin: 0 0 16px;
+            margin: 0 0 8px;
             color: #334155;
-            font-size: 0.95em;
-            line-height: 1.45;
+            font-size: 0.9em;
+            line-height: 1.4;
             white-space: pre-wrap;
             overflow-wrap: anywhere;
+            flex-shrink: 0;
         }
 
         .library-image-description:empty {
@@ -23301,37 +23372,24 @@
                     }
                 }
 
-                // 2. Verificar likes y comentarios en fotos del usuario
-                // Primero obtener todas las fotos del usuario
-                const fotosRef = collection(db, "fotos");
-                const fotosQuery = query(fotosRef, where("userId", "==", userId));
-                const fotosSnapshot = await getDocs(fotosQuery);
-                
+                // 2. Verificar likes y comentarios nuevos en fotos del usuario
                 let unreadLikes = 0;
                 let unreadComments = 0;
-                const fotosIds = [];
-                
-                fotosSnapshot.forEach(docSnapshot => {
-                    fotosIds.push(docSnapshot.id);
-                });
 
-                if (fotosIds.length > 0) {
-                    // Verificar likes nuevos (likes que el usuario no ha visto)
-                    // Por simplicidad, contamos todos los likes en las fotos del usuario
-                    // En una implementación más avanzada, se podría rastrear qué likes ya se vieron
-                    const likesRef = collection(db, "fotoLikes");
-                    for (const fotoId of fotosIds) {
-                        const likesQuery = query(likesRef, where("fotoId", "==", fotoId));
-                        const likesSnapshot = await getDocs(likesQuery);
-                        unreadLikes += likesSnapshot.size;
-                    }
+                const userForPhotos = await getDoc(doc(db, "usuarios", userId));
+                const fotosVistas = userForPhotos.exists() ? (userForPhotos.data().fotosVistas || {}) : {};
+                const biblioteca = userForPhotos.exists() ? (userForPhotos.data().biblioteca || []) : [];
 
-                    // Verificar comentarios nuevos
-                    const commentsRef = collection(db, "fotoComentarios");
-                    for (const fotoId of fotosIds) {
-                        const commentsQuery = query(commentsRef, where("fotoId", "==", fotoId));
-                        const commentsSnapshot = await getDocs(commentsQuery);
-                        unreadComments += commentsSnapshot.size;
+                if (biblioteca.length > 0) {
+                    for (let index = 0; index < biblioteca.length; index++) {
+                        const item = biblioteca[index];
+                        const { imagen } = getLibraryImageData(item);
+                        if (!imagen) continue;
+                        const fotoId = await generateFotoId(imagen, userId, index);
+                        const lastViewed = getFotoLastViewed(fotosVistas, fotoId, userId);
+                        const unread = await countUnreadFotoInteractions(fotoId, lastViewed, userId);
+                        unreadLikes += unread.likes;
+                        unreadComments += unread.comments;
                     }
                 }
 
@@ -23888,6 +23946,59 @@
             }
         };
 
+        function getFotoVistaStorageKey(userId, fotoId) {
+            return `banderas_fotoVista_${userId}_${fotoId}`;
+        }
+
+        function getFotoLastViewed(fotosVistas, fotoId, userId) {
+            const stored = fotosVistas && fotosVistas[fotoId] != null ? Number(fotosVistas[fotoId]) : 0;
+            let local = 0;
+            try {
+                local = parseInt(localStorage.getItem(getFotoVistaStorageKey(userId, fotoId)) || '0', 10) || 0;
+            } catch (error) {
+                local = 0;
+            }
+            return Math.max(Number.isFinite(stored) ? stored : 0, local);
+        }
+
+        function interactionIsUnread(data, lastViewed, currentUserId) {
+            if (!data) return false;
+            if (currentUserId && data.userId === currentUserId) return false;
+            return (data.timestamp || 0) > lastViewed;
+        }
+
+        async function countUnreadFotoInteractions(fotoId, lastViewed, currentUserId) {
+            const likesSnapshot = await getDocs(query(collection(db, "fotoLikes"), where("fotoId", "==", fotoId)));
+            const commentsSnapshot = await getDocs(query(collection(db, "fotoComentarios"), where("fotoId", "==", fotoId)));
+            const likes = likesSnapshot.docs.filter(docSnap => interactionIsUnread(docSnap.data(), lastViewed, currentUserId)).length;
+            const comments = commentsSnapshot.docs.filter(docSnap => interactionIsUnread(docSnap.data(), lastViewed, currentUserId)).length;
+            return { likes, comments, likesSnapshot, commentsSnapshot };
+        }
+
+        async function markFotoAsViewed(fotoId) {
+            if (!window.currentUser || !fotoId) return;
+            const userId = window.currentUser.uid;
+            const viewedAt = Date.now();
+            try {
+                localStorage.setItem(getFotoVistaStorageKey(userId, fotoId), String(viewedAt));
+            } catch (error) {
+                console.warn('No se pudo guardar la foto vista en local:', error);
+            }
+            document.querySelectorAll(`[data-foto-id="${fotoId}"]`).forEach(item => {
+                item.classList.remove('has-interactions');
+            });
+            try {
+                await updateDoc(doc(db, "usuarios", userId), {
+                    [`fotosVistas.${fotoId}`]: viewedAt
+                });
+            } catch (error) {
+                console.warn('No se pudo guardar la foto vista:', error);
+            }
+            if (window.loadProfileNotifications) {
+                window.loadProfileNotifications();
+            }
+        }
+
         function getLibraryImageData(item) {
             if (item && typeof item === 'object') {
                 return {
@@ -23955,19 +24066,11 @@
                     // Guardar fotoId en el elemento para poder encontrarlo después
                     libraryItem.setAttribute('data-foto-id', fotoId);
                     
-                    // Verificar si esta foto tiene interacciones (likes o comentarios)
+                    // Marcar en rojo solo si hay likes o comentarios nuevos desde la última visita
                     try {
-                        const likesRef = collection(db, "fotoLikes");
-                        const likesQuery = query(likesRef, where("fotoId", "==", fotoId));
-                        const likesSnapshot = await getDocs(likesQuery);
-                        const hasLikes = likesSnapshot.size > 0;
-                        
-                        const commentsRef = collection(db, "fotoComentarios");
-                        const commentsQuery = query(commentsRef, where("fotoId", "==", fotoId));
-                        const commentsSnapshot = await getDocs(commentsQuery);
-                        const hasComments = commentsSnapshot.size > 0;
-                        
-                        if (hasLikes || hasComments) {
+                        const lastViewed = getFotoLastViewed(userDoc.exists() ? (userDoc.data().fotosVistas || {}) : {}, fotoId, window.currentUser.uid);
+                        const unread = await countUnreadFotoInteractions(fotoId, lastViewed, window.currentUser.uid);
+                        if (unread.likes > 0 || unread.comments > 0) {
                             libraryItem.classList.add('has-interactions');
                         }
                     } catch (error) {
@@ -23976,7 +24079,6 @@
                     
                     libraryItem.onclick = async () => {
                         console.log('Click en foto, abriendo con fotoId:', fotoId);
-                        // Quitar el estilo de "has-interactions" al abrir la foto
                         libraryItem.classList.remove('has-interactions');
                         await window.showLibraryImage(imageBase64, fotoId, window.currentUser.uid, descripcion);
                     };
@@ -24123,6 +24225,9 @@
                     try {
                         await loadFotoLikes(fotoId);
                         await loadFotoComments(fotoId);
+                        if (window.currentUser && ownerId === window.currentUser.uid) {
+                            await markFotoAsViewed(fotoId);
+                        }
                     } catch (error) {
                         console.error('Error al cargar likes/comentarios:', error);
                     }
@@ -24442,7 +24547,7 @@
             // Botón de responder
             const replyBtn = document.createElement('button');
             replyBtn.className = 'comment-reply-btn';
-            replyBtn.textContent = '💬 Responder';
+            replyBtn.textContent = 'Responder';
             replyBtn.onclick = (e) => {
                 e.stopPropagation();
                 const replyContainer = commentItem.querySelector('.comment-reply-input-container');
@@ -24462,7 +24567,7 @@
             if (window.currentUser && data.userId === window.currentUser.uid) {
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'comment-delete-btn';
-                deleteBtn.textContent = '🗑️ Eliminar';
+                deleteBtn.textContent = 'Eliminar';
                 deleteBtn.onclick = async (e) => {
                     e.stopPropagation();
                     if (confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
@@ -24516,8 +24621,11 @@
             commentContent.appendChild(actions);
             commentContent.appendChild(replyInputContainer);
             
-            commentItem.appendChild(profilePicContainer);
-            commentItem.appendChild(commentContent);
+            const commentMain = document.createElement('div');
+            commentMain.className = 'comment-main';
+            commentMain.appendChild(profilePicContainer);
+            commentMain.appendChild(commentContent);
+            commentItem.appendChild(commentMain);
             
             return commentItem;
         }
@@ -24586,7 +24694,7 @@
                 commentsList.innerHTML = '';
                 
                 if (snapshot.empty) {
-                    commentsList.innerHTML = '<div style="text-align: center; color: #718096; padding: 20px;">No hay comentarios aún. ¡Sé el primero en comentar!</div>';
+                    commentsList.innerHTML = '<div style="text-align: center; color: #718096; padding: 12px 8px; font-size: 0.88em;">No hay comentarios aún. ¡Sé el primero!</div>';
                     return;
                 }
                 
