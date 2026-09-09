@@ -2247,6 +2247,80 @@
             opacity: 0.8;
         }
 
+        .difficulty-btn.locked-level {
+            position: relative;
+            overflow: hidden;
+            filter: grayscale(0.18) brightness(0.82);
+            cursor: not-allowed;
+        }
+
+        .difficulty-btn.locked-level:hover {
+            transform: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+        }
+
+        .difficulty-btn .construction-tape,
+        .difficulty-btn .construction-lock {
+            display: none;
+        }
+
+        .difficulty-btn.locked-level .construction-tape {
+            display: block;
+            position: absolute;
+            left: -35%;
+            width: 170%;
+            height: 22px;
+            background: repeating-linear-gradient(
+                -45deg,
+                #111111 0 13px,
+                #ffcc00 13px 26px
+            );
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.45), 0 6px 10px rgba(0, 0, 0, 0.28);
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .difficulty-btn.locked-level .construction-tape-top {
+            top: 12px;
+            transform: rotate(-12deg);
+        }
+
+        .difficulty-btn.locked-level .construction-tape-mid {
+            top: 50%;
+            height: 16px;
+            transform: translateY(-50%) rotate(7deg);
+            opacity: 0.92;
+        }
+
+        .difficulty-btn.locked-level .construction-tape-bottom {
+            bottom: 12px;
+            transform: rotate(9deg);
+        }
+
+        .difficulty-btn.locked-level .construction-lock {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 42px;
+            height: 42px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 25%, #fff7d1 0%, #f5c518 45%, #b8860b 100%);
+            border: 2px solid #1a1a1a;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+            font-size: 1.15em;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .difficulty-btn.locked-level .level-info-btn {
+            position: relative;
+            z-index: 5;
+        }
+
         .level-info-btn {
             display: inline-flex;
             align-items: center;
@@ -11491,10 +11565,10 @@
                 <div class="difficulty-buttons">
                     <button class="difficulty-btn starwars" id="starwarsBtn">⭐ Star Wars <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('starwars')" title="Cómo funciona Star Wars">i</span><br><small>Adivina el personaje</small></button>
                     <button class="difficulty-btn pokemon" id="pokemonBtn">⚡ Pokémon <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('pokemon')" title="Cómo funciona Pokémon">i</span><br><small>Adivina el Pokémon</small></button>
-                    <button class="difficulty-btn cars" id="carsBtn">🚗 Coches <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('cars')" title="Cómo funciona Coches">i</span><br><small>Adivina el modelo</small></button>
+                    <button class="difficulty-btn cars locked-level" id="carsBtn"><span class="construction-tape construction-tape-top" aria-hidden="true"></span><span class="construction-tape construction-tape-mid" aria-hidden="true"></span><span class="construction-tape construction-tape-bottom" aria-hidden="true"></span><span class="construction-lock" title="En obras">🔒</span>🚗 Coches <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('cars')" title="Cómo funciona Coches">i</span><br><small data-open-label="Adivina el modelo" data-locked-label="En obras">En obras</small></button>
                     <button class="difficulty-btn space" id="spaceBtn">🪐 Espacio <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('space')" title="Cómo funciona Espacio">i</span><br><small>Adivina el objeto espacial</small></button>
                     <button class="difficulty-btn brainrots" id="brainrotsBtn">🧠 Brainrots <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('brainrots')" title="Cómo funciona Brainrots">i</span><br><small>Adivina el personaje</small></button>
-                    <button class="difficulty-btn strangerthings" id="strangerthingsBtn">🔮 Stranger Things <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('strangerthings')" title="Cómo funciona Stranger Things">i</span><br><small>Adivina el personaje</small></button>
+                    <button class="difficulty-btn strangerthings locked-level" id="strangerthingsBtn"><span class="construction-tape construction-tape-top" aria-hidden="true"></span><span class="construction-tape construction-tape-mid" aria-hidden="true"></span><span class="construction-tape construction-tape-bottom" aria-hidden="true"></span><span class="construction-lock" title="En obras">🔒</span>🔮 Stranger Things <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('strangerthings')" title="Cómo funciona Stranger Things">i</span><br><small data-open-label="Adivina el personaje" data-locked-label="En obras">En obras</small></button>
                     <button class="difficulty-btn football" id="footballBtn">⚽ Escudos de Fútbol <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('football')" title="Cómo funciona Fútbol">i</span><br><small>Adivina el equipo</small></button>
                 </div>
             </div>
@@ -16274,7 +16348,39 @@
             }
         }
 
+        const LEVELS_UNDER_CONSTRUCTION = ['cars', 'strangerthings'];
+
+        function canPlayLockedLevels() {
+            const email = (window.currentUser && window.currentUser.email || '').toLowerCase();
+            const name = (window.currentUserName || '').toLowerCase().trim();
+            return email === 'mpenalvart1@educacion.navarra.es' || name === 'martin';
+        }
+
+        function isLevelLocked(level) {
+            return LEVELS_UNDER_CONSTRUCTION.includes(level) && !canPlayLockedLevels();
+        }
+
+        function updateLockedLevelButtons() {
+            const locked = !canPlayLockedLevels();
+            ['carsBtn', 'strangerthingsBtn'].forEach((id) => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                btn.classList.toggle('locked-level', locked);
+                const small = btn.querySelector('small');
+                if (small) {
+                    small.textContent = locked
+                        ? (small.dataset.lockedLabel || 'En obras')
+                        : (small.dataset.openLabel || small.textContent);
+                }
+            });
+        }
+
         function selectDifficulty(level) {
+            if (isLevelLocked(level)) {
+                alert('🔒 Este nivel está en obras. Pronto estará disponible.');
+                return;
+            }
+
             // Detener temporizador si existe
             stopTimer();
             stopMainFlagRotation();
@@ -19804,6 +19910,7 @@
                     document.getElementById('postSection').style.display = 'none';
                     document.getElementById('banderasRankingContainer').style.display = 'none';
                     document.getElementById('martRankingContainer').style.display = 'block';
+                    updateLockedLevelButtons();
                 });
             }
 
@@ -21687,6 +21794,8 @@
             if (strangerthingsBtn) {
                strangerthingsBtn.style.display = 'block';
             }
+
+            updateLockedLevelButtons();
             
             // Botones de clasificación de Coches y Espacio visibles para todos los usuarios
             if (mainViewRankingCarsBtn) {
@@ -24941,6 +25050,8 @@
         let currentChatFriendId = null;
         let currentChatGroupId = null;
         let chatUnsubscribe = null;
+        let chatViewGeneration = 0;
+        let sendChatInFlight = false;
 
         // Abrir chat con un amigo
         window.openChat = async function(friendId, friendData = null) {
@@ -24952,6 +25063,7 @@
                     chatUnsubscribe();
                     chatUnsubscribe = null;
                 }
+                chatViewGeneration += 1;
                 
                 currentChatFriendId = friendId;
                 currentChatGroupId = null; // No es un grupo
@@ -25019,30 +25131,45 @@
                 );
                 
                 chatUnsubscribe = onSnapshot(q, async (snapshot) => {
+                    const renderId = ++chatViewGeneration;
                     const activeChat = document.getElementById('profileActiveChat');
                     const activeMessagesEl = document.getElementById('activeChatMessages');
                     
-                    // Verificar que el chat activo esté visible y que este listener es para el chat actual
                     if (!activeChat || !activeMessagesEl || activeChat.style.display === 'none') {
-                        return; // El chat no está visible, no mostrar mensajes
+                        return;
                     }
                     
                     if (currentChatFriendId !== friendId) {
-                        return; // Este listener es para un chat diferente, ignorar
+                        return;
+                    }
+
+                    const changes = snapshot.docChanges();
+                    const onlyReadUpdates = changes.length > 0 && changes.every(change => change.type === 'modified');
+                    if (onlyReadUpdates) {
+                        changes.forEach(change => {
+                            const updated = change.doc.data();
+                            const readIndicator = document.querySelector(`.message-read-indicator[data-message-id="${change.doc.id}"]`);
+                            if (readIndicator) {
+                                if (updated.read) {
+                                    readIndicator.textContent = '✓✓';
+                                    readIndicator.classList.add('read');
+                                    readIndicator.title = 'Leído';
+                                } else {
+                                    readIndicator.textContent = '✓';
+                                    readIndicator.classList.remove('read');
+                                    readIndicator.title = 'Enviado';
+                                }
+                            }
+                        });
+                        return;
                     }
                     
-                    // Limpiar mensajes anteriores
-                    activeMessagesEl.innerHTML = '';
-                    
-                    // Obtener todos los mensajes y ordenarlos por timestamp
                     const messages = [];
-                    const messageIds = new Set(); // Para evitar duplicados
+                    const messageIds = new Set();
                     
-                    snapshot.forEach((doc) => {
-                        const messageData = doc.data();
-                        const messageId = doc.id;
-                        
-                        // Evitar duplicados
+                    snapshot.forEach((docSnap) => {
+                        const messageData = docSnap.data();
+                        const messageId = docSnap.id;
                         if (!messageIds.has(messageId)) {
                             messageIds.add(messageId);
                             messages.push({
@@ -25052,29 +25179,44 @@
                         }
                     });
                     
-                    // Ordenar por timestamp
-                    messages.sort((a, b) => {
-                        const timeA = a.timestamp || 0;
-                        const timeB = b.timestamp || 0;
-                        return timeA - timeB;
-                    });
+                    messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+                    if (renderId !== chatViewGeneration || currentChatFriendId !== friendId) {
+                        return;
+                    }
                     
-                    // Marcar todos los mensajes no leídos como leídos (el receptor tiene el chat abierto)
-                    const unreadMessages = messages.filter(msg => 
+                    const unreadMessages = messages.filter(msg =>
                         msg.toUserId === window.currentUser.uid && !msg.read
                     );
                     
+                    activeMessagesEl.innerHTML = '';
+                    
+                    for (const messageData of messages) {
+                        if (renderId !== chatViewGeneration || currentChatFriendId !== friendId) {
+                            return;
+                        }
+                        await displayMessage(messageData);
+                    }
+
+                    if (renderId !== chatViewGeneration) return;
+                    
+                    if (window.setupReadStatusListeners) {
+                        setupReadStatusListeners(messages);
+                    }
+                    
+                    setTimeout(() => {
+                        if (renderId === chatViewGeneration) {
+                            activeMessagesEl.scrollTop = activeMessagesEl.scrollHeight;
+                        }
+                    }, 100);
+
                     if (unreadMessages.length > 0) {
                         const batch = writeBatch(db);
                         unreadMessages.forEach(msg => {
-                            const msgRef = doc(db, "mensajes", msg.id);
-                            batch.update(msgRef, { read: true });
-                            // Actualizar inmediatamente en la UI local
-                            msg.read = true;
+                            batch.update(doc(db, "mensajes", msg.id), { read: true });
                         });
                         try {
                             await batch.commit();
-                            // Actualizar la lista de chats para quitar badges después de marcar como leídos
                             setTimeout(async () => {
                                 if (window.loadChatsList) {
                                     await window.loadChatsList();
@@ -25084,21 +25226,6 @@
                             console.error('Error al marcar mensajes como leídos:', error);
                         }
                     }
-                    
-                    // Mostrar mensajes ordenados (cargar fotos de forma asíncrona)
-                    for (const messageData of messages) {
-                        await displayMessage(messageData);
-                    }
-                    
-                    // Configurar listeners para actualizar indicadores de leído en tiempo real
-                    if (window.setupReadStatusListeners) {
-                        setupReadStatusListeners(messages);
-                    }
-                    
-                    // Scroll al final
-                    setTimeout(() => {
-                        activeMessagesEl.scrollTop = activeMessagesEl.scrollHeight;
-                    }, 100);
                 }, (error) => {
                     console.error('Error en onSnapshot:', error);
                 });
@@ -25218,6 +25345,7 @@
                     chatUnsubscribe();
                     chatUnsubscribe = null;
                 }
+                chatViewGeneration += 1;
                 
                 currentChatGroupId = grupoId;
                 currentChatFriendId = null; // No es un chat individual
@@ -25292,6 +25420,7 @@
                 }
                 
                 chatUnsubscribe = onSnapshot(q, async (snapshot) => {
+                    const renderId = ++chatViewGeneration;
                     const activeChat = document.getElementById('profileActiveChat');
                     const activeMessagesEl = document.getElementById('activeChatMessages');
                     
@@ -25302,21 +25431,36 @@
                     if (currentChatGroupId !== grupoId) {
                         return;
                     }
-                    
-                    // Prevenir ejecuciones simultáneas para este grupo
-                    if (window.groupChatLoading[grupoId]) {
+
+                    const changes = snapshot.docChanges();
+                    const onlyReadUpdates = changes.length > 0 && changes.every(change => change.type === 'modified');
+                    if (onlyReadUpdates) {
+                        changes.forEach(change => {
+                            const updated = change.doc.data();
+                            const leidoPor = updated.leidoPor || [];
+                            const readIndicator = document.querySelector(`.message-read-indicator[data-message-id="${change.doc.id}"]`);
+                            if (readIndicator) {
+                                if (leidoPor.length > 1) {
+                                    readIndicator.textContent = '✓✓';
+                                    readIndicator.classList.add('read');
+                                    readIndicator.title = `Leído por ${leidoPor.length} personas`;
+                                } else {
+                                    readIndicator.textContent = '✓';
+                                    readIndicator.classList.remove('read');
+                                    readIndicator.title = 'Enviado';
+                                }
+                            }
+                        });
                         return;
                     }
-                    window.groupChatLoading[grupoId] = true;
                     
                     try {
-                        // Recopilar todos los mensajes del snapshot
                         const messages = [];
                         const messageIds = new Set();
                         
-                        snapshot.forEach((doc) => {
-                            const messageData = doc.data();
-                            const messageId = doc.id;
+                        snapshot.forEach((docSnap) => {
+                            const messageData = docSnap.data();
+                            const messageId = docSnap.id;
                             
                             if (!messageIds.has(messageId)) {
                                 messageIds.add(messageId);
@@ -25327,24 +25471,35 @@
                             }
                         });
                         
-                        // Ordenar mensajes por timestamp
-                        messages.sort((a, b) => {
-                            const timeA = a.timestamp || 0;
-                            const timeB = b.timestamp || 0;
-                            return timeA - timeB;
-                        });
+                        messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+                        if (renderId !== chatViewGeneration || currentChatGroupId !== grupoId) {
+                            return;
+                        }
                         
-                        // Limpiar y volver a renderizar todos los mensajes
                         activeMessagesEl.innerHTML = '';
                         
-                        // Cargar nombres de usuarios para cada mensaje
                         for (const message of messages) {
+                            if (renderId !== chatViewGeneration || currentChatGroupId !== grupoId) {
+                                return;
+                            }
+                            if (message.id && activeMessagesEl.querySelector(`[data-message-id="${message.id}"]`)) {
+                                continue;
+                            }
+
                                 const remitenteDoc = await getDoc(doc(db, "usuarios", message.remitenteId));
+                                if (renderId !== chatViewGeneration || currentChatGroupId !== grupoId) {
+                                    return;
+                                }
+                                if (message.id && activeMessagesEl.querySelector(`[data-message-id="${message.id}"]`)) {
+                                    continue;
+                                }
                                 const remitenteNombre = remitenteDoc.exists() ? remitenteDoc.data().nombre : 'Usuario';
                                 const isSent = message.remitenteId === window.currentUser.uid;
                                 
                                 const messageEl = document.createElement('div');
                                 messageEl.className = `active-chat-message ${isSent ? 'sent' : 'received'}`;
+                                messageEl.setAttribute('data-message-id', message.id || '');
                                 
                                 if (!isSent) {
                                     const picture = document.createElement('div');
@@ -25413,18 +25568,21 @@
                                     messageEl.title = 'Doble click para marcar como leído';
                                 }
                                 
-                                messageEl.setAttribute('data-message-id', message.id || '');
                                 messageEl.appendChild(content);
+                                if (renderId !== chatViewGeneration || currentChatGroupId !== grupoId) {
+                                    return;
+                                }
+                                if (message.id && activeMessagesEl.querySelector(`[data-message-id="${message.id}"]`)) {
+                                    continue;
+                                }
                                 activeMessagesEl.appendChild(messageEl);
                         }
                         
-                        // Scroll al final
-                        activeMessagesEl.scrollTop = activeMessagesEl.scrollHeight;
-                    } finally {
-                        // Liberar el flag después de un pequeño delay para evitar ejecuciones muy rápidas
-                        setTimeout(() => {
-                            window.groupChatLoading[grupoId] = false;
-                        }, 100);
+                        if (renderId === chatViewGeneration) {
+                            activeMessagesEl.scrollTop = activeMessagesEl.scrollHeight;
+                        }
+                    } catch (error) {
+                        console.error('Error al renderizar chat de grupo:', error);
                     }
                 });
                 
@@ -25754,13 +25912,16 @@
             if (messageId) {
                 const existingMessage = messagesEl.querySelector(`[data-message-id="${messageId}"]`);
                 if (existingMessage) {
-                    return; // El mensaje ya está mostrado, no duplicar
+                    return;
                 }
             }
             
             const isSent = messageData.fromUserId === window.currentUser.uid;
             const messageDiv = document.createElement('div');
             messageDiv.className = `active-chat-message ${isSent ? 'sent' : 'received'}`;
+            if (messageId) {
+                messageDiv.setAttribute('data-message-id', messageId);
+            }
             
             const picture = document.createElement('div');
             picture.className = 'active-chat-message-picture';
@@ -25768,6 +25929,10 @@
             // Cargar foto de perfil del usuario que envió el mensaje
             const userId = messageData.fromUserId;
             const fotoPerfil = await loadUserProfilePicture(userId);
+
+            if (!currentChatFriendId || (messageId && messagesEl.querySelector(`[data-message-id="${messageId}"]`))) {
+                return;
+            }
             
             if (fotoPerfil) {
                 const img = document.createElement('img');
@@ -25814,7 +25979,12 @@
             }
             
             content.appendChild(time);
-            messageDiv.setAttribute('data-message-id', messageData.id || '');
+            if (messageId) {
+                messageDiv.setAttribute('data-message-id', messageId);
+            }
+            if (messageId && messagesEl.querySelector(`[data-message-id="${messageId}"]`)) {
+                return;
+            }
             messageDiv.appendChild(picture);
             messageDiv.appendChild(content);
             messagesEl.appendChild(messageDiv);
@@ -25833,6 +26003,8 @@
             
             // Si no hay texto, no enviar
             if (!text) return;
+            if (sendChatInFlight) return;
+            sendChatInFlight = true;
             
             // Deshabilitar botón de enviar mientras se procesa
             const sendBtn = document.getElementById('activeChatSendBtn');
