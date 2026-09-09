@@ -5663,7 +5663,10 @@
         .library-upload-container {
             margin-bottom: 15px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
         }
 
         .library-upload-btn {
@@ -9622,6 +9625,7 @@
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.25);
         }
 
         .friends-stories-container h3 {
@@ -9671,8 +9675,9 @@
             display: flex;
             gap: 15px;
             overflow-x: auto;
-            padding: 10px 0;
+            padding: 14px 4px 18px;
             flex-wrap: nowrap;
+            scrollbar-width: thin;
         }
 
         .stories-grid::-webkit-scrollbar {
@@ -9697,10 +9702,17 @@
             cursor: pointer;
             transition: transform 0.3s ease;
             flex-shrink: 0;
+            min-width: 82px;
+            padding: 8px 6px;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
         }
 
         .story-item:hover {
             transform: scale(1.05);
+            background: #fff7ed;
+            border-color: #fbbf24;
         }
 
         .story-avatar-wrapper {
@@ -9781,14 +9793,15 @@
         }
 
         .note-modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
+            background: linear-gradient(180deg, #ffffff 0%, #fffaf2 100%);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 20px;
+            padding: 28px;
             max-width: 500px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 22px 70px rgba(15, 23, 42, 0.28);
         }
 
         .note-modal-header {
@@ -9839,6 +9852,11 @@
             font-size: 1em;
         }
 
+        .note-view-author .note-author-name::before {
+            content: '@';
+            color: #f59e0b;
+        }
+
         .note-view-author .note-time {
             font-size: 0.85em;
             color: #999;
@@ -9863,12 +9881,18 @@
         }
 
         .note-modal-body {
-            color: #555;
-            line-height: 1.6;
-            font-size: 1.05em;
-            margin-bottom: 20px;
+            color: #334155;
+            line-height: 1.75;
+            font-size: 1.08em;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            margin: 8px 0 20px;
             flex-basis: 100%;
             width: 100%;
+            padding: 18px;
+            border-left: 4px solid #f59e0b;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.72);
         }
 
         .note-edit-container {
@@ -9985,6 +10009,439 @@
             font-weight: 600;
             color: #64748b;
             font-size: 0.9em;
+        }
+
+        .audios-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 28px;
+            background: linear-gradient(145deg, #fff7ed, #ffffff);
+            border: 1px solid #fed7aa;
+            border-radius: 20px;
+            box-shadow: 0 18px 45px rgba(124, 45, 18, 0.12);
+        }
+
+        .audios-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .audios-header h2 {
+            margin: 0;
+            color: #9a3412;
+        }
+
+        .audios-back-btn {
+            border: 0;
+            border-radius: 9px;
+            padding: 10px 16px;
+            color: white;
+            background: #64748b;
+            cursor: pointer;
+        }
+
+        .audio-upload-panel {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            align-items: end;
+            padding: 24px;
+            margin-bottom: 28px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid #fdba74;
+        }
+
+        .audio-upload-panel label {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: #7c2d12;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .audio-upload-panel input {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 48px;
+            padding: 12px;
+            border: 1px solid #fdba74;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        .audio-file-picker {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center;
+            gap: 14px;
+            min-height: 76px;
+            padding: 12px 16px;
+            border: 2px dashed #fb923c;
+            border-radius: 12px;
+            background: #fff7ed;
+            color: #9a3412 !important;
+            cursor: pointer;
+        }
+
+        .audio-file-picker:hover {
+            background: #ffedd5;
+            border-color: #ea580c;
+        }
+
+        .audio-file-picker input {
+            display: none;
+        }
+
+        .audio-plus-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            flex: 0 0 46px;
+            border-radius: 50%;
+            color: white;
+            background: #ea580c;
+            font-size: 2em;
+            font-weight: 400;
+            line-height: 1;
+        }
+
+        .audio-file-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .audio-file-copy small {
+            color: #9a3412;
+            font-weight: 400;
+        }
+
+        .audio-upload-btn {
+            grid-column: 1 / -1;
+            width: 100%;
+            min-height: 52px;
+            border: 0;
+            border-radius: 9px;
+            padding: 11px 16px;
+            color: white;
+            background: #ea580c;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .audio-upload-btn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .audio-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .audio-search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border: 1px solid #fdba74;
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        .audio-search-icon {
+            color: #ea580c;
+            font-size: 1.2em;
+        }
+
+        .audio-search input {
+            width: 100%;
+            min-height: 38px;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: #334155;
+            font: inherit;
+            font-size: 1em;
+        }
+
+        .audio-search-count {
+            flex: 0 0 auto;
+            color: #9a3412;
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+
+        .audio-card {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 6px 18px rgba(124, 45, 18, 0.07);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .audio-card.is-playing {
+            border-color: #fb923c;
+            transform: translateY(-2px);
+        }
+
+        .audio-card-title {
+            margin: 0 0 5px;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .audio-card-author {
+            color: #64748b;
+            font-size: 0.88em;
+        }
+
+        .audio-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: min(100%, 360px);
+        }
+
+        .audio-card > audio {
+            display: none;
+        }
+
+        .audio-play-btn {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            border: 0;
+            border-radius: 50%;
+            color: white;
+            background: #ea580c;
+            cursor: pointer;
+            font-size: 1.1em;
+            box-shadow: 0 5px 12px rgba(234, 88, 12, 0.25);
+        }
+
+        .audio-play-btn:hover {
+            background: #c2410c;
+        }
+
+        .audio-progress {
+            width: 170px;
+            accent-color: #ea580c;
+            cursor: pointer;
+        }
+
+        .audio-time {
+            min-width: 78px;
+            color: #64748b;
+            font-size: 0.82em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .audio-empty {
+            padding: 24px;
+            text-align: center;
+            color: #64748b;
+            border: 1px dashed #fdba74;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 650px) {
+            .audio-upload-panel,
+            .audio-card {
+                grid-template-columns: 1fr;
+            }
+
+            .audio-upload-btn {
+                grid-column: auto;
+            }
+
+            .audio-search {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .audio-search-count {
+                width: 100%;
+                padding-left: 30px;
+            }
+
+            .audio-player {
+                width: 100%;
+            }
+
+            .audio-progress {
+                width: 100%;
+            }
+        }
+
+        .viral-section {
+            display: grid;
+            gap: 14px;
+            margin-top: 28px;
+            padding: 22px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fff1f2, #fff7ed);
+            border: 1px solid #fecdd3;
+        }
+
+        .viral-section h3 {
+            margin: 0;
+            color: #9f1239;
+        }
+
+        .viral-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .viral-btn {
+            flex: 1 1 180px;
+            padding: 15px 18px;
+            border: 0;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(135deg, #e11d48, #f97316);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 700;
+        }
+
+        .post-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 28px;
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #fecdd3;
+            box-shadow: 0 18px 45px rgba(159, 18, 57, 0.12);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .post-header h2 {
+            margin: 0;
+            color: #9f1239;
+        }
+
+        .post-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .post-card {
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+            border-radius: 14px;
+            background: #fff7ed;
+        }
+
+        .post-card img {
+            display: block;
+            width: 100%;
+            max-height: 540px;
+            object-fit: contain;
+            background: #0f172a;
+        }
+
+        .post-card-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #475569;
+        }
+
+        .post-card-author {
+            color: #9f1239;
+            font-weight: 700;
+        }
+
+        .post-card-description {
+            padding: 0 15px 14px;
+            color: #475569;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .post-empty {
+            padding: 28px;
+            text-align: center;
+            color: #64748b;
+            border: 1px dashed #fda4af;
+            border-radius: 12px;
+        }
+
+        .library-visibility-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+            color: #475569;
+            font-size: 0.9em;
+        }
+
+        .library-visibility-label select {
+            padding: 7px 9px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            color: #334155;
+        }
+
+        .library-description-label {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            flex: 1 1 100%;
+            margin: 4px 0 0;
+            color: #475569;
+            font-size: 0.9em;
+            text-align: left;
+        }
+
+        .library-description-label textarea {
+            width: 100%;
+            min-height: 64px;
+            padding: 8px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            color: #334155;
+            font: inherit;
+            resize: vertical;
+        }
+
+        .library-image-description {
+            margin: 0 0 16px;
+            color: #334155;
+            font-size: 0.95em;
+            line-height: 1.45;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .library-image-description:empty {
+            display: none;
         }
 
         /* Estilos responsive para NOTAS */
@@ -10491,6 +10948,15 @@
                         <div class="library-upload-container">
                             <label for="libraryImageInput" class="library-upload-btn">📷 Añadir Foto</label>
                             <input type="file" id="libraryImageInput" accept="image/*" multiple style="display: none;">
+                            <label class="library-visibility-label" for="libraryVisibilitySelect">Visibilidad
+                                <select id="libraryVisibilitySelect">
+                                    <option value="privada">🔒 Privada (solo amigos)</option>
+                                    <option value="publica">🌍 Pública (VIRAL)</option>
+                                </select>
+                            </label>
+                            <label class="library-description-label" for="libraryImageDescription">Descripción (opcional)
+                                <textarea id="libraryImageDescription" maxlength="300" rows="2" placeholder="Escribe una descripción y luego pulsa Añadir Foto..."></textarea>
+                            </label>
                         </div>
                         <div class="library-grid" id="libraryGrid"></div>
                     </div>
@@ -10508,6 +10974,7 @@
                 <img id="libraryImageModalImg" src="" alt="Imagen">
             </div>
             <div class="library-image-interactions">
+                <p class="library-image-description" id="libraryImageDescriptionView"></p>
                 <div class="library-image-likes">
                     <button class="like-btn" id="libraryImageLikeBtn">
                         <span class="like-icon">❤️</span>
@@ -10884,8 +11351,10 @@
                     <button class="game-type-btn" id="martTypeBtn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; padding: 40px 60px; border-radius: 20px; font-size: 1.5em; cursor: pointer; box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4); transition: all 0.3s ease; min-width: 250px;">
                         🎮 Juegos MART
                     </button>
+                    <button class="game-type-btn" id="viralTypeBtn" style="background: linear-gradient(135deg, #e11d48 0%, #f97316 100%); color: white; border: none; padding: 40px 60px; border-radius: 20px; font-size: 1.5em; cursor: pointer; box-shadow: 0 6px 20px rgba(225, 29, 72, 0.35); transition: all 0.3s ease; min-width: 250px;">
+                        🔥 VIRAL
+                    </button>
                 </div>
-                
                 <!-- Contenedor de notas de amigos directamente en la pantalla principal -->
                 <div class="friends-stories-container" style="margin-top: 40px;">
                     <div class="notes-section-header">
@@ -10896,6 +11365,17 @@
                         <!-- Los stories de amigos se cargarán dinámicamente aquí -->
                     </div>
                     <p class="notes-hint" style="margin: 14px 0 0; color: #64748b; font-size: 0.9em;">Pulsa la foto de perfil para ver la nota. Solo se pueden ver así.</p>
+                </div>
+            </div>
+            <div class="viral-section" id="viralSection" style="display: none;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                    <h3>🔥 VIRAL</h3>
+                    <button class="audios-back-btn" id="backFromViralBtn" type="button">← Volver</button>
+                </div>
+                <div class="viral-buttons">
+                    <button class="viral-btn" id="historiaBtn">📖 Historia</button>
+                    <button class="viral-btn" id="audiosBtn">🎧 Audios</button>
+                    <button class="viral-btn" id="postBtn">📸 Post</button>
                 </div>
             </div>
             
@@ -10934,7 +11414,47 @@
                     <button class="difficulty-btn brainrots" id="brainrotsBtn">🧠 Brainrots <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('brainrots')" title="Cómo funciona Brainrots">i</span><br><small>Adivina el personaje</small></button>
                     <button class="difficulty-btn strangerthings" id="strangerthingsBtn">🔮 Stranger Things <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('strangerthings')" title="Cómo funciona Stranger Things">i</span><br><small>Adivina el personaje</small></button>
                     <button class="difficulty-btn football" id="footballBtn">⚽ Escudos de Fútbol <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('football')" title="Cómo funciona Fútbol">i</span><br><small>Adivina el equipo</small></button>
-                    <button class="difficulty-btn historia" id="historiaBtn">📖 HISTORIA <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('historia')" title="Cómo funciona Historia">i</span><br><small>Aventura interactiva</small></button>
+                </div>
+            </div>
+            <div class="audios-section" id="audiosSection" style="display: none;">
+                <div class="audios-header">
+                    <div>
+                        <h2>🎧 Audios</h2>
+                        <p>Escucha los audios compartidos por la comunidad.</p>
+                    </div>
+                    <button class="audios-back-btn" id="backFromAudiosBtn" type="button">← Volver</button>
+                </div>
+                <div class="audio-upload-panel">
+                    <label for="audioTitleInput">Título del audio
+                        <input id="audioTitleInput" type="text" maxlength="80" placeholder="Ej. Mi canción favorita">
+                    </label>
+                    <label class="audio-file-picker" for="audioFileInput">
+                        <span class="audio-plus-icon">+</span>
+                        <span class="audio-file-copy">
+                            <strong>Seleccionar audio</strong>
+                            <small id="audioFileName">MP3, WAV, OGG o M4A · máximo 25 MB</small>
+                        </span>
+                        <input id="audioFileInput" type="file" accept="audio/*">
+                    </label>
+                    <button class="audio-upload-btn" id="audioUploadBtn" type="button">⬆️ Subir audio</button>
+                </div>
+                <label class="audio-search" for="audioSearchInput">
+                    <span class="audio-search-icon">🔎</span>
+                    <input id="audioSearchInput" type="search" placeholder="Buscar por título, archivo o usuario..." autocomplete="off">
+                    <span class="audio-search-count" id="audioSearchCount">0 audios</span>
+                </label>
+                <div class="audio-list" id="audioList">
+                    <div class="audio-empty">Cargando audios...</div>
+                </div>
+            </div>
+            <div class="post-section" id="postSection" style="display: none;">
+                <div class="post-header">
+                    <h2>📸 Post</h2>
+                    <button class="audios-back-btn" id="backFromPostBtn" type="button">← Volver</button>
+                </div>
+                <p style="color: #64748b; margin-top: 0;">Publicaciones públicas de la comunidad.</p>
+                <div class="post-list" id="postList">
+                    <div class="post-empty">Cargando publicaciones...</div>
                 </div>
             </div>
             <!-- Clasificaciones de Banderas (solo visible en sección de banderas) -->
@@ -13414,6 +13934,9 @@
 
             document.getElementById('juegosMartSection').style.display = 'none';
             document.getElementById('martRankingContainer').style.display = 'none';
+            document.getElementById('viralSection').style.display = 'none';
+            document.getElementById('audiosSection').style.display = 'none';
+            document.getElementById('postSection').style.display = 'none';
             
             // Reset estado historia
             historiaData = null;
@@ -13671,7 +14194,7 @@
                             font-size: 1em;
                             transition: all 0.3s ease;
                         ">
-                            ← Volver a Juegos MART
+                            ← Volver
                         </button>
                     </div>
                 </div>
@@ -13688,23 +14211,35 @@
             mostrarCapitulo("inicio");
         }
 
-        // Función para volver a Juegos MART
-        function volverJuegosMart() {
-            // Eliminar el contenedor de historia
+        function volverPantallaPrincipal() {
             const historiaContainer = document.getElementById('historiaContainer');
-            if (historiaContainer) {
-                historiaContainer.remove();
-            }
-            
-            // Restaurar UI del juego (contenedor principal) si corresponde
+            if (historiaContainer) historiaContainer.remove();
+
             const gameContainer = document.getElementById('gameContainer');
-            if (gameContainer && window.currentUser) {
-                gameContainer.style.display = 'block';
-            }
-            
-            // Mostrar nuevamente la sección de Juegos MART
-            document.getElementById('juegosMartSection').style.display = 'block';
-            document.getElementById('martRankingContainer').style.display = 'block';
+            if (gameContainer && window.currentUser) gameContainer.style.display = 'block';
+
+            const setDisplay = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = value;
+            };
+
+            setDisplay('difficultySelector', 'block');
+            setDisplay('gameTypeSelector', 'block');
+            setDisplay('banderasLevelsSection', 'none');
+            setDisplay('juegosMartSection', 'none');
+            setDisplay('viralSection', 'none');
+            setDisplay('audiosSection', 'none');
+            setDisplay('postSection', 'none');
+            setDisplay('banderasRankingContainer', 'none');
+            setDisplay('martRankingContainer', 'none');
+            setDisplay('difficultyRankingContainer', 'none');
+            document.body.classList.add('difficulty-selector-active');
+            startMainFlagRotation();
+        }
+
+        // Función para volver a la pantalla principal
+        function volverJuegosMart() {
+            volverPantallaPrincipal();
         }
 
         // Función para cargar Pokémon desde PokeAPI
@@ -15672,6 +16207,9 @@
             document.getElementById('gameTypeSelector').style.display = 'none';
             document.getElementById('banderasLevelsSection').style.display = 'none';
             document.getElementById('juegosMartSection').style.display = 'none';
+            document.getElementById('audiosSection').style.display = 'none';
+            document.getElementById('viralSection').style.display = 'none';
+            document.getElementById('postSection').style.display = 'none';
             document.body.classList.remove('difficulty-selector-active');
             document.getElementById('loading').style.display = 'block';
             // Mostrar botón de ranking cuando se selecciona dificultad
@@ -18275,6 +18813,9 @@
             document.getElementById('gameTypeSelector').style.display = 'block';
             document.getElementById('banderasLevelsSection').style.display = 'none';
             document.getElementById('juegosMartSection').style.display = 'none';
+            document.getElementById('viralSection').style.display = 'none';
+            document.getElementById('audiosSection').style.display = 'none';
+            document.getElementById('postSection').style.display = 'none';
             document.getElementById('banderasRankingContainer').style.display = 'none';
             document.getElementById('martRankingContainer').style.display = 'none';
             document.body.classList.add('difficulty-selector-active');
@@ -19160,6 +19701,11 @@
                     document.getElementById('gameTypeSelector').style.display = 'none';
                     document.getElementById('banderasLevelsSection').style.display = 'block';
                     document.getElementById('juegosMartSection').style.display = 'none';
+                    document.getElementById('audiosSection').style.display = 'none';
+                    document.getElementById('viralSection').style.display = 'none';
+                    document.getElementById('postSection').style.display = 'none';
+                    document.getElementById('viralSection').style.display = 'none';
+                    document.getElementById('postSection').style.display = 'none';
                     document.getElementById('banderasRankingContainer').style.display = 'block';
                     document.getElementById('martRankingContainer').style.display = 'none';
                 });
@@ -19171,8 +19717,32 @@
                     document.getElementById('gameTypeSelector').style.display = 'none';
                     document.getElementById('banderasLevelsSection').style.display = 'none';
                     document.getElementById('juegosMartSection').style.display = 'block';
+                    document.getElementById('audiosSection').style.display = 'none';
+                    document.getElementById('viralSection').style.display = 'none';
+                    document.getElementById('postSection').style.display = 'none';
                     document.getElementById('banderasRankingContainer').style.display = 'none';
                     document.getElementById('martRankingContainer').style.display = 'block';
+                });
+            }
+
+            const viralTypeBtn = document.getElementById('viralTypeBtn');
+            if (viralTypeBtn) {
+                viralTypeBtn.addEventListener('click', () => {
+                    document.getElementById('gameTypeSelector').style.display = 'none';
+                    document.getElementById('banderasLevelsSection').style.display = 'none';
+                    document.getElementById('juegosMartSection').style.display = 'none';
+                    document.getElementById('audiosSection').style.display = 'none';
+                    document.getElementById('postSection').style.display = 'none';
+                    document.getElementById('viralSection').style.display = 'grid';
+                    document.getElementById('banderasRankingContainer').style.display = 'none';
+                    document.getElementById('martRankingContainer').style.display = 'none';
+                });
+            }
+
+            const backFromViralBtn = document.getElementById('backFromViralBtn');
+            if (backFromViralBtn) {
+                backFromViralBtn.addEventListener('click', () => {
+                    volverPantallaPrincipal();
                 });
             }
             
@@ -19212,26 +19782,14 @@
             const backToMainBtn = document.getElementById('backToMainBtn');
             if (backToMainBtn) {
                 backToMainBtn.addEventListener('click', () => {
-                    document.getElementById('gameTypeSelector').style.display = 'block';
-                    document.getElementById('banderasLevelsSection').style.display = 'none';
-                    document.getElementById('juegosMartSection').style.display = 'none';
-                    document.getElementById('banderasRankingContainer').style.display = 'none';
-                    document.getElementById('martRankingContainer').style.display = 'none';
-                    document.body.classList.add('difficulty-selector-active');
-                    startMainFlagRotation();
+                    volverPantallaPrincipal();
                 });
             }
             
             const backToMainBtn2 = document.getElementById('backToMainBtn2');
             if (backToMainBtn2) {
                 backToMainBtn2.addEventListener('click', () => {
-                    document.getElementById('gameTypeSelector').style.display = 'block';
-                    document.getElementById('banderasLevelsSection').style.display = 'none';
-                    document.getElementById('juegosMartSection').style.display = 'none';
-                    document.getElementById('banderasRankingContainer').style.display = 'none';
-                    document.getElementById('martRankingContainer').style.display = 'none';
-                    document.body.classList.add('difficulty-selector-active');
-                    startMainFlagRotation();
+                    volverPantallaPrincipal();
                 });
             }
             
@@ -19271,6 +19829,51 @@
             
             const footballBtn = document.getElementById('footballBtn');
             if (footballBtn) footballBtn.addEventListener('click', () => selectDifficulty('football'));
+
+            const audiosBtn = document.getElementById('audiosBtn');
+            if (audiosBtn) {
+                audiosBtn.addEventListener('click', () => {
+                    document.getElementById('gameTypeSelector').style.display = 'none';
+                    document.getElementById('banderasLevelsSection').style.display = 'none';
+                    document.getElementById('juegosMartSection').style.display = 'none';
+                    document.getElementById('audiosSection').style.display = 'block';
+                    document.getElementById('viralSection').style.display = 'none';
+                    document.getElementById('postSection').style.display = 'none';
+                    document.getElementById('banderasRankingContainer').style.display = 'none';
+                    document.getElementById('martRankingContainer').style.display = 'none';
+                    document.body.classList.add('difficulty-selector-active');
+                    window.loadAudios?.();
+                });
+            }
+
+            const backFromAudiosBtn = document.getElementById('backFromAudiosBtn');
+            if (backFromAudiosBtn) {
+                backFromAudiosBtn.addEventListener('click', () => {
+                    volverPantallaPrincipal();
+                });
+            }
+
+            const postBtn = document.getElementById('postBtn');
+            if (postBtn) {
+                postBtn.addEventListener('click', () => {
+                    document.getElementById('gameTypeSelector').style.display = 'none';
+                    document.getElementById('banderasLevelsSection').style.display = 'none';
+                    document.getElementById('juegosMartSection').style.display = 'none';
+                    document.getElementById('audiosSection').style.display = 'none';
+                    document.getElementById('viralSection').style.display = 'none';
+                    document.getElementById('postSection').style.display = 'block';
+                    document.getElementById('banderasRankingContainer').style.display = 'none';
+                    document.getElementById('martRankingContainer').style.display = 'none';
+                    window.loadPublicPosts?.();
+                });
+            }
+
+            const backFromPostBtn = document.getElementById('backFromPostBtn');
+            if (backFromPostBtn) {
+                backFromPostBtn.addEventListener('click', () => {
+                    volverPantallaPrincipal();
+                });
+            }
             
             // Event listeners para opciones de juego
             const option1 = document.getElementById('option1');
@@ -19762,10 +20365,15 @@
         if (libraryImageInput) {
             libraryImageInput.addEventListener('change', async (e) => {
                 const files = Array.from(e.target.files);
+                const visibilitySelect = document.getElementById('libraryVisibilitySelect');
+                const descriptionInput = document.getElementById('libraryImageDescription');
+                const visibility = visibilitySelect?.value === 'publica' ? 'publica' : 'privada';
+                const description = descriptionInput?.value.trim() || '';
                 if (files.length > 0) {
                     for (const file of files) {
-                        await window.uploadLibraryImage(file);
+                        await window.uploadLibraryImage(file, visibility, description);
                     }
+                    if (descriptionInput) descriptionInput.value = '';
                     e.target.value = ''; // Limpiar input
                 }
             });
@@ -20672,6 +21280,7 @@
         // No iniciar automáticamente - esperar a que el usuario seleccione dificultad
     </script>
 
+    <script src="audios-manifest.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, doc, setDoc, getDoc, where, updateDoc, onSnapshot, writeBatch, deleteDoc } 
@@ -22402,8 +23011,11 @@
                 if (searchInput) searchInput.value = '';
 
                 // Enviar notificación (si está implementado)
-                if (window.sendNotification && recipientId !== 'ALL_USERS') {
-                    await window.sendNotification(recipientId, 'Nuevo mensaje', `${nombreRemitente} te ha enviado un mensaje`);
+                if (window.sendPushNotification && recipientId !== 'ALL_USERS') {
+                    await window.sendPushNotification(recipientId, 'Nuevo mensaje', `${nombreRemitente} te ha enviado un mensaje`, {
+                        type: 'mail',
+                        url: `${window.location.origin}${window.location.pathname}`
+                    });
                 }
             } catch (error) {
                 console.error('Error al enviar mensaje:', error);
@@ -22538,6 +23150,15 @@
                         });
                     });
                     await batch.commit();
+                }
+
+                if (window.sendPushNotification) {
+                    await Promise.all(selectedIds.map(destinatarioId => window.sendPushNotification(
+                        destinatarioId,
+                        'Aviso importante',
+                        `${nombreRemitente}: ${texto}`,
+                        { type: 'important-notice', url: `${window.location.origin}${window.location.pathname}` }
+                    )));
                 }
 
                 alert(`✅ Aviso enviado a ${selectedIds.length} usuario${selectedIds.length === 1 ? '' : 's'}.`);
@@ -22865,6 +23486,14 @@
             if (!friendId) return;
             
             try {
+                if (!window.currentUser) return;
+                const currentUserDoc = await getDoc(doc(db, 'usuarios', window.currentUser.uid));
+                const currentFriends = currentUserDoc.exists() ? (currentUserDoc.data().amigos || []) : [];
+                if (friendId !== window.currentUser.uid && !currentFriends.includes(friendId)) {
+                    alert('Solo puedes ver la biblioteca de tus amigos.');
+                    return;
+                }
+
                 // Cargar datos del amigo si no se proporcionaron
                 if (!friendData) {
                     const friendDoc = await getDoc(doc(db, "usuarios", friendId));
@@ -23137,7 +23766,7 @@
         }
 
         // Subir foto a la biblioteca
-        window.uploadLibraryImage = async function(file) {
+        window.uploadLibraryImage = async function(file, visibility = 'privada', description = '') {
             if (!window.currentUser) return false;
             
             try {
@@ -23146,10 +23775,22 @@
                 const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
                 const biblioteca = userDoc.exists() ? (userDoc.data().biblioteca || []) : [];
                 
-                biblioteca.push(compressedBase64);
+                biblioteca.push(description
+                    ? { imagen: compressedBase64, descripcion: description }
+                    : compressedBase64);
                 
                 await updateDoc(doc(db, "usuarios", window.currentUser.uid), {
                     biblioteca: biblioteca
+                });
+
+                const userName = await window.getCurrentUserAppName();
+                await addDoc(collection(db, 'fotos'), {
+                    imagen: compressedBase64,
+                    userId: window.currentUser.uid,
+                    nombreUsuario: userName,
+                    descripcion: description,
+                    visibilidad: visibility === 'publica' ? 'publica' : 'privada',
+                    fechaCreacion: Date.now()
                 });
                 
                 // Recargar biblioteca
@@ -23162,6 +23803,33 @@
                 return false;
             }
         };
+
+        function getLibraryImageData(item) {
+            if (item && typeof item === 'object') {
+                return {
+                    imagen: item.imagen || '',
+                    descripcion: item.descripcion || ''
+                };
+            }
+            return { imagen: item || '', descripcion: '' };
+        }
+
+        async function resolveFotoDescription(imageBase64, ownerId, fotoId, fallback = '') {
+            if (fallback) return fallback;
+            try {
+                if (fotoId && !String(fotoId).startsWith('foto_')) {
+                    const fotoDoc = await getDoc(doc(db, 'fotos', fotoId));
+                    if (fotoDoc.exists()) return fotoDoc.data().descripcion || '';
+                }
+                if (!ownerId) return '';
+                const snapshot = await getDocs(query(collection(db, 'fotos'), where('userId', '==', ownerId)));
+                const match = snapshot.docs.find(fotoDoc => fotoDoc.data().imagen === imageBase64);
+                return match?.data()?.descripcion || '';
+            } catch (error) {
+                console.warn('No se pudo cargar la descripción de la foto:', error);
+                return '';
+            }
+        }
 
         // Cargar biblioteca propia
         window.loadLibrary = async function() {
@@ -23177,7 +23845,8 @@
                 libraryGrid.innerHTML = '';
                 
                 // Usar Promise.all para esperar a que se generen todos los fotoIds
-                const items = await Promise.all(biblioteca.map(async (imageBase64, index) => {
+                const items = await Promise.all(biblioteca.map(async (item, index) => {
+                    const { imagen: imageBase64, descripcion } = getLibraryImageData(item);
                     const libraryItem = document.createElement('div');
                     libraryItem.className = 'library-item';
                     
@@ -23225,7 +23894,7 @@
                         console.log('Click en foto, abriendo con fotoId:', fotoId);
                         // Quitar el estilo de "has-interactions" al abrir la foto
                         libraryItem.classList.remove('has-interactions');
-                        await window.showLibraryImage(imageBase64, fotoId, window.currentUser.uid);
+                        await window.showLibraryImage(imageBase64, fotoId, window.currentUser.uid, descripcion);
                     };
                     
                     libraryItem.appendChild(img);
@@ -23244,6 +23913,11 @@
             if (!friendId) return;
             
             try {
+                if (!window.currentUser) return;
+                const currentUserDoc = await getDoc(doc(db, 'usuarios', window.currentUser.uid));
+                const currentFriends = currentUserDoc.exists() ? (currentUserDoc.data().amigos || []) : [];
+                if (friendId !== window.currentUser.uid && !currentFriends.includes(friendId)) return;
+
                 const friendDoc = await getDoc(doc(db, "usuarios", friendId));
                 if (!friendDoc.exists()) return;
                 
@@ -23262,7 +23936,8 @@
                 friendLibraryGrid.innerHTML = '';
                 
                 // Usar Promise.all para esperar a que se generen todos los fotoIds
-                const items = await Promise.all(biblioteca.map(async (imageBase64, index) => {
+                const items = await Promise.all(biblioteca.map(async (item, index) => {
+                    const { imagen: imageBase64, descripcion } = getLibraryImageData(item);
                     const libraryItem = document.createElement('div');
                     libraryItem.className = 'friend-library-item';
                     
@@ -23276,7 +23951,7 @@
                     
                     libraryItem.onclick = async () => {
                         console.log('Click en foto de amigo, abriendo con fotoId:', fotoId);
-                        await window.showLibraryImage(imageBase64, fotoId, friendId);
+                        await window.showLibraryImage(imageBase64, fotoId, friendId, descripcion);
                     };
                     
                     libraryItem.appendChild(img);
@@ -23334,17 +24009,22 @@
         }
 
         // Mostrar imagen en grande
-        window.showLibraryImage = async function(imageBase64, fotoId = null, ownerId = null) {
+        window.showLibraryImage = async function(imageBase64, fotoId = null, ownerId = null, description = '') {
             const modal = document.getElementById('libraryImageModal');
             const modalImg = document.getElementById('libraryImageModalImg');
+            const descriptionEl = document.getElementById('libraryImageDescriptionView');
             
             if (modal && modalImg) {
                 modalImg.src = imageBase64;
                 window.currentFotoId = fotoId;
                 window.currentFotoOwnerId = ownerId;
                 window.currentImageBase64 = imageBase64; // Guardar para la vista ampliada
+                if (descriptionEl) descriptionEl.textContent = description || '';
                 console.log('Mostrando imagen, fotoId:', fotoId, 'ownerId:', ownerId);
                 modal.style.display = 'flex';
+                if (descriptionEl && !description) {
+                    descriptionEl.textContent = await resolveFotoDescription(imageBase64, ownerId, fotoId, description);
+                }
                 
                 // Agregar evento click en la imagen para vista ampliada
                 const imageContainer = document.getElementById('libraryImageContainer');
@@ -23406,6 +24086,8 @@
                 window.currentFotoOwnerId = null;
                 window.currentImageBase64 = null;
             }
+            const descriptionEl = document.getElementById('libraryImageDescriptionView');
+            if (descriptionEl) descriptionEl.textContent = '';
             // También cerrar el zoom si está abierto
             if (zoomModal) {
                 zoomModal.classList.remove('active');
@@ -26662,12 +27344,13 @@
         };
 
         // ========== SISTEMA DE NOTIFICACIONES PUSH ==========
+        window.notificationServiceWorkerRegistration = null;
         
         // Registrar Service Worker para notificaciones
         if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
             window.addEventListener('load', async () => {
                 try {
-                    // Crear service worker inline mejorado para FCM y notificaciones push
+                    // Mantener el service worker como archivo real para que FCM pueda registrarlo a tiempo.
                     const swCode = `
                         // Importar Firebase Messaging en el Service Worker
                         importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
@@ -26764,26 +27447,15 @@
                     }
                     
                     try {
-                        const blob = new Blob([swCode], { type: 'application/javascript' });
-                        const swUrl = URL.createObjectURL(blob);
-                        
-                        const registration = await navigator.serviceWorker.register(swUrl, {
+                        const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js', {
                             scope: './',
                             type: 'classic'
                         });
+                        window.notificationServiceWorkerRegistration = registration;
                         
                         // Esperar a que el Service Worker esté listo
                         await navigator.serviceWorker.ready;
                     } catch (swError) {
-                        // Intentar limpiar el blob URL si hay error
-                        if (typeof URL.revokeObjectURL === 'function') {
-                            try {
-                                URL.revokeObjectURL(swUrl);
-                            } catch (e) {
-                                // Ignorar errores al revocar
-                            }
-                        }
-                        
                         // Solo mostrar error si no es por protocolo o blob URL (común en algunos navegadores)
                         if (!swError.message.includes('file://') && 
                             !swError.message.includes('null') && 
@@ -26899,7 +27571,8 @@
                 let currentToken;
                 try {
                     currentToken = await getToken(messaging, { 
-                        vapidKey: VAPID_KEY 
+                        vapidKey: VAPID_KEY,
+                        serviceWorkerRegistration: window.notificationServiceWorkerRegistration || await navigator.serviceWorker.ready
                     });
                 } catch (tokenError) {
                     // Si hay un error al obtener el token (p.ej. service worker no disponible), ignorar silenciosamente
@@ -27430,6 +28103,328 @@
             }
         }, 5000); // Verificar cada 5 segundos
 
+        // Funciones para el feed público de VIRAL
+        window.loadPublicPosts = async function() {
+            const postList = document.getElementById('postList');
+            if (!postList || !window.currentUser) return;
+
+            postList.innerHTML = '<div class="post-empty">Cargando publicaciones...</div>';
+            try {
+                const snapshot = await getDocs(query(
+                    collection(db, 'fotos'),
+                    where('visibilidad', '==', 'publica')
+                ));
+                const posts = snapshot.docs
+                    .map(postDoc => ({ id: postDoc.id, ...postDoc.data() }))
+                    .sort((a, b) => (b.fechaCreacion || 0) - (a.fechaCreacion || 0));
+
+                postList.innerHTML = '';
+                if (posts.length === 0) {
+                    postList.innerHTML = '<div class="post-empty">Todavía no hay publicaciones públicas.</div>';
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const card = document.createElement('article');
+                    card.className = 'post-card';
+                    const image = document.createElement('img');
+                    image.src = post.imagen;
+                    image.alt = `Publicación de ${post.nombreUsuario || 'Usuario'}`;
+                    image.loading = 'lazy';
+                    image.style.cursor = 'pointer';
+                    image.addEventListener('click', () => {
+                        window.showLibraryImage?.(post.imagen, post.id, post.userId, post.descripcion || '');
+                    });
+
+                    const info = document.createElement('div');
+                    info.className = 'post-card-info';
+                    const author = document.createElement('span');
+                    author.className = 'post-card-author';
+                    author.textContent = `@${post.nombreUsuario || 'Usuario'}`;
+                    const date = document.createElement('span');
+                    date.textContent = post.fechaCreacion
+                        ? new Date(post.fechaCreacion).toLocaleDateString('es-ES')
+                        : '';
+                    info.appendChild(author);
+                    info.appendChild(date);
+                    card.appendChild(image);
+                    card.appendChild(info);
+                    if (post.descripcion) {
+                        const description = document.createElement('div');
+                        description.className = 'post-card-description';
+                        description.textContent = post.descripcion;
+                        card.appendChild(description);
+                    }
+                    postList.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error al cargar publicaciones públicas:', error);
+                postList.innerHTML = '<div class="post-empty">No se pudieron cargar las publicaciones.</div>';
+            }
+        };
+
+        // Funciones para el nivel de AUDIOS
+        window.loadAudios = async function() {
+            const audioList = document.getElementById('audioList');
+            if (!audioList || !window.currentUser) return;
+
+            audioList.innerHTML = '<div class="audio-empty">Cargando audios...</div>';
+            try {
+                let uploadedAudios = [];
+                try {
+                    const snapshot = await getDocs(collection(db, 'audios'));
+                    uploadedAudios = snapshot.docs
+                        .map(audioDoc => ({ id: audioDoc.id, ...audioDoc.data() }))
+                        .sort((a, b) => (b.fechaCreacion || 0) - (a.fechaCreacion || 0));
+                } catch (firestoreError) {
+                    console.warn('No se pudieron cargar los audios subidos:', firestoreError);
+                }
+                let bundledAudios = [];
+                try {
+                    const manifestResponse = await fetch(new URL('audios-manifest.json', document.baseURI));
+                    if (manifestResponse.ok) {
+                        const manifest = await manifestResponse.json();
+                        bundledAudios = manifest.map(audioData => ({
+                            id: `bundled-${audioData.file}`,
+                            titulo: audioData.titulo,
+                            url: encodeURI(`audios/${audioData.file}`),
+                            autorNombre: 'Martin',
+                            fechaCreacion: 0
+                        }));
+                    }
+                } catch (manifestError) {
+                    bundledAudios = window.bundledAudios || [];
+                    console.warn('No se pudo cargar el manifiesto de audios; usando el listado integrado:', manifestError);
+                }
+                const audios = [...uploadedAudios, ...bundledAudios];
+
+                audioList.innerHTML = '';
+                if (audios.length === 0) {
+                    audioList.innerHTML = '<div class="audio-empty">Todavía no hay audios. ¡Sé el primero en subir uno!</div>';
+                    return;
+                }
+
+                audios.forEach(audioData => {
+                    const card = document.createElement('article');
+                    card.className = 'audio-card';
+                    card.dataset.audioSearch = [
+                        audioData.titulo,
+                        audioData.nombreArchivo,
+                        audioData.autorNombre
+                    ].filter(Boolean).join(' ').toLocaleLowerCase();
+
+                    const info = document.createElement('div');
+                    const title = document.createElement('h3');
+                    title.className = 'audio-card-title';
+                    title.textContent = audioData.titulo || audioData.nombreArchivo || 'Audio sin título';
+                    const author = document.createElement('div');
+                    author.className = 'audio-card-author';
+                    author.textContent = `Publicado por ${audioData.autorNombre || 'Usuario'}`;
+                    info.appendChild(title);
+                    info.appendChild(author);
+
+                    const player = document.createElement('audio');
+                    player.preload = 'metadata';
+                    player.src = audioData.url;
+                    player.setAttribute('aria-label', `Reproducir ${title.textContent}`);
+
+                    const playerControls = document.createElement('div');
+                    playerControls.className = 'audio-player';
+
+                    const playButton = document.createElement('button');
+                    playButton.type = 'button';
+                    playButton.className = 'audio-play-btn';
+                    playButton.textContent = '▶';
+                    playButton.title = 'Reproducir';
+                    playButton.setAttribute('aria-label', `Reproducir ${title.textContent}`);
+
+                    const progress = document.createElement('input');
+                    progress.type = 'range';
+                    progress.className = 'audio-progress';
+                    progress.min = '0';
+                    progress.max = '0';
+                    progress.value = '0';
+                    progress.step = '0.1';
+                    progress.setAttribute('aria-label', `Progreso de ${title.textContent}`);
+
+                    const timeLabel = document.createElement('span');
+                    timeLabel.className = 'audio-time';
+                    timeLabel.textContent = '0:00 / 0:00';
+
+                    const formatAudioTime = seconds => {
+                        if (!Number.isFinite(seconds)) return '0:00';
+                        const minutes = Math.floor(seconds / 60);
+                        const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, '0');
+                        return `${minutes}:${remainingSeconds}`;
+                    };
+
+                    const updateAudioControls = () => {
+                        progress.value = String(player.currentTime || 0);
+                        timeLabel.textContent = `${formatAudioTime(player.currentTime)} / ${formatAudioTime(player.duration)}`;
+                        const isPlaying = !player.paused;
+                        playButton.textContent = isPlaying ? '⏸' : '▶';
+                        playButton.title = isPlaying ? 'Pausar' : 'Reproducir';
+                        playButton.setAttribute('aria-label', `${isPlaying ? 'Pausar' : 'Reproducir'} ${title.textContent}`);
+                        card.classList.toggle('is-playing', isPlaying);
+                    };
+
+                    playButton.addEventListener('click', async () => {
+                        if (player.paused) {
+                            document.querySelectorAll('.audio-card audio').forEach(otherPlayer => {
+                                if (otherPlayer !== player) otherPlayer.pause();
+                            });
+                            try {
+                                await player.play();
+                            } catch (error) {
+                                console.error('No se pudo reproducir el audio:', error);
+                            }
+                        } else {
+                            player.pause();
+                        }
+                        updateAudioControls();
+                    });
+
+                    progress.addEventListener('input', () => {
+                        player.currentTime = Number(progress.value);
+                        updateAudioControls();
+                    });
+
+                    player.addEventListener('loadedmetadata', () => {
+                        progress.max = String(player.duration || 0);
+                        updateAudioControls();
+                    });
+                    player.addEventListener('timeupdate', updateAudioControls);
+                    player.addEventListener('play', updateAudioControls);
+                    player.addEventListener('pause', updateAudioControls);
+                    player.addEventListener('ended', () => {
+                        player.currentTime = 0;
+                        updateAudioControls();
+                    });
+
+                    playerControls.appendChild(playButton);
+                    playerControls.appendChild(progress);
+                    playerControls.appendChild(timeLabel);
+
+                    card.appendChild(info);
+                    card.appendChild(playerControls);
+                    card.appendChild(player);
+                    audioList.appendChild(card);
+                });
+                window.filterAudios?.();
+            } catch (error) {
+                console.error('Error al cargar los audios:', error);
+                audioList.innerHTML = '<div class="audio-empty">No se pudieron cargar los audios. Inténtalo de nuevo.</div>';
+            }
+        };
+
+        window.filterAudios = function() {
+            const audioList = document.getElementById('audioList');
+            const searchInput = document.getElementById('audioSearchInput');
+            const countElement = document.getElementById('audioSearchCount');
+            if (!audioList || !searchInput || !countElement) return;
+
+            const searchTerm = searchInput.value.trim().toLocaleLowerCase();
+            const cards = Array.from(audioList.querySelectorAll('.audio-card'));
+            let visibleCount = 0;
+            cards.forEach(card => {
+                const matches = !searchTerm || card.dataset.audioSearch.includes(searchTerm);
+                card.style.display = matches ? '' : 'none';
+                if (matches) visibleCount++;
+            });
+            countElement.textContent = `${visibleCount} audio${visibleCount === 1 ? '' : 's'}`;
+        };
+
+        window.uploadAudio = async function() {
+            const fileInput = document.getElementById('audioFileInput');
+            const titleInput = document.getElementById('audioTitleInput');
+            const uploadButton = document.getElementById('audioUploadBtn');
+            const file = fileInput?.files?.[0];
+
+            if (!window.currentUser) {
+                alert('Debes iniciar sesión para subir un audio.');
+                return;
+            }
+            if (!file) {
+                alert('Selecciona un archivo de audio.');
+                return;
+            }
+            const audioExtension = /\.(mp3|wav|ogg|m4a|aac|webm|flac)$/i.test(file.name);
+            if (!file.type.startsWith('audio/') && !audioExtension) {
+                alert('El archivo seleccionado no es un audio válido.');
+                return;
+            }
+            if (file.size > 25 * 1024 * 1024) {
+                alert('El audio no puede superar los 25 MB.');
+                return;
+            }
+
+            const titulo = titleInput.value.trim() || file.name.replace(/\.[^/.]+$/, '');
+            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+            const storagePath = `audios/${window.currentUser.uid}/${Date.now()}-${safeName}`;
+            const extension = file.name.split('.').pop().toLowerCase();
+            const contentTypeByExtension = {
+                mp3: 'audio/mpeg',
+                wav: 'audio/wav',
+                ogg: 'audio/ogg',
+                m4a: 'audio/mp4',
+                aac: 'audio/aac',
+                webm: 'audio/webm',
+                flac: 'audio/flac'
+            };
+            const contentType = file.type.startsWith('audio/')
+                ? file.type
+                : (contentTypeByExtension[extension] || 'audio/mpeg');
+
+            try {
+                uploadButton.disabled = true;
+                uploadButton.textContent = 'Subiendo...';
+                const audioRef = ref(storage, storagePath);
+                await uploadBytes(audioRef, file, { contentType });
+                const url = await getDownloadURL(audioRef);
+                const autorNombre = await window.getCurrentUserAppName();
+
+                await addDoc(collection(db, 'audios'), {
+                    titulo,
+                    nombreArchivo: file.name,
+                    url,
+                    storagePath,
+                    autorUid: window.currentUser.uid,
+                    autorNombre,
+                    fechaCreacion: Date.now()
+                });
+
+                fileInput.value = '';
+                titleInput.value = '';
+                await window.loadAudios();
+                alert('Audio subido correctamente.');
+            } catch (error) {
+                console.error('Error al subir el audio:', error);
+                const reason = error.code === 'storage/unauthorized'
+                    ? 'Firebase Storage no tiene las reglas desplegadas o no tienes permisos.'
+                    : (error.message || 'Comprueba tu conexión e inténtalo de nuevo.');
+                alert(`No se pudo subir el audio: ${reason}`);
+            } finally {
+                uploadButton.disabled = false;
+                uploadButton.textContent = '⬆️ Subir audio';
+            }
+        };
+
+        const audioUploadBtn = document.getElementById('audioUploadBtn');
+        const audioSearchInput = document.getElementById('audioSearchInput');
+        if (audioSearchInput) {
+            audioSearchInput.addEventListener('input', () => window.filterAudios());
+        }
+        const audioFileInput = document.getElementById('audioFileInput');
+        const audioFileName = document.getElementById('audioFileName');
+        if (audioFileInput && audioFileName) {
+            audioFileInput.addEventListener('change', () => {
+                audioFileName.textContent = audioFileInput.files?.[0]?.name || 'MP3, WAV, OGG o M4A · máximo 25 MB';
+            });
+        }
+        if (audioUploadBtn) {
+            audioUploadBtn.addEventListener('click', () => window.uploadAudio());
+        }
+
         // Funciones para el sistema de NOTAS
         window.currentNoteId = null;
         window.currentNoteLocal = false;
@@ -27447,6 +28442,7 @@
                 
                 // Obtener amigos directamente desde Firestore (no depender del DOM/perfil)
                 const userFriends = await window.getFriendsForNotes();
+                const currentUserName = await window.getCurrentUserAppName();
                 
                 // Agregar al usuario actual primero
                 const currentUserPhoto = await window.getCurrentUserPhotoForNotes();
@@ -27454,7 +28450,7 @@
                 const allUsers = [
                     {
                         uid: window.currentUser.uid,
-                        nombre: window.currentUser.displayName || 'Tú',
+                        nombre: currentUserName || 'Tú',
                         foto: currentUserPhoto,
                         isCurrentUser: true
                     },
@@ -27496,7 +28492,7 @@
                 
                 const yourStory = createStoryElement({
                     uid: window.currentUser.uid,
-                    nombre: window.currentUser.displayName || 'Tú',
+                    nombre: await window.getCurrentUserAppName() || 'Tú',
                     foto: currentUserPhoto,
                     isCurrentUser: true
                 }, null);
@@ -27508,6 +28504,17 @@
                 err.textContent = 'No se pudieron cargar las notas de amigos. Detalle: ' + msg;
                 storiesGrid.appendChild(err);
             }
+        };
+
+        window.getCurrentUserAppName = async function() {
+            if (!window.currentUser) return 'Usuario';
+            try {
+                const userDoc = await getDoc(doc(db, 'usuarios', window.currentUser.uid));
+                if (userDoc.exists() && userDoc.data().nombre) return userDoc.data().nombre;
+            } catch (error) {
+                console.warn('No se pudo obtener el nombre del usuario:', error);
+            }
+            return window.currentUserName || window.currentUser.displayName || window.currentUser.email?.split('@')[0] || 'Usuario';
         };
 
         // Obtener notas para un conjunto de UIDs (Firestore "in" por lotes de 10)
@@ -27854,7 +28861,7 @@
             modal.style.display = 'flex';
         };
 
-        window.viewNoteFull = function(note) {
+        window.viewNoteFull = async function(note) {
             // Verificar si el modal existe, si no, recrearlo
             let modal = document.getElementById('noteModal');
             if (!modal) {
@@ -27890,7 +28897,14 @@
                 authorAvatarPlaceholder.style.display = 'block';
             }
             
-            authorName.textContent = note.autorNombre;
+            let authorNameValue = note.autorNombre;
+            if (!authorNameValue && note.autorUid) {
+                try {
+                    const authorDoc = await getDoc(doc(db, 'usuarios', note.autorUid));
+                    authorNameValue = authorDoc.exists() ? authorDoc.data().nombre : '';
+                } catch (_) {}
+            }
+            authorName.textContent = authorNameValue || 'Usuario';
             timeElement.textContent = getTimeAgo(note.fechaCreacion);
             
             // Mostrar contenido de la nota
@@ -27945,7 +28959,7 @@
                     const noteData = {
                         contenido: content,
                         autorUid: window.currentUser?.uid || 'local-user',
-                        autorNombre: window.currentUser?.displayName || 'Usuario Local',
+                        autorNombre: await window.getCurrentUserAppName(),
                         autorFoto,
                         fechaCreacion: Date.now(),
                         localMode: true
@@ -27965,7 +28979,7 @@
                     const noteData = {
                         contenido: content,
                         autorUid: window.currentUser.uid,
-                        autorNombre: window.currentUser.displayName || 'Usuario',
+                        autorNombre: await window.getCurrentUserAppName(),
                         autorFoto,
                         fechaCreacion: Date.now()
                     };
@@ -28025,7 +29039,7 @@
                     const noteData = {
                         contenido: content,
                         autorUid: window.currentUser?.uid || 'local-user',
-                        autorNombre: window.currentUser?.displayName || 'Usuario Local',
+                        autorNombre: await window.getCurrentUserAppName(),
                             autorFoto,
                         fechaCreacion: Date.now(),
                         localMode: true,
@@ -28084,11 +29098,9 @@
                                     <div class="note-author-name" id="noteModalAuthorName"></div>
                                     <div class="note-time" id="noteModalTime"></div>
                                 </div>
-                                <div class="note-edit-header" id="noteEditHeader" style="display: none;">
-                                    <h3>📝 Tu Nota</h3>
-                                </div>
                                 <button class="note-modal-close" id="noteModalClose">✕</button>
                             </div>
+                            <div class="note-edit-header" id="noteEditHeader" style="display: none;"><h3>📝 Tu Nota</h3></div>
                             <div class="note-modal-body" id="noteModalBody"></div>
                             <div class="note-like-bar" id="noteLikeBar" style="display: none;">
                                 <button type="button" class="note-like-btn" id="noteLikeBtn">
@@ -28129,11 +29141,9 @@
                         <div class="note-author-name" id="noteModalAuthorName"></div>
                         <div class="note-time" id="noteModalTime"></div>
                     </div>
-                    <div class="note-edit-header" id="noteEditHeader" style="display: none;">
-                        <h3>📝 Tu Nota</h3>
-                    </div>
                     <button class="note-modal-close" id="noteModalClose">✕</button>
                 </div>
+                <div class="note-edit-header" id="noteEditHeader" style="display: none;"><h3>📝 Tu Nota</h3></div>
                 <div class="note-modal-body" id="noteModalBody"></div>
                 <div class="note-like-bar" id="noteLikeBar" style="display: none;">
                     <button type="button" class="note-like-btn" id="noteLikeBtn">
