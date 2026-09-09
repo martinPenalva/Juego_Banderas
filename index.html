@@ -10075,6 +10075,7 @@
         }
 
         .audio-file-picker {
+            position: relative;
             display: flex !important;
             flex-direction: row !important;
             align-items: center;
@@ -10093,8 +10094,17 @@
             border-color: #ea580c;
         }
 
-        .audio-file-picker input {
-            display: none;
+        .audio-file-picker input[type="file"] {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            margin: 0;
+            padding: 0;
+            opacity: 0;
+            cursor: pointer;
+            font-size: 0;
         }
 
         .audio-plus-icon {
@@ -11434,7 +11444,7 @@
                             <strong>Seleccionar audio</strong>
                             <small id="audioFileName">MP3, WAV, OGG o M4A · máximo 25 MB</small>
                         </span>
-                        <input id="audioFileInput" type="file" accept="audio/*">
+                        <input id="audioFileInput" type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/ogg,audio/mp4,audio/aac,audio/webm,audio/x-m4a,audio/flac,.mp3,.wav,.ogg,.m4a,.aac,.webm,.flac,audio/*">
                     </label>
                     <button class="audio-upload-btn" id="audioUploadBtn" type="button">⬆️ Subir audio</button>
                 </div>
@@ -20274,6 +20284,86 @@
             });
         }
 
+        const createGroupBtn = document.getElementById('createGroupBtn');
+        if (createGroupBtn) {
+            createGroupBtn.addEventListener('click', event => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (window.showCreateGroupModal) {
+                    window.showCreateGroupModal();
+                }
+            });
+        }
+
+        const closeCreateGroupModals = () => {
+            if (window.closeCreateGroupModals) window.closeCreateGroupModals();
+        };
+        const createGroupModalClose = document.getElementById('createGroupModalClose');
+        const groupCancelBtn = document.getElementById('groupCancelBtn');
+        const createGroupNameModalClose = document.getElementById('createGroupNameModalClose');
+        if (createGroupModalClose) createGroupModalClose.addEventListener('click', closeCreateGroupModals);
+        if (groupCancelBtn) groupCancelBtn.addEventListener('click', closeCreateGroupModals);
+        if (createGroupNameModalClose) createGroupNameModalClose.addEventListener('click', closeCreateGroupModals);
+
+        const groupNextBtn = document.getElementById('groupNextBtn');
+        if (groupNextBtn) {
+            groupNextBtn.addEventListener('click', async () => {
+                if (window.currentAddMembersGroupId) {
+                    const userIds = (window.selectedGroupUsers || []).map(user => user.id);
+                    if (!userIds.length) {
+                        alert('Selecciona al menos un usuario');
+                        return;
+                    }
+                    if (window.addMembersToGroup) {
+                        await window.addMembersToGroup(window.currentAddMembersGroupId, userIds);
+                    }
+                    return;
+                }
+                if (window.goToGroupNameStep) window.goToGroupNameStep();
+            });
+        }
+
+        const groupNameBackBtn = document.getElementById('groupNameBackBtn');
+        if (groupNameBackBtn) {
+            groupNameBackBtn.addEventListener('click', () => {
+                const createGroupModal = document.getElementById('createGroupModal');
+                const createGroupNameModal = document.getElementById('createGroupNameModal');
+                if (createGroupNameModal) createGroupNameModal.style.display = 'none';
+                if (createGroupModal) createGroupModal.style.display = 'flex';
+            });
+        }
+
+        const groupNameInput = document.getElementById('groupNameInput');
+        const groupCreateBtn = document.getElementById('groupCreateBtn');
+        if (groupNameInput && groupCreateBtn) {
+            groupNameInput.addEventListener('input', () => {
+                groupCreateBtn.disabled = !groupNameInput.value.trim();
+            });
+        }
+        if (groupCreateBtn) {
+            groupCreateBtn.addEventListener('click', async () => {
+                if (window.createGroup) await window.createGroup();
+            });
+        }
+
+        const groupUserSearch = document.getElementById('groupUserSearch');
+        if (groupUserSearch) {
+            let groupSearchTimer = null;
+            groupUserSearch.addEventListener('input', () => {
+                const term = groupUserSearch.value.trim();
+                clearTimeout(groupSearchTimer);
+                if (term.length < 2) {
+                    if (window.updateGroupSearchResults) window.updateGroupSearchResults([]);
+                    return;
+                }
+                groupSearchTimer = setTimeout(async () => {
+                    if (!window.searchUsers) return;
+                    const users = await window.searchUsers(term);
+                    if (window.updateGroupSearchResults) window.updateGroupSearchResults(users);
+                }, 250);
+            });
+        }
+
         // Event listeners para chat
         const activeChatSendBtn = document.getElementById('activeChatSendBtn');
         const activeChatInput = document.getElementById('activeChatInput');
@@ -22311,27 +22401,21 @@
                     window.loadLibrary();
                 }
                 
-                // Mostrar la sección de chats si hay amigos (aunque esté colapsada)
+                // Mostrar la sección de chats si hay amigos o si Martin necesita crear grupos
                 const chatsSection = document.getElementById('profileChatsSection');
                 if (chatsSection) {
-                    // Verificar si hay amigos para mostrar la sección
+                    const canCreateGroups = window.currentUser.email === 'mpenalvart1@educacion.navarra.es';
                     try {
                         const userDoc = await getDoc(doc(db, "usuarios", window.currentUser.uid));
-                        if (userDoc.exists()) {
-                            const amigos = userDoc.data().amigos || [];
-                            if (amigos.length > 0) {
-                                chatsSection.style.display = 'block';
-                                chatsSection.classList.add('collapsed'); // Empezar colapsado
-                            } else {
-                                chatsSection.style.display = 'none';
-                            }
+                        const amigos = userDoc.exists() ? (userDoc.data().amigos || []) : [];
+                        if (amigos.length > 0 || canCreateGroups) {
+                            chatsSection.style.display = 'block';
+                            chatsSection.classList.add('collapsed');
                         } else {
-                            // Si no existe el documento, ocultar la sección
                             chatsSection.style.display = 'none';
                         }
                     } catch (error) {
                         console.error('Error al verificar amigos para mostrar sección de chats:', error);
-                        // Si hay error, mostrar la sección de todos modos (el usuario puede tener amigos)
                         chatsSection.style.display = 'block';
                         chatsSection.classList.add('collapsed');
                     }
@@ -25929,6 +26013,68 @@
             });
         }
 
+        window.showCreateGroupModal = function() {
+            if (!window.currentUser) {
+                alert('Debes iniciar sesión para crear un grupo');
+                return;
+            }
+
+            window.currentAddMembersGroupId = null;
+            window.currentAddMembersExistingMembers = null;
+            window.selectedGroupUsers = [];
+            if (window.updateGroupSelectedUsers) window.updateGroupSelectedUsers();
+            if (window.updateGroupSearchResults) window.updateGroupSearchResults([]);
+
+            const createGroupModal = document.getElementById('createGroupModal');
+            const createGroupNameModal = document.getElementById('createGroupNameModal');
+            if (createGroupNameModal) createGroupNameModal.style.display = 'none';
+            if (!createGroupModal) return;
+
+            const modalTitle = createGroupModal.querySelector('h2');
+            if (modalTitle) modalTitle.textContent = 'Crear Grupo';
+            const groupNextBtn = document.getElementById('groupNextBtn');
+            if (groupNextBtn) {
+                groupNextBtn.textContent = 'Siguiente';
+                groupNextBtn.disabled = true;
+            }
+            const searchInput = document.getElementById('groupUserSearch');
+            if (searchInput) searchInput.value = '';
+            const nameInput = document.getElementById('groupNameInput');
+            if (nameInput) nameInput.value = '';
+            const groupCreateBtn = document.getElementById('groupCreateBtn');
+            if (groupCreateBtn) groupCreateBtn.disabled = true;
+
+            createGroupModal.style.display = 'flex';
+            if (searchInput) searchInput.focus();
+        };
+
+        window.closeCreateGroupModals = function() {
+            const createGroupModal = document.getElementById('createGroupModal');
+            const createGroupNameModal = document.getElementById('createGroupNameModal');
+            if (createGroupModal) createGroupModal.style.display = 'none';
+            if (createGroupNameModal) createGroupNameModal.style.display = 'none';
+            window.currentAddMembersGroupId = null;
+            window.currentAddMembersExistingMembers = null;
+            window.selectedGroupUsers = [];
+            if (window.updateGroupSelectedUsers) window.updateGroupSelectedUsers();
+        };
+
+        window.goToGroupNameStep = function() {
+            if (!window.selectedGroupUsers || window.selectedGroupUsers.length === 0) {
+                alert('Selecciona al menos un usuario para el grupo');
+                return;
+            }
+            const createGroupModal = document.getElementById('createGroupModal');
+            const createGroupNameModal = document.getElementById('createGroupNameModal');
+            if (createGroupModal) createGroupModal.style.display = 'none';
+            if (createGroupNameModal) createGroupNameModal.style.display = 'flex';
+            if (window.updateGroupNamePreview) window.updateGroupNamePreview();
+            const nameInput = document.getElementById('groupNameInput');
+            const groupCreateBtn = document.getElementById('groupCreateBtn');
+            if (groupCreateBtn) groupCreateBtn.disabled = !(nameInput && nameInput.value.trim());
+            if (nameInput) nameInput.focus();
+        };
+
         // Función para crear grupo
         window.createGroup = async function() {
             if (!window.currentUser) return;
@@ -26813,24 +26959,23 @@
             }
             
             try {
-                const usersRef = collection(db, "usuarios");
-                const q = query(usersRef, where("nombre", ">=", searchTerm.trim()), where("nombre", "<=", searchTerm.trim() + "\uf8ff"));
-                const snapshot = await getDocs(q);
-                
+                const term = searchTerm.trim().toLowerCase();
+                const snapshot = await getDocs(collection(db, "usuarios"));
                 const users = [];
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    // Excluir al usuario actual
-                    if (doc.id !== window.currentUser.uid) {
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (docSnap.id === window.currentUser.uid) return;
+                    const nombre = (data.nombre || '').toLowerCase();
+                    const email = (data.email || '').toLowerCase();
+                    if (nombre.includes(term) || email.includes(term)) {
                         users.push({
-                            id: doc.id,
+                            id: docSnap.id,
                             nombre: data.nombre || 'Sin nombre',
                             email: data.email || '',
                             fotoPerfil: data.fotoPerfil || null
                         });
                     }
                 });
-                
                 return users;
             } catch (error) {
                 console.error('Error al buscar usuarios:', error);
@@ -28224,9 +28369,10 @@
                     info.appendChild(author);
 
                     const player = document.createElement('audio');
-                    player.preload = 'metadata';
-                    player.src = audioData.url;
+                    player.preload = audioData.url ? 'metadata' : 'none';
+                    if (audioData.url) player.src = audioData.url;
                     player.setAttribute('aria-label', `Reproducir ${title.textContent}`);
+                    let audioSrcReady = Boolean(audioData.url);
 
                     const playerControls = document.createElement('div');
                     playerControls.className = 'audio-player';
@@ -28274,9 +28420,20 @@
                                 if (otherPlayer !== player) otherPlayer.pause();
                             });
                             try {
+                                if (!audioSrcReady) {
+                                    playButton.disabled = true;
+                                    playButton.textContent = '…';
+                                    const resolvedSrc = await window.resolveAudioSrc(audioData);
+                                    if (!resolvedSrc) throw new Error('No se encontró el archivo de audio.');
+                                    player.src = resolvedSrc;
+                                    audioSrcReady = true;
+                                    playButton.disabled = false;
+                                }
                                 await player.play();
                             } catch (error) {
+                                playButton.disabled = false;
                                 console.error('No se pudo reproducir el audio:', error);
+                                alert('No se pudo reproducir este audio.');
                             }
                         } else {
                             player.pause();
@@ -28334,10 +28491,90 @@
             countElement.textContent = `${visibleCount} audio${visibleCount === 1 ? '' : 's'}`;
         };
 
+        const AUDIO_CONTENT_TYPES = {
+            mp3: 'audio/mpeg',
+            wav: 'audio/wav',
+            ogg: 'audio/ogg',
+            m4a: 'audio/mp4',
+            aac: 'audio/aac',
+            webm: 'audio/webm',
+            flac: 'audio/flac'
+        };
+        const AUDIO_CHUNK_SIZE = 500 * 1024;
+
+        const bytesToBase64 = bytes => {
+            let binary = '';
+            const step = 0x8000;
+            for (let i = 0; i < bytes.length; i += step) {
+                binary += String.fromCharCode.apply(null, bytes.subarray(i, i + step));
+            }
+            return btoa(binary);
+        };
+
+        const base64ToBytes = base64 => {
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            return bytes;
+        };
+
+        window.resolveAudioSrc = async function(audioData) {
+            if (audioData?.url) return audioData.url;
+            if (audioData?.dataUrl) return audioData.dataUrl;
+            if (!audioData?.id || !audioData.chunkCount) return '';
+            const chunksSnap = await getDocs(collection(db, 'audios', audioData.id, 'chunks'));
+            const ordered = chunksSnap.docs
+                .map(chunkDoc => chunkDoc.data())
+                .sort((a, b) => (a.i || 0) - (b.i || 0));
+            const parts = ordered.map(chunk => chunk.d ? base64ToBytes(chunk.d) : new Uint8Array());
+            const totalLength = parts.reduce((sum, part) => sum + part.length, 0);
+            const merged = new Uint8Array(totalLength);
+            let offset = 0;
+            parts.forEach(part => {
+                merged.set(part, offset);
+                offset += part.length;
+            });
+            const blob = new Blob([merged], { type: audioData.contentType || 'audio/mpeg' });
+            return URL.createObjectURL(blob);
+        };
+
+        const uploadAudioToStorage = async (file, storagePath, contentType) => {
+            const audioRef = ref(storage, storagePath);
+            await uploadBytes(audioRef, file, { contentType });
+            return getDownloadURL(audioRef);
+        };
+
+        const uploadAudioToFirestore = async (file, meta, onProgress) => {
+            const buffer = new Uint8Array(await file.arrayBuffer());
+            const chunks = [];
+            for (let i = 0; i < buffer.length; i += AUDIO_CHUNK_SIZE) {
+                chunks.push(bytesToBase64(buffer.subarray(i, i + AUDIO_CHUNK_SIZE)));
+            }
+            const audioDoc = await addDoc(collection(db, 'audios'), {
+                ...meta,
+                url: '',
+                storagePath: '',
+                storageTipo: 'firestore',
+                chunkCount: chunks.length,
+                tamano: file.size
+            });
+            try {
+                for (let i = 0; i < chunks.length; i++) {
+                    await setDoc(doc(db, 'audios', audioDoc.id, 'chunks', String(i)), { i, d: chunks[i] });
+                    onProgress?.(Math.round(((i + 1) / chunks.length) * 100));
+                }
+            } catch (error) {
+                await deleteDoc(doc(db, 'audios', audioDoc.id));
+                throw error;
+            }
+            return audioDoc.id;
+        };
+
         window.uploadAudio = async function() {
             const fileInput = document.getElementById('audioFileInput');
             const titleInput = document.getElementById('audioTitleInput');
             const uploadButton = document.getElementById('audioUploadBtn');
+            const fileNameLabel = document.getElementById('audioFileName');
             const file = fileInput?.files?.[0];
 
             if (!window.currentUser) {
@@ -28358,54 +28595,60 @@
                 return;
             }
 
-            const titulo = titleInput.value.trim() || file.name.replace(/\.[^/.]+$/, '');
+            const titulo = (titleInput?.value || '').trim() || file.name.replace(/\.[^/.]+$/, '');
             const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
             const storagePath = `audios/${window.currentUser.uid}/${Date.now()}-${safeName}`;
-            const extension = file.name.split('.').pop().toLowerCase();
-            const contentTypeByExtension = {
-                mp3: 'audio/mpeg',
-                wav: 'audio/wav',
-                ogg: 'audio/ogg',
-                m4a: 'audio/mp4',
-                aac: 'audio/aac',
-                webm: 'audio/webm',
-                flac: 'audio/flac'
-            };
+            const extension = (file.name.split('.').pop() || '').toLowerCase();
             const contentType = file.type.startsWith('audio/')
                 ? file.type
-                : (contentTypeByExtension[extension] || 'audio/mpeg');
+                : (AUDIO_CONTENT_TYPES[extension] || 'audio/mpeg');
+            const autorNombre = await window.getCurrentUserAppName();
+            const audioMeta = {
+                titulo,
+                nombreArchivo: file.name,
+                contentType,
+                autorUid: window.currentUser.uid,
+                autorNombre,
+                fechaCreacion: Date.now()
+            };
 
             try {
-                uploadButton.disabled = true;
-                uploadButton.textContent = 'Subiendo...';
-                const audioRef = ref(storage, storagePath);
-                await uploadBytes(audioRef, file, { contentType });
-                const url = await getDownloadURL(audioRef);
-                const autorNombre = await window.getCurrentUserAppName();
+                if (uploadButton) {
+                    uploadButton.disabled = true;
+                    uploadButton.textContent = 'Subiendo...';
+                }
+                try {
+                    const url = await uploadAudioToStorage(file, storagePath, contentType);
+                    await addDoc(collection(db, 'audios'), {
+                        ...audioMeta,
+                        url,
+                        storagePath,
+                        storageTipo: 'storage'
+                    });
+                } catch (storageError) {
+                    console.warn('Storage no disponible, se guarda el audio en Firestore:', storageError);
+                    if (uploadButton) uploadButton.textContent = 'Guardando audio...';
+                    await uploadAudioToFirestore(file, audioMeta, percent => {
+                        if (uploadButton) uploadButton.textContent = `Guardando audio... ${percent}%`;
+                    });
+                }
 
-                await addDoc(collection(db, 'audios'), {
-                    titulo,
-                    nombreArchivo: file.name,
-                    url,
-                    storagePath,
-                    autorUid: window.currentUser.uid,
-                    autorNombre,
-                    fechaCreacion: Date.now()
-                });
-
-                fileInput.value = '';
-                titleInput.value = '';
+                if (fileInput) fileInput.value = '';
+                if (titleInput) titleInput.value = '';
+                if (fileNameLabel) fileNameLabel.textContent = 'MP3, WAV, OGG o M4A · máximo 25 MB';
                 await window.loadAudios();
                 alert('Audio subido correctamente.');
             } catch (error) {
                 console.error('Error al subir el audio:', error);
                 const reason = error.code === 'storage/unauthorized'
-                    ? 'Firebase Storage no tiene las reglas desplegadas o no tienes permisos.'
+                    ? 'No hay permisos para guardar el audio. Prueba a iniciar sesión de nuevo.'
                     : (error.message || 'Comprueba tu conexión e inténtalo de nuevo.');
                 alert(`No se pudo subir el audio: ${reason}`);
             } finally {
-                uploadButton.disabled = false;
-                uploadButton.textContent = '⬆️ Subir audio';
+                if (uploadButton) {
+                    uploadButton.disabled = false;
+                    uploadButton.textContent = '⬆️ Subir audio';
+                }
             }
         };
 
