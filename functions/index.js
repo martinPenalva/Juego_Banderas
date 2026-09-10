@@ -46,7 +46,9 @@ exports.sendPushNotification = functions.firestore
           icon: 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg',
           badge: 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg',
           requireInteraction: false,
-          vibrate: [200, 100, 200]
+          vibrate: [200, 100, 200],
+          tag: data.data?.tag || 'default',
+          renotify: false
         },
         fcmOptions: {
           link: 'https://martinpenalva.github.io/Juego_Banderas/index.html'

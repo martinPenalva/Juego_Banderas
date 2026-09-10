@@ -18,7 +18,8 @@ messaging.onBackgroundMessage(payload => {
         body: payload.notification?.body || 'Tienes una nueva notificacion',
         icon: payload.notification?.icon || 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg',
         badge: payload.notification?.icon || 'https://martinpenalva.github.io/Juego_Banderas/OIG1.jpg',
-        tag: payload.data?.tag || `notification-${Date.now()}`,
+        tag: payload.data?.tag || 'default',
+        renotify: false,
         data: payload.data || {},
         vibrate: [200, 100, 200]
     };

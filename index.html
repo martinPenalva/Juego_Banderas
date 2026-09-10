@@ -24742,6 +24742,9 @@ window.STICKER_FILES = [
             if (window.loadProfileNotifications) {
                 window.loadProfileNotifications();
             }
+            if (window.resetPendingNotifications) {
+                window.resetPendingNotifications('photo');
+            }
         }
 
         function getLibraryImageData(item) {
@@ -25739,6 +25742,7 @@ window.STICKER_FILES = [
         // Abrir chat con un amigo
         window.openChat = async function(friendId, friendData = null) {
             if (!window.currentUser || !friendId) return;
+            if (window.resetPendingNotifications) window.resetPendingNotifications('chat', friendId);
             
             try {
                 // Cerrar chat anterior si existe
@@ -26021,6 +26025,7 @@ window.STICKER_FILES = [
         // Abrir chat de grupo
         window.openGroupChat = async function(grupoId, grupoData = null) {
             if (!window.currentUser || !grupoId) return;
+            if (window.resetPendingNotifications) window.resetPendingNotifications('chat', `group-${grupoId}`);
             
             try {
                 // Cerrar chat anterior si existe
@@ -26810,7 +26815,7 @@ window.STICKER_FILES = [
                                     type: 'chat',
                                     chatId: finalChatId,
                                     fromUserId: window.currentUser.uid,
-                                    tag: `chat-${currentChatFriendId}`
+                                    tag: `chat-${window.currentUser.uid}`
                                 }
                             );
                         }
@@ -28838,12 +28843,13 @@ window.STICKER_FILES = [
                     
                     // Escuchar mensajes cuando la app está activa
                     onMessage(messaging, (payload) => {
-                        // Mostrar notificación local cuando la app está activa
+                        if (document.visibilityState === 'visible') return;
                         if (payload.notification) {
                             window.showNotification(payload.notification.title, {
                                 body: payload.notification.body,
                                 icon: payload.notification.icon,
-                                tag: payload.data?.tag || 'default'
+                                tag: payload.data?.tag || 'default',
+                                renotify: false
                             });
                         }
                     });
@@ -28975,192 +28981,256 @@ window.STICKER_FILES = [
             }
         };
 
-        // Configurar listeners para notificaciones en tiempo real
+        window.clearNotificationListeners = function() {
+            (window._notifUnsubscribes || []).forEach(unsub => {
+                try { unsub(); } catch (error) {}
+            });
+            window._notifUnsubscribes = [];
+        };
+
+        window.resetPendingNotifications = function(kind, chatKey) {
+            if (!window._notifPending) {
+                window._notifPending = { likes: 0, comments: 0, chats: {} };
+            }
+            if (kind === 'likes' || kind === 'photo' || kind === 'all') {
+                window._notifPending.likes = 0;
+            }
+            if (kind === 'comments' || kind === 'photo' || kind === 'all') {
+                window._notifPending.comments = 0;
+            }
+            if (kind === 'chat' && chatKey) {
+                delete window._notifPending.chats[chatKey];
+            }
+            if (kind === 'all') {
+                window._notifPending.chats = {};
+            }
+        };
+
+        function showPendingLikeNotification() {
+            const count = window._notifPending?.likes || 0;
+            if (count < 1) return;
+            window.showNotification(count === 1 ? '❤️ Like nuevo' : '❤️ Likes nuevos', {
+                body: count === 1 ? 'Tienes un like nuevo' : `Tienes ${count} likes nuevos`,
+                tag: 'photo-likes',
+                renotify: count > 1,
+                data: { type: 'likes' }
+            });
+        }
+
+        function showPendingCommentNotification() {
+            const count = window._notifPending?.comments || 0;
+            if (count < 1) return;
+            window.showNotification(count === 1 ? '💬 Comentario nuevo' : '💬 Comentarios nuevos', {
+                body: count === 1 ? 'Tienes un comentario nuevo' : `Tienes ${count} comentarios nuevos`,
+                tag: 'photo-comments',
+                renotify: count > 1,
+                data: { type: 'comments' }
+            });
+        }
+
         window.setupNotificationListeners = async function() {
             if (!window.currentUser) return;
 
-            // Asegurarse de que los permisos estén concedidos
             if (Notification.permission !== 'granted') {
                 await window.requestNotificationPermission();
             }
-            
-            // Si los permisos no están concedidos, no configurar listeners (silencioso)
             if (Notification.permission !== 'granted') {
                 return;
             }
 
+            if (window.clearNotificationListeners) window.clearNotificationListeners();
+            window._notifPending = window._notifPending || { likes: 0, comments: 0, chats: {} };
+
             const userId = window.currentUser.uid;
-            let lastNotificationCheck = {
-                messages: 0,
-                likes: 0,
-                comments: 0,
-                requests: 0,
-                chatMessages: 0
+            const knownLikeIds = new Set();
+            const knownCommentIds = new Set();
+            const knownChatIds = new Set();
+            const knownGroupIds = new Set();
+            const watchedFotos = new Set();
+            let chatReady = false;
+
+            const watchFoto = (fotoId) => {
+                if (!fotoId || watchedFotos.has(fotoId)) return;
+                watchedFotos.add(fotoId);
+                let likesReady = false;
+                let commentsReady = false;
+
+                const likesUnsub = onSnapshot(
+                    query(collection(db, 'fotoLikes'), where('fotoId', '==', fotoId)),
+                    (snapshot) => {
+                        let added = 0;
+                        snapshot.forEach(docSnap => {
+                            const data = docSnap.data() || {};
+                            if (data.userId === userId) {
+                                knownLikeIds.add(docSnap.id);
+                                return;
+                            }
+                            if (!knownLikeIds.has(docSnap.id)) {
+                                knownLikeIds.add(docSnap.id);
+                                if (likesReady && window.currentFotoId !== fotoId) added += 1;
+                            }
+                        });
+                        if (!likesReady) {
+                            likesReady = true;
+                            return;
+                        }
+                        if (added > 0) {
+                            window._notifPending.likes += added;
+                            showPendingLikeNotification();
+                            if (window.loadProfileNotifications) window.loadProfileNotifications();
+                        }
+                    }
+                );
+
+                const commentsUnsub = onSnapshot(
+                    query(collection(db, 'fotoComentarios'), where('fotoId', '==', fotoId)),
+                    (snapshot) => {
+                        let added = 0;
+                        snapshot.forEach(docSnap => {
+                            const data = docSnap.data() || {};
+                            if (data.userId === userId) {
+                                knownCommentIds.add(docSnap.id);
+                                return;
+                            }
+                            if (!knownCommentIds.has(docSnap.id)) {
+                                knownCommentIds.add(docSnap.id);
+                                if (commentsReady && window.currentFotoId !== fotoId) added += 1;
+                            }
+                        });
+                        if (!commentsReady) {
+                            commentsReady = true;
+                            return;
+                        }
+                        if (added > 0) {
+                            window._notifPending.comments += added;
+                            showPendingCommentNotification();
+                            if (window.loadProfileNotifications) window.loadProfileNotifications();
+                        }
+                    }
+                );
+
+                window._notifUnsubscribes.push(likesUnsub, commentsUnsub);
             };
 
-            // Verificar mensajes del buzón de correo
-            const messagesRef = collection(db, "mensajesCorreo");
-            const messagesQuery = query(
-                messagesRef,
-                where("destinatarioId", "==", userId),
-                where("leido", "==", false)
+            try {
+                const userDoc = await getDoc(doc(db, 'usuarios', userId));
+                const biblioteca = userDoc.exists() ? (userDoc.data().biblioteca || []) : [];
+                biblioteca.forEach(item => {
+                    const parsed = getLibraryImageData(item);
+                    if (parsed.fotoId) watchFoto(parsed.fotoId);
+                });
+            } catch (error) {}
+
+            const fotosUnsub = onSnapshot(
+                query(collection(db, 'fotos'), where('userId', '==', userId)),
+                (snapshot) => {
+                    snapshot.forEach(fotoDoc => watchFoto(fotoDoc.id));
+                }
             );
-            
-            onSnapshot(messagesQuery, (snapshot) => {
-                const unreadCount = snapshot.size;
-                if (unreadCount > lastNotificationCheck.messages) {
-                    const newMessages = unreadCount - lastNotificationCheck.messages;
-                    window.showNotification('📮 Nuevo mensaje', {
-                        body: `Tienes ${newMessages} nuevo${newMessages > 1 ? 's' : ''} mensaje${newMessages > 1 ? 's' : ''} en tu buzón`,
-                        tag: 'mailbox-message',
-                        requireInteraction: false
+            window._notifUnsubscribes.push(fotosUnsub);
+
+            const chatUnsub = onSnapshot(
+                query(collection(db, 'mensajes'), where('toUserId', '==', userId), where('read', '==', false)),
+                async (snapshot) => {
+                    const newBySender = {};
+                    snapshot.forEach(docSnap => {
+                        const data = docSnap.data() || {};
+                        if (!chatReady) {
+                            knownChatIds.add(docSnap.id);
+                            return;
+                        }
+                        if (knownChatIds.has(docSnap.id)) return;
+                        knownChatIds.add(docSnap.id);
+                        const senderId = data.fromUserId;
+                        if (!senderId || senderId === userId) return;
+                        if (typeof currentChatFriendId !== 'undefined' && currentChatFriendId === senderId) return;
+                        if (!newBySender[senderId]) newBySender[senderId] = [];
+                        newBySender[senderId].push(data);
                     });
-                }
-                lastNotificationCheck.messages = unreadCount;
-            });
+                    if (!chatReady) {
+                        chatReady = true;
+                        return;
+                    }
 
-            // Verificar mensajes de chat - mejorado para móvil
-            const chatMessagesRef = collection(db, "mensajes");
-            const chatMessagesQuery = query(
-                chatMessagesRef,
-                where("toUserId", "==", userId),
-                where("read", "==", false)
+                    for (const senderId of Object.keys(newBySender)) {
+                        const incoming = newBySender[senderId];
+                        window._notifPending.chats[senderId] = (window._notifPending.chats[senderId] || 0) + incoming.length;
+                        const count = window._notifPending.chats[senderId];
+                        let senderName = 'Alguien';
+                        try {
+                            const senderDoc = await getDoc(doc(db, 'usuarios', senderId));
+                            if (senderDoc.exists()) senderName = senderDoc.data().nombre || 'Alguien';
+                        } catch (error) {}
+                        const rawText = incoming[incoming.length - 1].text || 'Nuevo mensaje';
+                        const lastText = window.formatStickerPreview ? window.formatStickerPreview(rawText) : rawText;
+                        const preview = String(lastText || 'Nuevo mensaje').substring(0, 50);
+                        await window.showNotification(
+                            count === 1 ? '💬 Mensaje nuevo' : '💬 Mensajes nuevos',
+                            {
+                                body: count === 1
+                                    ? `${senderName}: ${preview}`
+                                    : `${count} mensajes nuevos de ${senderName}`,
+                                tag: `chat-${senderId}`,
+                                renotify: count > 1,
+                                data: { type: 'chat', fromUserId: senderId }
+                            }
+                        );
+                    }
+                    if (Object.keys(newBySender).length > 0 && window.loadProfileNotifications) {
+                        window.loadProfileNotifications();
+                    }
+                }
             );
-            
-            let lastChatMessageIds = new Set();
-            
-            onSnapshot(chatMessagesQuery, async (snapshot) => {
-                const currentMessageIds = new Set();
-                const newMessages = [];
-                
-                snapshot.forEach((docSnapshot) => {
-                    const messageData = docSnapshot.data();
-                    const messageId = docSnapshot.id;
-                    currentMessageIds.add(messageId);
-                    
-                    // Si es un mensaje nuevo que no estaba antes
-                    if (!lastChatMessageIds.has(messageId)) {
-                        newMessages.push({ ...messageData, id: messageId });
-                    }
+            window._notifUnsubscribes.push(chatUnsub);
+
+            try {
+                const userDoc = await getDoc(doc(db, 'usuarios', userId));
+                const grupos = userDoc.exists() ? (userDoc.data().grupos || []) : [];
+                grupos.forEach(grupoId => {
+                    let thisGroupReady = false;
+                    const groupUnsub = onSnapshot(
+                        query(collection(db, 'mensajesGrupo'), where('grupoId', '==', grupoId)),
+                        async (snapshot) => {
+                            const incoming = [];
+                            snapshot.docChanges().forEach(change => {
+                                if (change.type !== 'added') return;
+                                const data = change.doc.data() || {};
+                                if (!thisGroupReady) {
+                                    knownGroupIds.add(change.doc.id);
+                                    return;
+                                }
+                                if (knownGroupIds.has(change.doc.id)) return;
+                                knownGroupIds.add(change.doc.id);
+                                if (data.remitenteId === userId) return;
+                                if (typeof currentChatGroupId !== 'undefined' && currentChatGroupId === grupoId) return;
+                                incoming.push(data);
+                            });
+                            if (!thisGroupReady) {
+                                thisGroupReady = true;
+                                return;
+                            }
+                            if (!incoming.length) return;
+                            const chatKey = `group-${grupoId}`;
+                            window._notifPending.chats[chatKey] = (window._notifPending.chats[chatKey] || 0) + incoming.length;
+                            const count = window._notifPending.chats[chatKey];
+                            await window.showNotification(
+                                count === 1 ? '💬 Mensaje de grupo' : '💬 Mensajes de grupo',
+                                {
+                                    body: count === 1 ? 'Tienes un mensaje nuevo en un grupo' : `Tienes ${count} mensajes nuevos en un grupo`,
+                                    tag: chatKey,
+                                    renotify: count > 1,
+                                    data: { type: 'group', grupoId }
+                                }
+                            );
+                        }
+                    );
+                    window._notifUnsubscribes.push(groupUnsub);
                 });
-                
-                // Solo mostrar notificación si hay mensajes nuevos
-                if (newMessages.length > 0) {
-                    // Obtener información del remitente del último mensaje
-                    const lastMessage = newMessages[newMessages.length - 1];
-                    const senderId = lastMessage.fromUserId;
-                    
-                    // Obtener nombre del remitente
-                    try {
-                        const senderDoc = await getDoc(doc(db, "usuarios", senderId));
-                        const senderName = senderDoc.exists() ? (senderDoc.data().nombre || 'Alguien') : 'Alguien';
-                        
-                        const notificationBody = newMessages.length === 1 
-                            ? `${senderName}: ${(lastMessage.text || 'Nuevo mensaje').substring(0, 50)}${(lastMessage.text || '').length > 50 ? '...' : ''}`
-                            : `${senderName} y otros: ${newMessages.length} nuevos mensajes`;
-                        
-                        // Mostrar notificación siempre, incluso si la página no está visible
-                        await window.showNotification('💬 Nuevo mensaje de chat', {
-                            body: notificationBody,
-                            tag: `chat-${senderId}`, // Tag establecido para agrupar notificaciones del mismo remitente
-                            requireInteraction: false,
-                            vibrate: [200, 100, 200],
-                            silent: false,
-                            renotify: true // Renovar la notificación si ya existe una
-                        });
-                    } catch (error) {
-                        console.error('Error al obtener nombre del remitente:', error);
-                        await window.showNotification('💬 Nuevo mensaje de chat', {
-                            body: `Tienes ${newMessages.length} nuevo${newMessages.length > 1 ? 's' : ''} mensaje${newMessages.length > 1 ? 's' : ''}`,
-                            tag: `chat-${Date.now()}`,
-                            requireInteraction: false,
-                            vibrate: [200, 100, 200]
-                        });
-                    }
-                    
-                    // Actualizar la lista de amigos para mostrar los badges de notificación
-                    if (window.loadFriendsList) {
-                        await window.loadFriendsList();
-                    }
-                }
-                
-                lastChatMessageIds = currentMessageIds;
-                lastNotificationCheck.chatMessages = snapshot.size;
-            });
-
-            // Verificar likes y comentarios en fotos
-            const fotosRef = collection(db, "fotos");
-            const fotosQuery = query(fotosRef, where("userId", "==", userId));
-            
-            onSnapshot(fotosQuery, async (fotosSnapshot) => {
-                const fotosIds = [];
-                fotosSnapshot.forEach(docSnapshot => {
-                    fotosIds.push(docSnapshot.id);
-                });
-
-                if (fotosIds.length > 0) {
-                    // Verificar likes
-                    const likesRef = collection(db, "fotoLikes");
-                    let totalLikes = 0;
-                    for (const fotoId of fotosIds) {
-                        const likesQuery = query(likesRef, where("fotoId", "==", fotoId));
-                        const likesSnapshot = await getDocs(likesQuery);
-                        totalLikes += likesSnapshot.size;
-                    }
-
-                    if (totalLikes > lastNotificationCheck.likes) {
-                        const newLikes = totalLikes - lastNotificationCheck.likes;
-                        window.showNotification('❤️ Nuevo like', {
-                            body: `Tu foto recibió ${newLikes} nuevo${newLikes > 1 ? 's' : ''} like${newLikes > 1 ? 's' : ''}`,
-                            tag: 'photo-like',
-                            requireInteraction: false
-                        });
-                    }
-                    lastNotificationCheck.likes = totalLikes;
-
-                    // Verificar comentarios
-                    const commentsRef = collection(db, "fotoComentarios");
-                    let totalComments = 0;
-                    for (const fotoId of fotosIds) {
-                        const commentsQuery = query(commentsRef, where("fotoId", "==", fotoId));
-                        const commentsSnapshot = await getDocs(commentsQuery);
-                        totalComments += commentsSnapshot.size;
-                    }
-
-                    if (totalComments > lastNotificationCheck.comments) {
-                        const newComments = totalComments - lastNotificationCheck.comments;
-                        window.showNotification('💬 Nuevo comentario', {
-                            body: `Tu foto recibió ${newComments} nuevo${newComments > 1 ? 's' : ''} comentario${newComments > 1 ? 's' : ''}`,
-                            tag: 'photo-comment',
-                            requireInteraction: false
-                        });
-                    }
-                    lastNotificationCheck.comments = totalComments;
-                }
-            });
-
-            // Verificar solicitudes de amistad
-            const userDocRef = doc(db, "usuarios", userId);
-            onSnapshot(userDocRef, (docSnapshot) => {
-                if (docSnapshot.exists()) {
-                    const userData = docSnapshot.data();
-                    const solicitudesRecibidas = userData.solicitudesRecibidas || [];
-                    const requestsCount = solicitudesRecibidas.length;
-
-                    if (requestsCount > lastNotificationCheck.requests) {
-                        const newRequests = requestsCount - lastNotificationCheck.requests;
-                        window.showNotification('👥 Nueva solicitud de amistad', {
-                            body: `Tienes ${newRequests} nueva${newRequests > 1 ? 's' : ''} solicitud${newRequests > 1 ? 'es' : ''} de amistad`,
-                            tag: 'friend-request',
-                            requireInteraction: false
-                        });
-                    }
-                    lastNotificationCheck.requests = requestsCount;
-                }
-            });
+            } catch (error) {}
         };
 
         // ========== DETECCIÓN DE CONEXIÓN A INTERNET ==========
+
         
         // Modal para mostrar cuando no hay conexión
         const noConnectionModal = document.createElement('div');
