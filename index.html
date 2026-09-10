@@ -6685,15 +6685,20 @@
         .profile-mailbox-btn.has-notifications,
         .profile-inbox-btn.has-notifications,
         .profile-friends-btn.has-notifications,
-        .profile-library-section.has-notifications,
-        .profile-chats-section.has-notifications {
+        .profile-library-section.has-notifications {
             position: relative;
             animation: notificationPulse 2s ease-in-out infinite;
             box-shadow: 0 0 20px rgba(245, 101, 101, 0.6), 0 4px 15px rgba(66, 153, 225, 0.4) !important;
         }
 
+        .profile-chats-section.has-notifications {
+            position: relative;
+            border-color: #f56565;
+            box-shadow: 0 0 0 1px #f56565, 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
         .profile-chats-section.has-notifications h3 {
-            animation: notificationPulse 2s ease-in-out infinite;
+            color: #c53030;
         }
 
         .profile-chats-section {
@@ -6772,19 +6777,7 @@
         .chat-item.has-unread {
             border: 2px solid #f56565;
             background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
-            animation: chatItemPulse 2s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(245, 101, 101, 0.4), 0 4px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        @keyframes chatItemPulse {
-            0%, 100% {
-                border-color: #f56565;
-                box-shadow: 0 0 20px rgba(245, 101, 101, 0.4), 0 4px 15px rgba(0, 0, 0, 0.15);
-            }
-            50% {
-                border-color: #ff6b9d;
-                box-shadow: 0 0 30px rgba(245, 101, 101, 0.6), 0 6px 20px rgba(0, 0, 0, 0.2);
-            }
+            box-shadow: 0 2px 8px rgba(245, 101, 101, 0.18);
         }
 
         .chat-item.has-unread::before {
@@ -6810,17 +6803,6 @@
 
         .chat-item.has-unread .chat-item-picture {
             border: 3px solid #f56565;
-            box-shadow: 0 0 15px rgba(245, 101, 101, 0.5);
-            animation: pictureGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes pictureGlow {
-            0%, 100% {
-                box-shadow: 0 0 15px rgba(245, 101, 101, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(245, 101, 101, 0.8);
-            }
         }
 
         .chat-item-picture img {
@@ -27774,6 +27756,7 @@ window.STICKER_FILES = [
                 
                 // Usar un Set para rastrear chats ya agregados y evitar duplicados
                 const addedChats = new Set();
+                const chatEntries = [];
                 
                 // Obtener últimos mensajes de cada amigo
                 for (const friendId of amigos) {
@@ -27885,7 +27868,11 @@ window.STICKER_FILES = [
                             const chatKey = `friend_${friendId}`;
                             if (!addedChats.has(chatKey)) {
                                 addedChats.add(chatKey);
-                                chatsListEl.appendChild(chatItem);
+                                chatEntries.push({
+                                    item: chatItem,
+                                    unreadCount,
+                                    lastTimestamp: lastMessage ? (lastMessage.timestamp || 0) : 0
+                                });
                             }
                         }
                     } catch (error) {
@@ -28031,13 +28018,25 @@ window.STICKER_FILES = [
                             const groupChatKey = `group_${grupoId}`;
                             if (!addedChats.has(groupChatKey)) {
                                 addedChats.add(groupChatKey);
-                                chatsListEl.appendChild(chatItem);
+                                chatEntries.push({
+                                    item: chatItem,
+                                    unreadCount,
+                                    lastTimestamp: lastMessage ? (lastMessage.timestamp || 0) : 0
+                                });
                             }
                         }
                     } catch (error) {
                         console.error(`Error al cargar grupo ${grupoId}:`, error);
                     }
                 }
+
+                chatEntries.sort((a, b) => {
+                    const aUnread = a.unreadCount > 0 ? 1 : 0;
+                    const bUnread = b.unreadCount > 0 ? 1 : 0;
+                    if (aUnread !== bUnread) return bUnread - aUnread;
+                    return (b.lastTimestamp || 0) - (a.lastTimestamp || 0);
+                });
+                chatEntries.forEach(entry => chatsListEl.appendChild(entry.item));
 
                 // Actualizar notificaciones después de cargar chats
                 if (window.loadProfileNotifications) {
