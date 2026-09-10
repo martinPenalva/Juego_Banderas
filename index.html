@@ -8507,7 +8507,8 @@
             transform: translateX(5px);
         }
 
-        .profile-important-notice-btn {
+        .profile-important-notice-btn,
+        .profile-reports-btn {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             border: none;
@@ -8520,6 +8521,56 @@
             box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
             width: 100%;
             margin-top: 10px;
+        }
+
+        .profile-reports-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+            position: relative;
+        }
+
+        .profile-reports-btn.has-notifications {
+            animation: notificationPulse 2s ease-in-out infinite;
+        }
+
+        .photo-reports-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .photo-report-card {
+            border: 1px solid #fecaca;
+            border-radius: 14px;
+            padding: 14px;
+            background: #fff7ed;
+        }
+
+        .photo-report-card img {
+            display: block;
+            width: 100%;
+            max-height: 280px;
+            object-fit: contain;
+            background: #0f172a;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .photo-report-meta {
+            color: #334155;
+            font-size: 0.95em;
+            line-height: 1.45;
+        }
+
+        .photo-report-remove-btn {
+            margin-top: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 11px 14px;
+            background: #b91c1c;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         .profile-important-notice-btn:hover {
@@ -9531,6 +9582,143 @@
             transform: scale(1.2);
         }
 
+        .sticker-picker {
+            position: fixed;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 12px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+            z-index: 12000;
+            width: min(380px, calc(100vw - 16px));
+            max-height: 360px;
+            overflow-y: auto;
+            display: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sticker-picker.show {
+            display: block;
+        }
+
+        .sticker-picker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 0 0 10px;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+            padding-bottom: 4px;
+        }
+
+        .sticker-picker-title {
+            font-size: 0.95em;
+            font-weight: 700;
+            color: #4a5568;
+            margin: 0;
+        }
+
+        .sticker-picker-close {
+            background: #edf2f7;
+            color: #4a5568;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1em;
+            flex-shrink: 0;
+        }
+
+        .sticker-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .sticker-item {
+            background: #f7fafc;
+            border: 1px solid #edf2f7;
+            border-radius: 10px;
+            padding: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .sticker-item:hover {
+            background: #edf2f7;
+            transform: scale(1.06);
+        }
+
+        .sticker-item img {
+            max-width: 72px;
+            max-height: 72px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .sticker-image,
+        .comment-sticker-image,
+        .chat-sticker-image {
+            display: block;
+            object-fit: contain;
+            background: transparent;
+        }
+
+        .chat-sticker-image {
+            max-width: 140px;
+            max-height: 140px;
+            margin: 2px 0;
+        }
+
+        .comment-sticker-image {
+            max-width: 90px;
+            max-height: 90px;
+            margin: 6px 0 2px;
+        }
+
+        .active-chat-message-content.sticker-only {
+            background: transparent;
+            box-shadow: none;
+            padding: 4px 6px;
+        }
+
+        .active-chat-message.sent .active-chat-message-content.sticker-only,
+        .active-chat-message.received .active-chat-message-content.sticker-only {
+            background: transparent;
+            color: inherit;
+        }
+
+        .comment-sticker-btn {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .comment-sticker-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: scale(1.08);
+        }
+
         /* Menú de selección de imagen */
         .image-menu-container {
             position: relative;
@@ -9670,6 +9858,40 @@
             
             .emoji-grid {
                 grid-template-columns: repeat(6, 1fr);
+            }
+
+            .sticker-picker.sticker-picker-sheet {
+                width: 100vw;
+                max-width: 100vw;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                top: auto !important;
+                max-height: min(72vh, 620px);
+                border-radius: 22px 22px 0 0;
+                padding: 14px 14px calc(18px + env(safe-area-inset-bottom, 0px));
+                box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.28);
+            }
+
+            .sticker-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .sticker-item {
+                min-height: 108px;
+                padding: 10px;
+                border-radius: 14px;
+            }
+
+            .sticker-item img {
+                max-width: 96px;
+                max-height: 96px;
+            }
+
+            .chat-sticker-image {
+                max-width: 110px;
+                max-height: 110px;
             }
             
             .image-menu {
@@ -10510,12 +10732,49 @@
             background: #fff7ed;
         }
 
+        .post-card-media {
+            position: relative;
+            background: #0f172a;
+        }
+
         .post-card img {
             display: block;
             width: 100%;
             max-height: 540px;
             object-fit: contain;
             background: #0f172a;
+        }
+
+        .post-report-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.72);
+            color: #fbbf24;
+            font-size: 1.25em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+            z-index: 2;
+        }
+
+        .post-report-btn:hover,
+        .post-report-btn:focus-visible {
+            background: #b91c1c;
+            color: #fff;
+            transform: scale(1.06);
+        }
+
+        .post-report-btn.reported {
+            background: #166534;
+            color: #fff;
+            cursor: default;
         }
 
         .post-card-info {
@@ -11058,6 +11317,7 @@
                     <button class="profile-mailbox-btn" id="profileMailboxBtn">📮 Buzón de Correo</button>
                     <button class="profile-send-mail-btn" id="profileSendMailBtn" style="display: none;">✉️ Enviar Mensaje</button>
                     <button class="profile-important-notice-btn" id="profileImportantNoticeBtn" style="display: none;">📢 Avisos Importantes</button>
+                    <button class="profile-reports-btn" id="profileReportsBtn" style="display: none;">⚠️ Reportes</button>
                     <button class="profile-recommendations-inbox-btn" id="profileRecommendationsInboxBtn" style="display: none;">📧 Correo de Recomendaciones</button>
                     <div class="profile-scores-section" id="profileScoresSection" style="display: none;">
                         <h3>Mis Puntuaciones Máximas</h3>
@@ -11093,6 +11353,7 @@
                             <div class="active-chat-input-wrapper">
                                 <div class="active-chat-actions">
                                     <button class="active-chat-action-btn" id="emojiBtn" title="Emojis">😀</button>
+                                    <button class="active-chat-action-btn sticker-trigger" id="stickerBtn" type="button" title="Pegatinas">🏷️</button>
                                 </div>
                                 <textarea id="activeChatInput" class="active-chat-input" placeholder="Escribe un mensaje..." maxlength="500" rows="1"></textarea>
                                 <button class="active-chat-send-btn" id="activeChatSendBtn">Enviar</button>
@@ -11141,6 +11402,7 @@
                     <h4>Comentarios</h4>
                     <div class="comments-list" id="libraryImageCommentsList"></div>
                     <div class="comment-input-container">
+                        <button type="button" class="comment-sticker-btn sticker-trigger" id="commentStickerBtn" title="Pegatinas">🏷️</button>
                         <input type="text" id="libraryImageCommentInput" placeholder="Escribe un comentario..." class="comment-input">
                         <button class="comment-submit-btn" id="libraryImageCommentSubmit">Enviar</button>
                     </div>
@@ -11156,6 +11418,14 @@
         <div class="library-image-zoom-container">
             <img id="libraryImageZoomImg" src="" alt="Imagen ampliada">
         </div>
+    </div>
+
+    <div class="sticker-picker" id="stickerPicker" role="dialog" aria-label="Pegatinas">
+        <div class="sticker-picker-header">
+            <p class="sticker-picker-title">Elige una pegatina</p>
+            <button type="button" class="sticker-picker-close" id="stickerPickerClose" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="sticker-grid" id="stickerGrid"></div>
     </div>
 
     <!-- Modal para crear grupo - Seleccionar usuarios -->
@@ -11358,6 +11628,20 @@
                     <button class="friends-search-btn" id="friendsSearchBtn">🔍 Buscar</button>
                 </div>
                 <div class="friends-results" id="friendsResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de reportes de fotos (solo Martin) -->
+    <div class="inbox-modal" id="reportsModal" style="display: none;">
+        <div class="inbox-modal-content">
+            <div class="inbox-modal-header">
+                <h2>⚠️ Reportes</h2>
+                <button class="inbox-modal-close" id="reportsModalClose">✕</button>
+            </div>
+            <div class="inbox-modal-body">
+                <p style="color: #64748b; margin-top: 0;">Fotos públicas con más de 2 reportes. Al quitarlas del post siguen en la biblioteca privada de quien las publicó.</p>
+                <div class="photo-reports-list" id="photoReportsList"></div>
             </div>
         </div>
     </div>
@@ -16350,6 +16634,11 @@
 
         const LEVELS_UNDER_CONSTRUCTION = ['cars', 'strangerthings'];
 
+        function isMartinAccount() {
+            return !!(window.currentUser && window.currentUser.email === 'mpenalvart1@educacion.navarra.es');
+        }
+        window.isMartinAccount = isMartinAccount;
+
         function canPlayLockedLevels() {
             const email = (window.currentUser && window.currentUser.email || '').toLowerCase();
             const name = (window.currentUserName || '').toLowerCase().trim();
@@ -20241,6 +20530,26 @@
                     if (window.loadImportantNoticeUsers) await window.loadImportantNoticeUsers();
                 });
             }
+            const profileReportsBtn = document.getElementById('profileReportsBtn');
+            const reportsModal = document.getElementById('reportsModal');
+            const reportsModalClose = document.getElementById('reportsModalClose');
+            if (profileReportsBtn) {
+                profileReportsBtn.addEventListener('click', async () => {
+                    if (window.showReportsModal) await window.showReportsModal();
+                });
+            }
+            if (reportsModalClose) {
+                reportsModalClose.addEventListener('click', () => {
+                    if (window.hideReportsModal) window.hideReportsModal();
+                });
+            }
+            if (reportsModal) {
+                reportsModal.addEventListener('click', (e) => {
+                    if (e.target === reportsModal && window.hideReportsModal) {
+                        window.hideReportsModal();
+                    }
+                });
+            }
             if (importantNoticeModalClose) {
                 importantNoticeModalClose.addEventListener('click', () => {
                     if (importantNoticeModal) importantNoticeModal.style.display = 'none';
@@ -20584,6 +20893,7 @@
             emojiBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 emojiPicker.classList.toggle('show');
+                if (window.hideStickerPicker) window.hideStickerPicker();
             });
         }
         
@@ -20593,6 +20903,256 @@
                 emojiPicker.classList.remove('show');
             }
         });
+
+        window.STICKER_FOLDER = 'kk-stickersgg-pack';
+
+window.STICKER_FILES = [
+    '1003-i-don-t-care.png',
+    '1028-sex-2.png',
+    '1367-shit-i-got-cyberbullied.png',
+    '1525-crazy.png',
+    '1564-haha-cry.png',
+    '1580-cute-cat.png',
+    '1917-nom-fast.png',
+    '1936-friend.png',
+    '2052-monkey-excuse-me.png',
+    '2326-pwe.jpg',
+    '2363-homiekiss.png',
+    '24644-shinji-ikari-screaming.png',
+    '2486-kurukurukurukuruuuu.png',
+    '25111-shhh.png',
+    '2701-joobiforyou.png',
+    '27859-cronchycat.gif',
+    '3002-trappin.png',
+    '3136-kiss.png',
+    '3503-hi.png',
+    '3764-maxwell-4.gif',
+    '3771-we-re-late.png',
+    '3961-bleh.png',
+    '40699-uh.png',
+    '4175-y-ok.png',
+    '4311-thisshitbussin.png',
+    '4458-yeaaaa.gif',
+    '4534-only-pain.png',
+    '4668-i-forgor.png',
+    '4729-hmm.png',
+    '4811-plink.png',
+    '4980-very-cool.png',
+    '5094-pardon.png',
+    '5094-wtf.png',
+    '5117-lol.png',
+    '5237-yoshida-peak.png',
+    '5312-cute-cat-4.png',
+    '5372-surprise-cat.png',
+    '5427-caught-in-4k.png',
+    '5649-rose.png',
+    '5669-real.png',
+    '5671-black-prisoner.png',
+    '5765-cute-cat.png',
+    '5867-nerdy.png',
+    '5993-sparxie-laugh.gif',
+    '61512-icekingt-werk.gif',
+    '6273-what-the.png',
+    '64387-rigby.png',
+    '6478-.gif',
+    '6543-stop-pls.png',
+    '6739-cute-cat.png',
+    '6993-rip.png',
+    '7716-you-mad.png',
+    '8192-yoshida-mid.png',
+    '8197-i-rember.png',
+    '8219-touch-grass.png',
+    '8462-uh-oh.png',
+    '85559-lolll.png',
+    '8594-jiggy.png',
+    '86743-sybau.png',
+    '8853-the-autism.png',
+    '9037-shocker.png',
+    '9039-popcat.png',
+    '9041-intense-stare.png',
+    '9066-let-em-cook.png',
+    '9071-eepy.png',
+    '9170-get-a-load-of-this-guy.png',
+    '9233-car-bomb.png',
+    '92746-uh-oh.png',
+    '9419-you-smell.png',
+    '9603-sex.png',
+    '9624-yapper.png',
+    '9766-cat.png',
+    '9985-dance-blob.png'
+];
+
+        window.isValidStickerFile = function(name) {
+            return window.STICKER_FILES.includes(name);
+        };
+
+        window.stickerToken = function(name) {
+            return `[sticker:${name}]`;
+        };
+
+        window.stickerSrc = function(name) {
+            return `${window.STICKER_FOLDER}/${encodeURIComponent(name)}`;
+        };
+
+        window.formatStickerPreview = function(text) {
+            if (!text) return '';
+            const replaced = String(text).replace(/\[sticker:[^\]]+\]/g, 'Pegatina');
+            return replaced.trim() || 'Pegatina';
+        };
+
+        window.isStickerOnlyText = function(text) {
+            return /^\s*\[sticker:[a-zA-Z0-9._-]+\]\s*$/.test(String(text || ''));
+        };
+
+        window.appendTextWithStickers = function(parentEl, text, imageClass) {
+            if (!parentEl || text == null || text === '') return;
+            const source = String(text);
+            const regex = /\[sticker:([a-zA-Z0-9._-]+)\]/g;
+            let lastIndex = 0;
+            let match;
+            while ((match = regex.exec(source)) !== null) {
+                if (match.index > lastIndex) {
+                    const span = document.createElement('span');
+                    span.textContent = source.slice(lastIndex, match.index);
+                    parentEl.appendChild(span);
+                }
+                const file = match[1];
+                if (window.isValidStickerFile(file)) {
+                    const img = document.createElement('img');
+                    img.src = window.stickerSrc(file);
+                    img.alt = 'Pegatina';
+                    img.className = imageClass || 'sticker-image';
+                    parentEl.appendChild(img);
+                } else {
+                    const span = document.createElement('span');
+                    span.textContent = match[0];
+                    parentEl.appendChild(span);
+                }
+                lastIndex = regex.lastIndex;
+            }
+            if (lastIndex < source.length) {
+                const span = document.createElement('span');
+                span.textContent = source.slice(lastIndex);
+                parentEl.appendChild(span);
+            } else if (lastIndex === 0) {
+                parentEl.textContent = source;
+            }
+        };
+
+        window.hideStickerPicker = function() {
+            const picker = document.getElementById('stickerPicker');
+            if (picker) {
+                picker.classList.remove('show', 'sticker-picker-sheet');
+                picker.style.left = '';
+                picker.style.right = '';
+                picker.style.top = '';
+                picker.style.bottom = '';
+                picker.style.width = '';
+            }
+            window.stickerPickerContext = null;
+        };
+
+        window.openStickerPicker = function(anchorEl, context) {
+            const picker = document.getElementById('stickerPicker');
+            if (!picker || !anchorEl) return;
+            window.stickerPickerContext = context || { type: 'chat' };
+            if (emojiPicker) emojiPicker.classList.remove('show');
+
+            picker.classList.add('show');
+            const isMobile = window.innerWidth <= 768;
+            if (isMobile) {
+                picker.classList.add('sticker-picker-sheet');
+                picker.style.left = '0px';
+                picker.style.right = '0px';
+                picker.style.bottom = '0px';
+                picker.style.top = 'auto';
+                picker.style.width = '100vw';
+                return;
+            }
+
+            picker.classList.remove('sticker-picker-sheet');
+            const rect = anchorEl.getBoundingClientRect();
+            const pickerWidth = picker.offsetWidth || 380;
+            const pickerHeight = picker.offsetHeight || 320;
+            let left = rect.left;
+            if (left + pickerWidth > window.innerWidth - 8) {
+                left = Math.max(8, window.innerWidth - pickerWidth - 8);
+            }
+            let top = rect.top - pickerHeight - 8;
+            if (top < 8) {
+                top = Math.min(window.innerHeight - pickerHeight - 8, rect.bottom + 8);
+            }
+            picker.style.left = `${left}px`;
+            picker.style.top = `${Math.max(8, top)}px`;
+            picker.style.bottom = 'auto';
+            picker.style.right = 'auto';
+            picker.style.width = '';
+        };
+
+        const stickerGrid = document.getElementById('stickerGrid');
+        const stickerPicker = document.getElementById('stickerPicker');
+        if (stickerGrid) {
+            window.STICKER_FILES.forEach((file) => {
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.className = 'sticker-item';
+                item.title = file.replace(/^\d+-/, '').replace(/\.[^.]+$/, '').replace(/-/g, ' ');
+                const img = document.createElement('img');
+                img.src = window.stickerSrc(file);
+                img.alt = item.title;
+                item.appendChild(img);
+                item.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const token = window.stickerToken(file);
+                    const context = window.stickerPickerContext || { type: 'chat' };
+                    window.hideStickerPicker();
+                    if (context.type === 'comment' && window.currentFotoId && window.addFotoComment) {
+                        await window.addFotoComment(window.currentFotoId, token, context.parentCommentId || null);
+                    } else if (context.type === 'reply' && window.currentFotoId && window.addFotoComment) {
+                        await window.addFotoComment(window.currentFotoId, token, context.parentCommentId);
+                    } else if (window.sendChatMessage) {
+                        await window.sendChatMessage(token);
+                    }
+                });
+                stickerGrid.appendChild(item);
+            });
+        }
+
+        document.addEventListener('click', (e) => {
+            const trigger = e.target.closest('.sticker-trigger');
+            if (trigger) {
+                e.preventDefault();
+                e.stopPropagation();
+                const picker = document.getElementById('stickerPicker');
+                const alreadyOpen = picker && picker.classList.contains('show') && window.stickerPickerAnchor === trigger;
+                if (alreadyOpen) {
+                    window.hideStickerPicker();
+                    window.stickerPickerAnchor = null;
+                    return;
+                }
+                window.stickerPickerAnchor = trigger;
+                let context = { type: 'chat' };
+                if (trigger.id === 'commentStickerBtn') {
+                    context = { type: 'comment' };
+                } else if (trigger.dataset.parentCommentId) {
+                    context = { type: 'reply', parentCommentId: trigger.dataset.parentCommentId };
+                }
+                window.openStickerPicker(trigger, context);
+                return;
+            }
+            if (stickerPicker && !stickerPicker.contains(e.target)) {
+                window.hideStickerPicker();
+                window.stickerPickerAnchor = null;
+            }
+        });
+        const stickerPickerClose = document.getElementById('stickerPickerClose');
+        if (stickerPickerClose) {
+            stickerPickerClose.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.hideStickerPicker();
+                window.stickerPickerAnchor = null;
+            });
+        }
         // Autoajustar altura del textarea
         if (activeChatInput) {
             activeChatInput.addEventListener('input', function() {
@@ -22644,9 +23204,14 @@
 
                 const importantNoticeBtn = document.getElementById('profileImportantNoticeBtn');
                 if (importantNoticeBtn && window.currentUser) {
-                    importantNoticeBtn.style.display = window.currentUser.email === 'mpenalvart1@educacion.navarra.es'
+                    importantNoticeBtn.style.display = (window.isMartinAccount && window.isMartinAccount())
                         ? 'block'
                         : 'none';
+                }
+
+                const reportsBtn = document.getElementById('profileReportsBtn');
+                if (reportsBtn && window.currentUser) {
+                    reportsBtn.style.display = (window.isMartinAccount && window.isMartinAccount()) ? 'block' : 'none';
                 }
 
                 // Mostrar botón de crear grupo solo para mpenalvart1
@@ -22672,6 +23237,7 @@
             const saveBtn = document.getElementById('profileSaveBtn');
             const friendsModal = document.getElementById('friendsModal');
             const inboxModal = document.getElementById('inboxModal');
+            const reportsModal = document.getElementById('reportsModal');
             const friendProfileModal = document.getElementById('friendProfileModal');
             if (modal) {
                 modal.style.display = 'none';
@@ -22684,6 +23250,9 @@
             }
             if (inboxModal) {
                 inboxModal.style.display = 'none';
+            }
+            if (reportsModal) {
+                reportsModal.style.display = 'none';
             }
             if (friendProfileModal) {
                 friendProfileModal.style.display = 'none';
@@ -23597,6 +24166,29 @@
                     }
                 }
 
+                // 5. Avisos de fotos reportadas (solo Martin, a partir de 2 reportes)
+                if (window.isMartinAccount && window.isMartinAccount()) {
+                    const reportsSnapshot = await getDocs(collection(db, 'reportesFotos'));
+                    const pendingReports = reportsSnapshot.docs.filter(reportDoc => {
+                        const data = reportDoc.data();
+                        return (data.estado || 'pendiente') === 'pendiente' && (data.reportCount || 0) > 2;
+                    }).length;
+                    const reportsBtn = document.getElementById('profileReportsBtn');
+                    if (reportsBtn) {
+                        const existingBadge = reportsBtn.querySelector('.notification-badge');
+                        if (existingBadge) existingBadge.remove();
+                        if (pendingReports > 0) {
+                            reportsBtn.classList.add('has-notifications');
+                            const badge = document.createElement('span');
+                            badge.className = 'notification-badge';
+                            badge.textContent = pendingReports > 99 ? '99+' : String(pendingReports);
+                            reportsBtn.appendChild(badge);
+                        } else {
+                            reportsBtn.classList.remove('has-notifications');
+                        }
+                    }
+                }
+
             } catch (error) {
                 console.error('Error al cargar notificaciones del perfil:', error);
             }
@@ -23818,6 +24410,7 @@
                             if (success) {
                                 window.hideFriendProfileModal();
                                 await window.loadFriendsList();
+                                if (window.loadChatsList) await window.loadChatsList();
                             }
                         }
                     };
@@ -24052,6 +24645,9 @@
                 
                 // Recargar biblioteca
                 await window.loadLibrary();
+                if (visibilidad === 'publica' && window.loadPublicPosts) {
+                    await window.loadPublicPosts();
+                }
                 
                 return true;
             } catch (error) {
@@ -24756,7 +25352,11 @@
             
             const text = document.createElement('div');
             text.className = 'comment-text';
-            text.textContent = data.comentario;
+            if (window.appendTextWithStickers) {
+                window.appendTextWithStickers(text, data.comentario || '', 'comment-sticker-image');
+            } else {
+                text.textContent = data.comentario;
+            }
             
             // Cargar likes del comentario
             const likesData = await loadCommentLikes(data.id);
@@ -24847,6 +25447,13 @@
                 }
             });
             replyInputContainer.appendChild(replyInput);
+            const replyStickerBtn = document.createElement('button');
+            replyStickerBtn.type = 'button';
+            replyStickerBtn.className = 'comment-sticker-btn sticker-trigger';
+            replyStickerBtn.title = 'Pegatinas';
+            replyStickerBtn.textContent = '🏷️';
+            replyStickerBtn.dataset.parentCommentId = data.id;
+            replyInputContainer.appendChild(replyStickerBtn);
             replyInputContainer.appendChild(replySubmit);
             
             commentContent.appendChild(author);
@@ -25037,12 +25644,54 @@
                 await updateDoc(friendUserRef, {
                     amigos: updatedFriendAmigos
                 });
+
+                await window.deleteDirectChatWithUser(friendId);
                 
                 return true;
             } catch (error) {
                 console.error('Error al eliminar amigo:', error);
                 alert('Error al eliminar el amigo');
                 return false;
+            }
+        };
+
+        window.deleteDirectChatWithUser = async function(friendId) {
+            if (!window.currentUser || !friendId) return;
+            const currentUserId = window.currentUser.uid;
+            const chatId1 = `${currentUserId}_${friendId}`;
+            const chatId2 = `${friendId}_${currentUserId}`;
+            const finalChatId = chatId1 < chatId2 ? chatId1 : chatId2;
+
+            try {
+                const messagesRef = collection(db, 'mensajes');
+                while (true) {
+                    const snapshot = await getDocs(query(
+                        messagesRef,
+                        where('chatId', '==', finalChatId),
+                        limit(400)
+                    ));
+                    if (snapshot.empty) break;
+                    const batch = writeBatch(db);
+                    snapshot.docs.forEach(messageDoc => batch.delete(messageDoc.ref));
+                    await batch.commit();
+                    if (snapshot.size < 400) break;
+                }
+            } catch (error) {
+                console.error('Error al borrar la conversación:', error);
+            }
+
+            try {
+                await deleteDoc(doc(db, 'typingStatus', `${finalChatId}_${currentUserId}`));
+            } catch (error) {}
+            try {
+                await deleteDoc(doc(db, 'typingStatus', `${finalChatId}_${friendId}`));
+            } catch (error) {}
+
+            if (typeof currentChatFriendId !== 'undefined' && currentChatFriendId === friendId && window.closeChat) {
+                await window.closeChat();
+            }
+            if (window.loadChatsList) {
+                await window.loadChatsList();
             }
         };
 
@@ -25524,9 +26173,16 @@
                                     content.appendChild(senderName);
                                 }
 
-                                const text = document.createElement('div');
-                                text.textContent = message.texto || '';
-                                content.appendChild(text);
+                                if (window.isStickerOnlyText && window.isStickerOnlyText(message.texto || '')) {
+                                    content.classList.add('sticker-only');
+                                }
+                                if (window.appendTextWithStickers) {
+                                    window.appendTextWithStickers(content, message.texto || '', 'chat-sticker-image');
+                                } else {
+                                    const text = document.createElement('div');
+                                    text.textContent = message.texto || '';
+                                    content.appendChild(text);
+                                }
                                 
                                 const time = document.createElement('div');
                                 time.className = 'active-chat-message-time';
@@ -25952,9 +26608,16 @@
             
             // Mostrar texto
             if (messageData.text) {
-                const text = document.createElement('div');
-                text.textContent = messageData.text;
-                content.appendChild(text);
+                if (window.isStickerOnlyText && window.isStickerOnlyText(messageData.text)) {
+                    content.classList.add('sticker-only');
+                }
+                if (window.appendTextWithStickers) {
+                    window.appendTextWithStickers(content, messageData.text, 'chat-sticker-image');
+                } else {
+                    const text = document.createElement('div');
+                    text.textContent = messageData.text;
+                    content.appendChild(text);
+                }
             }
             
             const time = document.createElement('div');
@@ -26012,6 +26675,13 @@
                 sendBtn.disabled = true;
                 sendBtn.textContent = 'Enviando...';
             }
+
+            const restoreSendButton = () => {
+                if (sendBtn) {
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Enviar';
+                }
+            };
             
             try {
                 if (currentChatGroupId) {
@@ -26019,20 +26689,12 @@
                     const grupoDoc = await getDoc(doc(db, "gruposChat", currentChatGroupId));
                     if (!grupoDoc.exists()) {
                         alert('El grupo no existe');
-                        if (sendBtn) {
-                            sendBtn.disabled = false;
-                            sendBtn.textContent = 'Enviar';
-                        }
                         return;
                     }
                     
                     const miembros = grupoDoc.data().miembros || [];
                     if (!miembros.includes(window.currentUser.uid)) {
                         alert('No eres miembro de este grupo');
-                        if (sendBtn) {
-                            sendBtn.disabled = false;
-                            sendBtn.textContent = 'Enviar';
-                        }
                         return;
                     }
                     
@@ -26054,7 +26716,7 @@
                     try {
                         const senderName = window.currentUserName || 'Alguien';
                         const grupoNombre = grupoDoc.data().nombre || 'Grupo';
-                        let messagePreview = text || 'Mensaje';
+                        let messagePreview = window.formatStickerPreview ? window.formatStickerPreview(text) : (text || 'Mensaje');
                         if (messagePreview.length > 50) {
                             messagePreview = messagePreview.substring(0, 50) + '...';
                         }
@@ -26100,7 +26762,7 @@
                     // Enviar notificación push al destinatario (si tiene token FCM)
                     try {
                         const senderName = window.currentUserName || 'Alguien';
-                        let messagePreview = text || 'Mensaje';
+                        let messagePreview = window.formatStickerPreview ? window.formatStickerPreview(text) : (text || 'Mensaje');
                         if (messagePreview.length > 50) {
                             messagePreview = messagePreview.substring(0, 50) + '...';
                         }
@@ -26140,12 +26802,6 @@
                 chatInput.value = '';
                 chatInput.style.height = 'auto';
                 
-                // Restaurar botón de enviar
-                if (sendBtn) {
-                    sendBtn.disabled = false;
-                    sendBtn.textContent = 'Enviar';
-                }
-                
                 // El onSnapshot se encargará de actualizar automáticamente en tiempo real
                 // Scroll al final después de enviar (el onSnapshot también lo hará)
                 setTimeout(() => {
@@ -26156,11 +26812,6 @@
                 }, 200);
             } catch (error) {
                 console.error('Error al enviar mensaje:', error);
-                // Restaurar botón en caso de error
-                if (sendBtn) {
-                    sendBtn.disabled = false;
-                    sendBtn.textContent = 'Enviar';
-                }
                 
                 // Mostrar mensaje de error más específico
                 let errorMessage = 'Error al enviar el mensaje';
@@ -26170,6 +26821,9 @@
                     errorMessage = `Error: ${error.message}`;
                 }
                 alert(errorMessage);
+            } finally {
+                sendChatInFlight = false;
+                restoreSendButton();
             }
         };
 
@@ -27168,7 +27822,9 @@
                             const lastMsg = document.createElement('div');
                             lastMsg.className = 'chat-item-last-message';
                             if (lastMessage) {
-                                lastMsg.textContent = lastMessage.text || 'Sin mensajes';
+                                lastMsg.textContent = window.formatStickerPreview
+                                    ? window.formatStickerPreview(lastMessage.text) || 'Sin mensajes'
+                                    : (lastMessage.text || 'Sin mensajes');
                             } else {
                                 lastMsg.textContent = 'Sin mensajes';
                             }
@@ -27289,7 +27945,10 @@
                             if (lastMessage) {
                                 const remitenteDoc = await getDoc(doc(db, "usuarios", lastMessage.remitenteId));
                                 const remitenteNombre = remitenteDoc.exists() ? remitenteDoc.data().nombre : 'Usuario';
-                                lastMsg.textContent = `${remitenteNombre}: ${lastMessage.texto || 'Sin mensajes'}`;
+                                const preview = window.formatStickerPreview
+                                    ? window.formatStickerPreview(lastMessage.texto)
+                                    : (lastMessage.texto || 'Sin mensajes');
+                                lastMsg.textContent = `${remitenteNombre}: ${preview || 'Sin mensajes'}`;
                             } else {
                                 lastMsg.textContent = 'Sin mensajes';
                             }
@@ -27593,6 +28252,7 @@
                                     const success = await window.removeFriend(friendId);
                                     if (success) {
                                         await window.loadFriendsList();
+                                        if (window.loadChatsList) await window.loadChatsList();
                                     }
                                 }
                             };
@@ -28650,21 +29310,268 @@
             }
         }, 5000); // Verificar cada 5 segundos
 
-        // Funciones para el feed público de VIRAL
+        const PHOTO_REPORT_NOTICE_AFTER = 2;
+
+        function isPublicPhotoVisibility(value) {
+            return String(value || '').toLowerCase() === 'publica';
+        }
+
+        function postsShareSameImage(a, b) {
+            return a && b && a.userId === b.userId && a.imagen && a.imagen === b.imagen;
+        }
+
+        async function collectPublicPosts() {
+            const postsById = new Map();
+
+            const addPost = (post) => {
+                if (!post || !post.imagen || !isPublicPhotoVisibility(post.visibilidad)) return;
+                if (post.ocultaEnPost) return;
+                if (![...postsById.values()].some(existing => postsShareSameImage(existing, post))) {
+                    const key = post.id || `${post.userId || 'user'}_${post.imagen.length}_${post.fechaCreacion || 0}`;
+                    if (!postsById.has(key)) postsById.set(key, { ...post, id: post.id || key });
+                }
+            };
+
+            try {
+                const snapshot = await getDocs(collection(db, 'fotos'));
+                snapshot.docs.forEach(fotoDoc => addPost({ id: fotoDoc.id, ...fotoDoc.data() }));
+            } catch (error) {
+                console.warn('No se pudieron leer fotos públicas de la colección fotos:', error);
+            }
+
+            try {
+                const usersSnapshot = await getDocs(collection(db, 'usuarios'));
+                usersSnapshot.docs.forEach(userDoc => {
+                    const userData = userDoc.data() || {};
+                    (userData.biblioteca || []).forEach((item, index) => {
+                        const parsed = getLibraryImageData(item);
+                        addPost({
+                            id: parsed.fotoId || `bib_${userDoc.id}_${index}`,
+                            imagen: parsed.imagen,
+                            userId: userDoc.id,
+                            nombreUsuario: userData.nombre || 'Usuario',
+                            descripcion: parsed.descripcion,
+                            visibilidad: parsed.visibilidad,
+                            fechaCreacion: parsed.fechaCreacion || 0,
+                            bibliotecaIndex: index
+                        });
+                    });
+                });
+            } catch (error) {
+                console.warn('No se pudieron leer fotos públicas de las bibliotecas:', error);
+            }
+
+            return [...postsById.values()].sort((a, b) => (b.fechaCreacion || 0) - (a.fechaCreacion || 0));
+        }
+
+        async function resolveReportedPhotoImage(report) {
+            if (!report) return '';
+            try {
+                if (report.fotoId) {
+                    const fotoDoc = await getDoc(doc(db, 'fotos', report.fotoId));
+                    if (fotoDoc.exists() && fotoDoc.data().imagen) return fotoDoc.data().imagen;
+                }
+            } catch (error) {}
+            if (report.ownerId) {
+                try {
+                    const ownerDoc = await getDoc(doc(db, 'usuarios', report.ownerId));
+                    const biblioteca = ownerDoc.exists() ? (ownerDoc.data().biblioteca || []) : [];
+                    for (const item of biblioteca) {
+                        const parsed = getLibraryImageData(item);
+                        if (parsed.fotoId === report.fotoId && parsed.imagen) return parsed.imagen;
+                    }
+                    const publicItem = biblioteca.map(getLibraryImageData).find(item => isPublicPhotoVisibility(item.visibilidad) && item.imagen);
+                    if (publicItem) return publicItem.imagen;
+                } catch (error) {}
+            }
+            return '';
+        }
+
+        window.hasUserReportedPhoto = async function(fotoId) {
+            if (!window.currentUser || !fotoId) return false;
+            const snapshot = await getDocs(query(
+                collection(db, 'fotoReportes'),
+                where('fotoId', '==', fotoId),
+                where('reporterId', '==', window.currentUser.uid)
+            ));
+            return !snapshot.empty;
+        };
+
+        window.reportPublicPhoto = async function(post) {
+            if (!window.currentUser) {
+                alert('Debes iniciar sesión para reportar una foto.');
+                return false;
+            }
+            if (!post || !post.id) return false;
+            if (post.userId === window.currentUser.uid) {
+                alert('No puedes reportar tu propia foto.');
+                return false;
+            }
+            try {
+                if (await window.hasUserReportedPhoto(post.id)) {
+                    alert('Ya has reportado esta foto.');
+                    return false;
+                }
+                await addDoc(collection(db, 'fotoReportes'), {
+                    fotoId: post.id,
+                    reporterId: window.currentUser.uid,
+                    ownerId: post.userId || '',
+                    timestamp: Date.now()
+                });
+                const reportsSnapshot = await getDocs(query(
+                    collection(db, 'fotoReportes'),
+                    where('fotoId', '==', post.id)
+                ));
+                const reportCount = reportsSnapshot.size;
+                if (reportCount > PHOTO_REPORT_NOTICE_AFTER) {
+                    await setDoc(doc(db, 'reportesFotos', String(post.id)), {
+                        fotoId: post.id,
+                        ownerId: post.userId || '',
+                        ownerName: post.nombreUsuario || 'Usuario',
+                        descripcion: post.descripcion || '',
+                        reportCount,
+                        estado: 'pendiente',
+                        updatedAt: Date.now()
+                    }, { merge: true });
+                    if (window.loadProfileNotifications) await window.loadProfileNotifications();
+                }
+                alert('Foto reportada.');
+                return true;
+            } catch (error) {
+                console.error('Error al reportar la foto:', error);
+                alert('No se pudo reportar la foto.');
+                return false;
+            }
+        };
+
+        window.hideReportsModal = function() {
+            const modal = document.getElementById('reportsModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        window.removePhotoFromPublicFeed = async function(fotoId, ownerId) {
+            if (!window.isMartinAccount || !window.isMartinAccount()) return false;
+            try {
+                try {
+                    const fotoRef = doc(db, 'fotos', fotoId);
+                    const fotoDoc = await getDoc(fotoRef);
+                    if (fotoDoc.exists()) {
+                        await updateDoc(fotoRef, { visibilidad: 'privada' });
+                    }
+                } catch (error) {
+                    console.warn('No se pudo actualizar la foto pública:', error);
+                }
+
+                if (ownerId) {
+                    const ownerRef = doc(db, 'usuarios', ownerId);
+                    const ownerDoc = await getDoc(ownerRef);
+                    if (ownerDoc.exists()) {
+                        const biblioteca = [...(ownerDoc.data().biblioteca || [])];
+                        const bibPrefix = `bib_${ownerId}_`;
+                        const bibIndex = String(fotoId || '').startsWith(bibPrefix)
+                            ? Number(String(fotoId).slice(bibPrefix.length))
+                            : NaN;
+                        const updated = biblioteca.map((item, index) => {
+                            if (!item || typeof item !== 'object') return item;
+                            const matchesId = item.fotoId === fotoId;
+                            const matchesIndex = Number.isInteger(bibIndex) && index === bibIndex;
+                            if (matchesId || matchesIndex) {
+                                return { ...item, visibilidad: 'privada' };
+                            }
+                            return item;
+                        });
+                        await updateDoc(ownerRef, { biblioteca: updated });
+                    }
+                }
+
+                await setDoc(doc(db, 'reportesFotos', String(fotoId)), {
+                    estado: 'resuelto',
+                    updatedAt: Date.now()
+                }, { merge: true });
+
+                if (window.loadPublicPosts) await window.loadPublicPosts();
+                if (window.showReportsModal) await window.showReportsModal();
+                if (window.loadProfileNotifications) await window.loadProfileNotifications();
+                return true;
+            } catch (error) {
+                console.error('Error al quitar la foto del post:', error);
+                alert('No se pudo quitar la foto del post.');
+                return false;
+            }
+        };
+
+        window.showReportsModal = async function() {
+            if (!window.isMartinAccount || !window.isMartinAccount()) return;
+            const modal = document.getElementById('reportsModal');
+            const list = document.getElementById('photoReportsList');
+            if (!modal || !list) return;
+            modal.style.display = 'flex';
+            list.innerHTML = '<div class="post-empty">Cargando reportes...</div>';
+            try {
+                const snapshot = await getDocs(collection(db, 'reportesFotos'));
+                const pending = snapshot.docs
+                    .map(reportDoc => ({ id: reportDoc.id, ...reportDoc.data() }))
+                    .filter(report => (report.estado || 'pendiente') === 'pendiente' && (report.reportCount || 0) > PHOTO_REPORT_NOTICE_AFTER)
+                    .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+                list.innerHTML = '';
+                if (pending.length === 0) {
+                    list.innerHTML = '<div class="post-empty">No hay fotos reportadas pendientes.</div>';
+                    return;
+                }
+
+                for (const report of pending) {
+                    const card = document.createElement('div');
+                    card.className = 'photo-report-card';
+                    const imageSrc = await resolveReportedPhotoImage(report);
+                    if (imageSrc) {
+                        const img = document.createElement('img');
+                        img.src = imageSrc;
+                        img.alt = 'Foto reportada';
+                        card.appendChild(img);
+                    }
+                    const meta = document.createElement('div');
+                    meta.className = 'photo-report-meta';
+                    const ownerLine = document.createElement('strong');
+                    ownerLine.textContent = `@${report.ownerName || 'Usuario'}`;
+                    meta.appendChild(ownerLine);
+                    meta.appendChild(document.createElement('br'));
+                    const countLine = document.createTextNode(`${report.reportCount || 0} reportes`);
+                    meta.appendChild(countLine);
+                    if (report.descripcion) {
+                        meta.appendChild(document.createElement('br'));
+                        meta.appendChild(document.createTextNode(report.descripcion));
+                    }
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'photo-report-remove-btn';
+                    removeBtn.textContent = 'Quitar del post público';
+                    removeBtn.addEventListener('click', async () => {
+                        if (confirm('¿Quitar esta foto de la parte pública? Seguirá en la biblioteca de quien la publicó.')) {
+                            await window.removePhotoFromPublicFeed(report.fotoId || report.id, report.ownerId);
+                        }
+                    });
+                    card.appendChild(meta);
+                    card.appendChild(removeBtn);
+                    list.appendChild(card);
+                }
+            } catch (error) {
+                console.error('Error al cargar reportes:', error);
+                list.innerHTML = '<div class="post-empty">No se pudieron cargar los reportes.</div>';
+            }
+        };
+
         window.loadPublicPosts = async function() {
             const postList = document.getElementById('postList');
-            if (!postList || !window.currentUser) return;
+            if (!postList) return;
+            if (!window.currentUser) {
+                postList.innerHTML = '<div class="post-empty">Inicia sesión para ver las publicaciones públicas.</div>';
+                return;
+            }
 
             postList.innerHTML = '<div class="post-empty">Cargando publicaciones...</div>';
             try {
-                const snapshot = await getDocs(query(
-                    collection(db, 'fotos'),
-                    where('visibilidad', '==', 'publica')
-                ));
-                const posts = snapshot.docs
-                    .map(postDoc => ({ id: postDoc.id, ...postDoc.data() }))
-                    .sort((a, b) => (b.fechaCreacion || 0) - (a.fechaCreacion || 0));
-
+                const posts = await collectPublicPosts();
                 postList.innerHTML = '';
                 if (posts.length === 0) {
                     postList.innerHTML = '<div class="post-empty">Todavía no hay publicaciones públicas.</div>';
@@ -28672,37 +29579,72 @@
                 }
 
                 posts.forEach(post => {
-                    const card = document.createElement('article');
-                    card.className = 'post-card';
-                    const image = document.createElement('img');
-                    image.src = post.imagen;
-                    image.alt = `Publicación de ${post.nombreUsuario || 'Usuario'}`;
-                    image.loading = 'lazy';
-                    image.style.cursor = 'pointer';
-                    image.addEventListener('click', () => {
-                        window.showLibraryImage?.(post.imagen, post.id, post.userId, post.descripcion || '');
-                    });
+                    try {
+                        const card = document.createElement('article');
+                        card.className = 'post-card';
+                        const media = document.createElement('div');
+                        media.className = 'post-card-media';
+                        const image = document.createElement('img');
+                        image.src = post.imagen;
+                        image.alt = `Publicación de ${post.nombreUsuario || 'Usuario'}`;
+                        image.loading = 'lazy';
+                        image.style.cursor = 'pointer';
+                        image.addEventListener('click', () => {
+                            window.showLibraryImage?.(post.imagen, post.id, post.userId, post.descripcion || '');
+                        });
+                        media.appendChild(image);
 
-                    const info = document.createElement('div');
-                    info.className = 'post-card-info';
-                    const author = document.createElement('span');
-                    author.className = 'post-card-author';
-                    author.textContent = `@${post.nombreUsuario || 'Usuario'}`;
-                    const date = document.createElement('span');
-                    date.textContent = post.fechaCreacion
-                        ? new Date(post.fechaCreacion).toLocaleDateString('es-ES')
-                        : '';
-                    info.appendChild(author);
-                    info.appendChild(date);
-                    card.appendChild(image);
-                    card.appendChild(info);
-                    if (post.descripcion) {
-                        const description = document.createElement('div');
-                        description.className = 'post-card-description';
-                        description.textContent = post.descripcion;
-                        card.appendChild(description);
+                        if (window.currentUser && post.userId !== window.currentUser.uid) {
+                            const reportBtn = document.createElement('button');
+                            reportBtn.type = 'button';
+                            reportBtn.className = 'post-report-btn';
+                            reportBtn.title = 'Reportar esta foto';
+                            reportBtn.setAttribute('aria-label', 'Reportar esta foto');
+                            reportBtn.textContent = '⚠️';
+                            reportBtn.addEventListener('click', async (event) => {
+                                event.stopPropagation();
+                                const reported = await window.reportPublicPhoto(post);
+                                if (reported) {
+                                    reportBtn.classList.add('reported');
+                                    reportBtn.textContent = '✓';
+                                    reportBtn.title = 'Ya has reportado esta foto';
+                                    reportBtn.disabled = true;
+                                }
+                            });
+                            window.hasUserReportedPhoto(post.id).then((alreadyReported) => {
+                                if (alreadyReported) {
+                                    reportBtn.classList.add('reported');
+                                    reportBtn.textContent = '✓';
+                                    reportBtn.title = 'Ya has reportado esta foto';
+                                    reportBtn.disabled = true;
+                                }
+                            }).catch(() => {});
+                            media.appendChild(reportBtn);
+                        }
+
+                        const info = document.createElement('div');
+                        info.className = 'post-card-info';
+                        const author = document.createElement('span');
+                        author.className = 'post-card-author';
+                        author.textContent = `@${post.nombreUsuario || 'Usuario'}`;
+                        const date = document.createElement('span');
+                        date.textContent = post.fechaCreacion
+                            ? new Date(post.fechaCreacion).toLocaleDateString('es-ES')
+                            : '';
+                        info.appendChild(author);
+                        info.appendChild(date);
+                        card.appendChild(media);
+                        card.appendChild(info);
+                        if (post.descripcion) {
+                            const description = document.createElement('div');
+                            description.className = 'post-card-description';
+                            description.textContent = post.descripcion;
+                            card.appendChild(description);
+                        }
+                        postList.appendChild(card);
+                    } catch (cardError) {
+                        console.error('Error al mostrar una publicación:', cardError);
                     }
-                    postList.appendChild(card);
                 });
             } catch (error) {
                 console.error('Error al cargar publicaciones públicas:', error);
