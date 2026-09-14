@@ -1009,6 +1009,22 @@
             }
         }
 
+        .god-progress {
+            display: none;
+            margin: 0 auto 16px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #4c1d95 0%, #6366f1 100%);
+            color: white;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.45);
+        }
+
+        body.god-mode .god-progress.is-visible {
+            display: inline-block;
+        }
+
         .streak-text {
             font-size: 1.3em;
             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
@@ -11703,6 +11719,7 @@
             <div class="hearts" id="hearts">❤️ ❤️ ❤️</div>
         </div>
         <div class="score game-play-ui">Puntuación: <span id="score">0</span></div>
+        <div class="god-progress game-play-ui" id="godProgress">Bandera <span id="godProgressCurrent">0</span> / <span id="godProgressTotal">0</span></div>
         <div class="streak-container game-play-ui">
             <div class="streak-fire" id="streakFire">🔥</div>
             <div class="streak-text">Racha: <span id="streak">0</span></div>
@@ -11811,7 +11828,7 @@
                     <button class="difficulty-btn easy" id="easyBtn">🟢 Fácil <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('easy')" title="Cómo funciona Fácil">i</span><br><small>Países de Europa</small></button>
                     <button class="difficulty-btn hard" id="hardBtn">🔴 Difícil <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('hard')" title="Cómo funciona Difícil">i</span><br><small>Todos los países</small></button>
                     <button class="difficulty-btn impossible" id="impossibleBtn">⚫ Imposible <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('impossible')" title="Cómo funciona Imposible">i</span><br><small>Islas y paraísos fiscales</small></button>
-                    <button class="difficulty-btn god" id="godBtn">✨ Dios <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('god')" title="Cómo funciona Dios">i</span><br><small>Todas las banderas del mundo</small></button>
+                    <button class="difficulty-btn god" id="godBtn">✨ Dios <span class="level-info-btn" onclick="event.stopPropagation(); mostrarInfoNivel('god')" title="Cómo funciona Dios">i</span><br><small>Más de 200 banderas, sin repetir</small></button>
                 </div>
             </div>
             
@@ -11954,6 +11971,7 @@
         </div>
     </div>
 
+    <script src="world-flags.js"></script>
     <script>
         let countries = [];
         let allCountries = [];
@@ -11995,21 +12013,24 @@
             }
 
             try {
-                const response = await fetch('https://restcountries.com/v3.1/all', {
+                const bundled = getBundledWorldCountries();
+                if (bundled.length > 0) {
+                    flagPool = bundled;
+                    mainFlagRotationIndex = 0;
+                    renderMainFlag(flagPool[0]);
+                }
+
+                const liveCodes = await fetch('https://flagcdn.com/es/codes.json', {
                     headers: { 'Accept': 'application/json' }
                 });
-                if (!response.ok) return;
-                const countries = await response.json();
-                if (!Array.isArray(countries)) return;
-                const seenCodes = new Set();
-                flagPool = countries.filter(country => {
-                    const code = country?.cca2;
-                    if (!code || seenCodes.has(code)) return false;
-                    seenCodes.add(code);
-                    return true;
-                });
-                mainFlagRotationIndex = 0;
-                renderMainFlag(flagPool[0]);
+                if (!liveCodes.ok) return;
+                const names = await liveCodes.json();
+                const livePool = buildCountriesFromNameMap(names, regionLookupFromBundle());
+                if (livePool.length > 80) {
+                    flagPool = livePool;
+                    mainFlagRotationIndex = 0;
+                    renderMainFlag(flagPool[0]);
+                }
             } catch (error) {
                 console.warn('No se pudieron cargar las banderas decorativas:', error);
             }
@@ -12024,13 +12045,118 @@
 
         function getUniqueCountries(countryList) {
             const uniqueCountries = new Map();
-            countryList.forEach(country => {
-                const key = country.cca2 || country.cca3 || country.name?.common;
+            (countryList || []).forEach(country => {
+                const code = (country?.cca2 || country?.cca3 || '').toString().toUpperCase();
+                const key = /^[A-Z]{2}$/.test(code) ? code : (country?.name?.common);
                 if (key && !uniqueCountries.has(key)) {
-                    uniqueCountries.set(key, country);
+                    uniqueCountries.set(key, { ...country, cca2: code || country?.cca2 });
                 }
             });
             return Array.from(uniqueCountries.values());
+        }
+
+        function isPlayableFlagCountry(country) {
+            const code = (country?.cca2 || '').toString().toUpperCase();
+            const name = country?.name?.common;
+            return !!name && /^[A-Z]{2}$/.test(code) && code !== 'EU' && code !== 'UN';
+        }
+
+        function regionLookupFromBundle() {
+            const lookup = {};
+            const groups = window.WORLD_FLAG_BUNDLE?.regionGroups || {};
+            Object.entries(groups).forEach(([region, csv]) => {
+                String(csv).split(',').forEach(code => {
+                    const key = code.trim().toUpperCase();
+                    if (key) lookup[key] = region;
+                });
+            });
+            return lookup;
+        }
+
+        function buildCountriesFromNameMap(nameMap, regionLookup) {
+            return Object.entries(nameMap || {})
+                .filter(([code]) => /^[a-z]{2}$/i.test(code) && !['eu', 'un'].includes(code.toLowerCase()))
+                .map(([code, name]) => {
+                    const cca2 = code.toUpperCase();
+                    return {
+                        name: { common: name },
+                        cca2,
+                        region: regionLookup[cca2] || '',
+                        subregion: '',
+                        population: 0,
+                        borders: []
+                    };
+                });
+        }
+
+        function getBundledWorldCountries() {
+            const bundle = window.WORLD_FLAG_BUNDLE;
+            if (!bundle?.names) return [];
+            return buildCountriesFromNameMap(bundle.names, regionLookupFromBundle());
+        }
+
+        function overlayCountryDetails(baseList, extraList) {
+            const extraByCode = new Map();
+            (extraList || []).forEach(country => {
+                const code = (country?.cca2 || '').toString().toUpperCase();
+                if (/^[A-Z]{2}$/.test(code)) extraByCode.set(code, country);
+            });
+
+            const merged = baseList.map(base => {
+                const extra = extraByCode.get(base.cca2);
+                extraByCode.delete(base.cca2);
+                if (!extra) return base;
+                const spanishName = extra.translations?.spa?.common;
+                return {
+                    ...base,
+                    ...extra,
+                    cca2: base.cca2,
+                    name: { common: base.name.common || spanishName || extra.name?.common },
+                    region: extra.region || base.region,
+                    subregion: extra.subregion || base.subregion,
+                    population: extra.population || base.population,
+                    borders: extra.borders || base.borders
+                };
+            });
+
+            extraByCode.forEach(country => {
+                if (isPlayableFlagCountry(country)) {
+                    merged.push({
+                        name: { common: country.translations?.spa?.common || country.name.common },
+                        cca2: country.cca2.toUpperCase(),
+                        region: country.region || '',
+                        subregion: country.subregion || '',
+                        population: country.population || 0,
+                        borders: country.borders || []
+                    });
+                }
+            });
+
+            return getUniqueCountries(merged.filter(isPlayableFlagCountry));
+        }
+
+        async function fetchJsonArray(url) {
+            const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+            if (!response.ok) return null;
+            const data = await response.json();
+            return Array.isArray(data) ? data : null;
+        }
+
+        function setGodProgressVisible(visible) {
+            const progressEl = document.getElementById('godProgress');
+            if (!progressEl) return;
+            progressEl.classList.toggle('is-visible', !!visible);
+            progressEl.style.display = visible ? 'inline-block' : 'none';
+        }
+
+        function updateGodProgress() {
+            const currentEl = document.getElementById('godProgressCurrent');
+            const totalEl = document.getElementById('godProgressTotal');
+            if (!currentEl || !totalEl) return;
+            const total = usedCountries.length + availableCountries.length;
+            currentEl.textContent = String(usedCountries.length);
+            totalEl.textContent = String(total);
+            setGodProgressVisible(difficulty === 'god' && total > 0);
         }
 
         let currentStarWarsCharacter = null; // Para el modo Star Wars
@@ -12331,18 +12457,12 @@
                     countries = impossibleFallback.length > 0 ? impossibleFallback : countries;
                 }
             } else if (difficulty === 'god') {
-                // Dios: TODOS los países sin filtros (examen completo de todas las banderas)
-                // Usar TODOS los países de la API sin ningún filtro
-                countries = getUniqueCountries(allCountries); // Usar todas las banderas únicas de la API
-                
-                // Inicializar arrays para tracking de países usados
-                // Crear una copia profunda para evitar referencias
-                availableCountries = getUniqueCountries(allCountries).map(country => ({ ...country }));
+                // Dios: todas las banderas de todos los continentes, sin repetir
+                countries = getUniqueCountries(allCountries.filter(isPlayableFlagCountry));
+                availableCountries = countries.map(country => ({ ...country }));
                 usedCountries = [];
-                
-                console.log(`Modo Dios: ${availableCountries.length} países cargados (examen completo sin repeticiones)`);
-                console.log(`Total de países disponibles de la API: ${allCountries.length}`);
-                return; // Salir temprano, no aplicar más filtros
+                console.log(`Modo Dios: ${availableCountries.length} banderas únicas (todos los continentes, sin repeticiones)`);
+                return;
             } else if (difficulty === 'god_old') {
                 // Código anterior (tribus) - desactivado
                 const tribalCountries = [
@@ -16677,11 +16797,14 @@
             // Reiniciar arrays para modo Dios
             if (level === 'god') {
                 usedCountries = [];
-                // Reinicializar con todos los países de la API (copia profunda)
-                availableCountries = allCountries.length > 0 
-                    ? getUniqueCountries(allCountries).map(country => ({ ...country }))
+                availableCountries = allCountries.length > 0
+                    ? getUniqueCountries(allCountries.filter(isPlayableFlagCountry)).map(country => ({ ...country }))
                     : [];
-                console.log(`Modo Dios reiniciado: ${availableCountries.length} países disponibles`);
+                setGodProgressVisible(true);
+                updateGodProgress();
+                console.log(`Modo Dios reiniciado: ${availableCountries.length} banderas disponibles`);
+            } else {
+                setGodProgressVisible(false);
             }
             
             // Activar efectos según el modo
@@ -16964,88 +17087,72 @@
             }
         }
 
-        // Cargar países desde la API
+        // Cargar países: catálogo completo local + FlagCDN (REST Countries v3.1 está deprecada)
         async function loadCountries() {
             const loadingEl = document.getElementById('loading');
             
             try {
                 loadingEl.textContent = 'Cargando países...';
-                
-                // Intentar cargar desde la API (solo una vez, sin timeout para evitar errores)
-                let data = null;
-                
+
+                let worldCountries = getBundledWorldCountries();
+
                 try {
-                    const response = await fetch('https://restcountries.com/v3.1/all', {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json'
-                        }
+                    const response = await fetch('https://flagcdn.com/es/codes.json', {
+                        headers: { 'Accept': 'application/json' }
                     });
-                    
                     if (response.ok) {
-                        const jsonData = await response.json();
-                        if (Array.isArray(jsonData) && jsonData.length > 0) {
-                            data = jsonData;
+                        const names = await response.json();
+                        const liveCountries = buildCountriesFromNameMap(names, regionLookupFromBundle());
+                        if (liveCountries.length > 0) {
+                            worldCountries = overlayCountryDetails(
+                                worldCountries.length > 0 ? worldCountries : liveCountries,
+                                liveCountries
+                            );
                         }
                     }
                 } catch (err) {
-                    console.log('API no disponible, usando lista de respaldo');
+                    console.log('FlagCDN no disponible, usando catálogo local de banderas');
                 }
-                
-                // Si la API falla o no devuelve datos, usar lista de respaldo
-                if (!data || data.length === 0) {
-                    console.log('Usando lista de países de respaldo');
-                    allCountries = fallbackCountries;
-                } else {
-                    // Filtrar países que tengan nombre y código ISO (para FlagsAPI)
-                    // En modo Dios, queremos TODOS los países posibles
-                    allCountries = data.filter(country =>
-                        country &&
-                        country.name &&
-                        country.name.common &&
-                        country.cca2 // Código ISO de 2 letras para FlagsAPI
-                    );
-                    
-                    // Eliminar duplicados por código ISO (por si acaso)
-                    const seenCodes = new Set();
-                    allCountries = allCountries.filter(country => {
-                        const code = country.cca2;
-                        if (seenCodes.has(code)) {
-                            return false;
+
+                const restCountryUrls = [
+                    'https://restcountries.com/v3.1/all?fields=name,cca2,cca3,region,subregion,population,borders,translations',
+                    'https://raw.githubusercontent.com/mledoze/countries/master/dist/countries.json'
+                ];
+                for (const url of restCountryUrls) {
+                    try {
+                        const apiCountries = await fetchJsonArray(url);
+                        if (apiCountries && apiCountries.length > 0) {
+                            worldCountries = overlayCountryDetails(worldCountries, apiCountries);
+                            break;
                         }
-                        seenCodes.add(code);
-                        return true;
-                    });
-                    
-                    console.log(`Países cargados de la API: ${allCountries.length}`);
-                    
-                    // Si después del filtro no hay países, usar respaldo
-                    if (allCountries.length === 0) {
-                        console.log('No se encontraron países válidos, usando lista de respaldo');
-                        allCountries = fallbackCountries;
+                    } catch (err) {
+                        console.log('Fuente extra de países no disponible:', url);
                     }
                 }
-                
+
+                allCountries = getUniqueCountries(
+                    (worldCountries.length > 0 ? worldCountries : fallbackCountries).filter(isPlayableFlagCountry)
+                );
+                console.log(`Banderas cargadas: ${allCountries.length}`);
+
                 if (allCountries.length === 0) {
                     throw new Error('No se pudo cargar ningún país');
                 }
-                
-                // Aplicar filtro según dificultad
+
                 applyDifficultyFilter();
-                
                 loadingEl.style.display = 'none';
                 document.getElementById('options').style.display = 'flex';
                 document.getElementById('endAttemptBtn').style.display = 'block';
                 loadNewQuestion();
             } catch (error) {
-                // Si todo falla, usar la lista de respaldo
-                console.log('Error al cargar desde API, usando lista de respaldo:', error);
-                allCountries = fallbackCountries;
-                
+                console.log('Error al cargar países, usando catálogo local:', error);
+                const bundled = getBundledWorldCountries();
+                allCountries = getUniqueCountries(
+                    (bundled.length > 0 ? bundled : fallbackCountries).filter(isPlayableFlagCountry)
+                );
+
                 if (allCountries.length > 0) {
-                    // Aplicar filtro según dificultad
                     applyDifficultyFilter();
-                    
                     loadingEl.style.display = 'none';
                     document.getElementById('options').style.display = 'flex';
                     loadNewQuestion();
@@ -20104,7 +20211,7 @@
             },
             god: {
                 title: '✨ Dios',
-                description: 'Examen completo: aparecen todas las banderas únicas de la API sin repetir. Solo tienes 1 vida.',
+                description: 'Examen completo de más de 200 banderas de todos los continentes. Ninguna bandera se repite. Solo tienes 1 vida.',
                 streak: 'Cada acierto aumenta la racha; un fallo la reinicia y termina el intento porque solo tienes una vida.',
                 joker: 'Funciona con 5 aciertos seguidos, elimina 2 opciones y descuenta 5 puntos de racha. No repite banderas.'
             },
