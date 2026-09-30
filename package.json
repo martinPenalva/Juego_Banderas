@@ -1,0 +1,46 @@
+{
+  "name": "juego-banderas",
+  "version": "1.0.0",
+  "description": "Juego de Banderas para escritorio y móvil, con dinosaurio sin conexión",
+  "author": "Martin Penalva",
+  "private": true,
+  "main": "native/electron/main.cjs",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build:web": "node native/scripts/build-web.mjs",
+    "start": "npm run build:web && electron .",
+    "start:offline": "npm run build:web && electron . --offline",
+    "dist:win": "npm run build:web && electron-builder --win zip --x64",
+    "dist:win:installer": "npm run build:web && electron-builder --win nsis --x64",
+    "dist:linux": "npm run build:web && electron-builder --linux AppImage --x64",
+    "native:sync": "npm run build:web && cap sync",
+    "android:open": "npm run native:sync && cap open android",
+    "ios:open": "npm run native:sync && cap open ios",
+    "android:debug": "npm run native:sync && node native/scripts/android-build.mjs",
+    "test": "npm run build:web && node --test native/test/*.test.cjs",
+    "test:browser": "npm run build:web && playwright test",
+    "test:electron": "npm run build:web && node native/test/electron-smoke.cjs"
+  },
+  "dependencies": {
+    "@capacitor/core": "8.5.2",
+    "@capacitor/android": "8.5.2",
+    "@capacitor/ios": "8.5.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.2",
+    "@playwright/test": "1.63.0",
+    "electron": "44.5.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.martinpenalva.banderas",
+    "productName": "Banderas",
+    "directories": { "output": "release" },
+    "files": ["native/electron/**", "native/public/**", "package.json"],
+    "asar": true,
+    "win": { "target": ["zip", "nsis"], "icon": "icon-512.png", "signExecutable": false },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "deleteAppDataOnUninstall": false },
+    "linux": { "target": "AppImage", "icon": "icon-512.png", "category": "Game" },
+    "artifactName": "Banderas-${version}-${os}-${arch}.${ext}"
+  }
+}

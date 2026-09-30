@@ -3,4 +3,12 @@ functions/node_modules/
 .firebase/
 firebase-debug.log
 firebase-debug.*.log
-
+native/public/
+release/
+test-results/
+playwright-report/
+.cache/
+*.jks
+*.keystore
+*.p12
+*.mobileprovision

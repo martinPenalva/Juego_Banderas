@@ -2,6 +2,12 @@
 
 Un juego interactivo de adivinar banderas de países con sistema de racha y comodines.
 
+## Aplicaciones descargables
+
+El proyecto incluye un cliente **Electron para Windows** y proyectos **Capacitor para Android e iOS**, con las mismas cuentas y servicios del juego. Al arrancar sin conexión aparece el dinosaurio de Chromium, incluido localmente.
+
+Consulta [NATIVE_APPS.md](NATIVE_APPS.md) para ejecutar, generar los paquetes y conocer el estado de las notificaciones y las pruebas. Inicio local con Node.js 22+: `npm ci` y `npm start`.
+
 ## 🎮 Características
 
 - **4 opciones de respuesta**: Mayor dificultad con 1 respuesta correcta y 3 incorrectas
@@ -62,4 +68,3 @@ Para agregar el juego a la pantalla de inicio de tu móvil:
 ## 📄 Licencia
 
 Este proyecto es de código abierto y está disponible para uso personal y educativo.
-

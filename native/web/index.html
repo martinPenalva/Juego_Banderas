@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; connect-src https://www.gstatic.com; object-src 'none'; base-uri 'self'">
+  <title>Banderas</title>
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="launcher.css">
+  <script src="launcher.js" defer></script>
+</head>
+<body>
+  <header><img src="icon-192.png" width="36" height="36" alt=""><span>Banderas</span><span class="badge" id="badge">Conectando</span></header>
+  <main>
+    <p class="eyebrow">QUE NADA PARE EL JUEGO</p>
+    <h1 id="title">Preparando tu próxima partida.</h1>
+    <p id="status" role="status" aria-live="polite">Comprobando la conexión con el juego…</p>
+    <section id="offline" hidden aria-label="Dinosaurio de Chromium">
+      <div class="dino-frame"><div id="runner" tabindex="0" role="application" aria-label="Dinosaurio. Espacio o flecha arriba para saltar, flecha abajo para agacharte. En móvil, toca el juego."><div class="icon icon-offline" hidden></div></div></div>
+      <p class="controls"><kbd>Espacio</kbd> / <kbd>↑</kbd> saltar · <kbd>↓</kbd> agacharte<br><span>En móvil, toca el dinosaurio para jugar.</span></p>
+      <div class="actions"><button id="retry" type="button">Volver a comprobar</button><button id="enter" type="button" hidden>Abrir Banderas →</button></div>
+      <p class="hint">Puedes seguir jugando aquí mientras vuelve la conexión.</p>
+    </section>
+  </main>
+  <footer>Las cuentas y las partidas de Banderas siguen en el mismo servicio.<br>Dinosaurio de Chromium · licencia BSD incluida en la aplicación</footer>
+  <div hidden>
+    <img id="offline-resources-1x" src="dino/sprite-1x.png" alt="">
+    <img id="offline-resources-2x" src="dino/sprite-2x.png" alt="">
+    <template id="audio-resources">
+      <audio id="offline-sound-press" src="{{button-press}}"></audio>
+      <audio id="offline-sound-hit" src="{{hit}}"></audio>
+      <audio id="offline-sound-reached" src="{{score-reached}}"></audio>
+    </template>
+  </div>
+</body>
+</html>

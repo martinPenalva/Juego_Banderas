@@ -22249,7 +22249,7 @@ window.STICKER_FILES = [
         window.loadMainRanking = loadMainRanking;
 
         // Verificar y redirigir si es necesario (para PWA)
-        if (window.location.pathname === '/' && !window.location.href.includes('Juego_Banderas')) {
+        if (!window.BanderasNative && window.location.pathname === '/' && !window.location.href.includes('Juego_Banderas')) {
             window.location.href = 'https://martinpenalva.github.io/Juego_Banderas/index.html';
         }
 
@@ -22296,7 +22296,7 @@ window.STICKER_FILES = [
         
         // Inicializar Firebase Messaging (solo en el cliente, no en Service Worker)
         let messaging = null;
-        if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+        if (!window.BanderasNative && typeof window !== 'undefined' && 'serviceWorker' in navigator) {
             try {
                 messaging = getMessaging(app);
             } catch (error) {
@@ -28726,7 +28726,7 @@ window.STICKER_FILES = [
         window.notificationServiceWorkerRegistration = null;
         
         // Registrar Service Worker para notificaciones
-        if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+        if (!window.BanderasNative && 'serviceWorker' in navigator && window.location.protocol !== 'file:') {
             window.addEventListener('load', async () => {
                 try {
                     // Mantener el service worker como archivo real para que FCM pueda registrarlo a tiempo.
@@ -28884,7 +28884,7 @@ window.STICKER_FILES = [
             };
 
             try {
-                if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+                if (!window.BanderasNative && 'serviceWorker' in navigator && window.location.protocol !== 'file:') {
                     try {
                         const registration = await navigator.serviceWorker.ready;
                         // Usar el Service Worker para mostrar notificaciones (funciona en segundo plano)

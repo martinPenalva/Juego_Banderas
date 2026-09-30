@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Banderas</string>
+    <string name="title_activity_main">Banderas</string>
+    <string name="package_name">com.martinpenalva.banderas</string>
+    <string name="custom_url_scheme">com.martinpenalva.banderas</string>
+</resources>

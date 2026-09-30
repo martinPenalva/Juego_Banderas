@@ -1,0 +1,8 @@
+{
+  "appId": "com.martinpenalva.banderas",
+  "appName": "Banderas",
+  "webDir": "native/public",
+  "server": { "hostname": "localhost", "androidScheme": "https", "iosScheme": "capacitor" },
+  "ios": { "contentInset": "automatic", "backgroundColor": "#f7f7f7" },
+  "android": { "backgroundColor": "#f7f7f7", "allowMixedContent": false }
+}
